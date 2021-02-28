@@ -1,0 +1,46 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Grupos
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <a nz-button nzType="primary" routerLink="/grupos/nuevo">
+                <i nz-icon nzType="plus"></i>
+                Nuevo
+            </a>
+            <nz-table #tbl [nzData]="lstGrupos" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let grupo of tbl.data">
+                        <td>{{ grupo.id }}</td>
+                        <td>{{ grupo.descripcion }}</td>
+                        <td>
+                            <a nz-button nzType="default" routerLink="/grupos/{{grupo.id}}"
+                                style="margin-right: 3px; margin-left: 3px;" nzTooltipTitle="Editar Grupo" nz-tooltip>
+                                <i nz-icon nzType="edit"></i>
+                            </a>
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom"
+                                (nzOnConfirm)="eliminar(grupo.id)" nz-button nzType="primary" nzDanger
+                                style="margin-right: 3px; margin-left: 3px;" nzTooltipTitle="Eliminar Grupo" nz-tooltip>
+                                <i nz-icon nzType="delete"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
