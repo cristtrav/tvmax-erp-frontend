@@ -15,6 +15,8 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @NgModule({
   declarations: [VistaGruposComponent, DetalleGrupoComponent],
@@ -32,7 +34,9 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzInputNumberModule,
     NzInputModule,
     NzNotificationModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzGridModule,
+    NzDividerModule
   ]
 })
 export class GruposModule { }

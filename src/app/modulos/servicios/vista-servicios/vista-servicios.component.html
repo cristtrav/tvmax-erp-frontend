@@ -1,0 +1,51 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Servicios
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <a nz-button nzType="primary" routerLink="/servicios/nuevo">
+                <i nz-icon nzType="plus"></i>
+                Nuevo
+            </a>
+            <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Grupo</th>
+                        <th nzAlign="center">Suscribible</th>
+                        <th nzAlign="center">Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let srv of tbl.data">
+                        <td>{{ srv.id }}</td>
+                        <td>{{ srv.descripcion }}</td>
+                        <td>{{ srv.grupo }} ({{ srv.idgrupo }})</td>
+                        <td nzAlign="center">
+                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="srv.suscribible?'#00C853':'#f44336'" [nzType]="srv.suscribible?'check-circle':'close-circle'"></i>
+                        </td>
+                        <td nzAlign="right">{{ srv.precio | number }}</td>
+                        <td>
+                            <a [routerLink]="'/servicios/'+srv.id">Editar</a>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(srv.id)">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

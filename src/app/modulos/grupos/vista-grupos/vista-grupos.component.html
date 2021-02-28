@@ -28,14 +28,14 @@
                         <td>{{ grupo.id }}</td>
                         <td>{{ grupo.descripcion }}</td>
                         <td>
-                            <a nz-button nzType="default" routerLink="/grupos/{{grupo.id}}"
-                                style="margin-right: 3px; margin-left: 3px;" nzTooltipTitle="Editar Grupo" nz-tooltip>
-                                <i nz-icon nzType="edit"></i>
+                            
+                            <a routerLink="/grupos/{{grupo.id}}">
+                                Editar
                             </a>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom"
-                                (nzOnConfirm)="eliminar(grupo.id)" nz-button nzType="primary" nzDanger
-                                style="margin-right: 3px; margin-left: 3px;" nzTooltipTitle="Eliminar Grupo" nz-tooltip>
-                                <i nz-icon nzType="delete"></i>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                (nzOnConfirm)="eliminar(grupo.id)">
+                                Eliminar
                             </a>
                         </td>
                     </tr>

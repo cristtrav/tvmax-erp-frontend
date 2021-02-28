@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '', component: VistaGruposComponent
   },
   {
-    path: ':id', component: DetalleGrupoComponent, data: {breadcrumb: ':id'}
+    path: ':id', component: DetalleGrupoComponent
   }
 ];
 

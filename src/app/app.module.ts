@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,7 +32,7 @@ registerLocaleData(es);
     NzMenuModule,
     NzBreadCrumbModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: es_ES }],
+  providers: [{ provide: NZ_I18N, useValue: es_ES }, {provide: LOCALE_ID, useValue: 'es-PY'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
