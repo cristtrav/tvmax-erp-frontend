@@ -37,13 +37,13 @@ export class DetalleServicioComponent implements OnInit {
     this.idservicio = param !== null?param:'nuevo';
     this.cargarGrupos();
     if(this.idservicio!=='nuevo'){
+      this.form.get('id')?.disable();
       this.cargarServicio();
     }
   }
 
   private cargarServicio(){
     this.serviciosSrv.getServicioPorId(+this.idservicio).subscribe((data)=>{
-      this.form.get('id')?.disable();
       this.form.get('id')?.setValue(data.id);
       this.form.get('descripcion')?.setValue(data.descripcion);
       this.form.get('idgrupo')?.setValue(data.idgrupo);
