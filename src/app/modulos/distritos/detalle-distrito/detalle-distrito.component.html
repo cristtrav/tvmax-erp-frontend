@@ -5,10 +5,10 @@
                 <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                <a routerLink="/departamentos">Departamentos</a>
+                <a routerLink="/distritos">Distritos</a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                {{ iddepartamento | titlecase}}
+                {{ iddistrito | titlecase}}
             </nz-breadcrumb-item>
         </nz-breadcrumb>
     </div>
@@ -19,14 +19,24 @@
                     <nz-form-item>
                         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
                         <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
-                            <nz-input-number [nzMin]="0" [nzMax]="99" [nzStep]="1" formControlName="id" style="width: 50%;"
+                            <nz-input-group [nzAddOnBefore]="prefijoId" >
+                                <nz-input-number [nzMin]="0" [nzMax]="99" [nzStep]="1" formControlName="id" style="width: 50%;"
                             [nzFormatter]="formatterCod"></nz-input-number>
+                            </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
                         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 80 carácteres.">
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 150 carácteres.">
                             <input nz-input formControlName="descripcion">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Departamento</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un departamento.">
+                            <nz-select formControlName="iddepartamento" nzShowSearch>
+                                <nz-option *ngFor="let dep of lstDep" [nzLabel]="dep.descripcion" [nzValue]="dep.id"></nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">

@@ -15,7 +15,7 @@ export class DetalleDepartamentoComponent implements OnInit {
   iddepartamento = 'nuevo';
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
-    descripcion: [null, [Validators.required, Validators.maxLength(80)]]
+    descripcion: [null, [Validators.required, Validators.maxLength(80)]],
   });
 
   formatterCod = (value: number) => value === null ? '' : `${value}`.padStart(2, '0');
