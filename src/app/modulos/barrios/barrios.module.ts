@@ -19,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
-
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent],
   imports: [

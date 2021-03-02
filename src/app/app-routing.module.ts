@@ -8,8 +8,8 @@ const routes: Routes = [
   { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule)},
   { path: 'departamentos', loadChildren: () => import('./modulos/departamentos/departamentos.module').then(m => m.DepartamentosModule)},
   { path: 'distritos', loadChildren: () => import('./modulos/distritos/distritos.module').then(m => m.DistritosModule) },
-  { path: 'barrios', loadChildren: () => import ('./modulos/barrios/barrios.module').then(m => m.BarriosModule)}
-  
+  { path: 'barrios', loadChildren: () => import ('./modulos/barrios/barrios.module').then(m => m.BarriosModule)},
+  { path: 'tiposdomicilios', loadChildren: () => import('./modulos/tiposdomicilios/tiposdomicilios.module').then(m => m.TiposdomiciliosModule)}
 ];
 
 @NgModule({

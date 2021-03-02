@@ -5,10 +5,10 @@
                 <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                <a routerLink="/barrios">Barrios</a>
+                <a routerLink="/tiposdomicilios">Tipos de domicilios</a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                {{ idbarrio | titlecase}}
+                {{ idtipodomicilio | titlecase}}
             </nz-breadcrumb-item>
         </nz-breadcrumb>
     </div>
@@ -28,21 +28,12 @@
                     <nz-form-item>
                         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
                         <nz-form-control [nzSm]="15" [nzXs]="24"
-                            nzErrorTip="Ingrese una descripción. Máx. 150 carácteres.">
+                            nzErrorTip="Ingrese una descripción. Máx. 60 carácteres.">
                             <input nz-input formControlName="descripcion">
                         </nz-form-control>
                     </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Distrito</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un distrito.">
-                            <nz-select formControlName="iddistrito" nzShowSearch>
-                                <nz-option *ngFor="let dist of lstDist"
-                                    [nzLabel]="dist.descripcion+', '+dist.departamento" [nzValue]="dist.id"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                        <button nz-button nzType="primary" (click)="guardar()">
+                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                             <i nz-icon nzType="save"></i>
                             Guardar
                         </button>

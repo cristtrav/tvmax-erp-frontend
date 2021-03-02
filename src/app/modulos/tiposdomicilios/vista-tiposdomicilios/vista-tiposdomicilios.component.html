@@ -1,21 +1,21 @@
-<div class="inner-content">
+<div class="inner-component">
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
                 <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                Grupos
+                Tipos de domicilios
             </nz-breadcrumb-item>
         </nz-breadcrumb>
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/grupos/nuevo">
+            <a nz-button nzType="primary" routerLink="/tiposdomicilios/nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstGrupos" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstTD" style="margin-top: 10px;">
                 <thead>
                     <tr>
                         <th>Código</th>
@@ -24,17 +24,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let grupo of tbl.data">
-                        <td>{{ grupo.id }}</td>
-                        <td>{{ grupo.descripcion }}</td>
+                    <tr *ngFor="let td of tbl.data">
+                        <td>{{ td.id }}</td>
+                        <td>{{ td.descripcion }}</td>
                         <td>
-
-                            <a routerLink="/grupos/{{grupo.id}}">
-                                Editar
-                            </a>
+                            <a [routerLink]="'/tiposdomicilios/'+td.id">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom"
-                                nzOkText="Eliminar" (nzOnConfirm)="eliminar(grupo.id)">
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Tipo de domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(td.id)">
                                 Eliminar
                             </a>
                         </td>
@@ -43,7 +40,4 @@
             </nz-table>
         </div>
     </div>
-    <ng-template #suffixIconSearch>
-        <i nz-icon nzType="search"></i>
-    </ng-template>
 </div>
