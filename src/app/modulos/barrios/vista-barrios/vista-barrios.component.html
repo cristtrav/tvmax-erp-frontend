@@ -1,0 +1,45 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Barrios
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <a nz-button nzType="primary" routerLink="/barrios/nuevo">
+                <i nz-icon nzType="plus"></i>
+                Nuevo
+            </a>
+            <nz-table #tbl [nzData]="lstBarrios" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Distrito</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let b of lstBarrios">
+                        <td>{{ b.id }}</td>
+                        <td>{{ b.descripcion }}</td>
+                        <td>{{ b.distrito }}, {{b.departamento}} ({{b.iddistrito}})</td>
+                        <td>
+                            <a [routerLink]="'/barrios/'+b.id">Editar</a>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Barrio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(b.id)">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>

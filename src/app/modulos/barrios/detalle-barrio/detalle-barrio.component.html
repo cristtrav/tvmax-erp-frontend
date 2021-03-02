@@ -1,0 +1,51 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a routerLink="/barrios">Barrios</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idbarrio | titlecase}}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+                <form nz-form [formGroup]="form">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
+                            <nz-input-group >
+                                <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 150 carácteres.">
+                            <input nz-input formControlName="descripcion">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Distrito</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un distrito.">
+                            <nz-select formControlName="iddistrito" nzShowSearch>
+                                <nz-option *ngFor="let dist of lstDist" [nzLabel]="dist.descripcion+', '+dist.departamento" [nzValue]="dist.id"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                        <button nz-button nzType="primary" (click)="guardar()">
+                            <i nz-icon nzType="save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
