@@ -25,8 +25,8 @@ export class DepartamentosService {
     return this.http.get<Departamento>(`${this.url}/${id}`);
   }
 
-  put(d: Departamento): Observable<any>{
-    return this.http.put(`${this.url}/${d.id}`, d, AppSettings.httpOptionsPost);
+  put(id: string, d: Departamento): Observable<any>{
+    return this.http.put(`${this.url}/${id}`, d, AppSettings.httpOptionsPost);
   }
 
   delete(id: string | null): Observable<any>{

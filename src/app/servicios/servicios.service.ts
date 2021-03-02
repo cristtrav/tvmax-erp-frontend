@@ -25,8 +25,8 @@ export class ServiciosService {
     return this.http.get<Servicio>(`${this.url}/${id}`);
   }
 
-  putServicio(srv: Servicio): Observable<any> {
-    return this.http.put(`${this.url}/${srv.id}`, srv, AppSettings.httpOptionsPost);
+  putServicio(id: number, srv: Servicio): Observable<any> {
+    return this.http.put(`${this.url}/${id}`, srv, AppSettings.httpOptionsPost);
   }
 
   deleteServicio(id: number): Observable<any> {

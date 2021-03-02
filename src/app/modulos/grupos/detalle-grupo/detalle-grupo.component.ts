@@ -22,14 +22,14 @@ export class DetalleGrupoComponent implements OnInit {
     private aroute: ActivatedRoute,
     private fb: FormBuilder,
     private grupoSrv: GruposService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     const param = this.aroute.snapshot.paramMap.get('id');
     this.idgrupo = param !== null ? param : 'nuevo';
     if(this.idgrupo !== 'nuevo'){
-      this.fg.get('id')?.disable();
       this.cargarDatos();
     }
   }
@@ -89,8 +89,11 @@ export class DetalleGrupoComponent implements OnInit {
   }
 
   private modificar(): void {
-    this.grupoSrv.putGrupo(this.getDto()).subscribe(()=>{
+    const g: Grupo = this.getDto();
+    this.grupoSrv.putGrupo(+this.idgrupo, this.getDto()).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
+      this.idgrupo = `${g.id}`;
+      this.router.navigateByUrl(`/grupos/${g.id}`);
     }, (e)=>{
       console.log('Error al modificar grupo');
       console.log(e);

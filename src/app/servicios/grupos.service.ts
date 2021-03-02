@@ -29,7 +29,7 @@ export class GruposService {
     return this.http.get<Grupo>(`${this.url}/${id}`);
   }
 
-  putGrupo(g: Grupo): Observable<any>{
-    return this.http.put(`${this.url}/${g.id}`, g, AppSettings.httpOptionsPost);
+  putGrupo(id: number, g: Grupo): Observable<any>{
+    return this.http.put(`${this.url}/${id}`, g, AppSettings.httpOptionsPost);
   }
 }

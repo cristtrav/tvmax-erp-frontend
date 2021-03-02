@@ -5,7 +5,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Servicio } from './../../../dto/servicio-dto';
 import { ServiciosService } from './../../../servicios/servicios.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-servicio',
@@ -29,7 +29,8 @@ export class DetalleServicioComponent implements OnInit {
     private notif: NzNotificationService,
     private fb: FormBuilder,
     private serviciosSrv: ServiciosService,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    private router: Router
     ) { }
 
   ngOnInit(): void {
@@ -37,7 +38,6 @@ export class DetalleServicioComponent implements OnInit {
     this.idservicio = param !== null?param:'nuevo';
     this.cargarGrupos();
     if(this.idservicio!=='nuevo'){
-      this.form.get('id')?.disable();
       this.cargarServicio();
     }
   }
@@ -113,8 +113,11 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private modificar(): void{
-    this.serviciosSrv.putServicio(this.getDto()).subscribe(()=>{
+    const s: Servicio = this.getDto();
+    this.serviciosSrv.putServicio(+this.idservicio, s).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
+      this.idservicio = `${s.id}`;
+      this.router.navigateByUrl(`/servicios/${s.id}`);
     }, (e)=>{
       console.log('Error al modificar Servicio');
       console.log(e);

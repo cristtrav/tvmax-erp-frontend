@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Departamento } from './../../../dto/departamento-dto';
 import { DepartamentosService } from './../../../servicios/departamentos.service';
@@ -24,7 +24,8 @@ export class DetalleDepartamentoComponent implements OnInit {
     private fb: FormBuilder,
     private depSrv: DepartamentosService,
     private notif: NzNotificationService,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -32,7 +33,6 @@ export class DetalleDepartamentoComponent implements OnInit {
     if (param !== null) {
       this.iddepartamento = param;
       if (this.iddepartamento !== 'nuevo') {
-        this.form.get('id')?.disable();
         this.cargarDatos();
       }
     }
@@ -87,8 +87,11 @@ export class DetalleDepartamentoComponent implements OnInit {
   }
 
   private modificar(): void {
-    this.depSrv.put(this.getDto()).subscribe(()=>{
+    const d: Departamento = this.getDto();
+    this.depSrv.put(this.iddepartamento, d).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
+      this.iddepartamento = `${d.id}`;
+      this.router.navigateByUrl(`/departamentos/${d.id}`);
     }, (e)=>{
       console.log('Error al modificar departamento');
       console.log(e);
