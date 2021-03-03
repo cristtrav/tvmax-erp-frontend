@@ -1,0 +1,74 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a routerLink="/cobradores">Cobradores</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idcobrador | titlecase}}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+                <form nz-form [formGroup]="form">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
+                            <nz-input-group>
+                                <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;">
+                                </nz-input-number>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Razón social</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24"
+                            nzErrorTip="Ingrese una razón social. Máx. 150 carácteres.">
+                            <input nz-input formControlName="razonsocial">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24">CI/RUC</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24">
+                            <nz-input-group>
+                                <input nz-input formControlName="ci" style="width: 75%;">
+                                <nz-select nzPlaceHolder="DV" style="width: 25%;" nzAllowClear formControlName="dv">
+                                    <nz-option *ngFor="let n of [0,1,2,3,4,5,6,7,8,9]" [nzValue]="n" [nzLabel]="n+''"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24">Teléfono</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24">
+                            <input nz-input formControlName="telefono">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24">Email</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Formato de email incorrecto">
+                            <input nz-input formControlName="email">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <span nz-col [nzSm]="7" [nzXs]="24"></span>
+                        <nz-form-control [nzSm]="15" [nzXs]="24">
+                            <label nz-checkbox formControlName="activo">Activo</label>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                            <i nz-icon nzType="save"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

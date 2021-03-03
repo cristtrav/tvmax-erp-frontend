@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'departamentos', loadChildren: () => import('./modulos/departamentos/departamentos.module').then(m => m.DepartamentosModule)},
   { path: 'distritos', loadChildren: () => import('./modulos/distritos/distritos.module').then(m => m.DistritosModule) },
   { path: 'barrios', loadChildren: () => import ('./modulos/barrios/barrios.module').then(m => m.BarriosModule)},
-  { path: 'tiposdomicilios', loadChildren: () => import('./modulos/tiposdomicilios/tiposdomicilios.module').then(m => m.TiposdomiciliosModule)}
+  { path: 'tiposdomicilios', loadChildren: () => import('./modulos/tiposdomicilios/tiposdomicilios.module').then(m => m.TiposdomiciliosModule)},
+  { path: 'cobradores', loadChildren: () => import('./modulos/cobradores/cobradores.module').then(m => m.CobradoresModule)}
 ];
 
 @NgModule({

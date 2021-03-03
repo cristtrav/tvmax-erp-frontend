@@ -1,0 +1,53 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Cobradores
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <a nz-button nzType="primary" routerLink="/cobradores/nuevo">
+                <i nz-icon nzType="plus"></i>
+                Nuevo
+            </a>
+            <nz-table #tbl [nzData]="lstCobradores" style="margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Razón social</th>
+                        <th>CI/RUC</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th nzAlign="center">Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of tbl.data">
+                        <td>{{ c.id }}</td>
+                        <td>{{ c.razonsocial }}</td>
+                        <td>{{ c.ci }}{{ c.ci !== null && c.dvruc !== null?' - ':'' }}{{c.dvruc}}</td>
+                        <td>{{ c.telefono }}</td>
+                        <td>{{ c.email }}</td>
+                        <td nzAlign="center">
+                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.activo?'#00C853':'#f44336'" [nzType]="c.activo?'check-circle':'close-circle'"></i>
+                        </td>
+                        <td>
+                            <a [routerLink]="'/cobradores/'+c.id">Editar</a>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cobrador?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(c.id)">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
