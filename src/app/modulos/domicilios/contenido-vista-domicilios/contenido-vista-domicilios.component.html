@@ -1,0 +1,36 @@
+<a nz-button nzType="primary" routerLink="nuevo">
+    <i nz-icon nzType="plus"></i>
+    Nuevo
+</a>
+<nz-table #tbl [nzData]="lstDomicilios" style="margin-top: 10px;">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Dirección</th>
+            <th>Barrio</th>
+            <th>Tipo de domicilio</th>
+            <th>Medidor ANDE</th>
+            <th>Principal</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let d of tbl.data">
+            <td>{{ d.id }}</td>
+            <td>{{ d.direccion }}</td>
+            <td>{{ d.barrio }} ({{d.distrito}}, {{d.departamento}})</td>
+            <td>{{ d.tipodomicilio }}</td>
+            <td>{{ d.nromedidor }}</td>
+            <td>
+                <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="d.principal?'#00C853':'#f44336'" [nzType]="d.principal?'check-circle':'close-circle'"></i>
+            <td>
+                <a [routerLink]="d.id+''">Editar</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(d.id)">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

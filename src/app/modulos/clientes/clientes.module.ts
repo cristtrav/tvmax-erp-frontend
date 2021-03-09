@@ -17,10 +17,14 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { DomiciliosClienteComponent } from './domicilios-cliente/domicilios-cliente.component';
+import { DomiciliosModule } from './../domicilios/domicilios.module';
+import { DetalleDomicilioClienteComponent } from './detalle-domicilio-cliente/detalle-domicilio-cliente.component';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
-  declarations: [VistaClientesComponent, DetalleClienteComponent],
+  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent],
   imports: [
     CommonModule,
     ClientesRoutingModule,
@@ -37,7 +41,10 @@ import { NzNotificationModule } from 'ng-zorro-antd/notification';
     NzDividerModule,
     NzSelectModule,
     NzBreadCrumbModule,
-    NzNotificationModule
+    NzNotificationModule,
+    NzSpaceModule,
+    DomiciliosModule,
+    NzToolTipModule
   ]
 })
 export class ClientesModule { }

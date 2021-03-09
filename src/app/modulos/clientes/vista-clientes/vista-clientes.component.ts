@@ -16,6 +16,7 @@ export class VistaClientesComponent implements OnInit {
   pageSize: number = 10;
   pageIndex: number = 1;
   tablaLoading = false;
+  expandSet = new Set<number>();
 
   constructor(
     private cliSrv: ClientesService,
@@ -63,6 +64,14 @@ export class VistaClientesComponent implements OnInit {
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.cargarDatos(pageIndex, pageSize);
+  }
+
+  onRowExpand(id: number, checked: boolean): void{
+    if(checked){
+      this.expandSet.add(id);
+    }else{
+      this.expandSet.delete(id);
+    }
   }
 
 }

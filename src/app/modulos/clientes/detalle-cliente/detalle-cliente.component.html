@@ -49,7 +49,7 @@
                         <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 15 carácteres.">
                             <nz-input-group>
                                 <input nz-input formControlName="ci" style="width: 70%;"
-                                    nzErrorTip="Máx. 15 carácteres.">
+                                    nzErrorTip="Máx. 15 carácteres." (focusout)="verificarCi()">
                                 <nz-select nzAllowClear formControlName="dvruc" style="width: 30%;"
                                     nzPlaceHolder="DV">
                                     <nz-option *ngFor="let dv of [0,1,2,3,4,5,6,7,8,9]" [nzLabel]="dv+''"
@@ -87,10 +87,20 @@
                             </nz-form-control>
                     </nz-form-item>
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                            <i nz-icon nzType="save"></i>
-                            Guardar
-                        </button>
+                        <nz-space>
+                            <nz-space-item *ngIf="idcliente!=='nuevo'">
+                                <a nz-button routerLink="domicilios">
+                                    <i nz-icon nzType="home"></i>
+                                    Domicilios
+                                </a>
+                            </nz-space-item>
+                            <nz-space-item>
+                                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                    <i nz-icon nzType="save"></i>
+                                    Guardar
+                                </button>
+                            </nz-space-item>
+                        </nz-space>
                     </div>
                 </form>
             </div>

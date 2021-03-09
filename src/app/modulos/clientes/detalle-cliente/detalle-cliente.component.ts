@@ -40,7 +40,7 @@ export class DetalleClienteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.aroute.snapshot.paramMap.get('id');
+    const id = this.aroute.snapshot.paramMap.get('idcliente');
     this.idcliente = `${id}`;
     if (id !== null) {
       if (this.idcliente !== 'nuevo') {
@@ -63,8 +63,10 @@ export class DetalleClienteComponent implements OnInit {
   guardar(): void {
     if (this.validado()) {
       if (this.idcliente === 'nuevo') {
+        this.verificarCi();
         this.registrar();
       } else {
+        this.verificarCi();
         this.modificar();
       }
     }
@@ -166,6 +168,13 @@ export class DetalleClienteComponent implements OnInit {
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del cliente', e.error);
     });
+  }
+
+  verificarCi(): void{
+    const ci = this.form.get('ci')?.value;
+    if(!ci){
+      this.form.get('dvruc')?.reset();
+    }
   }
 
 }

@@ -10,4 +10,8 @@ export class Cliente {
     dvruc: number | null = null;
     idcobrador: number | null = null;
     cobrador: string | null = null;
+    iddomicilio: number | null = null;
+    direccion: string | null = null;
+    idbarrio: number | null = null;
+    barrio: string | null = null;
 }

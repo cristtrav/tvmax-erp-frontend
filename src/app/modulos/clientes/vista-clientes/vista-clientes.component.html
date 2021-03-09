@@ -15,47 +15,88 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstClientes" style="margin-top: 10px;"
-            nzShowSizeChanger
-            [nzFrontPagination]="false"
-            [nzTotal]="total" 
-            [nzPageSize]="pageSize" 
-            [nzPageIndex]="pageIndex"
-            [nzLoading]="tablaLoading"
-            (nzQueryParams)="onTableParamsChange($event)">
+            <ng-template #pietabla>
+                <nz-space>
+                    <nz-space-item>
+                        <strong>Total:</strong>
+                    </nz-space-item>
+                    <nz-space-item>{{ total | number}}</nz-space-item>
+                </nz-space>
+            </ng-template>
+            <nz-table #tbl [nzData]="lstClientes" style="margin-top: 10px;" nzShowSizeChanger
+                [nzFrontPagination]="false" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+                [nzLoading]="tablaLoading" (nzQueryParams)="onTableParamsChange($event)" [nzFooter]="pietabla">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Código</th>
                         <th>Razón social</th>
                         <th>CI/RUC</th>
-                        <th>Teléfonos</th>
-                        <th>Email</th>
+                        <th>Domicilio princ.</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let c of tbl.data">
-                        <td>{{ c.id }}</td>
-                        <td>{{ c.razonsocial }}</td>
-                        <td>{{ c.ci | number }}
-                            <span *ngIf="c.ci!==null && c.dvruc!=null">-</span>
-                            {{c.dvruc}}
-                        </td>
-                        <td>
-                            {{ c.telefono1 }}
-                            <nz-divider nzType="vertical" *ngIf="c.telefono2"></nz-divider>
-                            {{c.telefono2}}
-                        </td>
-                        <td>{{ c.email }}</td>
-                        <td>
-                            <a [routerLink]="'/clientes/'+c.id">Editar</a>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cobrador?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(c.id)">
-                                Eliminar
-                            </a>
-                        </td>
-                    </tr>
+                    <ng-container *ngFor="let c of tbl.data">
+                        <tr>
+                            <td [nzExpand]="expandSet.has(c.id===null?-1:c.id)"
+                                (nzExpandChange)="onRowExpand(c.id===null?-1:c.id, $event)"></td>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.razonsocial }}</td>
+                            <td>
+                                <span *ngIf="c.ci">
+                                    {{ c.ci | number }}
+                                    <span *ngIf="c.ci!==null && c.dvruc!=null">-</span>
+                                {{c.dvruc}}
+                                </span>
+                                <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
+                                
+                            </td>
+                            <td nzBreakWord>
+                                <a nz-tooltip nzTooltipTitle="Ver todos los domicilios" [routerLink]="c.id+'/domicilios'">
+                                    <i nz-icon nzType="eye"></i>
+                                </a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <span *ngIf="c.direccion">
+                                    {{ c.direccion }}
+                                    ({{ c.barrio }})
+                                </span>
+                                <span *ngIf="!c.direccion" style="color: gray">
+                                    (Sin domicilio principal)
+                                </span>
+                            </td>
+                            <td>
+                                <a [routerLink]="'/clientes/'+c.id">Editar</a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cobrador?"
+                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(c.id)">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(c.id===null?-1:c.id)">
+                            <span>
+                                <nz-space nzSize="large">
+                                    <nz-space-item>
+                                        <strong>Email: </strong>
+                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sin email)' }}</span>
+                                    </nz-space-item>
+                                    <nz-space-item>
+                                        <strong>Teléfono princ.: </strong>
+                                        <span [style]="!c.telefono1?'color: gray':''">{{ c.telefono1?c.telefono1:'(sin teléfono)' }}</span>
+                                    </nz-space-item>
+                                    <nz-space-item>
+                                        <strong>Teléfono sec.:</strong>
+                                        <span [style]="!c.telefono2?'color: gray':''"> {{ c.telefono2?c.telefono2:'(sin teléfono)' }}</span>
+                                    </nz-space-item>
+                                    <nz-space-item>
+                                        <strong>Cobrador: </strong>
+                                        <span>{{ c.cobrador }} ({{ c.idcobrador }})</span>
+                                    </nz-space-item>
+                                </nz-space>
+                            </span>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </nz-table>
         </div>
