@@ -33,6 +33,7 @@
                         <th>Razón social</th>
                         <th>CI/RUC</th>
                         <th>Domicilio princ.</th>
+                        <th>Suscripciones</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -50,7 +51,6 @@
                                 {{c.dvruc}}
                                 </span>
                                 <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
-                                
                             </td>
                             <td nzBreakWord>
                                 <a nz-tooltip nzTooltipTitle="Ver todos los domicilios" [routerLink]="c.id+'/domicilios'">
@@ -66,9 +66,17 @@
                                 </span>
                             </td>
                             <td>
+                                <a nz-tooltip nzTooltipTitle="Ver todas las suscripciones" [routerLink]="c.id+'/suscripciones'">
+                                    <i nz-icon nzType="eye"></i>
+                                </a>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <nz-tag [nzColor]="'#00C853'">{{ c.cantconectados }} Con.</nz-tag>
+                                <nz-tag [nzColor]="'#f44336'">{{ c.cantdesconectados }} Des.</nz-tag>
+                            </td>
+                            <td>
                                 <a [routerLink]="'/clientes/'+c.id">Editar</a>
                                 <nz-divider nzType="vertical"></nz-divider>
-                                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cobrador?"
+                                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cliente?"
                                     nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(c.id)">
                                     Eliminar
                                 </a>

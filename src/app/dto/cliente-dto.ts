@@ -14,4 +14,6 @@ export class Cliente {
     direccion: string | null = null;
     idbarrio: number | null = null;
     barrio: string | null = null;
+    cantconectados: number = 0;
+    cantdesconectados: number = 0;
 }

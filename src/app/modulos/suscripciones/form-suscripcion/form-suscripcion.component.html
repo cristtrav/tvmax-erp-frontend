@@ -1,0 +1,55 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Domicilio</nz-form-label>
+        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un domicilio.">
+            <nz-select formControlName="iddomicilio"  nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let dom of lstDomicilios" [nzValue]="dom.id" [nzLabel]="dom.direccion+' - '+dom.barrio+' ('+dom.id+')'"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Servicio</nz-form-label>
+        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un servicio.">
+            <nz-select formControlName="idservicio" (ngModelChange)="onChangeServicio($event)" nzShowSearch nzAllowClear>
+                <nz-option *ngFor="let srv of lstServicios" [nzLabel]="srv.descripcion+' ('+srv.id+')'" [nzValue]="srv.id"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Monto</nz-form-label>
+        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un monto.">
+            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="monto" style="width: 50%;"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Fecha de suscripción</nz-form-label>
+        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una fecha.">
+            <nz-date-picker nzFormat="dd/MMMM/yyyy" formControlName="fechasuscripcion" style="width: 50%;"></nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <span nz-col [nzSm]="7" [nzXs]="24"></span>
+        <nz-form-control [nzSm]="15" [nzXs]="24">
+            <nz-space>
+                <nz-space-item>
+                    <label nz-checkbox formControlName="conectado">Conectado</label>
+                </nz-space-item>
+                <nz-space-item>
+                    <label nz-checkbox formControlName="reconectado">Reconectado</label>
+                </nz-space-item>
+            </nz-space>
+        </nz-form-control>
+    </nz-form-item>
+    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+            <i nz-icon nzType="save"></i>
+            Guardar
+        </button>
+    </div>
+</form>

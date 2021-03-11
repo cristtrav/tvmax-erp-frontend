@@ -22,7 +22,8 @@ export class VistaServiciosComponent implements OnInit {
   }
 
   private cargarServicios(): void{
-    this.serviciosSrv.getServicios().subscribe((data)=>{
+    const params = [{key: 'sort', value: '+id'}];
+    this.serviciosSrv.getServicios(params).subscribe((data)=>{
       this.lstServicios = data;
     }, (e)=>{
       console.log('Error al cargar Servicios');

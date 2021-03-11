@@ -1,0 +1,40 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <div nz-row>
+            <div nz-col nzFlex="auto">
+                <nz-breadcrumb>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/clientes">Clientes</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a [routerLink]="'/clientes/'+idcliente">{{ idcliente }}</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a [routerLink]="'/clientes/'+idcliente+'/suscripciones'">Suscripciones</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        {{ idsuscripcion | titlecase }}
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </div>
+            <div nz-col>
+                <div *ngIf="cliente">
+                    <span style="color:gray" *ngIf="cliente.ci">1.333.444-5</span>
+                    <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
+                    <strong>{{ cliente.razonsocial }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+                <app-form-suscripcion [idcliente]="idcliente" [idsuscripcion]="idsuscripcion"></app-form-suscripcion>
+            </div>
+        </div>
+    </div>
+</div>

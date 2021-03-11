@@ -1,0 +1,42 @@
+<a nz-button nzType="primary" routerLink="nueva">
+    <i nz-icon nzType="plus"></i>
+    Nueva
+</a>
+<nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Servicio</th>
+            <th>Monto</th>
+            <th>Dirección</th>
+            <th>Fecha Susc.</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let s of tbl.data">
+            <td>{{ s.id }}</td>
+            
+            <td>{{ s.servicio }} ({{s.idservicio}})</td>
+            <td>{{ s.monto | number }}</td>
+            <td>{{ s.direccion }}</td>
+            <td>{{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}</td>
+            <td>
+                <nz-tag [nzColor]="s.conectado?'#00C853':'#f44336'">
+                    <span *ngIf="s.conectado && s.reconectado">Reconectado</span>
+                    <span *ngIf="s.conectado && !s.reconectado">Conectado</span>
+                    <span *ngIf="!s.conectado">Desconectado</span>
+                </nz-tag>
+            </td>
+            <td>
+                <a [routerLink]="s.id+''">Editar</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminar la Suscripción?"
+                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(s.id)">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

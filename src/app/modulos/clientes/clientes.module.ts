@@ -22,9 +22,13 @@ import { DomiciliosClienteComponent } from './domicilios-cliente/domicilios-clie
 import { DomiciliosModule } from './../domicilios/domicilios.module';
 import { DetalleDomicilioClienteComponent } from './detalle-domicilio-cliente/detalle-domicilio-cliente.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { SuscripcionesClienteComponent } from './suscripciones-cliente/suscripciones-cliente.component';
+import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { SuscripcionesModule } from './../suscripciones/suscripciones.module';
 
 @NgModule({
-  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent],
+  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent],
   imports: [
     CommonModule,
     ClientesRoutingModule,
@@ -44,7 +48,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzNotificationModule,
     NzSpaceModule,
     DomiciliosModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzTagModule,
+    SuscripcionesModule
   ]
 })
 export class ClientesModule { }

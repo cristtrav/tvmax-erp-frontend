@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Servicio } from './../dto/servicio-dto';
@@ -17,8 +17,12 @@ export class ServiciosService {
     return this.http.post(this.url, srv, AppSettings.httpOptionsPost);
   }
 
-  getServicios(): Observable<Servicio[]> {
-    return this.http.get<Servicio[]>(this.url);
+  getServicios(filters: Array<{key: string, value: any | null}>): Observable<Servicio[]> {
+    let params = new HttpParams().append('eliminado', 'false');
+    for(let p of filters){
+      params = params.append(p.key, p.value);
+    }
+    return this.http.get<Servicio[]>(this.url, { params });
   }
 
   getServicioPorId(id: number): Observable<Servicio>{

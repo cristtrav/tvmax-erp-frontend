@@ -19,14 +19,14 @@ export class DomiciliosService {
     return this.http.post(this.url, d, AppSettings.httpOptionsPost);
   }
 
-  get(filters: Array<{ key: string, value: any | null }>): Observable<any> {
+  get(filters: Array<{ key: string, value: any | null }>): Observable<Domicilio[]> {
     let params = new HttpParams()
       .append('eliminado', 'false')
       .append('sort', '+id');
     for (let f of filters) {
       params = params.append(f.key, f.value);
     }
-    return this.http.get(this.url, { params });
+    return this.http.get<Domicilio[]>(this.url, { params });
   }
 
   getPorId(id: number): Observable<Domicilio> {
