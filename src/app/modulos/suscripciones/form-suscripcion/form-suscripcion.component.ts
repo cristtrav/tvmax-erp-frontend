@@ -26,7 +26,7 @@ export class FormSuscripcionComponent implements OnInit {
     iddomicilio: [null, [Validators.required]],
     idservicio: [null, [Validators.required]],
     monto: [null, [Validators.required]],
-    fechasuscripcion: [new Date(), [Validators.required]],
+    fechasuscripcion: [null, [Validators.required]],
     conectado: [true],
     reconectado: [false]
   });
@@ -51,6 +51,7 @@ export class FormSuscripcionComponent implements OnInit {
     }else{
       this.cargarUltimoId();
     }
+    
   }
 
   private cargarDatos(): void {
@@ -141,7 +142,6 @@ export class FormSuscripcionComponent implements OnInit {
     this.suscSrv.post(this.getDto()).subscribe(() => {
       this.notif.create('success', 'Suscripción guardada correctamente', '');
       this.form.reset();
-      this.form.get('fechasuscripcion')?.setValue(new Date());
       this.form.get('conectado')?.setValue(true);
       this.form.get('reconectado')?.setValue(false);
       this.guardarLoading = false;

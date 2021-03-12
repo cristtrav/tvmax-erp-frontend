@@ -7,7 +7,7 @@ import { TipoDomicilio } from './../../../dto/tipodomicilio-dto';
 import { TiposdomiciliosService } from './../../../servicios/tiposdomicilios.service';
 import { Domicilio } from 'src/app/dto/domicilio-dto';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-domicilio',
@@ -22,6 +22,7 @@ export class FormDomicilioComponent implements OnInit {
   idcliente: number | null = null;
   lstBarrios: Barrio[] = []
   lstTiposDomicilios: TipoDomicilio[] = [];
+  navigate: string | null = null;
 
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
@@ -39,7 +40,8 @@ export class FormDomicilioComponent implements OnInit {
     private notif: NzNotificationService,
     private tipoDomiSrv: TiposdomiciliosService,
     private domiSrv: DomiciliosService,
-    private router: Router
+    private router: Router,
+    private aroute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +53,7 @@ export class FormDomicilioComponent implements OnInit {
     }else{
       this.consultarUltimoId();
     }
+    this.navigate = this.aroute.snapshot.queryParamMap.get('navigate');
   }
 
   private cargarDatos(): void {
@@ -129,8 +132,9 @@ export class FormDomicilioComponent implements OnInit {
 
   private registrar(): void {
     this.domiSrv.post(this.getDto()).subscribe(() => {
-      this.notif.create('success', 'Guardado correctamente', '');
+      this.notif.create('success', 'Domicilio guardado correctamente', '');
       this.form.reset();
+      this.procesarRedireccion();
     }, (e) => {
       console.log('Error al registrar domicilio');
       console.log(e);
@@ -141,7 +145,7 @@ export class FormDomicilioComponent implements OnInit {
   private modificar(): void {
     const domi = this.getDto();
     this.domiSrv.put(+this.iddomicilio, domi).subscribe(() => {
-      this.notif.create('success', 'Guardado correctamente', '');
+      this.notif.create('success', 'Domicilio guardado correctamente', '');
       this.iddomicilio = `${domi.id}`;
       this.router.navigateByUrl(`../${domi.id}`);
     }, (e) => {
@@ -164,6 +168,18 @@ export class FormDomicilioComponent implements OnInit {
       console.log(e);
       this.notif.create('error', 'Error al consultar código disponible', e.error);
     });
+  }
+
+  private procesarRedireccion(): void{
+    if(this.navigate){
+      switch(this.navigate){
+        case 'nuevasuscripcion':
+          this.router.navigateByUrl(`/clientes/${this.idcliente}/suscripciones/nueva`);
+          break;
+        default:
+          break;
+      }
+    }
   }
 
 }

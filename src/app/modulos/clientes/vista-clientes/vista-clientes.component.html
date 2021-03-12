@@ -70,8 +70,8 @@
                                     <i nz-icon nzType="eye"></i>
                                 </a>
                                 <nz-divider nzType="vertical"></nz-divider>
-                                <nz-tag [nzColor]="'#00C853'">{{ c.cantconectados }} Con.</nz-tag>
-                                <nz-tag [nzColor]="'#f44336'">{{ c.cantdesconectados }} Des.</nz-tag>
+                                <nz-tag [nzColor]="'green'">{{ c.cantconectados }} Con.</nz-tag>
+                                <nz-tag [nzColor]="'red'">{{ c.cantdesconectados }} Des.</nz-tag>
                             </td>
                             <td>
                                 <a [routerLink]="'/clientes/'+c.id">Editar</a>

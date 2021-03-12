@@ -89,6 +89,12 @@
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                         <nz-space>
                             <nz-space-item *ngIf="idcliente!=='nuevo'">
+                                <a nz-button routerLink="suscripciones">
+                                    <i nz-icon nzType="carry-out"></i>
+                                    Suscripciones
+                                </a>
+                            </nz-space-item>
+                            <nz-space-item *ngIf="idcliente!=='nuevo'">
                                 <a nz-button routerLink="domicilios">
                                     <i nz-icon nzType="home"></i>
                                     Domicilios

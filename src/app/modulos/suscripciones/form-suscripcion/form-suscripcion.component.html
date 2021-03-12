@@ -8,16 +8,27 @@
     <nz-form-item>
         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Domicilio</nz-form-label>
         <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un domicilio.">
-            <nz-select formControlName="iddomicilio"  nzShowSearch nzAllowClear>
-                <nz-option *ngFor="let dom of lstDomicilios" [nzValue]="dom.id" [nzLabel]="dom.direccion+' - '+dom.barrio+' ('+dom.id+')'"></nz-option>
+            <nz-select formControlName="iddomicilio" nzShowSearch nzAllowClear [nzDropdownRender]="addDomicilio">
+                <nz-option *ngFor="let dom of lstDomicilios" [nzValue]="dom.id"
+                    [nzLabel]="dom.direccion+' - '+dom.barrio+' ('+dom.id+')'"></nz-option>
             </nz-select>
+            <ng-template #addDomicilio>
+                <nz-divider style="margin: 4px 0;"></nz-divider>
+                <a [routerLink]="'/clientes/'+idcliente+'/domicilios/nuevo'"
+                    [queryParams]="{navigate: 'nuevasuscripcion'}" style="margin-left: 12px;">
+                    <i nz-icon nzType="plus"></i>
+                    Nuevo domicilio...
+                </a>
+            </ng-template>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Servicio</nz-form-label>
         <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un servicio.">
-            <nz-select formControlName="idservicio" (ngModelChange)="onChangeServicio($event)" nzShowSearch nzAllowClear>
-                <nz-option *ngFor="let srv of lstServicios" [nzLabel]="srv.descripcion+' ('+srv.id+')'" [nzValue]="srv.id"></nz-option>
+            <nz-select formControlName="idservicio" (ngModelChange)="onChangeServicio($event)" nzShowSearch
+                nzAllowClear>
+                <nz-option *ngFor="let srv of lstServicios" [nzLabel]="srv.descripcion+' ('+srv.id+')'"
+                    [nzValue]="srv.id"></nz-option>
             </nz-select>
         </nz-form-control>
     </nz-form-item>
@@ -30,7 +41,8 @@
     <nz-form-item>
         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Fecha de suscripción</nz-form-label>
         <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una fecha.">
-            <nz-date-picker nzFormat="dd/MMMM/yyyy" formControlName="fechasuscripcion" style="width: 50%;"></nz-date-picker>
+            <nz-date-picker nzFormat="dd/MMMM/yyyy" formControlName="fechasuscripcion" style="width: 50%;">
+            </nz-date-picker>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

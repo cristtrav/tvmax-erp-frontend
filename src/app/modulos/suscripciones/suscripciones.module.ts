@@ -18,6 +18,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent],
@@ -38,7 +39,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzCheckboxModule,
     NzSpaceModule,
     NzTagModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzToolTipModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })
