@@ -40,4 +40,8 @@ export class SuscripcionesService {
   delete(id: number): Observable<any>{
     return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
   }
+
+  getUltimoId(): Observable<{ultimoid: number | null}> {
+    return this.http.get<{ultimoid: number | null}>(`${this.url}/ultimoid`);
+  }
 }

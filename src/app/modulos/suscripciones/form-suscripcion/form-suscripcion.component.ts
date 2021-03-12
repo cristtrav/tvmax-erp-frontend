@@ -48,6 +48,8 @@ export class FormSuscripcionComponent implements OnInit {
     this.cargarServicios();
     if (this.idsuscripcion !== 'nueva') {
       this.cargarDatos();
+    }else{
+      this.cargarUltimoId();
     }
   }
 
@@ -109,7 +111,7 @@ export class FormSuscripcionComponent implements OnInit {
     if (this.validado()) {
       if (this.idsuscripcion === 'nueva') {
         this.registrar();
-      }else{
+      } else {
         this.modificar();
       }
     }
@@ -165,15 +167,25 @@ export class FormSuscripcionComponent implements OnInit {
     });
   }
 
-  onChangeServicio(idsrv: any): void{
-    if(idsrv){
-      for(let s of this.lstServicios){
-        if(s.id === +idsrv){
+  onChangeServicio(idsrv: any): void {
+    if (idsrv) {
+      for (let s of this.lstServicios) {
+        if (s.id === +idsrv) {
           this.form.get('monto')?.setValue(s.precio);
           break;
         }
       }
     }
+  }
+
+  cargarUltimoId(): void {
+    this.suscSrv.getUltimoId().subscribe((data) => {
+      this.form.get('id')?.setValue(data.ultimoid);
+    }, (e) => {
+      console.log('Error al consultar el ultimo código de suscripción');
+      console.log(e);
+      this.notif.create('error', 'Error al consultar código de suscripción', e.error);
+    });
   }
 
 }
