@@ -23,10 +23,10 @@
             <td>{{ s.direccion }}</td>
             <td>{{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}</td>
             <td>
-                <nz-tag [nzColor]="s.conectado?'green':'red'">
-                    <span *ngIf="s.conectado && s.reconectado">Reconectado</span>
-                    <span *ngIf="s.conectado && !s.reconectado">Conectado</span>
-                    <span *ngIf="!s.conectado">Desconectado</span>
+                <nz-tag [nzColor]="s.estado==='D'?'red':'green'">
+                    <span *ngIf="s.estado === 'R'">Reconectado</span>
+                    <span *ngIf="s.estado === 'C'">Conectado</span>
+                    <span *ngIf="s.estado === 'D'">Desconectado</span>
                 </nz-tag>
             </td>
             <td>

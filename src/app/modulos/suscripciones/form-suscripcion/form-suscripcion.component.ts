@@ -7,6 +7,7 @@ import { Servicio } from './../../../dto/servicio-dto';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { SuscripcionesService } from './../../../servicios/suscripciones.service';
 import { Suscripcion } from 'src/app/dto/suscripcion-dto';
+import { Extra } from './../../../util/extra';
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -26,14 +27,15 @@ export class FormSuscripcionComponent implements OnInit {
     iddomicilio: [null, [Validators.required]],
     idservicio: [null, [Validators.required]],
     monto: [null, [Validators.required]],
+    estado: [null, Validators.required],
     fechasuscripcion: [null, [Validators.required]],
-    conectado: [true],
-    reconectado: [false]
+    fechacambioestado: [null, [Validators.required]]
   });
 
   lstDomicilios: Domicilio[] = [];
   lstServicios: Servicio[] = [];
   guardarLoading = false;
+  labelFechaCambio = '';
 
   constructor(
     private fb: FormBuilder,
@@ -48,10 +50,10 @@ export class FormSuscripcionComponent implements OnInit {
     this.cargarServicios();
     if (this.idsuscripcion !== 'nueva') {
       this.cargarDatos();
-    }else{
+    } else {
       this.cargarUltimoId();
     }
-    
+
   }
 
   private cargarDatos(): void {
@@ -60,10 +62,12 @@ export class FormSuscripcionComponent implements OnInit {
       this.form.get('iddomicilio')?.setValue(data.iddomicilio);
       this.form.get('idservicio')?.setValue(data.idservicio);
       this.form.get('monto')?.setValue(data.monto);
-      this.form.get('conectado')?.setValue(data.conectado);
-      this.form.get('reconectado')?.setValue(data.reconectado);
+      this.form.get('estado')?.setValue(data.estado);
       if (data.fechasuscripcion) {
         this.form.get('fechasuscripcion')?.setValue(new Date(`${data.fechasuscripcion}T00:00:00`));
+      }
+      if (data.fechacambioestado) {
+        this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}T00:00:00`));
       }
     }, (e) => {
       console.log('Error al cargar datos de la suscripcion');
@@ -125,14 +129,14 @@ export class FormSuscripcionComponent implements OnInit {
     s.idservicio = this.form.get('idservicio')?.value;
     s.iddomicilio = this.form.get('iddomicilio')?.value;
     s.idcliente = this.idcliente;
-    s.conectado = this.form.get('conectado')?.value;
-    s.reconectado = this.form.get('reconectado')?.value;
+    s.estado = this.form.get('estado')?.value;
     const fs: Date = this.form.get('fechasuscripcion')?.value;
     if (fs) {
-      const dia = `${fs.getDate()}`.padStart(2, '0');
-      const mes = `${fs.getMonth() + 1}`.padStart(2, '0');
-      const strFS = `${fs.getFullYear()}-${mes}-${dia}`;
-      s.fechasuscripcion = strFS;
+      s.fechasuscripcion = Extra.dateToString(fs);
+    }
+    const fce: Date = this.form.get('fechacambioestado')?.value;
+    if (fce) {
+      s.fechacambioestado = Extra.dateToString(fce);
     }
     return s;
   }
@@ -180,12 +184,30 @@ export class FormSuscripcionComponent implements OnInit {
 
   cargarUltimoId(): void {
     this.suscSrv.getUltimoId().subscribe((data) => {
-      this.form.get('id')?.setValue(data.ultimoid);
+        this.form.get('id')?.setValue(data.ultimoid?data.ultimoid+1:1);
     }, (e) => {
       console.log('Error al consultar el ultimo código de suscripción');
       console.log(e);
       this.notif.create('error', 'Error al consultar código de suscripción', e.error);
     });
+  }
+
+  seleccionEstado(e: string | null): void {
+    this.form.get('fechacambioestado')?.reset();
+    switch (e) {
+      case 'C':
+        this.labelFechaCambio = 'conexión';
+        break;
+      case 'R':
+        this.labelFechaCambio = 'reconexion';
+        break;
+      case 'D':
+        this.labelFechaCambio = 'desconexión';
+        break;
+      default:
+        this.labelFechaCambio = '';
+        break;
+    }
   }
 
 }
