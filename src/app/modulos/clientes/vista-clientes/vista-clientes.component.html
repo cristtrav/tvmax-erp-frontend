@@ -31,7 +31,7 @@
                         <th></th>
                         <th>Código</th>
                         <th>Razón social</th>
-                        <th>CI/RUC</th>
+                        <th nzAlign="right">CI/RUC</th>
                         <th>Domicilio princ.</th>
                         <th>Suscripciones</th>
                         <th>Acciones</th>
@@ -44,18 +44,21 @@
                                 (nzExpandChange)="onRowExpand(c.id===null?-1:c.id, $event)"></td>
                             <td>{{ c.id }}</td>
                             <td>{{ c.razonsocial }}</td>
-                            <td>
+                            <td nzAlign="right">
                                 <span *ngIf="c.ci">
                                     {{ c.ci | number }}
                                     <span *ngIf="c.ci!==null && c.dvruc!=null">-</span>
-                                {{c.dvruc}}
+                                    {{c.dvruc}}
                                 </span>
                                 <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
                             </td>
                             <td nzBreakWord>
-                                <a nz-tooltip nzTooltipTitle="Ver todos los domicilios" [routerLink]="c.id+'/domicilios'">
-                                    <i nz-icon nzType="eye"></i>
-                                </a>
+                                <span style="font-size: large;">
+                                    <a nz-tooltip nzTooltipTitle="Ver todos los domicilios del cliente"
+                                        [routerLink]="c.id+'/domicilios'">
+                                        <i nz-icon nzType="eye"></i>
+                                    </a>
+                                </span>
                                 <nz-divider nzType="vertical"></nz-divider>
                                 <span *ngIf="c.direccion">
                                     {{ c.direccion }}
@@ -66,9 +69,12 @@
                                 </span>
                             </td>
                             <td>
-                                <a nz-tooltip nzTooltipTitle="Ver todas las suscripciones" [routerLink]="c.id+'/suscripciones'">
-                                    <i nz-icon nzType="eye"></i>
-                                </a>
+                                <span style="font-size: large;">
+                                    <a nz-tooltip nzTooltipTitle="Ver todas las suscripciones del cliente"
+                                        [routerLink]="c.id+'/suscripciones'">
+                                        <i nz-icon nzType="eye"></i>
+                                    </a>
+                                </span>
                                 <nz-divider nzType="vertical"></nz-divider>
                                 <nz-tag [nzColor]="'green'">{{ c.cantconectados }} Con.</nz-tag>
                                 <nz-tag [nzColor]="'red'">{{ c.cantdesconectados }} Des.</nz-tag>
@@ -87,15 +93,18 @@
                                 <nz-space nzSize="large">
                                     <nz-space-item>
                                         <strong>Email: </strong>
-                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sin email)' }}</span>
+                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sin email)'
+                                            }}</span>
                                     </nz-space-item>
                                     <nz-space-item>
                                         <strong>Teléfono princ.: </strong>
-                                        <span [style]="!c.telefono1?'color: gray':''">{{ c.telefono1?c.telefono1:'(sin teléfono)' }}</span>
+                                        <span [style]="!c.telefono1?'color: gray':''">{{ c.telefono1?c.telefono1:'(sin
+                                            teléfono)' }}</span>
                                     </nz-space-item>
                                     <nz-space-item>
                                         <strong>Teléfono sec.:</strong>
-                                        <span [style]="!c.telefono2?'color: gray':''"> {{ c.telefono2?c.telefono2:'(sin teléfono)' }}</span>
+                                        <span [style]="!c.telefono2?'color: gray':''"> {{ c.telefono2?c.telefono2:'(sin
+                                            teléfono)' }}</span>
                                     </nz-space-item>
                                     <nz-space-item>
                                         <strong>Cobrador: </strong>

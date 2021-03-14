@@ -26,9 +26,12 @@ import { SuscripcionesClienteComponent } from './suscripciones-cliente/suscripci
 import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { SuscripcionesModule } from './../suscripciones/suscripciones.module';
+import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
+import { CuotasModule } from './../cuotas/cuotas.module';
+import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 
 @NgModule({
-  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent],
+  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent],
   imports: [
     CommonModule,
     ClientesRoutingModule,
@@ -50,7 +53,8 @@ import { SuscripcionesModule } from './../suscripciones/suscripciones.module';
     DomiciliosModule,
     NzToolTipModule,
     NzTagModule,
-    SuscripcionesModule
+    SuscripcionesModule,
+    CuotasModule
   ]
 })
 export class ClientesModule { }

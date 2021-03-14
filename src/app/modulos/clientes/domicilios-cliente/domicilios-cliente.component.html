@@ -17,12 +17,14 @@
                     </nz-breadcrumb-item>
                 </nz-breadcrumb>
             </div>
-            <div nz-col>
-                <div *ngIf="cliente">
-                    <span style="color:gray" *ngIf="cliente.ci">1.333.444-5</span>
-                    <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
+            <div *ngIf="cliente" nz-col>
+                <nz-tag [nzColor]="'magenta'">
                     <strong>{{ cliente.razonsocial }}</strong>
-                </div>
+                    <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
+                    <span *ngIf="cliente.ci">
+                        {{ cliente.ci | number }}<span *ngIf="cliente.dvruc">-{{ cliente.dvruc }}</span>
+                    </span>
+                </nz-tag>
             </div>
         </div>
     </div>

@@ -10,4 +10,6 @@ export class Suscripcion{
     idcliente: number | null = null;
     cliente: string | null = null;
     monto: number| null = null;
+    cuotaspendientes: number = 0;
+    deuda: number = 0;
 }

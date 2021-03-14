@@ -7,10 +7,12 @@
         <tr>
             <th>Código</th>
             <th>Servicio</th>
-            <th>Monto</th>
+            <th nzAlign="center">Monto</th>
             <th>Dirección</th>
             <th>Fecha Susc.</th>
             <th>Estado</th>
+            <th>Cuotas Pend.</th>
+            <th nzAlign="right">Deuda</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -19,7 +21,7 @@
             <td>{{ s.id }}</td>
             
             <td>{{ s.servicio }} ({{s.idservicio}})</td>
-            <td>{{ s.monto | number }}</td>
+            <td nzAlign="right">{{ s.monto | number }}</td>
             <td>{{ s.direccion }}</td>
             <td>{{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}</td>
             <td>
@@ -29,6 +31,16 @@
                     <span *ngIf="s.estado === 'D'">Desconectado</span>
                 </nz-tag>
             </td>
+            <td>
+                <span style="font-size: large;">
+                    <a nz-tooltip nzTooltipTitle="Ver cuotas de la suscripción" [routerLink]="s.id+'/cuotas'">
+                        <i nz-icon nzType="eye"></i>
+                    </a>
+                </span>
+                <nz-divider nzType="vertical"></nz-divider>
+                {{ s.cuotaspendientes | number }}
+            </td>
+            <td nzAlign="right">{{ s.deuda | number }}</td>
             <td>
                 <a [routerLink]="s.id+''">Editar</a>
                 <nz-divider nzType="vertical"></nz-divider>

@@ -1,0 +1,33 @@
+<nz-table #tbl [nzData]="lstCuotas">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Vencimiento</th>
+            <th nzAlign="right">Monto</th>
+            <th nzAlign="center">Pagado</th>
+            <th>F. de pago</th>
+            <th>Observación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let c of tbl.data">
+            <td>{{ c.id }}</td>
+            <td>{{ c.fechavencimiento }}</td>
+            <td nzAlign="right">{{ c.monto | number}}</td>
+            <td nzAlign="center">
+                <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.pagado?'#00C853':'#f44336'" [nzType]="c.pagado?'check-circle':'close-circle'"></i>
+            </td>
+            <td>{{ c.fechapago }}</td>
+            <td nzBreakWord>{{ c.observacion }}</td>
+            <td>
+                <a [routerLink]="c.id+''">Editar</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminar la Cuota?"
+                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(c.id)">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

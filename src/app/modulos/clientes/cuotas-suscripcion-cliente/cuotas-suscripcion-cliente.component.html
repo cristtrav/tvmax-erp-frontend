@@ -13,11 +13,24 @@
                         <a [routerLink]="'/clientes/'+idcliente">{{ idcliente }}</a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        Suscripciones
+                        <a [routerLink]="'/clientes/'+idcliente+'/suscripciones'">Suscripciones</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a [routerLink]="'/clientes/'+idcliente+'/suscripciones/'+idsuscripcion">{{ idsuscripcion }}</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                         Cuotas
                     </nz-breadcrumb-item>
                 </nz-breadcrumb>
             </div>
-            <div *ngIf="cliente" nz-col >
+            <div *ngIf="suscripcion" nz-col>
+                <nz-tag [nzColor]="'magenta'">
+                    <strong>{{ suscripcion.servicio }}</strong>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    Gs.{{ suscripcion.monto | number }}/mes
+                </nz-tag>
+            </div>
+            <div *ngIf="cliente" nz-col>
                 <nz-tag [nzColor]="'magenta'">
                     <strong>{{ cliente.razonsocial }}</strong>
                     <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
@@ -31,7 +44,7 @@
     
     <div class="module-container">
         <div class="module-content">
-            <app-contenido-vista-suscripciones [idcliente]="idcliente"></app-contenido-vista-suscripciones>
+            <app-contenido-vista-cuotas [idsuscripcion]="idsuscripcion"></app-contenido-vista-cuotas>
         </div>
     </div>
 </div>

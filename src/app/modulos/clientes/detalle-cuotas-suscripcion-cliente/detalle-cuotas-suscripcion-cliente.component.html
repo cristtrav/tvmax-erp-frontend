@@ -1,6 +1,6 @@
 <div class="inner-component">
     <div class="main-breadcrumb">
-        <div nz-row>
+        <div nz-row [nzGutter]="'8'">
             <div nz-col nzFlex="auto">
                 <nz-breadcrumb>
                     <nz-breadcrumb-item>
@@ -16,9 +16,22 @@
                         <a [routerLink]="'/clientes/'+idcliente+'/suscripciones'">Suscripciones</a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        {{ idsuscripcion | titlecase }}
+                        <a [routerLink]="'/clientes/'+idcliente+'/suscripciones/'+idsuscripcion">{{ idsuscripcion }}</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a [routerLink]="'/clientes/'+idcliente+'/suscripciones/'+idsuscripcion+'/cuotas'">Cuotas</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        {{ idcuota | titlecase}}
                     </nz-breadcrumb-item>
                 </nz-breadcrumb>
+            </div>
+            <div *ngIf="suscripcion" nz-col>
+                <nz-tag [nzColor]="'magenta'">
+                    <strong>{{ suscripcion.servicio }}</strong>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    Gs.{{ suscripcion.monto | number }}/mes
+                </nz-tag>
             </div>
             <div *ngIf="cliente" nz-col>
                 <nz-tag [nzColor]="'magenta'">
@@ -31,11 +44,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="module-container">
         <div nz-row nzJustify="center" nzAlign="top">
             <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
-                <app-form-suscripcion [idcliente]="idcliente" [idsuscripcion]="idsuscripcion"></app-form-suscripcion>
+                <app-form-cuota [idsuscripcion]="idsuscripcion" [idcuota]="idcuota"></app-form-cuota>
             </div>
         </div>
     </div>

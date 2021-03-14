@@ -6,6 +6,8 @@ import { DomiciliosClienteComponent } from './domicilios-cliente/domicilios-clie
 import { DetalleDomicilioClienteComponent } from './detalle-domicilio-cliente/detalle-domicilio-cliente.component';
 import { SuscripcionesClienteComponent } from './suscripciones-cliente/suscripciones-cliente.component';
 import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
+import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
+import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
@@ -13,7 +15,9 @@ const routes: Routes = [
   { path: ':idcliente/domicilios', component: DomiciliosClienteComponent },
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent},
   { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent },
-  { path: ':idcliente/suscripciones/:idsuscripcion', component: DetalleSuscripcionClienteComponent }
+  { path: ':idcliente/suscripciones/:idsuscripcion', component: DetalleSuscripcionClienteComponent },
+  { path: ':idcliente/suscripciones/:idsuscripcion/cuotas', component: CuotasSuscripcionClienteComponent},
+  { path: ':idcliente/suscripciones/:idsuscripcion/cuotas/:idcuota', component: DetalleCuotasSuscripcionClienteComponent}
 ];
 
 @NgModule({
