@@ -30,7 +30,11 @@
                     <tr *ngFor="let srv of tbl.data">
                         <td>{{ srv.id }}</td>
                         <td>{{ srv.descripcion }}</td>
-                        <td>{{ srv.grupo }} ({{ srv.idgrupo }})</td>
+                        <td>
+                            <span nz-tooltip [nzTooltipTitle]="'Código: '+srv.idgrupo">
+                                {{ srv.grupo }}
+                            </span>
+                        </td>
                         <td nzAlign="center">
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="srv.suscribible?'#00C853':'#f44336'" [nzType]="srv.suscribible?'check-circle':'close-circle'"></i>
                         </td>

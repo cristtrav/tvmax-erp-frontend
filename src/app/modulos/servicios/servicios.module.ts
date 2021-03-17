@@ -18,6 +18,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   declarations: [VistaServiciosComponent, DetalleServicioComponent],
@@ -38,7 +39,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     ReactiveFormsModule,
     NzTableModule,
     NzDividerModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzToolTipModule
   ]
 })
 export class ServiciosModule { }

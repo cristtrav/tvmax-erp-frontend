@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'barrios', loadChildren: () => import('./modulos/barrios/barrios.module').then(m => m.BarriosModule) },
   { path: 'tiposdomicilios', loadChildren: () => import('./modulos/tiposdomicilios/tiposdomicilios.module').then(m => m.TiposdomiciliosModule) },
   { path: 'cobradores', loadChildren: () => import('./modulos/cobradores/cobradores.module').then(m => m.CobradoresModule) },
-  { path: 'clientes', loadChildren: () => import('./modulos/clientes/clientes.module').then(m => m.ClientesModule) }
+  { path: 'clientes', loadChildren: () => import('./modulos/clientes/clientes.module').then(m => m.ClientesModule) },
+  { path: 'usuarios', loadChildren: () => import('./modulos/usuarios/usuarios.module').then(m => m.UsuariosModule)}
 ];
 
 @NgModule({

@@ -18,6 +18,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent],
@@ -37,7 +38,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     ReactiveFormsModule,
     IconsProviderModule,
     NzNotificationModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzToolTipModule
   ]
 })
 export class BarriosModule { }

@@ -28,7 +28,11 @@
                     <tr *ngFor="let b of lstBarrios">
                         <td>{{ b.id }}</td>
                         <td>{{ b.descripcion }}</td>
-                        <td>{{ b.distrito }}, {{b.departamento}} ({{b.iddistrito}})</td>
+                        <td>
+                            <span nz-tooltip [nzTooltipTitle]="'Código: '+b.iddistrito">
+                                {{ b.distrito }}, {{b.departamento}} 
+                            </span>
+                        </td>
                         <td>
                             <a [routerLink]="'/barrios/'+b.id">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>

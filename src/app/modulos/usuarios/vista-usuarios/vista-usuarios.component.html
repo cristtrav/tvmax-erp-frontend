@@ -5,35 +5,45 @@
                 <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
-                Distritos
+                Usuarios
             </nz-breadcrumb-item>
         </nz-breadcrumb>
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/distritos/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstDist" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstUsuarios" style="margin-top: 10px;">
                 <thead>
                     <tr>
                         <th>Código</th>
-                        <th>Descripción</th>
-                        <th>Departamento</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>C.I.</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th nzAlign="center">Activo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let dis of lstDist">
-                        <td>{{ dis.id }}</td>
-                        <td>{{ dis.descripcion }}</td>
-                        <td><span nz-tooltip [nzTooltipTitle]="'Código: '+dis.iddepartamento">{{ dis.departamento}}</span></td>
+                    <tr *ngFor="let u of tbl.data">
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.nombres }}</td>
+                        <td>{{ u.apellidos }}</td>
+                        <td>{{ u.ci | number}}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.telefono }}</td>
+                        <td nzAlign="center">
+                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.activo?'#00C853':'#f44336'" [nzType]="u.activo?'check-circle':'close-circle'"></i>
+                        </td>
                         <td>
-                            <a [routerLink]="'/distritos/'+dis.id">Editar</a>
+                            <a [routerLink]="u.id+''">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
                             <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(dis.id)">
+                            (nzOnConfirm)="eliminar(u.id)">
                                 Eliminar
                             </a>
                         </td>
