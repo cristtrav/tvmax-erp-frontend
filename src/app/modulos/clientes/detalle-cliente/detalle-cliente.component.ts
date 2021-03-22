@@ -16,6 +16,7 @@ export class DetalleClienteComponent implements OnInit {
 
   idcliente = 'nuevo';
   guardarLoading: boolean = false;
+  formLoading: boolean = false;
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
     nombres: [null, Validators.maxLength(50)],
@@ -152,6 +153,7 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.cliSrv.getPorId(+this.idcliente).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('nombres')?.setValue(data.nombres);
@@ -163,10 +165,12 @@ export class DetalleClienteComponent implements OnInit {
       this.form.get('telefono2')?.setValue(data.telefono2);
       this.form.get('email')?.setValue(data.email);
       this.form.get('idcobrador')?.setValue(data.idcobrador);
+      this.formLoading = false; 
     }, (e) => {
       console.log('Error al cargar cliente por id');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del cliente', e.error);
+      this.formLoading = false;
     });
   }
 

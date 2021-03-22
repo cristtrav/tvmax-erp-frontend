@@ -17,6 +17,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent],
@@ -35,7 +36,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzCheckboxModule,
     NzTableModule,
     NzDividerModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzSpinModule
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
 })

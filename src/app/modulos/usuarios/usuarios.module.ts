@@ -16,6 +16,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzDividerModule,
     NzCheckboxModule,
     NzNotificationModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzSpinModule
   ]
 })
 export class UsuariosModule { }

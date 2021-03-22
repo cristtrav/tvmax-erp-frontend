@@ -17,6 +17,8 @@ export class DetalleGrupoComponent implements OnInit {
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(80)]]
   });
+  formLoading: boolean = false;
+  guardarLoading: boolean = false;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -35,13 +37,16 @@ export class DetalleGrupoComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.grupoSrv.getGrupoPorId(+this.idgrupo).subscribe((data)=>{
       this.fg.get('id')?.setValue(data.id);
       this.fg.get('descripcion')?.setValue(data.descripcion);
+      this.formLoading = false;
     }, (e)=>{
       console.log('Error al cargar datos de Grupo');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos de Grupo', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -78,26 +83,32 @@ export class DetalleGrupoComponent implements OnInit {
   }
 
   private registrar(): void {
+    this.guardarLoading = true;
     this.grupoSrv.postGrupo(this.getDto()).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.fg.reset();
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al registrar Grupo');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 
   private modificar(): void {
+    this.guardarLoading = true;
     const g: Grupo = this.getDto();
     this.grupoSrv.putGrupo(+this.idgrupo, this.getDto()).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idgrupo = `${g.id}`;
       this.router.navigateByUrl(`/grupos/${g.id}`);
+      this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar grupo');
       console.log(e);
       this.notif.create('error', 'Eror al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 }

@@ -23,6 +23,8 @@ export class DetalleDistritoComponent implements OnInit {
   });
   formatterCod = (value: number) => value === null ? '' : `${value}`.padStart(2, '0');
   lstDep: Departamento[] = [];
+  formLoading: boolean = false;
+  guardarLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -53,14 +55,17 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.distSrv.getPorId(this.iddistrito).subscribe((data) => {
       this.form.get('id')?.setValue(data.id?.slice(-2));
       this.form.get('descripcion')?.setValue(data.descripcion);
       this.form.get('iddepartamento')?.setValue(data.iddepartamento);
+      this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos del distrito');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del distrito', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -100,17 +105,21 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   private registrar(): void {
+    this.guardarLoading = true;
     this.distSrv.post(this.getDto()).subscribe(() => {
       this.form.reset();
       this.notif.create('success', 'Guardado correctamente', '');
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al registrar distrito');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     })
   }
 
   private modificar(): void {
+    this.guardarLoading = true;
     const d = this.getDto();
     this.distSrv.put(this.iddistrito, d).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
@@ -118,10 +127,12 @@ export class DetalleDistritoComponent implements OnInit {
       if (d.id !== null) {
         this.iddistrito = d.id;
       }
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar distrito');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 

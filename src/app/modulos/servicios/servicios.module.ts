@@ -19,6 +19,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [VistaServiciosComponent, DetalleServicioComponent],
@@ -40,7 +41,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzTableModule,
     NzDividerModule,
     NzPopconfirmModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpinModule
   ]
 })
 export class ServiciosModule { }

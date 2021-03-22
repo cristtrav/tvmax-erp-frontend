@@ -3,6 +3,7 @@
         <tr>
             <th>Código</th>
             <th>Vencimiento</th>
+            <th nzAlign="center">Nro. Cuota</th>
             <th nzAlign="right">Monto</th>
             <th nzAlign="center">Pagado</th>
             <th>F. de pago</th>
@@ -14,6 +15,7 @@
         <tr *ngFor="let c of tbl.data">
             <td>{{ c.id }}</td>
             <td>{{ c.fechavencimiento }}</td>
+            <td nzAlign="center">{{ c.nrocuota | number}}</td>
             <td nzAlign="right">{{ c.monto | number}}</td>
             <td nzAlign="center">
                 <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.pagado?'#00C853':'#f44336'" [nzType]="c.pagado?'check-circle':'close-circle'"></i>

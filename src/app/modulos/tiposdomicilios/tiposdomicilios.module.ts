@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
     ReactiveFormsModule,
     NzGridModule,
     NzNotificationModule,
-    NzDividerModule
+    NzDividerModule,
+    NzSpinModule
   ]
 })
 export class TiposdomiciliosModule { }

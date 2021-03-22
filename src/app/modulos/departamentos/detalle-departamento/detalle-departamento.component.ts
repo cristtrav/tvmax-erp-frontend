@@ -17,6 +17,8 @@ export class DetalleDepartamentoComponent implements OnInit {
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(80)]],
   });
+  formLoading: boolean = false;
+  guardarLoading: boolean = false;
 
   formatterCod = (value: number) => value === null ? '' : `${value}`.padStart(2, '0');
 
@@ -40,13 +42,16 @@ export class DetalleDepartamentoComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.depSrv.getPorId(this.iddepartamento).subscribe((data)=>{
       this.form.get('id')?.setValue(data.id);
       this.form.get('descripcion')?.setValue(data.descripcion);
+      this.formLoading = false;
     }, (e)=>{
       console.log('Error al cargar departamento');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del departamento', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -76,26 +81,32 @@ export class DetalleDepartamentoComponent implements OnInit {
   }
 
   private registrar(): void {
+    this.guardarLoading = true;
     this.depSrv.post(this.getDto()).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.form.reset();
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al registrar departamento');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 
   private modificar(): void {
+    this.guardarLoading = true;
     const d: Departamento = this.getDto();
     this.depSrv.put(this.iddepartamento, d).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.iddepartamento = `${d.id}`;
       this.router.navigateByUrl(`/departamentos/${d.id}`);
+      this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar departamento');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 

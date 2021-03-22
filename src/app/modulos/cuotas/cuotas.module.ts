@@ -18,6 +18,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [TablaCuotasComponent, ContenidoVistaCuotasComponent, FormCuotaComponent],
@@ -38,7 +39,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzDatePickerModule,
     NzInputNumberModule,
     NzToolTipModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzSpinModule
   ],
   exports: [ContenidoVistaCuotasComponent, FormCuotaComponent]
 })

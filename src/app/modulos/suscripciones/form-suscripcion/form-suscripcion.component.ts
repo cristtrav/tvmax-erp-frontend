@@ -34,7 +34,8 @@ export class FormSuscripcionComponent implements OnInit {
 
   lstDomicilios: Domicilio[] = [];
   lstServicios: Servicio[] = [];
-  guardarLoading = false;
+  guardarLoading: boolean = false;
+  formLoading: boolean = false;
   labelFechaCambio = '';
 
   constructor(
@@ -57,6 +58,7 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.suscSrv.getPorId(+this.idsuscripcion).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('iddomicilio')?.setValue(data.iddomicilio);
@@ -69,10 +71,12 @@ export class FormSuscripcionComponent implements OnInit {
       if (data.fechacambioestado) {
         this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}T00:00:00`));
       }
+      this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos de la suscripcion');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos de suscripción', e.error);
+      this.formLoading = false;
     });
   }
 

@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent],
@@ -39,7 +40,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     IconsProviderModule,
     NzNotificationModule,
     NzPopconfirmModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpinModule
   ]
 })
 export class BarriosModule { }

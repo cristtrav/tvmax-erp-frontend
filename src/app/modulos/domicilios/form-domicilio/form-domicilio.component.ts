@@ -34,6 +34,9 @@ export class FormDomicilioComponent implements OnInit {
     principal: [false]
   });
 
+  guardarLoading: boolean = false;
+  formLoading: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private barriosSrv: BarriosService,
@@ -57,6 +60,7 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.domiSrv.getPorId(+this.iddomicilio).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('direccion')?.setValue(data.direccion);
@@ -65,10 +69,12 @@ export class FormDomicilioComponent implements OnInit {
       this.form.get('nromedidor')?.setValue(data.nromedidor);
       this.form.get('observacion')?.setValue(data.observacion);
       this.form.get('principal')?.setValue(data.principal);
+      this.formLoading = true;
     }, (e) => {
       console.log('Error al cargar datos del domicilio');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del domicilio', e.error);
+      this.formLoading = true;
     });
   }
 
@@ -131,27 +137,33 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private registrar(): void {
+    this.guardarLoading = true;
     this.domiSrv.post(this.getDto()).subscribe(() => {
       this.notif.create('success', 'Domicilio guardado correctamente', '');
       this.form.reset();
       this.procesarRedireccion();
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al registrar domicilio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 
   private modificar(): void {
+    this.guardarLoading = true;
     const domi = this.getDto();
     this.domiSrv.put(+this.iddomicilio, domi).subscribe(() => {
       this.notif.create('success', 'Domicilio guardado correctamente', '');
       this.iddomicilio = `${domi.id}`;
       this.router.navigateByUrl(`../${domi.id}`);
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar domicilio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 

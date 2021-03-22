@@ -1,55 +1,58 @@
-<form nz-form [formGroup]="form">
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Dirección</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una dirección. Máx. 200 carácteres.">
-            <input nz-input formControlName="direccion">
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Barrio</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un barrio.">
-            <nz-select nzAllowClear nzShowSearch formControlName="idbarrio">
-                <nz-option *ngFor="let b of lstBarrios" [nzValue]="b.id"
-                    [nzLabel]="b.descripcion+' ('+b.distrito+', '+b.departamento+')'"></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo de domicilio</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un tipo de domicilio.">
-            <nz-select formControlName="idtipodomicilio" nzAllowClear nzShowSearch>
-                <nz-option *ngFor="let td of lstTiposDomicilios" [nzValue]="td.id" [nzLabel]="td.descripcion"></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24">Medidor ANDE</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 30 carácteres.">
-            <input nz-input formControlName="nromedidor">
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-label [nzSm]="7" [nzXs]="24">Observación</nz-form-label>
-        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 150 carácteres.">
-            <input nz-input formControlName="observacion">
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <span nz-col [nzSm]="7" [nzXs]="24"></span>
-        <nz-form-control [nzSm]="15" [nzXs]="24">
-            <label nz-checkbox formControlName="principal">Domicilio principal</label>
-        </nz-form-control>
-    </nz-form-item>
-    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-        <button nz-button nzType="primary" (click)="guardar()">
-            <i nz-icon nzType="save"></i>
-            Guardar
-        </button>
-    </div>
-</form>
+<nz-spin [nzSpinning]="formLoading">
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+                <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Dirección</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una dirección. Máx. 200 carácteres.">
+                <input nz-input formControlName="direccion">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Barrio</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un barrio.">
+                <nz-select nzAllowClear nzShowSearch formControlName="idbarrio">
+                    <nz-option *ngFor="let b of lstBarrios" [nzValue]="b.id"
+                        [nzLabel]="b.descripcion+' ('+b.distrito+', '+b.departamento+')'"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo de domicilio</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un tipo de domicilio.">
+                <nz-select formControlName="idtipodomicilio" nzAllowClear nzShowSearch>
+                    <nz-option *ngFor="let td of lstTiposDomicilios" [nzValue]="td.id" [nzLabel]="td.descripcion">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">Medidor ANDE</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 30 carácteres.">
+                <input nz-input formControlName="nromedidor">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">Observación</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 150 carácteres.">
+                <input nz-input formControlName="observacion">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <span nz-col [nzSm]="7" [nzXs]="24"></span>
+            <nz-form-control [nzSm]="15" [nzXs]="24">
+                <label nz-checkbox formControlName="principal">Domicilio principal</label>
+            </nz-form-control>
+        </nz-form-item>
+        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                <i nz-icon nzType="save"></i>
+                Guardar
+            </button>
+        </div>
+    </form>
+</nz-spin>

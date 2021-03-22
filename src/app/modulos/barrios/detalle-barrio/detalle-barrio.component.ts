@@ -21,7 +21,8 @@ export class DetalleBarrioComponent implements OnInit {
     iddistrito: [null, [Validators.required]]
   });
   lstDist: Distrito[] = [];
-
+  formLoading: boolean = false;
+  guardarLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -34,24 +35,27 @@ export class DetalleBarrioComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.aroute.snapshot.paramMap.get('id');
-    if(id !== null){
+    if (id !== null) {
       this.idbarrio = id;
-      if(id !== 'nuevo'){
+      if (id !== 'nuevo') {
         this.cargarDatos();
       }
     }
     this.cargarDistritos();
   }
 
-  private cargarDatos(): void{
-    this.barrioSrv.getPorId(+this.idbarrio).subscribe((data)=>{
+  private cargarDatos(): void {
+    this.formLoading = true;
+    this.barrioSrv.getPorId(+this.idbarrio).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('descripcion')?.setValue(data.descripcion);
       this.form.get('iddistrito')?.setValue(data.iddistrito);
-    }, (e)=>{
+      this.formLoading = false;
+    }, (e) => {
       console.log('Error al cargar datos del barrio');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del barrio', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -81,10 +85,10 @@ export class DetalleBarrioComponent implements OnInit {
   }
 
   guardar(): void {
-    if(this.validado()){
-      if(this.idbarrio === 'nuevo'){
+    if (this.validado()) {
+      if (this.idbarrio === 'nuevo') {
         this.registrar();
-      }else{
+      } else {
         this.modificar();
       }
     }
@@ -98,27 +102,33 @@ export class DetalleBarrioComponent implements OnInit {
     return b;
   }
 
-  private registrar(): void{
-    this.barrioSrv.post(this.getDto()).subscribe(()=>{
+  private registrar(): void {
+    this.guardarLoading = true;
+    this.barrioSrv.post(this.getDto()).subscribe(() => {
       this.form.reset();
       this.notif.create('success', 'Guardado correctamente', '');
-    }, (e)=>{
+      this.guardarLoading = false;
+    }, (e) => {
       console.log('Error al registrar barrio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 
-  private modificar(): void{
+  private modificar(): void {
+    this.guardarLoading = true;
     const b: Barrio = this.getDto();
-    this.barrioSrv.put(+this.idbarrio, b).subscribe(()=>{
+    this.barrioSrv.put(+this.idbarrio, b).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.idbarrio = `${b.id}`;
       this.router.navigateByUrl(`/barrios/${b.id}`);
-    }, (e)=>{
+      this.guardarLoading = false;
+    }, (e) => {
       console.log('Error al modificar barrio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 

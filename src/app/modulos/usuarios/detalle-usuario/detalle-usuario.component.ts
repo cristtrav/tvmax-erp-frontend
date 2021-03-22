@@ -26,6 +26,7 @@ export class DetalleUsuarioComponent implements OnInit {
 
   pwdVisible: boolean = false;
   guardarLoading: boolean = false;
+  formLoading: boolean = false;
   pwdRequired: boolean = true;
 
   constructor(
@@ -46,6 +47,7 @@ export class DetalleUsuarioComponent implements OnInit {
   }
 
   private cargarDatos(): void {
+    this.formLoading = true;
     this.usuarioSrv.getPorId(+this.idusuario).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('nombres')?.setValue(data.nombres);
@@ -56,10 +58,12 @@ export class DetalleUsuarioComponent implements OnInit {
       this.form.get('activo')?.setValue(data.activo);
       this.pwdRequired = false;
       this.form.get('password')?.setValidators([Validators.minLength(5)]);
+      this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos del usuario');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del usuario', e.error);
+      this.formLoading = false;
     });
   }
 

@@ -18,6 +18,7 @@ export class DetalleTipodomicilioComponent implements OnInit {
     descripcion: [null, [Validators.required, Validators.maxLength(60)]]
   });
   guardarLoading: boolean = false;
+  formLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,13 +39,16 @@ export class DetalleTipodomicilioComponent implements OnInit {
   }
 
   private cargarDatos(): void{
+    this.formLoading = true;
     this.tipoDomSrv.getPorId(+this.idtipodomicilio).subscribe((data)=>{
       this.form.get('id')?.setValue(data.id);
       this.form.get('descripcion')?.setValue(data.descripcion);
+      this.formLoading = false;
     }, (e)=>{
       console.log('Error al cargar datos del tipo de domicilio');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -80,15 +84,18 @@ export class DetalleTipodomicilioComponent implements OnInit {
     }
   }
   private modificar(): void {
+    this.guardarLoading = true;
     const td: TipoDomicilio = this.getDto();
     this.tipoDomSrv.put(+this.idtipodomicilio, td).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idtipodomicilio = `${td.id}`;
       this.router.navigateByUrl(`/tiposdomicilios/${td.id}`);
+      this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar tipo de domicilio');
       console.log(e);
       this.notif.create('error', 'Error al guarddar', e.error);
+      this.guardarLoading = false;
     });
   }
 

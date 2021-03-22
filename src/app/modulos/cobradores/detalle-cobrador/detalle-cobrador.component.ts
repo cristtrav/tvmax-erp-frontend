@@ -23,6 +23,7 @@ export class DetalleCobradorComponent implements OnInit {
     activo: [false]
   });
   guardarLoading: boolean = false;
+  formLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +44,7 @@ export class DetalleCobradorComponent implements OnInit {
   }
 
   cargarDatos(): void {
+    this.formLoading = true;
     this.cobradoresSrv.getPorId(+this.idcobrador).subscribe((data) => {
       this.form.get('id')?.setValue(data.id);
       this.form.get('razonsocial')?.setValue(data.razonsocial);
@@ -51,10 +53,12 @@ export class DetalleCobradorComponent implements OnInit {
       this.form.get('telefono')?.setValue(data.telefono);
       this.form.get('email')?.setValue(data.email);
       this.form.get('activo')?.setValue(data.activo);
+      this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del cobrador', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -101,26 +105,32 @@ export class DetalleCobradorComponent implements OnInit {
   }
 
   private registrar(): void {
+    this.guardarLoading = true;
     this.cobradoresSrv.post(this.getDto()).subscribe(() => {
       this.form.reset();
       this.notif.create('success', 'Guardado correctamente', '');
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al registrar cobrador');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 
   private modificar(): void {
+    this.guardarLoading = true;
     const c = this.getDto();
     this.cobradoresSrv.put(+this.idcobrador, c).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.idcobrador = `${c.id}`;
       this.router.navigateByUrl(`/cobradores/${c.id}`);
+      this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar cobrador');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      this.guardarLoading = false;
     });
   }
 

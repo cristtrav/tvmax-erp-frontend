@@ -23,6 +23,8 @@ export class DetalleServicioComponent implements OnInit {
     precio: [null, [Validators.required]],
     suscribible: [false, [Validators.required]]
   });
+  formLoading: boolean = false;
+  guardarLoading: boolean = false;
 
   constructor(
     private gruposSrv: GruposService,
@@ -43,16 +45,19 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private cargarServicio(){
+    this.formLoading = true;
     this.serviciosSrv.getServicioPorId(+this.idservicio).subscribe((data)=>{
       this.form.get('id')?.setValue(data.id);
       this.form.get('descripcion')?.setValue(data.descripcion);
       this.form.get('idgrupo')?.setValue(data.idgrupo);
       this.form.get('precio')?.setValue(data.precio);
       this.form.get('suscribible')?.setValue(data.suscribible);
+      this.formLoading = false;
     }, (e)=>{
       console.log('Error al cargar datos de servicio');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos del Servicio', e.error);
+      this.formLoading = false;
     });
   }
 
@@ -102,26 +107,32 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private registrar(): void {
+    ;this.guardarLoading = true;
     this.serviciosSrv.postServicio(this.getDto()).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente','');
       this.form.reset();
+      ;this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al registrar Servicio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      ;this.guardarLoading = false;
     })
   }
 
   private modificar(): void{
+    ;this.guardarLoading = true;
     const s: Servicio = this.getDto();
     this.serviciosSrv.putServicio(+this.idservicio, s).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idservicio = `${s.id}`;
       this.router.navigateByUrl(`/servicios/${s.id}`);
+      ;this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar Servicio');
       console.log(e);
       this.notif.create('error', 'Error al guardar', e.error);
+      ;this.guardarLoading = false;
     });
   }
 

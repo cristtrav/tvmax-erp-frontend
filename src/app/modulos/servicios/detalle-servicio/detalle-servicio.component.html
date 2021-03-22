@@ -15,48 +15,52 @@
     <div class="module-container">
         <div nz-row nzJustify="center" nzAlign="top">
             <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
-                <form nz-form [formGroup]="form">
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
-                            <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 50%;">
-                            </nz-input-number>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24"
-                            nzErrorTip="Ingrese una descripción. Máx. 100 carácteres.">
-                            <input nz-input formControlName="descripcion">
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Grupo</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un Grupo">
-                            <nz-select nzShowSearch formControlName="idgrupo">
-                                <nz-option *ngFor="let grupo of lstGrupos" [nzLabel]="grupo.descripcion" [nzValue]="grupo.id"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Precio</nz-form-label>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un monto.">
-                            <nz-input-number [nzMin]="0" [nzStep]="1" style="width: 50%;" formControlName="precio"></nz-input-number>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item>
-                        <span nz-col [nzSm]="7" [nzXs]="24"></span>
-                        <nz-form-control [nzSm]="15" [nzXs]="24" >
-                            <label nz-checkbox formControlName="suscribible">Suscribible</label>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                        <button nz-button nzType="primary" (click)="guardar()">
-                            <i nz-icon nzType="save"></i>
-                            Guardar
-                        </button>
-                    </div>
-                </form>
+                <nz-spin [nzSpinning]="formLoading">
+                    <form nz-form [formGroup]="form">
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
+                                <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 50%;">
+                                </nz-input-number>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24"
+                                nzErrorTip="Ingrese una descripción. Máx. 100 carácteres.">
+                                <input nz-input formControlName="descripcion">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Grupo</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un Grupo">
+                                <nz-select nzShowSearch formControlName="idgrupo">
+                                    <nz-option *ngFor="let grupo of lstGrupos" [nzLabel]="grupo.descripcion"
+                                        [nzValue]="grupo.id"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Precio</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un monto.">
+                                <nz-input-number [nzMin]="0" [nzStep]="1" style="width: 50%;" formControlName="precio">
+                                </nz-input-number>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <span nz-col [nzSm]="7" [nzXs]="24"></span>
+                            <nz-form-control [nzSm]="15" [nzXs]="24">
+                                <label nz-checkbox formControlName="suscribible">Suscribible</label>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                <i nz-icon nzType="save"></i>
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </nz-spin>
             </div>
         </div>
     </div>

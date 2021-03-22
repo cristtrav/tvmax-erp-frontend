@@ -23,7 +23,8 @@ export class FormCuotaComponent implements OnInit {
     observacion: [null, [Validators.maxLength(150)]]
   });
 
-  guardarLoading = false;
+  guardarLoading: boolean = false;
+  formLoading: boolean = false;
   @Input()
   idsuscripcion: number | null = null;
   @Input()
@@ -145,16 +146,19 @@ export class FormCuotaComponent implements OnInit {
   }
   
   private cargarDatos(): void{
+    this.formLoading = true;
     this.cuotaSrv.getPorId(+this.idcuota).subscribe((data)=>{
       this.form.get('idservicio')?.setValue(data.idservicio);
       this.form.get('fechavencimiento')?.setValue(new Date(`${data.fechavencimiento}T00:00:00`));
       this.form.get('monto')?.setValue(data.monto);
       this.form.get('nrocuota')?.setValue(data.nrocuota);
       this.form.get('observacion')?.setValue(data.observacion);
+      this.formLoading = false;
     }, (e)=>{
       console.log('Error al cargar datos de la cuota');
       console.log(e);
       this.notif.create('error', 'Error al cargar datos de la cuota', e.error);
+      this.formLoading = false;
     });
   }
 }
