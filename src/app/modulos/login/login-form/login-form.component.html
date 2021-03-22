@@ -1,0 +1,44 @@
+<div nz-row nzJustify="space-around" nzAlign="middle" class="bg">
+    <div nz-col [nzXs]="22" [nzSm]="14" [nzMd]="10" [nzLg]="8" [nzXl]="6">
+        <nz-card class="tarjeta">
+            <nz-card-meta nzTitle="Login" [nzTitle]="titulo" [nzDescription]="formulario"></nz-card-meta>
+        </nz-card>
+    </div>
+    <ng-template #formulario>
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Ingrese su nro. de documento.">
+                    <nz-input-group nzAddOnBeforeIcon="user">
+                        <input formControlName="ci" nz-input placeholder="Documento">
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control nzErrorTip="Ingrese su contraseña.">
+                    <nz-input-group nzAddOnBeforeIcon="lock" [nzSuffix]="suffixPwd">
+                        <input nz-input formControlName="pwd" [type]="pwdVisible?'text':'password'" placeholder="Contraseña">
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-row [nzGutter]="[0, 32]">
+                <div nz-col nzSpan="24">
+                    <button nz-button nzType="primary" style="width: 100%;" [nzLoading]="loginLoading" (click)="doLogin()">
+                        Login
+                    </button>
+                    <div nz-col nzSpan="24" *ngIf="msgVisible">
+                        <nz-alert nzCloseable nzType="error" [nzMessage]="tituloMsg" [nzDescription]="descripcionMsg" (nzOnClose)="msgVisible=!msgVisible"></nz-alert>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template #titulo>
+        <img style="max-width: 100%; max-height: 100%;" src="/assets/img/logo-letra-negra.png" alt="TVMax">
+    </ng-template>
+    <ng-template #prefixUser>
+        <i nz-icon nzType="user"></i>
+    </ng-template>
+    <ng-template #suffixPwd>
+        <i nz-icon [nzType]="pwdVisible?'eye-invisible':'eye'" (click)="pwdVisible=!pwdVisible" style="cursor: pointer;"></i>
+    </ng-template>
+</div>

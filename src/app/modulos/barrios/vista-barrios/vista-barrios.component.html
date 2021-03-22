@@ -11,7 +11,7 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/barrios/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
@@ -34,7 +34,7 @@
                             </span>
                         </td>
                         <td>
-                            <a [routerLink]="'/barrios/'+b.id">Editar</a>
+                            <a [routerLink]="b.id+''">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
                             <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Barrio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(b.id)">

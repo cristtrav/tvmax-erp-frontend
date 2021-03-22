@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Tipos de domicilios
@@ -11,7 +11,7 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/tiposdomicilios/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
@@ -28,7 +28,7 @@
                         <td>{{ td.id }}</td>
                         <td>{{ td.descripcion }}</td>
                         <td>
-                            <a [routerLink]="'/tiposdomicilios/'+td.id">Editar</a>
+                            <a [routerLink]="td.id+''">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
                             <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Tipo de domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(td.id)">

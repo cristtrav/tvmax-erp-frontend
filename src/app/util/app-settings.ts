@@ -23,4 +23,34 @@ export class AppSettings{
     }
     return httpOptions;
   }
+  public static get httpOptionsPostJson(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json; charset=utf-8',
+      }),
+      responseType: 'json'
+    }
+    return httpOptions;
+  }
+
+  public static get headersTextAuth(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }),
+      responseType: 'text'
+    }
+    return httpOptions;
+  }
+
+  public static get headersGetAuth(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      })
+    }
+    return httpOptions;
+  }
+
 }

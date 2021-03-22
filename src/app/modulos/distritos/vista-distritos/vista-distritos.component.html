@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Distritos
@@ -11,7 +11,7 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/distritos/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
@@ -30,7 +30,7 @@
                         <td>{{ dis.descripcion }}</td>
                         <td><span nz-tooltip [nzTooltipTitle]="'Código: '+dis.iddepartamento">{{ dis.departamento}}</span></td>
                         <td>
-                            <a [routerLink]="'/distritos/'+dis.id">Editar</a>
+                            <a [routerLink]="dis.id+''">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
                             <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(dis.id)">

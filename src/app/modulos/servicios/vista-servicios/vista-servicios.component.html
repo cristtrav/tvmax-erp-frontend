@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Servicios
@@ -11,7 +11,7 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/servicios/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
@@ -40,7 +40,7 @@
                         </td>
                         <td nzAlign="right">{{ srv.precio | number }}</td>
                         <td>
-                            <a [routerLink]="'/servicios/'+srv.id">Editar</a>
+                            <a [routerLink]="srv.id+''">Editar</a>
                             <nz-divider nzType="vertical"></nz-divider>
                             <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(srv.id)">

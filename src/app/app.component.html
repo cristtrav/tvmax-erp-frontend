@@ -2,9 +2,9 @@
   <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
-        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-        <h1>TVMaxERP</h1>
+      <a [routerLink]="'/app/welcome'">
+        <img src="/assets/img/favicon-transparente.png" alt="logo">
+        <h1>TVMax ERP</h1>
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
@@ -12,14 +12,14 @@
       <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Bienvenido</a>
+            <a routerLink="welcome">Bienvenido</a>
           </li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Clientes" nzIcon="user">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/clientes">Clientes</a>
+            <a routerLink="clientes">Clientes</a>
           </li>
           <li nz-menu-item nzMatchRouter>
             <a>Suscripciones</a>
@@ -29,36 +29,36 @@
       <li nz-submenu nzTitle="Funcionarios" nzIcon="team">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/cobradores">Cobradores</a>
+            <a routerLink="cobradores">Cobradores</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/usuarios">Usuarios</a>
+            <a routerLink="usuarios">Usuarios</a>
           </li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Lugares" nzIcon="global">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/departamentos">Departamentos</a>
+            <a routerLink="departamentos">Departamentos</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/distritos">Distritos</a>
+            <a routerLink="distritos">Distritos</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/barrios">Barrios</a>
+            <a routerLink="barrios">Barrios</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/tiposdomicilios">Tipos de domicilios</a>
+            <a routerLink="tiposdomicilios">Tipos de domicilios</a>
           </li>
         </ul>
       </li>
       <li nz-submenu nzTitle="Servicios" nzIcon="shopping">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/grupos">Grupos</a>
+            <a routerLink="grupos">Grupos</a>
           </li>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/servicios">Servicios</a>
+            <a routerLink="servicios">Servicios</a>
           </li>
         </ul>
       </li>
@@ -66,14 +66,32 @@
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <div class="app-header">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
-        </span>
+      <div class="app-header" nz-row>
+        <div nz-col nzFlex="auto">
+          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+            <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+          </span>
+        </div>
+        <div nz-col>
+          <a>
+            <nz-avatar nz-dropdown [nzText]="textoAvatar"
+              [nzDropdownMenu]="menu" style="margin-right: 8px; background-color: #87d068;"></nz-avatar>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li style="margin: 6px 12px 6px 12px"><strong>{{nombreUsuario}}</strong></li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="doLogout()">
+                <i nz-icon nzType="logout"></i>
+                Cerrar Sesión
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
       </div>
     </nz-header>
     <nz-content>
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </nz-content>
   </nz-layout>
 </nz-layout>

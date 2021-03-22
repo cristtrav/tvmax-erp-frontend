@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Grupos
@@ -11,7 +11,7 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="/grupos/nuevo">
+            <a nz-button nzType="primary" routerLink="nuevo">
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
@@ -29,7 +29,7 @@
                         <td>{{ grupo.descripcion }}</td>
                         <td>
 
-                            <a routerLink="/grupos/{{grupo.id}}">
+                            <a [routerLink]="grupo.id+''">
                                 Editar
                             </a>
                             <nz-divider nzType="vertical"></nz-divider>

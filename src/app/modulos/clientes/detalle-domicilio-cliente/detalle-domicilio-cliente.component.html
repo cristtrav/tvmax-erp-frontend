@@ -4,16 +4,16 @@
             <div nz-col nzFlex="auto">
                 <nz-breadcrumb>
                     <nz-breadcrumb-item>
-                        <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                        <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        <a routerLink="/clientes">Clientes</a>
+                        <a routerLink="/app/clientes">Clientes</a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        <a [routerLink]="'/clientes/'+idcliente">{{ idcliente }}</a>
+                        <a [routerLink]="'/app/clientes/'+idcliente">{{ idcliente }}</a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        <a [routerLink]="'/clientes/'+idcliente+'/domicilios'">Domicilios</a>
+                        <a [routerLink]="'/app/clientes/'+idcliente+'/domicilios'">Domicilios</a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
                         {{ iddomicilio | titlecase }}

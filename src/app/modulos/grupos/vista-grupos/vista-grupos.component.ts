@@ -24,9 +24,10 @@ export class VistaGruposComponent implements OnInit {
   private cargarDatos(){
     this.grupoSrv.getGrupos().subscribe((data)=>{
       this.lstGrupos = data;
-    }, (error)=>{
+    }, (e)=>{
       console.log(`Error al cargar grupos`);
-      console.log(error);
+      console.log(e);
+      this.notif.create('error', 'Error al cargar grupos', e.error);
     });
   }
 

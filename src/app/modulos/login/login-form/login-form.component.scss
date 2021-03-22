@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    flex-direction: row;
+}
+
+.content{
+    flex: 1;
+}
+
+.bg{
+    height: 100%;
+    /*background-color:#ececec;*/
+    background-color: #001529;
+}

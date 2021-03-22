@@ -14,11 +14,11 @@ export class GruposService {
   constructor(private http: HttpClient) { }
 
   getGrupos(): Observable<Grupo[]> {
-    return this.http.get<Grupo[]>(this.url);
+    return this.http.get<Grupo[]>(this.url, AppSettings.headersGetAuth);
   }
 
   postGrupo(g: Grupo): Observable<any>{
-    return this.http.post(this.url, g, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, g, AppSettings.headersTextAuth);
   }
 
   deleteGrupo(id: number): Observable<any>{
