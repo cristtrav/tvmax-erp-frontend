@@ -31,7 +31,10 @@ export class VistaClientesComponent implements OnInit {
     this.tablaLoading = true;
     this.cliSrv.getTotal().subscribe((data) => {
       this.total = data.total;
-      this.cliSrv.get(pageIndex, pageSize).subscribe((data) => {
+      var filters: IFilter[] = [];
+      filters.push({key: 'eliminado', value: 'false'});
+      filters.push({key: 'sort', value: '+razonsocial'});
+      this.cliSrv.get(pageIndex, pageSize, filters).subscribe((data) => {
         this.lstClientes = data;
         this.tablaLoading = false
       }, (e) => {
@@ -74,4 +77,9 @@ export class VistaClientesComponent implements OnInit {
     }
   }
 
+}
+
+interface IFilter{
+  key: string,
+  value: string
 }

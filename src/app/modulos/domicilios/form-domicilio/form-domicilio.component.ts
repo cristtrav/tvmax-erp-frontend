@@ -16,13 +16,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class FormDomicilioComponent implements OnInit {
 
+
   @Input()
   iddomicilio = 'nuevo';
   @Input()
   idcliente: number | null = null;
   lstBarrios: Barrio[] = []
   lstTiposDomicilios: TipoDomicilio[] = [];
-  navigate: string | null = null;
+  idsuscripcionNav: string | null = 'nueva';
+  navigate: string | null = '';
 
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
@@ -53,10 +55,11 @@ export class FormDomicilioComponent implements OnInit {
     console.log(`Iddomiciliio ${this.iddomicilio}`);
     if (this.iddomicilio !== 'nuevo') {
       this.cargarDatos();
-    }else{
+    } else {
       this.consultarUltimoId();
     }
     this.navigate = this.aroute.snapshot.queryParamMap.get('navigate');
+    this.idsuscripcionNav = this.aroute.snapshot.queryParamMap.get('idsuscripcion');
   }
 
   private cargarDatos(): void {
@@ -182,15 +185,16 @@ export class FormDomicilioComponent implements OnInit {
     });
   }
 
-  private procesarRedireccion(): void{
-    if(this.navigate){
-      switch(this.navigate){
-        case 'nuevasuscripcion':
-          this.router.navigateByUrl(`/clientes/${this.idcliente}/suscripciones/nueva`);
-          break;
-        default:
-          break;
-      }
+  private procesarRedireccion(): void {
+    switch (this.navigate) {
+      case 'nuevasuscripcioncliente':
+        this.router.navigate([`/app/clientes/${this.idcliente}/suscripciones/${this.idsuscripcionNav}`]);
+        break;
+      case 'nuevasuscripciongeneral':
+        this.router.navigate([`/app/suscripciones/${this.idsuscripcionNav}`]);
+        break;
+      default:
+        break;
     }
   }
 

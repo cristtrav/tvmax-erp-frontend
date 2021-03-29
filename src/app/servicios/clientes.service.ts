@@ -27,10 +27,15 @@ export class ClientesService {
     return this.http.put(`${this.url}/${id}`, c, AppSettings.httpOptionsPost);
   }
 
-  get(pageIndex: number, pageSize: number): Observable<Cliente[]> {
-    const params = new HttpParams()
-    .append('limit', `${pageSize}`)
-    .append('offset', `${(pageIndex-1)*pageSize}`);
+  get(pageIndex: number | null, pageSize: number | null, filters: IFilter[]): Observable<Cliente[]> {
+    var params = new HttpParams();
+    if(pageSize && pageIndex){
+      params = params.append('limit', `${pageSize}`);
+      params = params.append('offset', `${(pageIndex-1)*pageSize}`);
+    }
+    for(let f of filters){
+      params = params.append(f.key, f.value);
+    }
     return this.http.get<Cliente[]>(this.url, { params });
   }
 
@@ -41,4 +46,9 @@ export class ClientesService {
   getTotal(): Observable<any>{
     return this.http.get(`${this.url}/total`);
   }
+}
+
+interface IFilter{
+  key: string,
+  value: string
 }

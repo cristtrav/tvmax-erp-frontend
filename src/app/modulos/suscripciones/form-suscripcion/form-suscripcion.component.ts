@@ -8,6 +8,8 @@ import { ServiciosService } from './../../../servicios/servicios.service';
 import { SuscripcionesService } from './../../../servicios/suscripciones.service';
 import { Suscripcion } from 'src/app/dto/suscripcion-dto';
 import { Extra } from './../../../util/extra';
+import { Cliente } from './../../../dto/cliente-dto';
+import { ClientesService } from './../../../servicios/clientes.service';
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -15,12 +17,17 @@ import { Extra } from './../../../util/extra';
   styleUrls: ['./form-suscripcion.component.scss']
 })
 export class FormSuscripcionComponent implements OnInit {
-
+  
+  @Input()
+  navigateOnSaveDest: string | null = null;
   @Input()
   idsuscripcion = 'nueva';
 
   @Input()
   idcliente: number | null = null;
+
+  @Input()
+  mostrarCliente: boolean = false;
 
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
@@ -29,9 +36,11 @@ export class FormSuscripcionComponent implements OnInit {
     monto: [null, [Validators.required]],
     estado: [null, Validators.required],
     fechasuscripcion: [null, [Validators.required]],
-    fechacambioestado: [null, [Validators.required]]
+    fechacambioestado: [null, [Validators.required]],
+    idcliente: [null, [Validators.required]]
   });
 
+  lstClientes: Cliente[] = [];
   lstDomicilios: Domicilio[] = [];
   lstServicios: Servicio[] = [];
   guardarLoading: boolean = false;
@@ -43,18 +52,22 @@ export class FormSuscripcionComponent implements OnInit {
     private domiSrv: DomiciliosService,
     private notif: NzNotificationService,
     private serviciosSrv: ServiciosService,
-    private suscSrv: SuscripcionesService
+    private suscSrv: SuscripcionesService,
+    private clientesSrv: ClientesService
   ) { }
 
   ngOnInit(): void {
-    this.cargarDomicilios();
+    if(this.idcliente){
+      this.form.get('idcliente')?.setValue(`${this.idcliente}`);
+      this.cargarDomicilios();
+    }
     this.cargarServicios();
     if (this.idsuscripcion !== 'nueva') {
       this.cargarDatos();
     } else {
       this.cargarUltimoId();
     }
-
+    this.cargarClientes();
   }
 
   private cargarDatos(): void {
@@ -71,6 +84,7 @@ export class FormSuscripcionComponent implements OnInit {
       if (data.fechacambioestado) {
         this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}T00:00:00`));
       }
+      this.form.get('idcliente')?.setValue(data.idcliente);
       this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos de la suscripcion');
@@ -81,7 +95,8 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   private cargarDomicilios(): void {
-    this.domiSrv.get([{ key: 'idcliente', value: this.idcliente }]).subscribe((data) => {
+    const idcli = this.form.get('idcliente')?.value;
+    this.domiSrv.get([{ key: 'idcliente', value: idcli }]).subscribe((data) => {
       this.lstDomicilios = data;
     }, (e) => {
       console.log('Error al cargar domicilios del cliente');
@@ -132,7 +147,7 @@ export class FormSuscripcionComponent implements OnInit {
     s.monto = this.form.get('monto')?.value;
     s.idservicio = this.form.get('idservicio')?.value;
     s.iddomicilio = this.form.get('iddomicilio')?.value;
-    s.idcliente = this.idcliente;
+    s.idcliente = this.form.get('idcliente')?.value;
     s.estado = this.form.get('estado')?.value;
     const fs: Date = this.form.get('fechasuscripcion')?.value;
     if (fs) {
@@ -188,11 +203,25 @@ export class FormSuscripcionComponent implements OnInit {
 
   cargarUltimoId(): void {
     this.suscSrv.getUltimoId().subscribe((data) => {
-        this.form.get('id')?.setValue(data.ultimoid?data.ultimoid+1:1);
+      this.form.get('id')?.setValue(data.ultimoid ? data.ultimoid + 1 : 1);
     }, (e) => {
       console.log('Error al consultar el ultimo código de suscripción');
       console.log(e);
       this.notif.create('error', 'Error al consultar código de suscripción', e.error);
+    });
+  }
+
+  cargarClientes(): void {
+    var filters: IFilter[] = [];
+    filters.push({ key: 'eliminado', value: 'false' });
+    filters.push({ key: 'sort', value: '+razonsocial' });
+    this.clientesSrv.get(null, null, filters).subscribe((clientes) => {
+      this.lstClientes = clientes;
+      
+    }, (e) => {
+      console.log('Error al cargar clientes');
+      console.log(e);
+      this.notif.create('error', 'Error al cargar clientes', e.error);
     });
   }
 
@@ -214,4 +243,19 @@ export class FormSuscripcionComponent implements OnInit {
     }
   }
 
+  onChangeCliente(e: any | null): void {
+    this.idcliente = e;
+    if (e) {
+      this.cargarDomicilios();
+    } else {
+      this.lstDomicilios = [];
+      this.form.get('iddomicilio')?.reset();
+    }
+  }
+
+}
+
+interface IFilter {
+  key: string,
+  value: string
 }

@@ -15,7 +15,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { MainComponent } from './main/main.component';
 import { appInitializer } from './util/app.initializer';
-import { SessionService } from './servicios/session.service';
+import { SesionService } from './servicios/sesion.service';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -47,7 +47,7 @@ registerLocaleData(es);
   providers: [
     { provide: NZ_I18N, useValue: es_ES },
     { provide: LOCALE_ID, useValue: 'es-PY' },
-    { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [SessionService] }
+    { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [SesionService] }
   ],
   bootstrap: [MainComponent]
 })

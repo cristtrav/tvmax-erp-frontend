@@ -20,9 +20,12 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { VistaSuscripcionesComponent } from './vista-suscripciones/vista-suscripciones.component';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { DetalleSuscripcionComponent } from './detalle-suscripcion/detalle-suscripcion.component';
 
 @NgModule({
-  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent],
+  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent],
   imports: [
     CommonModule,
     SuscripcionesRoutingModule,
@@ -42,7 +45,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzTagModule,
     NzPopconfirmModule,
     NzToolTipModule,
-    NzSpinModule
+    NzSpinModule,
+    NzBreadCrumbModule,
+    NzSpaceModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 /*import { clearTimeout } from 'node:timers';*/
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { AppSettings } from './../util/app-settings';
+import { AppSettings } from '../util/app-settings';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionService {
+export class SesionService {
 
-  private url = `${AppSettings.urlAPI}/session`;
+  
+
+  private url = `${AppSettings.urlAPI}/sesion`;
   private idusuarioBehavior: BehaviorSubject<number> = new BehaviorSubject(-1);
   private nombreBehavior: BehaviorSubject<string> = new BehaviorSubject('(Sin usuario)');
   public idusuarioObs: Observable<number> =this.idusuarioBehavior.asObservable();
@@ -31,26 +33,28 @@ export class SessionService {
     return this.nombreBehavior.value;
   }
 
-  login(ci: string, pwd: string): Observable<{ accessToken: string, refreshToken: string }> {
-    return this.http.post<{ accessToken: string, refreshToken: string }>(`${this.url}/login`, { ci: ci, password: pwd }, AppSettings.httpOptionsPostJson)
-      .pipe(map((tokens: any) => {
-        const atoken = tokens.accessToken;
-        const rtoken = tokens.refreshToken;
+  login(ci: string, pwd: string): Observable<ISession> {
+    return this.http.post<ISession>(`${this.url}/login`, { ci: ci, password: pwd }, AppSettings.httpOptionsPostJson)
+      .pipe(map((session: any) => {
+        const atoken = session.accessToken;
+        const rtoken = session.refreshToken;
+        this.nombreBehavior.next(session.nombreUsuario);
         localStorage.setItem('accessToken', atoken);
         localStorage.setItem('refreshToken', rtoken);
         this.actualizarDatosUsuario(atoken);
         this.refreshTokenTimer(atoken);
-        return tokens;
+        return session;
       }));
   }
 
-  refresh(token: string): Observable<{ accessToken: string }> {
-    return this.http.post<{ accessToken: string }>(`${this.url}/refresh`, { refreshToken: token }, AppSettings.httpOptionsPostJson)
-      .pipe(map((tokens) => {
-        localStorage.setItem('accessToken', tokens.accessToken);
-        this.actualizarDatosUsuario(tokens.accessToken);
-        this.refreshTokenTimer(tokens.accessToken);
-        return tokens;
+  refresh(token: string): Observable<IRefreshSession> {
+    return this.http.post<IRefreshSession>(`${this.url}/refresh`, { refreshToken: token }, AppSettings.httpOptionsPostJson)
+      .pipe(map((session) => {
+        localStorage.setItem('accessToken', session.accessToken);
+        this.nombreBehavior.next(session.nombreUsuario);
+        this.actualizarDatosUsuario(session.accessToken);
+        this.refreshTokenTimer(session.accessToken);
+        return session;
       }), catchError(err => {
         if (err.status === 401 || err.status === 403) {
           localStorage.removeItem('accessToken');
@@ -76,7 +80,6 @@ export class SessionService {
   private actualizarDatosUsuario(token: string): void {
     const jwtToken = JSON.parse(atob(token.split('.')[1]));
     this.idusuarioBehavior.next(jwtToken.sub);
-    this.nombreBehavior.next(jwtToken.name);
   }
 
   private refreshTokenTimer(token: string): void{
@@ -95,4 +98,15 @@ export class SessionService {
   private stopRefreshTimer(){
     clearTimeout(this.refreshTokenTimeout);
   }
+}
+
+interface ISession{
+  accessToken: string,
+  refreshToken: string,
+  nombreUsuario: string
+}
+
+interface IRefreshSession{
+  accessToken: string,
+  nombreUsuario: string
 }

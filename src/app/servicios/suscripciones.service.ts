@@ -20,9 +20,7 @@ export class SuscripcionesService {
   }
 
   get(filters: Array<{ key: string, value: any | null }>): Observable<Suscripcion[]> {
-    let params = new HttpParams()
-      .append('eliminado', 'false')
-      .append('sort', '+id');
+    let params = new HttpParams();
     for (let f of filters) {
       params = params.append(f.key, f.value);
     }
@@ -44,4 +42,21 @@ export class SuscripcionesService {
   getUltimoId(): Observable<{ultimoid: number | null}> {
     return this.http.get<{ultimoid: number | null}>(`${this.url}/ultimoid`);
   }
+
+  getTotal(filters: IFilter[]): Observable<ITotal>{
+    var params: HttpParams = new HttpParams();
+    for(let f of filters){
+      params = params.append(f.key, f.value);
+    }
+    return this.http.get<ITotal>(`${this.url}/total`, { params });
+  }
+}
+
+interface IFilter{
+  key: string,
+  value: string
+}
+
+interface ITotal{
+  total: number
 }

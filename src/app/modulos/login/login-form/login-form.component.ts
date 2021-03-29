@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SessionService } from './../../../servicios/session.service';
+import { SesionService } from '../../../servicios/sesion.service';
 
 @Component({
   selector: 'app-login-form',
@@ -23,7 +23,7 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private sessionSrv: SessionService,
+    private sesionSrv: SesionService,
     private router: Router
   ) { }
 
@@ -36,7 +36,7 @@ export class LoginFormComponent implements OnInit {
       this.loginLoading = true;
       const ci = this.form.get('ci')?.value;
       const pwd = this.form.get('pwd')?.value;
-      this.sessionSrv.login(ci, pwd).subscribe((data) => {
+      this.sesionSrv.login(ci, pwd).subscribe((data) => {
         this.loginLoading = false;
         this.router.navigate(['/app/welcome']);
       }, (e) => {
@@ -74,7 +74,7 @@ export class LoginFormComponent implements OnInit {
   private comprobarSesion(): void {
     const rtoken = localStorage.getItem('refreshToken');
     if (rtoken) {
-      this.sessionSrv.refresh(rtoken).subscribe((data) => {
+      this.sesionSrv.refresh(rtoken).subscribe((data) => {
         localStorage.setItem('accessToken', data.accessToken);
         this.router.navigateByUrl('/app/welcome');
       }, (e) => {

@@ -1,6 +1,6 @@
-import { SessionService } from './../servicios/session.service';
+import { SesionService } from '../servicios/sesion.service';
 
-export function appInitializer(sessionSrv: SessionService){
+export function appInitializer(sessionSrv: SesionService){
     return () => new Promise(resolve => {
         const rtoken = localStorage.getItem('refreshToken');
         if(rtoken){

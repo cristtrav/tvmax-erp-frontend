@@ -6,6 +6,14 @@
                 <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
             </nz-form-control>
         </nz-form-item>
+        <nz-form-item [style]="!mostrarCliente?'display: none':''">
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Cliente</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un cliente.">
+                <nz-select nzAllowClear nzShowSearch formControlName="idcliente" (ngModelChange)="onChangeCliente($event)">
+                    <nz-option *ngFor="let cli of lstClientes" [nzLabel]="cli.razonsocial+' ('+cli.id+')'" [nzValue]="cli.id"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Domicilio</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un domicilio.">
@@ -15,11 +23,12 @@
                 </nz-select>
                 <ng-template #addDomicilio>
                     <nz-divider style="margin: 4px 0;"></nz-divider>
-                    <a [routerLink]="'/clientes/'+idcliente+'/domicilios/nuevo'"
-                        [queryParams]="{navigate: 'nuevasuscripcion'}" style="margin-left: 12px;">
+                    <a *ngIf="idcliente" [routerLink]="'/app/clientes/'+idcliente+'/domicilios/nuevo'"
+                        [queryParams]="{navigate: navigateOnSaveDest, idsuscripcion: idsuscripcion}" style="margin-left: 12px;">
                         <i nz-icon nzType="plus"></i>
                         Nuevo domicilio...
                     </a>
+                    <span *ngIf="!idcliente" style="color: gray; margin-left: 12px;">(Seleccione un cliente)</span>
                 </ng-template>
             </nz-form-control>
         </nz-form-item>

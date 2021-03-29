@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { SessionService } from './servicios/session.service';
+import { SesionService } from './servicios/sesion.service';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +14,16 @@ export class AppComponent implements OnInit{
   textoAvatar='';
 
   constructor(
-    private sessionSrv: SessionService,
+    private sesionSrv: SesionService,
     private notif: NzNotificationService,
     private router: Router
   ){
     
   }
   ngOnInit(): void {
-    this.sessionSrv.nombreObs.subscribe((value)=>{
+    this.sesionSrv.nombreObs.subscribe((value)=>{
       this.nombreUsuario = value;
+      this.textoAvatar = '';
       for(let n of value.split(' ')){
         this.textoAvatar += n.charAt(0).toUpperCase();
       }
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit{
   }
 
   doLogout(): void {
-    this.sessionSrv.logout().subscribe(()=>{
+    this.sesionSrv.logout().subscribe(()=>{
       this.router.navigateByUrl('/login');
     }, (e)=>{
       console.log('Error al cerrar sesion');

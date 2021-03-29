@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SessionService } from './../servicios/session.service';
+import { SesionService } from '../servicios/sesion.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { SessionService } from './../servicios/session.service';
 export class AuthGuard implements CanActivate {
 
   constructor(
-    private sessionSrv: SessionService,
+    private sesionSrv: SesionService,
     private router: Router
   ) {
 
@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const idusuario = this.sessionSrv.idusuario;
+    const idusuario = this.sesionSrv.idusuario;
     const ar: string = route.url[0].toString();
     if (ar === 'login') {
       if (idusuario !== -1) {
