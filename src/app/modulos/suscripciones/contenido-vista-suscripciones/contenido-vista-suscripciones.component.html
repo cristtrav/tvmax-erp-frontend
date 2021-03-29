@@ -2,7 +2,16 @@
     <i nz-icon nzType="plus"></i>
     Nueva
 </a>
+<ng-template #pietabla>
+    <nz-space>
+        <nz-space-item>
+            <strong>Total:</strong>
+        </nz-space-item>
+        <nz-space-item>{{ total | number}}</nz-space-item>
+    </nz-space>
+</ng-template>
 <nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;" nzShowSizeChanger
+[nzFooter]="pietabla"
 [nzFrontPagination]="false"
 [nzLoading]="tableLoading"
 [(nzPageIndex)]="pageIndex"
