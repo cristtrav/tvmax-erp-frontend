@@ -15,11 +15,14 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstGrupos" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstGrupos" [nzFrontPagination]="false" style="margin-top: 10px;"
+                [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters"
+                (nzQueryParams)="onQueryParamsChange($event)" [nzLoading]="loadingData" nzShowPagination
+                nzShowSizeChanger>
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
+                        <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>
+                        <th nzColumnKey="descripcion" [nzSortFn]="true">Descripción</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -28,15 +31,17 @@
                         <td>{{ grupo.id }}</td>
                         <td>{{ grupo.descripcion }}</td>
                         <td>
-
-                            <a [routerLink]="grupo.id+''">
-                                Editar
-                            </a>
+                            <button nz-button nzType="primary" [routerLink]="grupo.id+''" nz-tooltip
+                                nzTooltipTitle="Editar">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom"
-                                nzOkText="Eliminar" (nzOnConfirm)="eliminar(grupo.id)">
-                                Eliminar
-                            </a>
+                            <button nz-button nzType="primary" nzDanger nz-popconfirm
+                                nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom"
+                                nzOkText="Eliminar" (nzOnConfirm)="eliminar(grupo.id)" nzOkType="danger" nz-tooltip
+                                nzTooltipTitle="Eliminar...">
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

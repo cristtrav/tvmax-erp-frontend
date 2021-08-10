@@ -7,7 +7,7 @@ import { NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb'
 import { IconsProviderModule } from '../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { DetalleGrupoComponent } from './detalle-grupo/detalle-grupo.component';
-import { NzTableModule} from 'ng-zorro-antd/table';
+import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';

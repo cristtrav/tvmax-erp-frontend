@@ -62,7 +62,8 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private cargarGrupos(): void{
-    this.gruposSrv.getGrupos().subscribe((data)=>{
+    var filter: IFilter[] = [];
+    this.gruposSrv.getGrupos(filter).subscribe((data)=>{
       this.lstGrupos = data;
     }, (e)=>{
       console.log('Error al cargar grupos');
@@ -136,4 +137,9 @@ export class DetalleServicioComponent implements OnInit {
     });
   }
 
+}
+
+interface IFilter{
+  key: string;
+  value: string;
 }

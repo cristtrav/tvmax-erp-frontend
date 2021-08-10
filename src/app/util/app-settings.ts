@@ -33,10 +33,20 @@ export class AppSettings{
     return httpOptions;
   }
 
-  public static get headersTextAuth(): Object {
+  public static getHttpOptionsJsonTextAuth(): Object {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }),
+      responseType: 'text'
+    }
+    return httpOptions;
+  }
+
+  public static getHttpOptionsTextAuth(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }),
       responseType: 'text'
@@ -49,6 +59,25 @@ export class AppSettings{
       headers: new HttpHeaders({
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       })
+    }
+    return httpOptions;
+  }
+
+  public static getHttpOptionsAuth(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      })
+    }
+    return httpOptions;
+  }
+
+  public static getHttpOptionsAuthWithParams(params: HttpParams): Object{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }),
+      params: params
     }
     return httpOptions;
   }

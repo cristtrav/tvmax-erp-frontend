@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Grupo } from 'src/app/dto/grupo-dto';
+import { Grupo } from '../../../dto/grupo-dto';
 import { GruposService } from '../../../servicios/grupos.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service'
 
 @Component({
   selector: 'app-detalle-grupos',
@@ -25,7 +27,9 @@ export class DetalleGrupoComponent implements OnInit {
     private fb: FormBuilder,
     private grupoSrv: GruposService,
     private notif: NzNotificationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -91,7 +95,7 @@ export class DetalleGrupoComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar Grupo');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -102,12 +106,12 @@ export class DetalleGrupoComponent implements OnInit {
     this.grupoSrv.putGrupo(+this.idgrupo, this.getDto()).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idgrupo = `${g.id}`;
-      this.router.navigateByUrl(`/grupos/${g.id}`);
+      this.router.navigate([g.id], {relativeTo: this.route.parent});
       this.guardarLoading = false;
-    }, (e)=>{
+    }, (e: HttpErrorResponse)=>{
       console.log('Error al modificar grupo');
       console.log(e);
-      this.notif.create('error', 'Eror al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
