@@ -6,6 +6,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Servicio } from './../../../dto/servicio-dto';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-servicio',
@@ -32,7 +33,8 @@ export class DetalleServicioComponent implements OnInit {
     private fb: FormBuilder,
     private serviciosSrv: ServiciosService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
     ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class DetalleServicioComponent implements OnInit {
     }, (e)=>{
       console.log('Error al cargar datos de servicio');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del Servicio', e.error);
+      this.httpErrorHandler.handle(e)
       this.formLoading = false;
     });
   }
@@ -116,7 +118,7 @@ export class DetalleServicioComponent implements OnInit {
     }, (e)=>{
       console.log('Error al registrar Servicio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e)
       ;this.guardarLoading = false;
     })
   }
@@ -132,7 +134,7 @@ export class DetalleServicioComponent implements OnInit {
     }, (e)=>{
       console.log('Error al modificar Servicio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e)
       ;this.guardarLoading = false;
     });
   }

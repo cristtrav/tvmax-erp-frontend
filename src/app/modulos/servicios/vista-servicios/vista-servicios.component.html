@@ -15,14 +15,16 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;" nzShowSizeChanger
+            [nzFrontPagination]="false" [nzLoading]="tableLoading" [nzTotal]="totalRegisters" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
+            (nzQueryParams)="onTableQueryParamsChange($event)">
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
-                        <th>Grupo</th>
-                        <th nzAlign="center">Suscribible</th>
-                        <th nzAlign="center">Precio</th>
+                        <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>
+                        <th nzColumnKey="descripcion" [nzSortFn]="true">Descripción</th>
+                        <th nzColumnKey="grupo" [nzSortFn]="true">Grupo</th>
+                        <th nzColumnKey="suscribible" [nzSortFn]="true" nzAlign="center">Suscribible</th>
+                        <th nzColumnKey="precio" [nzSortFn]="true" nzAlign="center">Precio</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -40,12 +42,21 @@
                         </td>
                         <td nzAlign="right">{{ srv.precio | number }}</td>
                         <td>
-                            <a [routerLink]="srv.id+''">Editar</a>
+                            <!--<a [routerLink]="srv.id+''">Editar</a>-->
+                            <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="srv.id+''">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            <button nz-button nz-tooltip nzDanger nz-popconfirm
+                            nzType="primary" nzTooltipTitle="Eliminar"
+                            nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" nzOkType="danger"
+                            (nzOnConfirm)="eliminar(srv.id)">
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
+                            <!--<a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(srv.id)">
                                 Eliminar
-                            </a>
+                            </a>-->
                         </td>
                     </tr>
                 </tbody>
