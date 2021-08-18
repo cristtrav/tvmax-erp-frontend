@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Departamento } from './../../../dto/departamento-dto';
 import { DepartamentosService } from './../../../servicios/departamentos.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-departamento',
@@ -27,7 +28,8 @@ export class DetalleDepartamentoComponent implements OnInit {
     private depSrv: DepartamentosService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +52,7 @@ export class DetalleDepartamentoComponent implements OnInit {
     }, (e)=>{
       console.log('Error al cargar departamento');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del departamento', e.error);
+      this.httpErrorHandler.handle(e);
       this.formLoading = false;
     });
   }
@@ -89,7 +91,7 @@ export class DetalleDepartamentoComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar departamento');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -100,12 +102,12 @@ export class DetalleDepartamentoComponent implements OnInit {
     this.depSrv.put(this.iddepartamento, d).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.iddepartamento = `${d.id}`;
-      this.router.navigateByUrl(`/departamentos/${d.id}`);
+      this.router.navigate([d.id], {relativeTo: this.aroute.parent});
       this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar departamento');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }

@@ -13,8 +13,9 @@ export class HttpErrorResponseHandlerService {
     if(e.status === 403){
       this.notif.create('warning', 'No autorizado', 'El usuario no tiene permisos para realizar esta acción.')
     }else{
-      var srvError = JSON.parse(e.error);
-      this.notif.create('error', this.getTitulo(srvError.request), srvError.description)
+      //var srvError = JSON.parse(e.error);
+      //this.notif.create('error', this.getTitulo(srvError.request), srvError.description)
+      this.notif.create('error', this.getTitulo(e.error.request), e.error.description)
     }
   }
 

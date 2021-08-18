@@ -42,21 +42,16 @@
                         </td>
                         <td nzAlign="right">{{ srv.precio | number }}</td>
                         <td>
-                            <!--<a [routerLink]="srv.id+''">Editar</a>-->
                             <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="srv.id+''">
                                 <i nz-icon nzType="edit" nzTheme="outline"></i>
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
                             <button nz-button nz-tooltip nzDanger nz-popconfirm
                             nzType="primary" nzTooltipTitle="Eliminar"
-                            nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" nzOkType="danger"
+                            nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(srv.id)">
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
-                            <!--<a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(srv.id)">
-                                Eliminar
-                            </a>-->
                         </td>
                     </tr>
                 </tbody>

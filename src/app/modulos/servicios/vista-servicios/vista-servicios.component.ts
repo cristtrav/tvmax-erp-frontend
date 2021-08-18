@@ -17,7 +17,7 @@ export class VistaServiciosComponent implements OnInit {
   pageSize: number = 10;
   pageIndex: number = 1;
   tableLoading: boolean = false;
-  sortStr: string | null = null;
+  sortStr: string | null = "+id";
 
   constructor(
     private serviciosSrv: ServiciosService,

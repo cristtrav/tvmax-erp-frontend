@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Departamento } from '../dto/departamento-dto';
 import { Observable } from 'rxjs';
 
@@ -14,22 +14,26 @@ export class DepartamentosService {
   constructor(private http: HttpClient) { }
 
   post(d: Departamento): Observable<any>{
-    return this.http.post(this.url, d, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, d, AppSettings.getHttpOptionsJsonTextAuth());
   }
 
-  get(): Observable<Departamento[]> {
-    return this.http.get<Departamento[]>(this.url);
+  get(params: HttpParams): Observable<Departamento[]> {
+    return this.http.get<Departamento[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: string): Observable<Departamento>{
-    return this.http.get<Departamento>(`${this.url}/${id}`);
+    return this.http.get<Departamento>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: string, d: Departamento): Observable<any>{
-    return this.http.put(`${this.url}/${id}`, d, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, d, AppSettings.getHttpOptionsJsonTextAuth());
   }
 
   delete(id: string | null): Observable<any>{
-    return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsTextAuth());
+  }
+
+  getTotal(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

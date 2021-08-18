@@ -15,11 +15,13 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstDepartamentos" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstDepartamentos" style="margin-top: 10px;" nzShowPagination nzShowSizeChanger
+            [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
+            (nzQueryParams)="onQueryParamsChange($event)">
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'" >Código</th>
+                        <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -28,12 +30,17 @@
                         <td>{{ dep.id }}</td>
                         <td>{{ dep.descripcion }}</td>
                         <td>
-                            <a [routerLink]="dep.id+''">Editar</a>
+                            <button nz-button nz-tooltip [routerLink]="dep.id+''"
+                            nzType="primary" nzTooltipTitle="Editar">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            <button nz-button nz-tooltip nz-popconfirm
+                            nzType="primary" nzTooltipTitle="Eliminar" nzDanger
+                            nzPopconfirmTitle="¿Desea eliminr el Grupo?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(dep.id)">
-                                Eliminar
-                            </a>
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

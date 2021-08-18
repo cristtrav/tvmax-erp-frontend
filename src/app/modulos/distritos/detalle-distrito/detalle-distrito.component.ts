@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Distrito } from './../../../dto/distrito-dto';
 import { DistritosService } from './../../../servicios/distritos.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-detalle-distrito',
@@ -70,7 +71,7 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   private cargarDep(): void {
-    this.depSrv.get().subscribe((data) => {
+    this.depSrv.get(this.getRequestParams()).subscribe((data) => {
       this.lstDep = data;
     }, (e) => {
       console.log('Error al cargar departamentos');
@@ -143,6 +144,11 @@ export class DetalleDistritoComponent implements OnInit {
     dist.descripcion = this.form.get('descripcion')?.value;
     dist.iddepartamento = this.form.get('iddepartamento')?.value;
     return dist;
+  }
+
+  getRequestParams(): HttpParams {
+    const params: HttpParams = new HttpParams();
+    return params;
   }
 
 }
