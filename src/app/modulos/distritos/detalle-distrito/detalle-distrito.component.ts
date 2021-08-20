@@ -7,6 +7,7 @@ import { Distrito } from './../../../dto/distrito-dto';
 import { DistritosService } from './../../../servicios/distritos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-distrito',
@@ -33,7 +34,8 @@ export class DetalleDistritoComponent implements OnInit {
     private notif: NzNotificationService,
     private distSrv: DistritosService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class DetalleDistritoComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar datos del distrito');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del distrito', e.error);
+      this.httpErrorHandler.handle(e);
       this.formLoading = false;
     });
   }
@@ -76,7 +78,7 @@ export class DetalleDistritoComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar departamentos');
       console.log(e);
-      this.notif.create('error', 'Error al cargar departamentos', e.error);
+      this.httpErrorHandler.handle(e);
     });
   }
 
@@ -114,7 +116,7 @@ export class DetalleDistritoComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar distrito');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     })
   }
@@ -124,7 +126,7 @@ export class DetalleDistritoComponent implements OnInit {
     const d = this.getDto();
     this.distSrv.put(this.iddistrito, d).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
-      this.router.navigateByUrl(`/distritos/${d.id}`);
+      this.router.navigate([d.id], { relativeTo: this.aroute.parent } );
       if (d.id !== null) {
         this.iddistrito = d.id;
       }
@@ -147,7 +149,7 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   getRequestParams(): HttpParams {
-    const params: HttpParams = new HttpParams();
+    const params: HttpParams = new HttpParams().append('eliminado', 'false');
     return params;
   }
 

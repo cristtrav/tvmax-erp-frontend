@@ -15,12 +15,14 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstDist" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstDist" style="margin-top: 10px;"
+            [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
+             (nzQueryParams)="onQueryParamsChange($event)" nzShowPagination nzShowSizeChanger>
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Descripción</th>
-                        <th>Departamento</th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
+                        <th [nzColumnKey]="'departamento'" [nzSortFn]="true">Departamento</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -30,12 +32,17 @@
                         <td>{{ dis.descripcion }}</td>
                         <td><span nz-tooltip [nzTooltipTitle]="'Código: '+dis.iddepartamento">{{ dis.departamento}}</span></td>
                         <td>
-                            <a [routerLink]="dis.id+''">Editar</a>
+                            <button nz-button nz-tooltip [routerLink]="dis.id+''"
+                            nzType="primary" nzTooltipTitle="Editar">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(dis.id)">
-                                Eliminar
-                            </a>
+                            <button nz-button nz-tooltip nz-popconfirm
+                            nzType="primary" nzTooltipTitle="Eliminar" 
+                            nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(dis.id)" nzDanger>
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

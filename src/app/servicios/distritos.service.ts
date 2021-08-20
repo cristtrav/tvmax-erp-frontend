@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Distrito } from '../dto/distrito-dto';
 import { Observable } from 'rxjs';
 
@@ -16,22 +16,26 @@ export class DistritosService {
   ) { }
 
   post(d: Distrito): Observable<any>{
-    return this.http.post(this.url, d, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, d, AppSettings.getHttpOptionsAuth());
   } 
 
-  get(): Observable<Distrito[]> {
-    return this.http.get<Distrito[]>(this.url);
+  get(params: HttpParams): Observable<Distrito[]> {
+    return this.http.get<Distrito[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: string): Observable<Distrito> {
-    return this.http.get<Distrito>(`${this.url}/${id}`);
+    return this.http.get<Distrito>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: string, d: Distrito): Observable<any> {
-    return this.http.put(`${this.url}/${id}`, d, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, d, AppSettings.getHttpOptionsAuth());
   }
 
   delete(id: string): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getTotalRegistros(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

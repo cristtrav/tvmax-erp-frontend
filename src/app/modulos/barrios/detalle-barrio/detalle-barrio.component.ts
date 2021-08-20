@@ -6,6 +6,7 @@ import { Distrito } from './../../../dto/distrito-dto';
 import { DistritosService } from './../../../servicios/distritos.service';
 import { BarriosService } from './../../../servicios/barrios.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-detalle-barrio',
@@ -75,7 +76,7 @@ export class DetalleBarrioComponent implements OnInit {
   }
 
   cargarDistritos(): void {
-    this.distSrv.get().subscribe((data) => {
+    this.distSrv.get(this.getHttpParamsDistrito()).subscribe((data) => {
       this.lstDist = data;
     }, (e) => {
       console.log('Error al cargar distritos');
@@ -130,6 +131,11 @@ export class DetalleBarrioComponent implements OnInit {
       this.notif.create('error', 'Error al guardar', e.error);
       this.guardarLoading = false;
     });
+  }
+
+  getHttpParamsDistrito(): HttpParams{
+    var params: HttpParams = new HttpParams();
+    return params;
   }
 
 }

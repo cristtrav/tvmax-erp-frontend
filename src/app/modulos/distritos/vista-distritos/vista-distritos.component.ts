@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Distrito } from './../../../dto/distrito-dto';
 import { DistritosService } from './../../../servicios/distritos.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { NzTableQueryParams, NzTableSortOrder } from 'ng-zorro-antd/table';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-vista-distritos',
@@ -11,10 +14,16 @@ import { DistritosService } from './../../../servicios/distritos.service';
 export class VistaDistritosComponent implements OnInit {
 
   lstDist: Distrito[] = [];
+  tableLoading: boolean = false;
+  pageSize: number = 10;
+  pageIndex: number = 1;
+  totalRegisters: number = 1;
+  sortStr: string | null = "+id";
 
   constructor(
     private distSrv: DistritosService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -22,12 +31,24 @@ export class VistaDistritosComponent implements OnInit {
   }
 
   private cargarDatos(): void {
-    this.distSrv.get().subscribe((data)=>{
+    this.tableLoading = true;
+    this.distSrv.get(this.getHttpParams()).subscribe((data)=>{
       this.lstDist = data;
+      this.tableLoading = false;
     }, (e)=>{
       console.log('Error al cargar distritos');
       console.log(e);
-      this.notif.create('error', 'Error al cargar distritos', e.error);
+      this.httpErrorHandler.handle(e);
+      this.tableLoading = false;
+    });
+
+    var paramCount: HttpParams = new HttpParams().append('eliminado', 'false');
+    this.distSrv.getTotalRegistros(paramCount).subscribe((data)=>{
+      this.totalRegisters = data;
+    }, (e)=>{
+      console.log('Error al consultar total de Distritos');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
     });
   }
 
@@ -39,9 +60,35 @@ export class VistaDistritosComponent implements OnInit {
       }, (e)=>{
         console.log('Error al eliminar distrito');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar', e.error);
+        this.httpErrorHandler.handle(e);
       });
     }
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams){
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    this.sortStr = this.getSortStr(params.sort);
+    this.cargarDatos();
+  }
+
+  getHttpParams(): HttpParams{
+    var params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    params = params.append('limit', `${this.pageSize}`);
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    return params;
+  }
+
+  getSortStr( sort: {key: string, value: NzTableSortOrder}[]): string | null {
+    for(let srt of sort){
+      if(srt.value === 'ascend') return `+${srt.key}`;
+      if(srt.value === 'descend') return `-${srt.key}`;
+    }
+    return null;
   }
 
 }
