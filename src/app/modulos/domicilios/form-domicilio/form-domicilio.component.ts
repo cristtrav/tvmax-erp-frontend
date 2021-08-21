@@ -8,6 +8,7 @@ import { TiposdomiciliosService } from './../../../servicios/tiposdomicilios.ser
 import { Domicilio } from 'src/app/dto/domicilio-dto';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-form-domicilio',
@@ -107,7 +108,7 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarBarrios(): void {
-    this.barriosSrv.get().subscribe((data) => {
+    this.barriosSrv.get(this.getBarriosHttpParams()).subscribe((data) => {
       this.lstBarrios = data;
     }, (e) => {
       console.log('Error al cargar barrios');
@@ -196,6 +197,11 @@ export class FormDomicilioComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  getBarriosHttpParams(): HttpParams {
+    var httpParams: HttpParams = new HttpParams();
+    return httpParams;
   }
 
 }

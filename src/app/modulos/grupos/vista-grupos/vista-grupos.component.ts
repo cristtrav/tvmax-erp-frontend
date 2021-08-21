@@ -67,7 +67,6 @@ export class VistaGruposComponent implements OnInit {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
     this.sort = this.buildSort(params.sort);
-    console.log(params);
     this.cargarDatos();
   }
 

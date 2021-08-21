@@ -7,6 +7,7 @@ import { DistritosService } from './../../../servicios/distritos.service';
 import { BarriosService } from './../../../servicios/barrios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-barrio',
@@ -31,7 +32,8 @@ export class DetalleBarrioComponent implements OnInit {
     private notif: NzNotificationService,
     private barrioSrv: BarriosService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +57,8 @@ export class DetalleBarrioComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar datos del barrio');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del barrio', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al cargar datos del barrio', e.error);
       this.formLoading = false;
     });
   }
@@ -112,7 +115,7 @@ export class DetalleBarrioComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar barrio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -123,18 +126,18 @@ export class DetalleBarrioComponent implements OnInit {
     this.barrioSrv.put(+this.idbarrio, b).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.idbarrio = `${b.id}`;
-      this.router.navigateByUrl(`/barrios/${b.id}`);
+      this.router.navigate([b.id], {relativeTo: this.aroute.parent});
       this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar barrio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
 
   getHttpParamsDistrito(): HttpParams{
-    var params: HttpParams = new HttpParams();
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
     return params;
   }
 
