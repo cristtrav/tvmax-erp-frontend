@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TipoDomicilio } from '../dto/tipodomicilio-dto';
 import { Observable } from 'rxjs';
 
@@ -16,22 +16,26 @@ export class TiposdomiciliosService {
   ) { }
 
   post(td: TipoDomicilio): Observable<any>{
-    return this.http.post(this.url, td, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, td, AppSettings.getHttpOptionsAuth());
   }
 
   getPorId(id: number): Observable<TipoDomicilio> {
-    return this.http.get<TipoDomicilio>(`${this.url}/${id}`);
+    return this.http.get<TipoDomicilio>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: number, td: TipoDomicilio): Observable<any>{
-    return this.http.put(`${this.url}/${id}`, td, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, td, AppSettings.getHttpOptionsAuth());
   }
 
-  get(): Observable<TipoDomicilio[]> {
-    return this.http.get<TipoDomicilio[]>(this.url);
+  get(p: HttpParams): Observable<TipoDomicilio[]> {
+    return this.http.get<TipoDomicilio[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(p));
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getTotalRegistros(p: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(p));
   }
 }

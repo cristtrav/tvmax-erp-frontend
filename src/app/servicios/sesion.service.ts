@@ -85,7 +85,7 @@ export class SesionService {
   private refreshTokenTimer(token: string): void{
     const jwtToken = JSON.parse(atob(token.split('.')[1]));
     const expiredate = new Date(jwtToken.exp * 1000);
-    const timeout = expiredate.getTime() - (Date.now() - (60 * 1000));
+    const timeout = (expiredate.getTime() - Date.now()) - (60 * 1000);
     this.refreshTokenTimeout = setTimeout(()=>{
       console.log('Se actualiza el token');
       const rtoken = localStorage.getItem('refreshToken');

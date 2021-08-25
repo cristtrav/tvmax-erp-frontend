@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { TipoDomicilio } from './../../../dto/tipodomicilio-dto';
 import { TiposdomiciliosService } from './../../../servicios/tiposdomicilios.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-tipodomicilio',
@@ -25,7 +26,8 @@ export class DetalleTipodomicilioComponent implements OnInit {
     private aroute: ActivatedRoute,
     private router: Router,
     private tipoDomSrv: TiposdomiciliosService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +49,8 @@ export class DetalleTipodomicilioComponent implements OnInit {
     }, (e)=>{
       console.log('Error al cargar datos del tipo de domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al cargar datos', e.error);
       this.formLoading = false;
     });
   }
@@ -89,12 +92,13 @@ export class DetalleTipodomicilioComponent implements OnInit {
     this.tipoDomSrv.put(+this.idtipodomicilio, td).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idtipodomicilio = `${td.id}`;
-      this.router.navigateByUrl(`/tiposdomicilios/${td.id}`);
+      this.router.navigate([td.id], {relativeTo: this.aroute.parent});
       this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar tipo de domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al guarddar', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al guarddar', e.error);
       this.guardarLoading = false;
     });
   }
@@ -108,7 +112,8 @@ export class DetalleTipodomicilioComponent implements OnInit {
     }, (e)=>{
       console.log('Error al registrar tipo domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al guardar', e.error);
       this.guardarLoading = false;
     })
   }

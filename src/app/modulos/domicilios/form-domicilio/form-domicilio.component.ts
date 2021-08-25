@@ -98,7 +98,7 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarTiposDomicilios(): void {
-    this.tipoDomiSrv.get().subscribe((data) => {
+    this.tipoDomiSrv.get(this.getBarriosHttpParams()).subscribe((data) => {
       this.lstTiposDomicilios = data;
     }, (e) => {
       console.log('Error al cargar tipos de domicilios');
@@ -202,6 +202,11 @@ export class FormDomicilioComponent implements OnInit {
   getBarriosHttpParams(): HttpParams {
     var httpParams: HttpParams = new HttpParams();
     return httpParams;
+  }
+
+  getHttpParamsTD(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    return params;
   }
 
 }
