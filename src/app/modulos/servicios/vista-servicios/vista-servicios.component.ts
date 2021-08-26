@@ -4,6 +4,8 @@ import { ServiciosService } from 'src/app/servicios/servicios.service';
 import { Servicio } from './../../../dto/servicio-dto';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-vista-servicios',
@@ -31,31 +33,15 @@ export class VistaServiciosComponent implements OnInit {
 
   private cargarServicios(): void {
     this.tableLoading = true;
-    const params: IFilter[] = [];
-    if (this.sortStr) {
-      params.push({ key: 'sort', value: this.sortStr });
-    }
-    params.push({ key: 'eliminado', value: false });
-    params.push({ key: 'limit', value: this.pageSize });
-    params.push({ key: 'offset', value: (this.pageIndex-1)*this.pageSize });
-    this.serviciosSrv.getServicios(params).subscribe((data) => {
-      this.lstServicios = data;
+    this.serviciosSrv.getServicios(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Servicio>) => {
+      this.lstServicios = resp.data;
+      this.totalRegisters = resp.queryRowCount;
       this.tableLoading = false;
     }, (e) => {
       console.log('Error al cargar Servicios');
       console.log(e);
       this.notif.create('error', 'Error al cargar servicios', e.error);
       this.tableLoading = false;
-    });
-
-    const paramsTotal: IFilter[] = [];
-    paramsTotal.push({ key: 'eliminado', value: false });
-    this.serviciosSrv.getTotalRegistros(paramsTotal).subscribe((data) => {
-      this.totalRegisters = data;
-    }, (e) => {
-      console.log('Error al cargar totales de registros de servicios');
-      console.log(e);
-      this.httpErrorRespSrv.handle(e);
     });
   }
 
@@ -79,7 +65,7 @@ export class VistaServiciosComponent implements OnInit {
     this.cargarServicios();
   }
 
-  private buildSortStr(sort: IFilter[]): string | null {
+  private buildSortStr(sort: {key: string, value: any}[]): string | null {
     for (let s of sort) {
       if (s.value === 'ascend') return `+${s.key}`;
       if (s.value === 'descend') return `-${s.key}`;
@@ -87,9 +73,13 @@ export class VistaServiciosComponent implements OnInit {
     return null;
   }
 
-}
-
-interface IFilter {
-  key: string;
-  value: any | null;
+  private getHttpQueryParams(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    params = params.append('limit', `${this.pageSize}`);
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    return params;
+  }
 }

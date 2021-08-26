@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Distrito } from '../dto/distrito-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class DistritosService {
     return this.http.post(this.url, d, AppSettings.getHttpOptionsAuth());
   } 
 
-  get(params: HttpParams): Observable<Distrito[]> {
-    return this.http.get<Distrito[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<ServerResponseList<Distrito>> {
+    return this.http.get<ServerResponseList<Distrito>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: string): Observable<Distrito> {

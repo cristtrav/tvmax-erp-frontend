@@ -5,6 +5,7 @@ import { TipoDomicilio } from './../../../dto/tipodomicilio-dto';
 import { TiposdomiciliosService } from './../../../servicios/tiposdomicilios.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-vista-tiposdomicilios',
@@ -32,20 +33,13 @@ export class VistaTiposdomiciliosComponent implements OnInit {
 
   private cargarDatos(): void {
     this.tableLoading = true;
-    this.tdSrv.get(this.getHttpParamsQuery()).subscribe((data)=>{
-      this.lstTD = data;
+    this.tdSrv.get(this.getHttpParamsQuery()).subscribe((resp: ServerResponseList<TipoDomicilio>)=>{
+      this.lstTD = resp.data;
+      this.totalRegisters = resp.queryRowCount;
       this.tableLoading = false;
     }, (e)=>{
       this.tableLoading = false;
       console.log('Error al cargar tipos de domicilios');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    });
-    var parCount: HttpParams = new HttpParams().append('eliminado', 'false');
-    this.tdSrv.getTotalRegistros(parCount).subscribe((data)=>{
-      this.totalRegisters = data;
-    },(e)=>{
-      console.log('Error al consultar total de tipos de domicilios');
       console.log(e);
       this.httpErrorHandler.handle(e);
     });

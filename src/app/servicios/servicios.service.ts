@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Servicio } from './../dto/servicio-dto';
 import { AppSettings } from './../util/app-settings';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,8 @@ export class ServiciosService {
     return this.http.post(this.url, srv, AppSettings.getHttpOptionsJsonTextAuth());
   }
 
-  getServicios(filters: Array<{key: string, value: any | null}>): Observable<Servicio[]> {
-    let params = new HttpParams();
-    for(let p of filters){
-      params = params.append(p.key, p.value);
-    }
-    return this.http.get<Servicio[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  getServicios(params: HttpParams): Observable<ServerResponseList<Servicio>> {
+    return this.http.get<ServerResponseList<Servicio>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getTotalRegistros(filters: Array<{key: string, value: any | null}>): Observable<number>{

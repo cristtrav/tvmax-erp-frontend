@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Grupo } from '../dto/grupo-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -13,21 +14,17 @@ export class GruposService {
 
   constructor(private http: HttpClient) { }
 
-  getGrupos(filters: IFilter[]): Observable<Grupo[]> {
-    var params: HttpParams = new HttpParams();
-    for(let f of filters){
-      params = params.append(f.key, `${f.value}`);
-    }
-    return this.http.get<Grupo[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  getGrupos(params: HttpParams): Observable<ServerResponseList<Grupo>> {
+    return this.http.get<ServerResponseList<Grupo>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getTotal(filters: IFilter[]): Observable<number>{
+  /*getTotal(filters: IFilter[]): Observable<number>{
     var params: HttpParams = new HttpParams();
     for(let f of filters){
       params = params.append(f.key, `${f.value}`);
     }
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
-  }
+  }*/
 
   postGrupo(g: Grupo): Observable<any>{
     return this.http.post(this.url, g, AppSettings.getHttpOptionsJsonTextAuth());
@@ -44,9 +41,4 @@ export class GruposService {
   putGrupo(id: number, g: Grupo): Observable<any>{
     return this.http.put(`${this.url}/${id}`, g, AppSettings.getHttpOptionsJsonTextAuth());
   }
-}
-
-interface IFilter {
-  key: string,
-  value: string
 }

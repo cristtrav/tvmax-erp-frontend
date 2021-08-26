@@ -9,6 +9,7 @@ import { Domicilio } from 'src/app/dto/domicilio-dto';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-form-domicilio',
@@ -98,8 +99,8 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarTiposDomicilios(): void {
-    this.tipoDomiSrv.get(this.getBarriosHttpParams()).subscribe((data) => {
-      this.lstTiposDomicilios = data;
+    this.tipoDomiSrv.get(this.getBarriosHttpParams()).subscribe((resp: ServerResponseList<TipoDomicilio>) => {
+      this.lstTiposDomicilios = resp.data;
     }, (e) => {
       console.log('Error al cargar tipos de domicilios');
       console.log(e);
@@ -108,8 +109,8 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarBarrios(): void {
-    this.barriosSrv.get(this.getBarriosHttpParams()).subscribe((data) => {
-      this.lstBarrios = data;
+    this.barriosSrv.get(this.getBarriosHttpParams()).subscribe((resp: ServerResponseList<Barrio>) => {
+      this.lstBarrios = resp.data;
     }, (e) => {
       console.log('Error al cargar barrios');
       console.log(e);

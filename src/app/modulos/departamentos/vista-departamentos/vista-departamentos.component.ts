@@ -5,6 +5,7 @@ import { DepartamentosService } from './../../../servicios/departamentos.service
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { HttpParams } from '@angular/common/http';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-vista-departamentos',
@@ -32,21 +33,13 @@ export class VistaDepartamentosComponent implements OnInit {
 
   private cargarDatos(): void{
     this.tableLoading = true;
-    this.depSrv.get(this.getRequestParams()).subscribe((data)=>{
-      this.lstDepartamentos = data;
+    this.depSrv.get(this.getRequestParams()).subscribe((resp: ServerResponseList<Departamento>)=>{
+      this.lstDepartamentos = resp.data;
+      this.totalRegisters = resp.queryRowCount;
       this.tableLoading = false;
     }, (e)=>{
       this.tableLoading = false;
       console.log('Error al cargar departamentos');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    });
-
-    let paramsCount: HttpParams = new HttpParams();
-    this.depSrv.getTotal(paramsCount).subscribe((data)=>{
-      this.totalRegisters = data;
-    }, (e)=>{
-      console.log('Error al consultar total de registros de Departamentos');
       console.log(e);
       this.httpErrorHandler.handle(e);
     });

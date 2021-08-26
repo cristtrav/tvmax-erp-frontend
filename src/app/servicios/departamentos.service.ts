@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Departamento } from '../dto/departamento-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class DepartamentosService {
     return this.http.post(this.url, d, AppSettings.getHttpOptionsJsonTextAuth());
   }
 
-  get(params: HttpParams): Observable<Departamento[]> {
-    return this.http.get<Departamento[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<ServerResponseList<Departamento>> {
+    return this.http.get<ServerResponseList<Departamento>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: string): Observable<Departamento>{

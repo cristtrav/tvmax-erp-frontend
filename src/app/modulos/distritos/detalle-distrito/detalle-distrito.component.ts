@@ -8,6 +8,7 @@ import { DistritosService } from './../../../servicios/distritos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { ServerResponseList } from 'src/app/dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-distrito',
@@ -73,8 +74,8 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   private cargarDep(): void {
-    this.depSrv.get(this.getRequestParams()).subscribe((data) => {
-      this.lstDep = data;
+    this.depSrv.get(this.getHttpQueryParamsDepartamento()).subscribe((resp: ServerResponseList<Departamento>) => {
+      this.lstDep = resp.data;
     }, (e) => {
       console.log('Error al cargar departamentos');
       console.log(e);
@@ -148,7 +149,7 @@ export class DetalleDistritoComponent implements OnInit {
     return dist;
   }
 
-  getRequestParams(): HttpParams {
+  getHttpQueryParamsDepartamento(): HttpParams {
     const params: HttpParams = new HttpParams().append('eliminado', 'false');
     return params;
   }

@@ -7,6 +7,8 @@ import { Servicio } from './../../../dto/servicio-dto';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { HttpParams } from '@angular/common/http';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-servicio',
@@ -64,9 +66,8 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private cargarGrupos(): void{
-    var filter: IFilter[] = [];
-    this.gruposSrv.getGrupos(filter).subscribe((data)=>{
-      this.lstGrupos = data;
+    this.gruposSrv.getGrupos(this.getQueryParamsGrupos()).subscribe((resp: ServerResponseList<Grupo>)=>{
+      this.lstGrupos = resp.data;
     }, (e)=>{
       console.log('Error al cargar grupos');
       console.log(e);
@@ -139,9 +140,10 @@ export class DetalleServicioComponent implements OnInit {
     });
   }
 
+  getQueryParamsGrupos(): HttpParams{
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    return params;
+  }
+
 }
 
-interface IFilter{
-  key: string;
-  value: string;
-}

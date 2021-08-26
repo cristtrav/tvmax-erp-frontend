@@ -8,6 +8,7 @@ import { BarriosService } from './../../../servicios/barrios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-barrio',
@@ -79,8 +80,8 @@ export class DetalleBarrioComponent implements OnInit {
   }
 
   cargarDistritos(): void {
-    this.distSrv.get(this.getHttpParamsDistrito()).subscribe((data) => {
-      this.lstDist = data;
+    this.distSrv.get(this.getHttpParamsDistrito()).subscribe((resp: ServerResponseList<Distrito>) => {
+      this.lstDist = resp.data;
     }, (e) => {
       console.log('Error al cargar distritos');
       console.log(e);

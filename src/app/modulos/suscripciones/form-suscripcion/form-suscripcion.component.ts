@@ -10,6 +10,8 @@ import { Suscripcion } from 'src/app/dto/suscripcion-dto';
 import { Extra } from './../../../util/extra';
 import { Cliente } from './../../../dto/cliente-dto';
 import { ClientesService } from './../../../servicios/clientes.service';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -106,9 +108,9 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   private cargarServicios(): void {
-    const param = [{ key: 'suscribible', value: true }]
-    this.serviciosSrv.getServicios(param).subscribe((data) => {
-      this.lstServicios = data;
+    const param = new HttpParams().append('suscribible', 'true');
+    this.serviciosSrv.getServicios(param).subscribe((resp: ServerResponseList<Servicio>) => {
+      this.lstServicios = resp.data;
     }, (e) => {
       console.log('Error al cargar servicios');
       console.log(e);

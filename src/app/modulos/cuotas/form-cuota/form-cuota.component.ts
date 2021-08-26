@@ -6,7 +6,8 @@ import { Servicio } from './../../../dto/servicio-dto';
 import { Cuota } from 'src/app/dto/cuota-dto';
 import { CuotasService } from './../../../servicios/cuotas.service';
 import { Extra } from './../../../util/extra';
-import { ThrowStmt } from '@angular/compiler';
+import { HttpParams } from '@angular/common/http';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-form-cuota',
@@ -48,9 +49,9 @@ export class FormCuotaComponent implements OnInit {
   }
 
   private cargarServicios() {
-    const filtros = [{ key: 'sort', value: '+descripcion' }];
-    this.serviciosSrv.getServicios(filtros).subscribe((data) => {
-      this.lstServicios = data;
+    const param: HttpParams = new HttpParams().append('sort', '+descripcion');
+    this.serviciosSrv.getServicios(param).subscribe((resp: ServerResponseList<Servicio>) => {
+      this.lstServicios = resp.data;
     }, (e) => {
       console.log('Error al cargar servicios');
       console.log(e);

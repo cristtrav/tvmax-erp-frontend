@@ -5,6 +5,7 @@ import { DistritosService } from './../../../servicios/distritos.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-vista-distritos',
@@ -32,23 +33,15 @@ export class VistaDistritosComponent implements OnInit {
 
   private cargarDatos(): void {
     this.tableLoading = true;
-    this.distSrv.get(this.getHttpParams()).subscribe((data)=>{
-      this.lstDist = data;
+    this.distSrv.get(this.getHttpParams()).subscribe((resp: ServerResponseList<Distrito>)=>{
+      this.lstDist = resp.data;
+      this.totalRegisters = resp.queryRowCount;
       this.tableLoading = false;
     }, (e)=>{
       console.log('Error al cargar distritos');
       console.log(e);
       this.httpErrorHandler.handle(e);
       this.tableLoading = false;
-    });
-
-    var paramCount: HttpParams = new HttpParams().append('eliminado', 'false');
-    this.distSrv.getTotalRegistros(paramCount).subscribe((data)=>{
-      this.totalRegisters = data;
-    }, (e)=>{
-      console.log('Error al consultar total de Distritos');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
     });
   }
 

@@ -4,6 +4,8 @@ import { GruposService } from '../../../servicios/grupos.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-vista-grupos',
@@ -30,20 +32,10 @@ export class VistaGruposComponent implements OnInit {
   }
 
   private cargarDatos(){
-    var filtersTotal: IFilter[] = [];
-    filtersTotal.push({ key: 'eliminado', value: 'false' });
-    this.grupoSrv.getTotal(filtersTotal).subscribe((total)=>{
-      console
-      this.totalRegisters = total;
-    }, (e)=>{
-      console.log('Error al consultar total de grupos');
-      console.log(e);
-      this.notif.create('error', 'Error al contar', 'Error al obtener el total de registros');
-    });
-
     this.loadingData = true;
-    this.grupoSrv.getGrupos(this.getFilters()).subscribe((data)=>{
-      this.lstGrupos = data;
+    this.grupoSrv.getGrupos(this.getQueryHttpParams()).subscribe((resp: ServerResponseList<Grupo>)=>{
+      this.lstGrupos = resp.data;
+      this.totalRegisters = resp.queryRowCount;
       this.loadingData = false;
     }, (e)=>{
       this.loadingData = false;
@@ -70,28 +62,22 @@ export class VistaGruposComponent implements OnInit {
     this.cargarDatos();
   }
 
-  getFilters(): IFilter[] {
-    var filters: IFilter[] = [];
-    filters.push({key: 'eliminado', value: 'false'});
-    if(this.sort){
-      filters.push({ key: 'sort', value: this.sort });
-    }
-    filters.push({key: 'limit', value: `${this.pageSize}`});
-    filters.push({key: 'offset', value: `${(this.pageIndex-1)*this.pageSize}`});
-    return filters;
-  }
-
-  buildSort(filters: IFilter[]): string | null {
+  buildSort(filters: {key: string, value: any}[]): string | null {
     for(var f of filters){
-      if(f.value === 'ascend') return `+${f.key}`
-      if(f.value === 'descend') return `-${f.key}`
+      if(f.value === 'ascend') return `+${f.key}`;
+      if(f.value === 'descend') return `-${f.key}`;
     }
-    return null
+    return null;
   }
 
-}
+  getQueryHttpParams(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    params = params.append('limit', `${this.pageSize}`);
+    if(this.sort){
+      params = params.append('sort', this.sort);
+    }
+    return params;
+  }
 
-interface IFilter{
-  key: string;
-  value: any;
 }

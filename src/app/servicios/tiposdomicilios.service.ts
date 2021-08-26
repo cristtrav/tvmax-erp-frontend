@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { TipoDomicilio } from '../dto/tipodomicilio-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ export class TiposdomiciliosService {
     return this.http.put(`${this.url}/${id}`, td, AppSettings.getHttpOptionsAuth());
   }
 
-  get(p: HttpParams): Observable<TipoDomicilio[]> {
-    return this.http.get<TipoDomicilio[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(p));
+  get(p: HttpParams): Observable<ServerResponseList<TipoDomicilio>> {
+    return this.http.get<ServerResponseList<TipoDomicilio>>(this.url, AppSettings.getHttpOptionsAuthWithParams(p));
   }
 
   delete(id: number): Observable<any> {
