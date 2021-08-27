@@ -4,6 +4,7 @@ import { UsuariosService } from './../../../servicios/usuarios.service';
 import { Usuario } from './../../../dto/usuario-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-usuario',
@@ -33,7 +34,8 @@ export class DetalleUsuarioComponent implements OnInit {
     private fb: FormBuilder,
     private usuarioSrv: UsuariosService,
     private notif: NzNotificationService,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -115,7 +117,8 @@ export class DetalleUsuarioComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar usuario');
       console.log(e);
-      this.notif.create('error', 'Error al guardar usuario', e.error);
+      this.httpErrorHandler.handle(e);;
+      //this.notif.create('error', 'Error al guardar usuario', e.error);
       this.guardarLoading = false;
     });
   }
@@ -129,7 +132,8 @@ export class DetalleUsuarioComponent implements OnInit {
     }, (e) => {
       console.log('Error al modificar usuario');
       console.log(e);
-      this.notif.create('error', 'Error al guardar usuario', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al guardar usuario', e.error);
       this.guardarLoading = false;
     });
   }

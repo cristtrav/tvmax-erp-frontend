@@ -17,6 +17,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzCheckboxModule,
     NzNotificationModule,
     NzPopconfirmModule,
-    NzSpinModule
+    NzSpinModule,
+    NzToolTipModule
   ]
 })
 export class UsuariosModule { }

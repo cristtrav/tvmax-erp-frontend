@@ -1,7 +1,11 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
 import { Usuario } from './../../../dto/usuario-dto';
 import { UsuariosService } from './../../../servicios/usuarios.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-vista-usuarios',
@@ -11,10 +15,16 @@ import { UsuariosService } from './../../../servicios/usuarios.service';
 export class VistaUsuariosComponent implements OnInit {
 
   lstUsuarios: Usuario[] = [];
+  pageSize: number = 10;
+  pageIndex: number = 1;
+  totalRegisters: number = 1;
+  tableLoading: boolean = false;
+  sortStr: string | null = '+id';
 
   constructor(
     private usuariosSrv: UsuariosService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -22,13 +32,16 @@ export class VistaUsuariosComponent implements OnInit {
   }
 
   private cargarDatos(): void{
-    let f: Array<{key: string, value: any | null}> = [{key: 'sort', value: '+id'}];
-    this.usuariosSrv.get(f).subscribe((data)=>{
-      this.lstUsuarios = data;
+    this.tableLoading = true;
+    this.usuariosSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Usuario>)=>{
+      this.lstUsuarios = resp.data;
+      this.totalRegisters = resp.queryRowCount;
+      this.tableLoading = false;
     }, (e)=>{
       console.log('Error al consultar usuarios');
       console.log(e);
-      this.notif.create('error', 'Error al cargar usuarios', e.error);
+      this.httpErrorHandler.handle(e);
+      this.tableLoading = false;
     });
   }
 
@@ -40,9 +53,35 @@ export class VistaUsuariosComponent implements OnInit {
       }, (e)=>{
         console.log('Error al eliminar usuario');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar usuario', e.error);
+        this.httpErrorHandler.handle(e);
+        //this.notif.create('error', 'Error al eliminar usuario', e.error);
       });
     }
+  }
+
+  getHttpQueryParams(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    params = params.append('limit', `${this.pageSize}`);
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    return params;
+  }
+
+  onTableParamsQueryChange(params: NzTableQueryParams){
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    this.sortStr = this.buildSortStr(params.sort);
+    this.cargarDatos();
+  }
+
+  buildSortStr(sort: {key: string, value: any}[]): string | null {
+    for(let s of sort){
+      if(s.value === 'ascend') return `+${s.key}`;
+      if(s.value === 'descend') return `-${s.key}`;
+    }
+    return null;
   }
 
 }

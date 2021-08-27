@@ -15,16 +15,18 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstUsuarios" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstUsuarios" [nzFrontPagination]="false" style="margin-top: 10px;"
+            [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzLoading]="tableLoading" [nzTotal]="totalRegisters"
+            (nzQueryParams)="onTableParamsQueryChange($event)" nzShowPagination nzShowSizeChanger>
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>C.I.</th>
-                        <th>Email</th>
-                        <th>Teléfono</th>
-                        <th nzAlign="center">Activo</th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'nombres'" [nzSortFn]="true">Nombres</th>
+                        <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">Apellidos</th>
+                        <th [nzColumnKey]="'ci'" [nzSortFn]="true">C.I.</th>
+                        <th [nzColumnKey]="'email'" [nzSortFn]="true">Email</th>
+                        <th [nzColumnKey]="'telefono'" [nzSortFn]="true">Teléfono</th>
+                        <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -40,12 +42,17 @@
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.activo?'#00C853':'#f44336'" [nzType]="u.activo?'check-circle':'close-circle'"></i>
                         </td>
                         <td>
-                            <a [routerLink]="u.id+''">Editar</a>
+                            <!--<a [routerLink]="u.id+''">Editar</a>-->
+                            <button nz-button nz-tooltip nzType="primary" [routerLink]="u.id+''" nzTooltipTitle="Editar">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(u.id)">
-                                Eliminar
-                            </a>
+                            <button nz-button nz-tooltip nz-popconfirm 
+                            nzType="primary" nzTooltipTitle="Eliminar"
+                            nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                            (nzOnConfirm)="eliminar(u.id)" nzDanger>
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
