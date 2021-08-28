@@ -5,4 +5,12 @@ export class Extra {
         const strF: string = `${d.getFullYear()}-${mes}-${dia}`;
         return strF;
     }
+
+    public static buildSortString(sort: {key: string, value: any}[]): string | null{
+        for(let s of sort){
+            if(s.value === 'ascend') return `+${s.key}`;
+            if(s.value === 'descend') return `-${s.key}`;
+        }
+        return null;
+    }
 }

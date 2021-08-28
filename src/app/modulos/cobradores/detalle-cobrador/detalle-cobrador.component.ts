@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cobrador } from './../../../dto/cobrador-dto';
 import { CobradoresService } from './../../../servicios/cobradores.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-cobrador',
@@ -30,7 +31,8 @@ export class DetalleCobradorComponent implements OnInit {
     private cobradoresSrv: CobradoresService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -57,7 +59,8 @@ export class DetalleCobradorComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar datos');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del cobrador', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al cargar datos del cobrador', e.error);
       this.formLoading = false;
     });
   }
@@ -113,7 +116,7 @@ export class DetalleCobradorComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar cobrador');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -124,12 +127,12 @@ export class DetalleCobradorComponent implements OnInit {
     this.cobradoresSrv.put(+this.idcobrador, c).subscribe(() => {
       this.notif.create('success', 'Guardado correctamente', '');
       this.idcobrador = `${c.id}`;
-      this.router.navigateByUrl(`/cobradores/${c.id}`);
+      this.router.navigate([c.id], { relativeTo: this.aroute.parent });
       this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar cobrador');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }

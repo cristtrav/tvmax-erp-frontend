@@ -6,6 +6,8 @@ import { Cobrador } from 'src/app/dto/cobrador-dto';
 import { CobradoresService } from './../../../servicios/cobradores.service';
 import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -52,8 +54,8 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   private cargarCobradores(): void {
-    this.cobradoresSrv.get().subscribe((data) => {
-      this.lstCobradores = data;
+    this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Cobrador>) => {
+      this.lstCobradores = resp.data;
     }, (e) => {
       console.log('Error al cargar cobradores');
       console.log(e);
@@ -179,6 +181,11 @@ export class DetalleClienteComponent implements OnInit {
     if(!ci){
       this.form.get('dvruc')?.reset();
     }
+  }
+
+  getHttpQueryParamsCobradores(): HttpParams{
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    return params;
   }
 
 }

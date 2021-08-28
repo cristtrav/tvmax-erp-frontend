@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Cobrador } from './../../../dto/cobrador-dto';
 import { CobradoresService } from './../../../servicios/cobradores.service';
+import { Extra } from '../../../util/extra';
+import { HttpParams } from '@angular/common/http';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
+
 
 @Component({
   selector: 'app-vista-cobradores',
@@ -11,10 +17,16 @@ import { CobradoresService } from './../../../servicios/cobradores.service';
 export class VistaCobradoresComponent implements OnInit {
 
   lstCobradores: Cobrador[] = [];
+  pageIndex: number = 1;
+  pageSize: number = 10;
+  totalRegisters: number = 1;
+  tableLoading: boolean = false;
+  sortStr: string | null = '+id';
 
   constructor(
     private cobradoresSrv: CobradoresService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -22,12 +34,16 @@ export class VistaCobradoresComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cobradoresSrv.get().subscribe((data)=>{
-      this.lstCobradores = data;
+    this.tableLoading = true;
+    this.cobradoresSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Cobrador>) =>{
+      this.lstCobradores = resp.data;
+      this.totalRegisters = resp.queryRowCount;      
+      this.tableLoading = false;
     }, (e)=>{
       console.log('Error al cargar cobradores');
       console.log(e);
-      this.notif.create('error', 'Error al cargar cobradores', e.error);
+      this.httpErrorHandler.handle(e);
+      this.tableLoading = false;
     });
   }
 
@@ -39,9 +55,27 @@ export class VistaCobradoresComponent implements OnInit {
       }, (e)=>{
         console.log('Error al eliminar cobrador');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar', e.error);
+        this.httpErrorHandler.handle(e);
+        //this.notif.create('error', 'Error al eliminar', e.error);
       });
     }
+  }
+
+  onTableQueryParamsChange(params: NzTableQueryParams){
+    this.pageSize = params.pageSize;
+    this.pageIndex = params.pageIndex;
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.cargarDatos();
+  }
+
+  getHttpQueryParams(): HttpParams{
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    params = params.append('limit', `${this.pageSize}`);
+    return params;
   }
 
 }

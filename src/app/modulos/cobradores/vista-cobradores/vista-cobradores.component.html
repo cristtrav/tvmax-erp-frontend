@@ -15,15 +15,17 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstCobradores" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstCobradores" style="margin-top: 10px;"
+            [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzLoading]="tableLoading" [nzTotal]="totalRegisters"
+            (nzQueryParams)="onTableQueryParamsChange($event)" nzShowPagination nzShowSizeChanger>
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Razón social</th>
-                        <th>CI/RUC</th>
-                        <th>Teléfono</th>
-                        <th>Email</th>
-                        <th nzAlign="center">Activo</th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'razon_social'" [nzSortFn]="true">Razón social</th>
+                        <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
+                        <th [nzColumnKey]="'telefono'" [nzSortFn]="true">Teléfono</th>
+                        <th [nzColumnKey]="'email'" [nzSortFn]="true">Email</th>
+                        <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -38,12 +40,16 @@
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.activo?'#00C853':'#f44336'" [nzType]="c.activo?'check-circle':'close-circle'"></i>
                         </td>
                         <td>
-                            <a [routerLink]="c.id+''">Editar</a>
+                            <button nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
+                            nzTooltipTitle="Editar">
+                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cobrador?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(c.id)">
-                                Eliminar
-                            </a>
+                            <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" 
+                            nzPopconfirmTitle="¿Desea eliminr el Cobrador?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" 
+                            (nzOnConfirm)="eliminar(c.id)" nzDanger>
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

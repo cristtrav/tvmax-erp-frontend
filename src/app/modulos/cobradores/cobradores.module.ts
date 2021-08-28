@@ -18,7 +18,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   declarations: [VistaCobradoresComponent, DetalleCobradorComponent],
@@ -39,7 +39,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzSelectModule,
     NzCheckboxModule,
     NzNotificationModule,
-    NzSpinModule
+    NzSpinModule,
+    NzToolTipModule
   ]
 })
 export class CobradoresModule { }
