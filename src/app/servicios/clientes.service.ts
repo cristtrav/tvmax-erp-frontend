@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Cliente } from '../dto/cliente-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -27,16 +28,8 @@ export class ClientesService {
     return this.http.put(`${this.url}/${id}`, c, AppSettings.httpOptionsPost);
   }
 
-  get(pageIndex: number | null, pageSize: number | null, filters: IFilter[]): Observable<Cliente[]> {
-    var params = new HttpParams();
-    if(pageSize && pageIndex){
-      params = params.append('limit', `${pageSize}`);
-      params = params.append('offset', `${(pageIndex-1)*pageSize}`);
-    }
-    for(let f of filters){
-      params = params.append(f.key, f.value);
-    }
-    return this.http.get<Cliente[]>(this.url, { params });
+  get(params: HttpParams): Observable<ServerResponseList<Cliente>> {
+    return this.http.get<ServerResponseList<Cliente>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   delete(id: number): Observable<any> {

@@ -1,8 +1,12 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { Cliente } from './../../../dto/cliente-dto';
 import { ClientesService } from './../../../servicios/clientes.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { Extra } from '../../../util/extra';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -17,35 +21,29 @@ export class VistaClientesComponent implements OnInit {
   pageIndex: number = 1;
   tablaLoading = false;
   expandSet = new Set<number>();
+  sortStr: string | null = '+razonsocial'
 
   constructor(
     private cliSrv: ClientesService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos(this.pageIndex, this.pageSize);
+    this.cargarDatos();
   }
 
-  cargarDatos(pageIndex:number, pageSize: number): void {
+  cargarDatos(): void {
     this.tablaLoading = true;
-    this.cliSrv.getTotal().subscribe((data) => {
-      this.total = data.total;
-      var filters: IFilter[] = [];
-      filters.push({key: 'eliminado', value: 'false'});
-      filters.push({key: 'sort', value: '+razonsocial'});
-      this.cliSrv.get(pageIndex, pageSize, filters).subscribe((data) => {
-        this.lstClientes = data;
-        this.tablaLoading = false
-      }, (e) => {
-        console.log('Error al cargar clientes');
-        console.log(e);
-        this.notif.create('error', 'Error al cargar clientes', e.error);
-      });
+    this.cliSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Cliente>) => {
+      this.lstClientes = resp.data;
+      this.total = resp.queryRowCount;
+      this.tablaLoading = false
     }, (e) => {
-      console.log('Error al consultar total');
+      console.log('Error al cargar clientes');
       console.log(e);
-      this.tablaLoading = false;
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al cargar clientes', e.error);
     });
   }
 
@@ -53,7 +51,7 @@ export class VistaClientesComponent implements OnInit {
     if (id !== null) {
       this.cliSrv.delete(id).subscribe(() => {
         this.notif.create('success', 'Eliminado correctamente', '');
-        this.cargarDatos(this.pageIndex, this.pageSize);
+        this.cargarDatos();
       }, (e) => {
         console.log('Error al eliminar cliente');
         console.log(e);
@@ -63,10 +61,10 @@ export class VistaClientesComponent implements OnInit {
   }
 
   onTableParamsChange(params: NzTableQueryParams): void{
-    const {pageIndex, pageSize} = params;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
-    this.cargarDatos(pageIndex, pageSize);
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.cargarDatos(); 
   }
 
   onRowExpand(id: number, checked: boolean): void{
@@ -77,9 +75,14 @@ export class VistaClientesComponent implements OnInit {
     }
   }
 
-}
+  getHttpQueryParams(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    params = params.append('limit', `${this.pageSize}`);
+    return params;
+  }
 
-interface IFilter{
-  key: string,
-  value: string
 }

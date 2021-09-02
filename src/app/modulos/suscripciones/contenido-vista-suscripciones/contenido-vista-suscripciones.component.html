@@ -10,7 +10,7 @@
         <nz-space-item>{{ total | number}}</nz-space-item>
     </nz-space>
 </ng-template>
-<nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;" nzShowSizeChanger
+<nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;" nzShowSizeChanger nzShowSizeChanger
 [nzFooter]="pietabla"
 [nzFrontPagination]="false"
 [nzLoading]="tableLoading"
@@ -21,13 +21,13 @@
     <thead>
         <tr>
             <th nzWidth="60px"></th>
-            <th>Código</th>
-            <th *ngIf="mostrarCliente">Cliente</th>
-            <th>Servicio</th>
-            <th nzAlign="center">Monto/mes</th>
-            <th>Estado</th>
-            <th>Cuotas Pend.</th>
-            <th nzAlign="right">Deuda</th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
+            <th *ngIf="mostrarCliente" [nzColumnKey]="'cliente'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Cliente</th>
+            <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
+            <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true">Monto/mes</th>
+            <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
+            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true">Cuotas Pend.</th>
+            <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right">Deuda</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -57,12 +57,15 @@
                 </td>
                 <td nzAlign="right">{{ s.deuda | number }}</td>
                 <td>
-                    <a [routerLink]="s.id+''">Editar</a>
+                    <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="s.id+''">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </button>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminar la Suscripción?"
-                                        nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(s.id)">
-                        Eliminar
-                    </a>
+                    <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" nzDanger
+                    nzPopconfirmTitle="¿Desea eliminar la Suscripción?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                    (nzOnConfirm)="eliminar(s.id)">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </button>
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(s.id?s.id:-1)">

@@ -3,6 +3,7 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Domicilio } from '../dto/domicilio-dto';
 import { Observable } from 'rxjs';
+import { ServerResponseList } from '../dto/server-response-list.dto'; 
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +20,8 @@ export class DomiciliosService {
     return this.http.post(this.url, d, AppSettings.httpOptionsPost);
   }
 
-  get(filters: Array<{ key: string, value: any | null }>): Observable<Domicilio[]> {
-    let params = new HttpParams()
-      .append('eliminado', 'false')
-      .append('sort', '+id');
-    for (let f of filters) {
-      params = params.append(f.key, f.value);
-    }
-    return this.http.get<Domicilio[]>(this.url, { params });
+  get(params: HttpParams): Observable<ServerResponseList<Domicilio>> {
+    return this.http.get<ServerResponseList<Domicilio>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: number): Observable<Domicilio> {

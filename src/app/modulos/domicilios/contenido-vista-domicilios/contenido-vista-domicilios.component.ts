@@ -1,5 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ServerResponseList } from 'src/app/dto/server-response-list.dto';
 import { Domicilio } from './../../../dto/domicilio-dto';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 
@@ -25,9 +27,9 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
     this.cargarDatos();
   }
 
-  private cargarDatos(): void{
-    this.domiSrv.get([{key: 'idcliente', value: this.idcliente}]).subscribe((data)=>{
-      this.lstDomicilios = data;
+  private cargarDatos(): void{    
+    this.domiSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Domicilio>)=>{
+      this.lstDomicilios = resp.data;
     }, (e)=>{
       console.log(e);
     });
@@ -44,6 +46,11 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
         this.notif.create('error', 'Error al eliminar', e.error);
       });
     }
+  }
+
+  getHttpQueryParams(): HttpParams {
+    var par: HttpParams = new HttpParams().append('idcliente', `${this.idcliente}`);
+    return par;
   }
 
 }

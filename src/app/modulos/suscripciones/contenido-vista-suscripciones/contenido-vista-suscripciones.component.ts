@@ -1,8 +1,12 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Suscripcion } from './../../../dto/suscripcion-dto';
 import { SuscripcionesService } from './../../../servicios/suscripciones.service';
+import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { Extra } from '../../../util/extra';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-contenido-vista-suscripciones',
@@ -20,7 +24,8 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
   tableLoading: boolean = false;
   pageIndex: number = 1;
   pageSize: number = 10;
-  total: number = 20;
+  total: number = 0;
+  sortStr: string | null = '+cliente';
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
@@ -33,48 +38,27 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
 
   constructor(
     private suscripSrv: SuscripcionesService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
   }
 
-  private cargarTotal(): void{
-    this.suscripSrv.getTotal(this.getFiltros()).subscribe((data)=>{
-      this.total = data.total;
-    }, (e)=>{
-      console.log('Error al contar suscripciones');
-      console.log(e)
-      this.notif.create('error', 'Error al obtener cuenta de total de suscripciones', e.error);
-    });
-  }
-
-  private getFiltros(): IFilter[] {
-    let filt: IFilter[] = [];
-    if(this.idcliente){
-      filt.push({key: 'idcliente', value: `${this.idcliente}`});
-    }
-    filt.push({key: 'eliminado', value: 'false'});
-    filt.push({key: 'offset', value: `${(this.pageIndex-1)*this.pageSize}`});
-    filt.push({key: 'limit', value: `${this.pageSize}`});
-    filt.push({key: 'sort', value: '+cliente'});
-    return filt;
-  }
-
   private cargarDatos(): void{
     this.tableLoading = true;
     
-    this.suscripSrv.get(this.getFiltros()).subscribe((data)=>{
-      this.lstSuscripciones = data;
+    this.suscripSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Suscripcion>)=>{
+      this.lstSuscripciones = resp.data;
+      this.total = resp.queryRowCount;
       this.tableLoading = false;
     }, (e)=>{
       console.log('Error al cargar suscripciones');
       console.log(e);
-      this.notif.create('error', 'Error al cargar suscripciones', e.error);
+      this.httpErrorHandler.handle(e);
       this.tableLoading = false;
     });
-    this.cargarTotal();
   }
 
   eliminar(id: number | null): void {
@@ -85,20 +69,30 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
       }, (e)=>{
         console.log('Error al eliminar suscripcion');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar suscripción', e.error);
+        this.httpErrorHandler.handle(e);;
+        //this.notif.create('error', 'Error al eliminar suscripción', e.error);
       });
     }
   }
 
   onTableParamsChange(params: NzTableQueryParams){
-    /*console.log(params);
-    console.log('El tamaño de la pagina es: '+this.pageSize);*/
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.pageSize = params.pageSize;
+    this.pageIndex = params.pageIndex
     this.cargarDatos();
   }
 
-}
+  getHttpQueryParams(): HttpParams {
+    var params: HttpParams = new HttpParams().append('eliminado', 'false');
+    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    params = params.append('limit', `${this.pageSize}`);
+    if(this.sortStr){
+      params = params.append('sort', this.sortStr);
+    }
+    if(this.idcliente){
+      params = params.append('idcliente', `${this.idcliente}`);
+    }
+    return params;
+  }
 
-interface IFilter{
-  key: string,
-  value: string
 }

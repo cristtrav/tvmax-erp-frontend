@@ -3,8 +3,17 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-                <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;"></nz-input-number>
+                <nz-input-group [nzAddOnAfter]="idIconButton" style="width: 50%;" nzSearch>
+                    <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;"></nz-input-number>
+                </nz-input-group>
+                <ng-template #idIconButton>
+                    <button nz-button nz-tooltip nzTooltipTitle="Calcular código" nzType="default" nzSearch 
+                    (click)="cargarUltimoId()" [nzLoading]="idLoading">
+                        <i nz-icon nzType="import" nzTheme="outline"></i>
+                    </button>
+                </ng-template>
             </nz-form-control>
+            
         </nz-form-item>
         <nz-form-item [style]="!mostrarCliente?'display: none':''">
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Cliente</nz-form-label>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Suscripcion } from './../dto/suscripcion-dto';
 import { AppSettings } from './../util/app-settings';
+import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,47 +17,26 @@ export class SuscripcionesService {
   ) { }
 
   post(s: Suscripcion): Observable<any> {
-    return this.http.post(this.url, s, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, s, AppSettings.getHttpOptionsAuth());
   }
 
-  get(filters: Array<{ key: string, value: any | null }>): Observable<Suscripcion[]> {
-    let params = new HttpParams();
-    for (let f of filters) {
-      params = params.append(f.key, f.value);
-    }
-    return this.http.get<Suscripcion[]>(this.url, { params });
+  get(params: HttpParams): Observable<ServerResponseList<Suscripcion>> {
+    return this.http.get<ServerResponseList<Suscripcion>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: number): Observable<Suscripcion> {
-    return this.http.get<Suscripcion>(`${this.url}/${id}`);
+    return this.http.get<Suscripcion>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: number, s: Suscripcion): Observable<any> {
-    return this.http.put(`${this.url}/${id}`, s, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, s, AppSettings.getHttpOptionsAuth());
   }
 
   delete(id: number): Observable<any>{
-    return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  getUltimoId(): Observable<{ultimoid: number | null}> {
-    return this.http.get<{ultimoid: number | null}>(`${this.url}/ultimoid`);
+  getUltimoId(): Observable< number | null> {
+    return this.http.get< number | null>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
-
-  getTotal(filters: IFilter[]): Observable<ITotal>{
-    var params: HttpParams = new HttpParams();
-    for(let f of filters){
-      params = params.append(f.key, f.value);
-    }
-    return this.http.get<ITotal>(`${this.url}/total`, { params });
-  }
-}
-
-interface IFilter{
-  key: string,
-  value: string
-}
-
-interface ITotal{
-  total: number
 }
