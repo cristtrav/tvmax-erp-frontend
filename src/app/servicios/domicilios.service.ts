@@ -17,7 +17,7 @@ export class DomiciliosService {
   ) { }
 
   post(d: Domicilio): Observable<any> {
-    return this.http.post(this.url, d, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, d, AppSettings.getHttpOptionsAuth());
   }
 
   get(params: HttpParams): Observable<ServerResponseList<Domicilio>> {
@@ -25,18 +25,18 @@ export class DomiciliosService {
   }
 
   getPorId(id: number): Observable<Domicilio> {
-    return this.http.get<Domicilio>(`${this.url}/${id}`);
+    return this.http.get<Domicilio>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: number, d: Domicilio): Observable<any> {
-    return this.http.put(`${this.url}/${id}`, d, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, d, AppSettings.getHttpOptionsAuth());
   }
 
   eliminar(id: number): Observable<any>{
-    return this.http.delete(`${this.url}/${id}`, {responseType: 'text'});
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  getUltimoId(): Observable<{ultimoid: number | null}> {
-    return this.http.get<{ultimoid: number | null}>(`${this.url}/ultimoid`);
+  getUltimoId(): Observable<number> {
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 }

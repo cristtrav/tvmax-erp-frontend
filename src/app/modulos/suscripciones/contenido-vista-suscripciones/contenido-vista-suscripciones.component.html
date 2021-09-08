@@ -4,10 +4,12 @@
 </a>
 <ng-template #pietabla>
     <nz-space>
-        <nz-space-item>
-            <strong>Total:</strong>
-        </nz-space-item>
-        <nz-space-item>{{ total | number}}</nz-space-item>
+            <span *nzSpaceItem>
+                <strong>Total:</strong>
+            </span>
+            <span *nzSpaceItem>
+                {{ total | number}}
+            </span>
     </nz-space>
 </ng-template>
 <nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;" nzShowSizeChanger nzShowSizeChanger
@@ -17,7 +19,8 @@
 [(nzPageIndex)]="pageIndex"
 [(nzPageSize)]="pageSize"
 [nzTotal]="total"
-(nzQueryParams)="onTableParamsChange($event)">
+(nzQueryParams)="onTableParamsChange($event)"
+nzSize="small">
     <thead>
         <tr>
             <th nzWidth="60px"></th>
@@ -26,7 +29,7 @@
             <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
             <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true">Monto/mes</th>
             <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
-            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true">Cuotas Pend.</th>
+            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true">Cuotas P.</th>
             <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right">Deuda</th>
             <th>Acciones</th>
         </tr>
@@ -46,36 +49,37 @@
                         <span *ngIf="s.estado === 'D'">Desconectado</span>
                     </nz-tag>
                 </td>
-                <td>
-                    <span style="font-size: large;">
-                        <a nz-tooltip nzTooltipTitle="Ver cuotas de la suscripción" [routerLink]="s.id+'/cuotas'">
-                            <i nz-icon nzType="eye"></i>
-                        </a>
-                    </span>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    {{ s.cuotaspendientes | number }}
+                <td nzAlign="center">
+                    <nz-tag *ngIf="s.cuotaspendientes === 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}</nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes >= 1 && s.cuotaspendientes <= 3" [nzColor]="'orange'">{{ s.cuotaspendientes | number }}</nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes >= 4" [nzColor]="'red'">{{ s.cuotaspendientes | number }}</nz-tag>
                 </td>
                 <td nzAlign="right">{{ s.deuda | number }}</td>
                 <td>
-                    <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="s.id+''">
-                        <i nz-icon nzType="edit" nzTheme="outline"></i>
-                    </button>
-                    <nz-divider nzType="vertical"></nz-divider>
-                    <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" nzDanger
-                    nzPopconfirmTitle="¿Desea eliminar la Suscripción?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                    (nzOnConfirm)="eliminar(s.id)">
-                        <i nz-icon nzType="delete" nzTheme="outline"></i>
-                    </button>
+                    <nz-space>
+                        <button *nzSpaceItem nz-tooltip nz-button nzType="default"
+                        [routerLink]="s.id+'/cuotas'" nzTooltipTitle="Cuotas">
+                            <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="s.id+''">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" nzDanger
+                        nzPopconfirmTitle="¿Desea eliminar la Suscripción?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                        (nzOnConfirm)="eliminar(s.id)">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+                    </nz-space>
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(s.id?s.id:-1)">
                 <nz-space nzSize="large">
-                    <nz-space-item >
-                        <strong>Dirección: </strong> {{ s.direccion }}
-                    </nz-space-item>
-                    <nz-space-item>
-                        <strong>Fecha de Suscripción:</strong> {{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}
-                    </nz-space-item>
+                        <span *nzSpaceItem>
+                            <strong>Dirección: </strong> {{ s.direccion }}
+                        </span>
+                        <span *nzSpaceItem>
+                            <strong>Fecha de Suscripción:</strong> {{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}
+                        </span>
                 </nz-space>
             </tr>
         </ng-container>

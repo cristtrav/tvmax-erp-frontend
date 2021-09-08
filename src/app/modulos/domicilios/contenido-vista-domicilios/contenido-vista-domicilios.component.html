@@ -2,15 +2,17 @@
     <i nz-icon nzType="plus"></i>
     Nuevo
 </a>
-<nz-table #tbl [nzData]="lstDomicilios" style="margin-top: 10px;">
+<nz-table #tbl [nzData]="lstDomicilios" style="margin-top: 10px;" nzSize="small" [nzFrontPagination]="false"
+[nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
+nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
-            <th>Código</th>
-            <th>Dirección</th>
-            <th>Barrio</th>
-            <th>Tipo de domicilio</th>
-            <th>Medidor ANDE</th>
-            <th>Principal</th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+            <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Dirección</th>
+            <th [nzColumnKey]="'barrio'" [nzSortFn]="true">Barrio</th>
+            <th [nzColumnKey]="'tipodomicilio'" [nzSortFn]="true">Tipo de domicilio</th>
+            <th [nzColumnKey]="'nromedidor'" [nzSortFn]="true">Medidor ANDE</th>
+            <th [nzColumnKey]="'principal'" [nzSortFn]="true">Principal</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -24,12 +26,16 @@
             <td>
                 <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="d.principal?'#00C853':'#f44336'" [nzType]="d.principal?'check-circle':'close-circle'"></i>
             <td>
-                <a [routerLink]="d.id+''">Editar</a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(d.id)">
-                    Eliminar
-                </a>
+                <nz-space>
+                    <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="[d.id]" nzTooltipTitle="Editar">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar"
+                    nzPopconfirmTitle="¿Desea eliminr el Domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" 
+                    (nzOnConfirm)="eliminar(d.id)" nzDanger>
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </button>
+                </nz-space>
             </td>
         </tr>
     </tbody>

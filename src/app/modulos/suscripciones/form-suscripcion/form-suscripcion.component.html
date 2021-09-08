@@ -3,23 +3,25 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-                <nz-input-group [nzAddOnAfter]="idIconButton" style="width: 50%;" nzSearch>
+                <nz-input-group nzSearch [nzAddOnAfter]="idIconButton" style="width: 50%;" >
                     <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;"></nz-input-number>
                 </nz-input-group>
                 <ng-template #idIconButton>
-                    <button nz-button nz-tooltip nzTooltipTitle="Calcular código" nzType="default" nzSearch 
-                    (click)="cargarUltimoId()" [nzLoading]="idLoading">
+                    <button nz-button nz-tooltip nzTooltipTitle="Calcular código" nzType="default" nzSearch
+                        (click)="cargarUltimoId()" [nzLoading]="idLoading">
                         <i nz-icon nzType="import" nzTheme="outline"></i>
                     </button>
                 </ng-template>
             </nz-form-control>
-            
         </nz-form-item>
+
         <nz-form-item [style]="!mostrarCliente?'display: none':''">
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Cliente</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un cliente.">
-                <nz-select nzAllowClear nzShowSearch formControlName="idcliente" (ngModelChange)="onChangeCliente($event)">
-                    <nz-option *ngFor="let cli of lstClientes" [nzLabel]="cli.razonsocial+' ('+cli.id+')'" [nzValue]="cli.id"></nz-option>
+                <nz-select nzAllowClear nzShowSearch formControlName="idcliente"
+                    (ngModelChange)="onChangeCliente($event)">
+                    <nz-option *ngFor="let cli of lstClientes" [nzLabel]="cli.razonsocial+' ('+cli.id+')'"
+                        [nzValue]="cli.id"></nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
@@ -33,7 +35,8 @@
                 <ng-template #addDomicilio>
                     <nz-divider style="margin: 4px 0;"></nz-divider>
                     <a *ngIf="idcliente" [routerLink]="'/app/clientes/'+idcliente+'/domicilios/nuevo'"
-                        [queryParams]="{navigate: navigateOnSaveDest, idsuscripcion: idsuscripcion}" style="margin-left: 12px;">
+                        [queryParams]="{navigate: navigateOnSaveDest, idsuscripcion: idsuscripcion}"
+                        style="margin-left: 12px;">
                         <i nz-icon nzType="plus"></i>
                         Nuevo domicilio...
                     </a>
@@ -87,10 +90,22 @@
             </nz-form-control>
         </nz-form-item>
         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                <i nz-icon nzType="save"></i>
-                Guardar
-            </button>
+            <nz-space>
+                <span *nzSpaceItem>
+                    <span *ngIf="idsuscripcion !== 'nueva'">
+                        <button nz-button nzType="default" [routerLink]="'cuotas'">
+                            <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
+                            Cuotas
+                        </button>
+                    </span>
+                </span>
+
+                <button *nzSpaceItem nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                    <i nz-icon nzType="save"></i>
+                    Guardar
+                </button>
+            </nz-space>
+
         </div>
     </form>
 </nz-spin>

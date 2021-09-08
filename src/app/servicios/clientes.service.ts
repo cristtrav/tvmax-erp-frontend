@@ -17,15 +17,15 @@ export class ClientesService {
   ) { }
 
   post(c: Cliente): Observable<any> {
-    return this.http.post(this.url, c, AppSettings.httpOptionsPost);
+    return this.http.post(this.url, c, AppSettings.getHttpOptionsAuth());
   }
 
   getPorId(id: number): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.url}/${id}`);
+    return this.http.get<Cliente>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: number, c: Cliente): Observable<any> {
-    return this.http.put(`${this.url}/${id}`, c, AppSettings.httpOptionsPost);
+    return this.http.put(`${this.url}/${id}`, c, AppSettings.getHttpOptionsAuth());
   }
 
   get(params: HttpParams): Observable<ServerResponseList<Cliente>> {
@@ -33,11 +33,15 @@ export class ClientesService {
   }
 
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`, { responseType: 'text' });
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getUltimoId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
   getTotal(): Observable<any>{
-    return this.http.get(`${this.url}/total`);
+    return this.http.get(`${this.url}/total`, AppSettings.getHttpOptionsAuth());
   }
 }
 

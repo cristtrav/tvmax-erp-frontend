@@ -17,7 +17,7 @@
             </a>
             <nz-table #tbl [nzData]="lstUsuarios" [nzFrontPagination]="false" style="margin-top: 10px;"
             [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzLoading]="tableLoading" [nzTotal]="totalRegisters"
-            (nzQueryParams)="onTableParamsQueryChange($event)" nzShowPagination nzShowSizeChanger>
+            (nzQueryParams)="onTableParamsQueryChange($event)" nzShowPagination nzShowSizeChanger nzSize="small">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>

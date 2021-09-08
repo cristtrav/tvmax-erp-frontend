@@ -55,7 +55,8 @@ export class VistaClientesComponent implements OnInit {
       }, (e) => {
         console.log('Error al eliminar cliente');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar', e.error);
+        this.httpErrorHandler.handle(e);
+        //this.notif.create('error', 'Error al eliminar', e.error);
       });
     }
   }

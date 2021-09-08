@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Barrio } from './../../../dto/barrio-dto';
@@ -10,6 +10,7 @@ import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-form-domicilio',
@@ -21,6 +22,8 @@ export class FormDomicilioComponent implements OnInit {
 
   @Input()
   iddomicilio = 'nuevo';
+  @Output()
+  iddomicilioChange = new EventEmitter<string>();
   @Input()
   idcliente: number | null = null;
   lstBarrios: Barrio[] = []
@@ -40,6 +43,7 @@ export class FormDomicilioComponent implements OnInit {
 
   guardarLoading: boolean = false;
   formLoading: boolean = false;
+  calculateIdLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +52,8 @@ export class FormDomicilioComponent implements OnInit {
     private tipoDomiSrv: TiposdomiciliosService,
     private domiSrv: DomiciliosService,
     private router: Router,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -57,8 +62,6 @@ export class FormDomicilioComponent implements OnInit {
     console.log(`Iddomiciliio ${this.iddomicilio}`);
     if (this.iddomicilio !== 'nuevo') {
       this.cargarDatos();
-    } else {
-      this.consultarUltimoId();
     }
     this.navigate = this.aroute.snapshot.queryParamMap.get('navigate');
     this.idsuscripcionNav = this.aroute.snapshot.queryParamMap.get('idsuscripcion');
@@ -74,12 +77,12 @@ export class FormDomicilioComponent implements OnInit {
       this.form.get('nromedidor')?.setValue(data.nromedidor);
       this.form.get('observacion')?.setValue(data.observacion);
       this.form.get('principal')?.setValue(data.principal);
-      this.formLoading = true;
+      this.formLoading = false;
     }, (e) => {
       console.log('Error al cargar datos del domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del domicilio', e.error);
-      this.formLoading = true;
+      this.httpErrorHandler.handle(e);
+      this.formLoading = false;
     });
   }
 
@@ -99,7 +102,7 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarTiposDomicilios(): void {
-    this.tipoDomiSrv.get(this.getBarriosHttpParams()).subscribe((resp: ServerResponseList<TipoDomicilio>) => {
+    this.tipoDomiSrv.get(this.getHttpParamsTD()).subscribe((resp: ServerResponseList<TipoDomicilio>) => {
       this.lstTiposDomicilios = resp.data;
     }, (e) => {
       console.log('Error al cargar tipos de domicilios');
@@ -151,7 +154,7 @@ export class FormDomicilioComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -162,28 +165,32 @@ export class FormDomicilioComponent implements OnInit {
     this.domiSrv.put(+this.iddomicilio, domi).subscribe(() => {
       this.notif.create('success', 'Domicilio guardado correctamente', '');
       this.iddomicilio = `${domi.id}`;
-      this.router.navigateByUrl(`../${domi.id}`);
+      this.iddomicilioChange.emit(this.iddomicilio);
+      this.router.navigate(['../',this.iddomicilio], {relativeTo: this.aroute});
       this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar domicilio');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
 
-  private consultarUltimoId(): void {
+  consultarUltimoId(): void {
+    this.calculateIdLoading = true;
     this.domiSrv.getUltimoId().subscribe((data) => {
-      const uid = data.ultimoid;
+      const uid = data;
       if (uid) {
         this.form.get('id')?.setValue(uid + 1);
       } else {
         this.form.get('id')?.setValue(1);
       }
+      this.calculateIdLoading = false;
     }, (e) => {
       console.log('Error al consultar ultimo ID de domicilio');
       console.log(e);
       this.notif.create('error', 'Error al consultar código disponible', e.error);
+      this.calculateIdLoading = false;
     });
   }
 
@@ -201,9 +208,9 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   getBarriosHttpParams(): HttpParams {
-    var httpParams: HttpParams = new HttpParams();
+    var httpParams: HttpParams = new HttpParams().append('eliminado', 'false');
     return httpParams;
-  }
+  }  
 
   getHttpParamsTD(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');

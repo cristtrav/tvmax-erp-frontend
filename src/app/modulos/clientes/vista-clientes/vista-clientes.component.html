@@ -17,23 +17,22 @@
             </a>
             <ng-template #pietabla>
                 <nz-space>
-                    <nz-space-item>
-                        <strong>Total:</strong>
-                    </nz-space-item>
-                    <nz-space-item>{{ total | number}}</nz-space-item>
+                    <span *nzSpaceItem><strong>Total:</strong></span>
+                    <span *nzSpaceItem>{{ total | number}}</span>
                 </nz-space>
             </ng-template>
-            <nz-table #tbl [nzData]="lstClientes" style="margin-top: 10px;" nzShowSizeChanger
+            <nz-table #tbl [nzData]="lstClientes" nzShowSizeChanger nzShowPagination
                 [nzFrontPagination]="false" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
-                [nzLoading]="tablaLoading" (nzQueryParams)="onTableParamsChange($event)" [nzFooter]="pietabla">
+                [nzLoading]="tablaLoading" (nzQueryParams)="onTableParamsChange($event)" [nzFooter]="pietabla"
+                nzSize="small" style="margin-top: 10px;">
                 <thead>
                     <tr>
                         <th nzWidth="60px"></th>
-                        <th>Código</th>
-                        <th>Razón social</th>
-                        <th nzAlign="right">CI/RUC</th>
-                        <th>Domicilio princ.</th>
-                        <th>Suscripciones</th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
+                        <th [nzColumnKey]="'razonsocial'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Razón social</th>
+                        <th [nzColumnKey]="'ci'" [nzSortFn]="true" nzAlign="right">CI/RUC</th>
+                        <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Domicilio princ.</th>
+                        <th>Susc.</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -46,20 +45,11 @@
                             <td>{{ c.razonsocial }}</td>
                             <td nzAlign="right">
                                 <span *ngIf="c.ci">
-                                    {{ c.ci | number }}
-                                    <span *ngIf="c.ci!==null && c.dvruc!=null">-</span>
-                                    {{c.dvruc}}
+                                    {{ c.ci | number }}{{ c.ci!==null && c.dvruc!=null?' - ':'' }}{{ c.dvruc }}
                                 </span>
                                 <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
                             </td>
-                            <td nzBreakWord>
-                                <span style="font-size: large;">
-                                    <a nz-tooltip nzTooltipTitle="Ver todos los domicilios del cliente"
-                                        [routerLink]="c.id+'/domicilios'">
-                                        <i nz-icon nzType="eye"></i>
-                                    </a>
-                                </span>
-                                <nz-divider nzType="vertical"></nz-divider>
+                            <td>
                                 <span *ngIf="c.direccion">
                                     {{ c.direccion }}
                                     ({{ c.barrio }})
@@ -69,47 +59,57 @@
                                 </span>
                             </td>
                             <td>
-                                <span style="font-size: large;">
-                                    <a nz-tooltip nzTooltipTitle="Ver todas las suscripciones del cliente"
-                                        [routerLink]="c.id+'/suscripciones'">
-                                        <i nz-icon nzType="eye"></i>
-                                    </a>
-                                </span>
-                                <nz-divider nzType="vertical"></nz-divider>
-                                <nz-tag [nzColor]="'green'">{{ c.cantconectados }} Con.</nz-tag>
-                                <nz-tag [nzColor]="'red'">{{ c.cantdesconectados }} Des.</nz-tag>
+                                    <nz-tag nz-tooltip nzTooltipTitle="Conectados" [nzColor]="'green'">{{
+                                        c.cantconectados }} </nz-tag>
+                                    <nz-tag nz-tooltip nzTooltipTitle="Desconectados" [nzColor]="'red'">{{
+                                        c.cantdesconectados }} </nz-tag>
                             </td>
                             <td>
-                                <a [routerLink]="c.id+''">Editar</a>
-                                <nz-divider nzType="vertical"></nz-divider>
-                                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminr el Cliente?"
-                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(c.id)">
-                                    Eliminar
-                                </a>
+                                <nz-space>
+                                    <button *nzSpaceItem nz-tooltip nzTooltipTitle="Domicilios"
+                                        nz-button nzType="default" [routerLink]="[c.id, 'domicilios']">
+                                        <i nz-icon nzType="home" nzTheme="outline"></i>
+                                    </button>
+                                    <button *nzSpaceItem nz-tooltip nz-button nzType="default"
+                                        nzTooltipTitle="Suscripciones"
+                                        [routerLink]="c.id+'/suscripciones'">
+                                        <i nz-icon nzType="carry-out" nzTheme="outline"></i>
+                                    </button>
+                                    <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
+                                        nzTooltipTitle="Editar">
+                                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                    </button>
+                                    <button *nzSpaceItem nzType="primary" nz-button nz-tooltip nz-popconfirm
+                                        nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminr el Cliente?"
+                                        nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                        (nzOnConfirm)="eliminar(c.id)" nzDanger>
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </button>
+
+                                </nz-space>
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(c.id===null?-1:c.id)">
                             <span>
                                 <nz-space nzSize="large">
-                                    <nz-space-item>
+                                    <span *nzSpaceItem>
                                         <strong>Email: </strong>
-                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sin email)'
-                                            }}</span>
-                                    </nz-space-item>
-                                    <nz-space-item>
+                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sinemail)'}}</span>
+                                    </span>
+                                    <span *nzSpaceItem>
                                         <strong>Teléfono princ.: </strong>
-                                        <span [style]="!c.telefono1?'color: gray':''">{{ c.telefono1?c.telefono1:'(sin
-                                            teléfono)' }}</span>
-                                    </nz-space-item>
-                                    <nz-space-item>
+                                        <span [style]="!c.telefono1?'color: gray':''">{{
+                                            c.telefono1?c.telefono1:'(sinteléfono)' }}</span>
+                                    </span>
+                                    <span *nzSpaceItem>
                                         <strong>Teléfono sec.:</strong>
-                                        <span [style]="!c.telefono2?'color: gray':''"> {{ c.telefono2?c.telefono2:'(sin
-                                            teléfono)' }}</span>
-                                    </nz-space-item>
-                                    <nz-space-item>
+                                        <span [style]="!c.telefono2?'color: gray':''"> {{
+                                            c.telefono2?c.telefono2:'(sinteléfono)' }}</span>
+                                    </span>
+                                    <span *nzSpaceItem>
                                         <strong>Cobrador: </strong>
                                         <span>{{ c.cobrador }} ({{ c.idcobrador }})</span>
-                                    </nz-space-item>
+                                    </span>
                                 </nz-space>
                             </span>
                         </tr>

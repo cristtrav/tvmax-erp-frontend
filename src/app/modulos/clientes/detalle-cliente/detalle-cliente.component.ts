@@ -8,6 +8,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
+import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -19,6 +20,8 @@ export class DetalleClienteComponent implements OnInit {
   idcliente = 'nuevo';
   guardarLoading: boolean = false;
   formLoading: boolean = false;
+  calculateBtnLoading: boolean = false;
+
   form: FormGroup = this.fb.group({
     id: [null, [Validators.required]],
     nombres: [null, Validators.maxLength(50)],
@@ -39,7 +42,8 @@ export class DetalleClienteComponent implements OnInit {
     private notif: NzNotificationService,
     private cliSrv: ClientesService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -53,13 +57,26 @@ export class DetalleClienteComponent implements OnInit {
     this.cargarCobradores();
   }
 
+  calculteID(){
+    this.calculateBtnLoading = true;
+    this.cliSrv.getUltimoId().subscribe((data: number)=>{
+      this.form.get('id')?.setValue(data+1);
+      this.calculateBtnLoading = false;
+    }, (e)=>{
+      console.log('Error al consultar ultimo ID', e)
+      this.httpErrorHandler.handle(e);
+      this.calculateBtnLoading = false;
+    });
+  }
+
   private cargarCobradores(): void {
     this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Cobrador>) => {
       this.lstCobradores = resp.data;
     }, (e) => {
       console.log('Error al cargar cobradores');
       console.log(e);
-      this.notif.create('error', 'Error al cargar cobradores', '');
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al cargar cobradores', '');
     });
   }
 
@@ -122,7 +139,8 @@ export class DetalleClienteComponent implements OnInit {
     }, (e) => {
       console.log('Error al guardar cliente');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', '');
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al guardar', '');
       this.guardarLoading = false;
     });
   }
@@ -138,7 +156,8 @@ export class DetalleClienteComponent implements OnInit {
     }, (e) => {
       console.log('Error al modificar cliente');
       console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
+      this.httpErrorHandler.handle(e);
+      //this.notif.create('error', 'Error al guardar', e.error);
       this.guardarLoading = false;
     });
   }
@@ -171,7 +190,8 @@ export class DetalleClienteComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar cliente por id');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos del cliente', e.error);
+      //this.notif.create('error', 'Error al cargar datos del cliente', e.error);
+      this.httpErrorHandler.handle(e);
       this.formLoading = false;
     });
   }

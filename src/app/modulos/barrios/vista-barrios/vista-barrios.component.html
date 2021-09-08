@@ -17,7 +17,7 @@
             </a>
             <nz-table #tbl [nzData]="lstBarrios" style="margin-top: 10px;"
             [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
-            (nzQueryParams)="onTableQueryParamsChange($event)">
+            (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>

@@ -17,7 +17,7 @@
             </a>
             <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;" nzShowSizeChanger
             [nzFrontPagination]="false" [nzLoading]="tableLoading" [nzTotal]="totalRegisters" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
-            (nzQueryParams)="onTableQueryParamsChange($event)">
+            (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
                 <thead>
                     <tr>
                         <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>

@@ -20,11 +20,18 @@
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-                                <nz-input-group>
-                                    <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 50%;">
+                                <nz-input-group style="width: 50%;" [nzAddOnAfter]="btnConsutarId" nzSearch>
+                                    <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;">
                                     </nz-input-number>
                                 </nz-input-group>
                             </nz-form-control>
+                            <ng-template #btnConsutarId>
+                                <button nz-button nz-tooltip nzTooltipTitle="Calcular código"
+                                    [nzLoading]="calculateBtnLoading" nzType="default" nzSearch
+                                    (click)="calculteID()">
+                                    <i nz-icon nzType="import" nzTheme="outline"></i>
+                                </button>
+                            </ng-template>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24">Nombres</nz-form-label>
@@ -89,24 +96,28 @@
                         </nz-form-item>
                         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                             <nz-space>
-                                <nz-space-item *ngIf="idcliente!=='nuevo'">
-                                    <a nz-button routerLink="suscripciones">
-                                        <i nz-icon nzType="carry-out"></i>
-                                        Suscripciones
-                                    </a>
-                                </nz-space-item>
-                                <nz-space-item *ngIf="idcliente!=='nuevo'">
-                                    <a nz-button routerLink="domicilios">
-                                        <i nz-icon nzType="home"></i>
-                                        Domicilios
-                                    </a>
-                                </nz-space-item>
-                                <nz-space-item>
+                                <span *nzSpaceItem>
+                                    <span *ngIf="idcliente!=='nuevo'">
+                                        <a nz-button routerLink="suscripciones">
+                                            <i nz-icon nzType="carry-out"></i>
+                                            Suscripciones
+                                        </a>
+                                    </span>
+                                </span>
+                                <span *nzSpaceItem>
+                                    <span *ngIf="idcliente!=='nuevo'">
+                                        <a nz-button routerLink="domicilios">
+                                            <i nz-icon nzType="home"></i>
+                                            Domicilios
+                                        </a>
+                                    </span>
+                                </span>
+                                <span *nzSpaceItem>
                                     <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                                         <i nz-icon nzType="save"></i>
                                         Guardar
                                     </button>
-                                </nz-space-item>
+                                </span>
                             </nz-space>
                         </div>
                     </form>

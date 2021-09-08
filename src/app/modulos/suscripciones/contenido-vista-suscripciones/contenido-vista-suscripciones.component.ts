@@ -70,7 +70,6 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
         console.log('Error al eliminar suscripcion');
         console.log(e);
         this.httpErrorHandler.handle(e);;
-        //this.notif.create('error', 'Error al eliminar suscripción', e.error);
       });
     }
   }
