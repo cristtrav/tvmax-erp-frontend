@@ -1,7 +1,13 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
 import { Cuota } from './../../../dto/cuota-dto';
 import { CuotasService} from './../../../servicios/cuotas.service';
+import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { Extra } from '../../../util/extra';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-tabla-cuotas',
@@ -16,10 +22,16 @@ export class TablaCuotasComponent implements OnInit {
   idsuscripcion: number | null = null;
 
   lstCuotas: Cuota[] = [];
+  pageSize: number = 10;
+  pageIndex: number = 1;
+  totalRegisters: number = 0;
+  tableLoading: boolean = false;
+  sortStr: string | null = null;
 
   constructor(
     private cuotaSrv: CuotasService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -27,19 +39,17 @@ export class TablaCuotasComponent implements OnInit {
   }
 
   private cargarCuotas(): void{
-    let filters: Array<{key: string, value: any | null}> = [{key: 'sort', value: '-fecha_vencimiento'}];
-    if(this.idservicio){
-      filters.push({key: 'idservicio', value: this.idservicio});
-    }
-    if(this.idsuscripcion){
-      filters.push({key: 'idsuscripcion', value: this.idsuscripcion});
-    }
-    this.cuotaSrv.get(filters).subscribe((data)=>{
-      this.lstCuotas = data;
+    //console.log('Se cargan las cuotas');
+    this.tableLoading = true;
+    this.cuotaSrv.get(this.getHttpParams()).subscribe((resp: ServerResponseList<Cuota>)=>{
+      this.lstCuotas = resp.data;
+      this.totalRegisters = resp.queryRowCount;
+      this.tableLoading = false;
     }, (e)=>{
       console.log('Error al cargar cuotas');
       console.log(e);
-      this.notif.create('error', 'Error al cargar cuotas', e.error);
+      this.httpErrorHandler.handle(e);
+      this.tableLoading = false;
     });
   }
 
@@ -51,9 +61,34 @@ export class TablaCuotasComponent implements OnInit {
       }, (e)=>{
         console.log('Error al eliminar cuota');
         console.log(e);
-        this.notif.create('error', 'Error al eliminar cuota', e.error);
+        this.httpErrorHandler.handle(e);
       });
     }
   }
+
+  getHttpParams(): HttpParams {
+    var par: HttpParams = new HttpParams();
+    par = par.append('eliminado', 'false');
+    if(this.idsuscripcion){
+      par = par.append('idsuscripcion', this.idsuscripcion);
+    }
+    if(this.idservicio){
+      par = par.append('idservicio', this.idservicio);
+    }
+    if(this.sortStr){
+      par = par.append('sort', this.sortStr);
+    }
+    par = par.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    par = par.append('limit', `${this.pageSize}`);
+    return par;
+  }
+
+  onTableQueryParamsChange(params: NzTableQueryParams){
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.cargarCuotas();
+  }
+
 
 }

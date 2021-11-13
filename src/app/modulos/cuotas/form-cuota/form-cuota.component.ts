@@ -8,6 +8,7 @@ import { CuotasService } from './../../../servicios/cuotas.service';
 import { Extra } from './../../../util/extra';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { HttpErrorResponseHandlerService } from './../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-form-cuota',
@@ -36,7 +37,8 @@ export class FormCuotaComponent implements OnInit {
     private fb: FormBuilder,
     private serviciosSrv: ServiciosService,
     private notif: NzNotificationService,
-    private cuotaSrv: CuotasService
+    private cuotaSrv: CuotasService,
+    private httpErrorHandler : HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -127,7 +129,7 @@ export class FormCuotaComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar cuota');
       console.log(e);
-      this.notif.create('error', 'Error al guardar cuota', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -141,7 +143,7 @@ export class FormCuotaComponent implements OnInit {
     }, (e)=>{
       console.log('Error al modificar cuota');
       console.log(e);
-      this.notif.create('error', 'Error al guardar cuota', e.error);
+      this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
     });
   }
@@ -158,7 +160,8 @@ export class FormCuotaComponent implements OnInit {
     }, (e)=>{
       console.log('Error al cargar datos de la cuota');
       console.log(e);
-      this.notif.create('error', 'Error al cargar datos de la cuota', e.error);
+      //this.notif.create('error', 'Error al cargar datos de la cuota', e.error);
+      this.httpErrorHandler.handle(e);
       this.formLoading = false;
     });
   }

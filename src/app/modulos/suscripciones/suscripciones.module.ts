@@ -23,9 +23,13 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { VistaSuscripcionesComponent } from './vista-suscripciones/vista-suscripciones.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { DetalleSuscripcionComponent } from './detalle-suscripcion/detalle-suscripcion.component';
+import { CuotasSuscripcionesComponent } from './cuotas-suscripciones/cuotas-suscripciones.component';
+import { CuotasModule } from '../cuotas/cuotas.module';
+import { DetalleCuotasSuscripcionesComponent } from './detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @NgModule({
-  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent],
+  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent],
   imports: [
     CommonModule,
     SuscripcionesRoutingModule,
@@ -47,7 +51,9 @@ import { DetalleSuscripcionComponent } from './detalle-suscripcion/detalle-suscr
     NzToolTipModule,
     NzSpinModule,
     NzBreadCrumbModule,
-    NzSpaceModule
+    NzSpaceModule,
+    CuotasModule,
+    NzGridModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

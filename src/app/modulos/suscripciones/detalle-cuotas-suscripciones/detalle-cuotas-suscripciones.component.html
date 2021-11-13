@@ -1,0 +1,28 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'welcome']"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'suscripciones']">Suscripciones</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'suscripciones', idsuscripcion ]">{{ idsuscripcion }}</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'suscripciones', idsuscripcion, 'cuotas']">Cuotas</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'suscripciones', idsuscripcion, 'cuotas', idcuota]">{{ idcuota | titlecase }}</a>
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+                <app-form-cuota [idsuscripcion]="idsuscripcion" [idcuota]="idcuota"></app-form-cuota>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,7 @@ import { ServerResponseList } from '../dto/server-response-list.dto';
 export class ServiciosService {
 
   private url: string = `${AppSettings.urlAPI}/servicios`;
+  private urlSusc: string = `${AppSettings.urlAPI}/suscripciones`;
 
   constructor(private http: HttpClient) { }
 
@@ -40,5 +41,9 @@ export class ServiciosService {
 
   deleteServicio(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsTextAuth())
+  }
+
+  getServiciosPorCuotasDeSuscripcion(idsusc: number, params: HttpParams): Observable<ServerResponseList<Servicio>>{
+    return this.http.get<ServerResponseList<Servicio>>(`${this.urlSusc}/${idsusc}/cuotas/servicios`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

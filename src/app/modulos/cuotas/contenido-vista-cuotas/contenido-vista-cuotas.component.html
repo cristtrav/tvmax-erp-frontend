@@ -1,14 +1,15 @@
-
-<nz-tabset *ngIf="lstServicios.length>0" [nzTabBarExtraContent]="accionesTab">
-    <nz-tab *ngFor="let s of lstServicios" [nzTitle]="s.descripcion?s.descripcion:'-'">
-        <app-tabla-cuotas [idsuscripcion]="idsuscripcion" [idservicio]="s.id"></app-tabla-cuotas>
-    </nz-tab>
-</nz-tabset>
-<nz-tabset *ngIf="lstServicios.length === 0" [nzTabBarExtraContent]="accionesTab">
-    <nz-tab nzTitle="Sin servicio">
-        <h5 nz-typography>Ninguna cuota registrada...</h5>
-    </nz-tab>
-</nz-tabset>
+<nz-spin [nzSpinning]="tabsLoading">
+    <nz-tabset *ngIf="lstServicios.length>0" [nzTabBarExtraContent]="accionesTab">
+        <nz-tab *ngFor="let s of lstServicios" [nzTitle]="s.descripcion?s.descripcion:'-'">
+            <app-tabla-cuotas [idsuscripcion]="idsuscripcion" [idservicio]="s.id"></app-tabla-cuotas>
+        </nz-tab>
+    </nz-tabset>
+    <nz-tabset *ngIf="lstServicios.length === 0" [nzTabBarExtraContent]="accionesTab">
+        <nz-tab nzTitle="Sin servicio">
+            <h5 nz-typography>Ninguna cuota registrada...</h5>
+        </nz-tab>
+    </nz-tabset>
+</nz-spin>
 <ng-template #accionesTab>
     <a nz-button nzType="primary" routerLink="nueva">
         <i nz-icon nzType="plus"></i>

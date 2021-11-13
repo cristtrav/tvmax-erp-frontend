@@ -1,20 +1,22 @@
-<nz-table #tbl [nzData]="lstCuotas">
+<nz-table #tbl [nzData]="lstCuotas" nzSize="small" nzFrontPagination="false"
+[nzLoading]="tableLoading" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" [nzTotal]="totalRegisters"
+(nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
-            <th>Código</th>
-            <th>Vencimiento</th>
-            <th nzAlign="center">Nro. Cuota</th>
-            <th nzAlign="right">Monto</th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
+            <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" [nzSortOrder]="'descend'">Vencimiento</th>
+            <th [nzColumnKey]="'nrocuota'" [nzSortFn]="true" nzAlign="center">Nro. Cuota</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true" nzAlign="right">Monto</th>
             <th nzAlign="center">Pagado</th>
             <th>F. de pago</th>
-            <th>Observación</th>
+            <th [nzColumnKey]="'observacion'" [nzSortFn]="true">Observación</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let c of tbl.data">
             <td>{{ c.id }}</td>
-            <td>{{ c.fechavencimiento }}</td>
+            <td>{{ c.fechavencimiento | date: 'dd/LL/yyyy' }}</td>
             <td nzAlign="center">{{ c.nrocuota | number}}</td>
             <td nzAlign="right">{{ c.monto | number}}</td>
             <td nzAlign="center">
@@ -23,12 +25,17 @@
             <td>{{ c.fechapago }}</td>
             <td nzBreakWord>{{ c.observacion }}</td>
             <td>
-                <a [routerLink]="c.id+''">Editar</a>
-                <nz-divider nzType="vertical"></nz-divider>
-                <a nz-popconfirm nzPopconfirmTitle="¿Desea eliminar la Cuota?"
-                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(c.id)">
-                    Eliminar
-                </a>
+                <nz-space>
+                    <button nz-button nz-tooltip nzType="primary" *nzSpaceItem [routerLink]="c.id+''"
+                    nzTooltipTitle="Editar">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </button>
+                    <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzDanger="" *nzSpaceItem
+                    nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminar la cuota?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                    (nzOnConfirm)="eliminar(c.id)">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </button>
+                </nz-space>
             </td>
         </tr>
     </tbody>
