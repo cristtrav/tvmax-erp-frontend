@@ -47,36 +47,23 @@
                                 <nz-tag *ngIf="fv.anulado" nzColor="red">Anulado</nz-tag>
                             </td>
                             <td>
-                                <span>
-                                    <button 
-                                    *ngIf="!fv.anulado" 
-                                    nz-button 
-                                    nz-tooltip 
-                                    nz-popconfirm
-                                    nzType="primary"
-                                    nzTooltipTitle="Anular factura"
-                                    nzPopconfirmTitle="¿Desea anular la factura?"
-                                    nzOkText="Anular"
-                                    (nzOnConfirm)="anularFactura(fv.id)"
-                                        nzGhost nzDanger>
-                                        <i nz-icon nzTheme="outline" nzType="minus-circle"></i>
+                                <nz-space>
+                                    <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
+                                        [nzTooltipTitle]="fv.anulado?'Revertir anulacion':'Anular factura'"
+                                        [nzPopconfirmTitle]="fv.anulado?'¿Desea revertir la anulación?':'¿Desea anular la factura?'"
+                                        [nzOkText]="fv.anulado?'Revertir':'Anular'"
+                                        (nzOnConfirm)="procesarAnulacion(fv)" nzGhost [nzDanger]="!fv.anulado">
+                                        <i nz-icon nzTheme="outline" [nzType]="fv.anulado?'undo':'minus-circle'"></i>
                                     </button>
-                                </span>
-                                <span>
-                                    <button 
-                                    *ngIf="fv.anulado" 
-                                    nz-button
-                                    nz-tooltip 
-                                    nz-popconfirm
-                                    nzType="primary"
-                                    nzTooltipTitle="Revertir anulación" 
-                                    nzPopconfirmTitle="¿Desea revertir la anulación?"
-                                    nzOkText="Revertir"
-                                    (nzOnConfirm)="revertirAnulacion(fv.id)"
-                                    nzGhost>
-                                        <i nz-icon nzTheme="outline" nzType="undo"></i>
+                                    <button *nzSpaceItem nz-tooltip nz-button nz-popconfirm
+                                        nzType="primary" nzTooltipTitle="Eliminar factura"
+                                        nzPopconfirmTitle="¿Desea eliminar la factura?"
+                                        nzOkText="Eliminar"
+                                        (nzOnConfirm)="eliminarVenta(fv.id)"
+                                        nzDanger>
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
                                     </button>
-                                </span>
+                                </nz-space>
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(fv.id ?? 0)">

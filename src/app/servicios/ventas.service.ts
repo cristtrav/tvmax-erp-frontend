@@ -31,4 +31,8 @@ export class VentasService {
   revertiranul(idventa: number): Observable<any>{
     return this.http.get(`${this.url}/${idventa}/revertiranulacion`, AppSettings.getHttpOptionsAuth());
   }
+
+  delete(id: number): Observable<any>{
+    return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
 }

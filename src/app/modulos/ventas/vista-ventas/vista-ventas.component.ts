@@ -75,7 +75,17 @@ export class VistaVentasComponent implements OnInit {
     this.cargarVentas();
   }
 
-  anularFactura(id: number | null): void{
+  procesarAnulacion(fv: FacturaVenta | null){
+    if(fv){
+      if(fv.anulado){
+        this.revertirAnulacion(fv.id);
+      }else{
+        this.anularFactura(fv.id);
+      }
+    }
+  }
+
+  private anularFactura(id: number | null): void{
     if(id){
       this.ventasSrv.anular(id).subscribe(()=>{
         for(let fv of this.lstFacturasVenta){
@@ -93,7 +103,7 @@ export class VistaVentasComponent implements OnInit {
     }
   }
 
-  revertirAnulacion(id: number | null): void{
+  private revertirAnulacion(id: number | null): void{
     if(id){
       this.ventasSrv.revertiranul(id).subscribe(()=>{
         for(let fv of this.lstFacturasVenta){
@@ -111,4 +121,16 @@ export class VistaVentasComponent implements OnInit {
     }
   }
 
+  eliminarVenta(id: number | null): void{
+    if(id){
+      this.ventasSrv.delete(id).subscribe(()=>{
+        this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
+        this.cargarVentas();
+      }, (e)=>{
+        console.log('Error al eliminar venta');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      });
+    }
+  }
 }
