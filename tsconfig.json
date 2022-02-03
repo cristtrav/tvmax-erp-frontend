@@ -19,7 +19,18 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@dto/*": [
+        "./src/app/dto/*"
+      ],
+      "@util/*":[
+        "./src/app/util/*"
+      ],
+      "@servicios/*": [
+        "./src/app/servicios/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

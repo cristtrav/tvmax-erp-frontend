@@ -1,0 +1,86 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Timbrados
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <div nz-row [nzGutter]="[0, 10]">
+                <div nz-col nzSpan="24">
+                    <button nz-button nzType="primary" [routerLink]="'nuevo'">
+                        <i nz-icon nzType="plus" nzTheme="outline"></i>
+                        Nuevo
+                    </button>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-table 
+                        #tabla
+                        [nzData]="lstTimbrados"
+                        nzSize="small"
+                        [nzLoading]="tableLoading"
+                        [nzShowPagination]="true"
+                        [nzShowSizeChanger]="true"
+                        [nzFrontPagination]="false"
+                        [nzPageIndex]="pageIndex"
+                        [nzPageSize]="pageSize"
+                        [nzTotal]="totalRegisters"
+                        (nzQueryParams)="onTableQueryParamsChange($event)">
+                        <thead>
+                            <tr>
+                                <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                                <th [nzColumnKey]="'timbrado'" [nzSortFn]="true">Timbrado</th>
+                                <th [nzColumnKey]="'cod_establecimiento'" [nzSortFn]="true">Prefijo</th>
+                                <th [nzColumnKey]="'nro_inicio'" [nzSortFn]="true">Rango</th>
+                                <th [nzColumnKey]="'ultimo_nro_usado'" [nzSortFn]="true">Últ. núm usado</th>
+                                <th [nzColumnKey]="'fecha_vencimiento'" [nzSortFn]="true">Vencimiento</th>
+                                <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let t of tabla.data">
+                                <td>{{ t.id }}</td>
+                                <td>{{ t.timbrado?.toString()?.padStart(8, '0') }}</td>
+                                <td>{{ t.codestablecimiento?.toString()?.padStart(3, '0') }}-{{ t.codpuntoemision?.toString()?.padStart(3, '0') }}</td>
+                                <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
+                                <td>{{ t.ultnrousado?t.ultnrousado?.toString()?.padStart(7, '0'):'(Ninguno)' }}</td>
+                                <td>{{ t.fechavencimiento | date:'dd/MM/yyyy' }}</td>
+                                <td nzAlign="center">
+                                    <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="t.activo?'#00C853':'#f44336'" [nzType]="t.activo?'check-circle':'close-circle'"></i>
+                                </td>
+                                <td>
+                                    <nz-space>
+                                        <button *nzSpaceItem nz-tooltip nz-button nzType="primary" nzTooltipTitle="Editar" [routerLink]="t.id?.toString()">
+                                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                        </button>
+                                        <button 
+                                            *nzSpaceItem
+                                            nz-popconfirm
+                                            nzPopconfirmTitle="¿Desea eliminar el timbrado?"
+                                            nzPopconfirmPlacement="bottom"
+                                            nzOkText="Eliminar"
+                                            (nzOnConfirm)="eliminar(t.id)" 
+                                            nz-tooltip 
+                                            nz-button 
+                                            nzType="primary" 
+                                            nzDanger 
+                                            nzTooltipTitle="Eliminar">
+                                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                        </button>
+                                    </nz-space>
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

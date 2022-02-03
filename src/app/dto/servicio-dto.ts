@@ -5,4 +5,5 @@ export class Servicio{
     grupo: string | null = null;
     precio: number = 0;
     suscribible: boolean = false;
+    porcentajeiva: number = 10;
 }

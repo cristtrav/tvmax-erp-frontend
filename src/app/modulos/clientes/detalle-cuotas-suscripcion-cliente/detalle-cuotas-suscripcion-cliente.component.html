@@ -33,7 +33,7 @@
                     Gs.{{ suscripcion.monto | number }}/mes
                 </nz-tag>
             </div>
-            <div *ngIf="cliente" nz-col>
+            <div *ngIf="cliente" nz-col> 
                 <nz-tag [nzColor]="'magenta'">
                     <strong>{{ cliente.razonsocial }}</strong>
                     <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>

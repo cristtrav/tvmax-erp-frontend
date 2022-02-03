@@ -13,4 +13,7 @@ export class Extra {
         }
         return null;
     }
+
+    static formatterNroFactura = (value: number): string => `${value ? value.toString().padStart(7, '0') : ''}`;
+    static parserNroFactura = (value: string): string => `${value ? Number(value) : ''}`;
 }

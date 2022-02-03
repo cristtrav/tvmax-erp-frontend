@@ -1,0 +1,315 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <div nz-row>
+            <div nz-col nzFlex="auto">
+                <nz-breadcrumb>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a routerLink="../">Ventas</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a>{{ idventa | titlecase }}</a>
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </div>
+            <div nz-col>
+                <nz-tag nzColor="default">
+                    IVA 5%
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <strong>Gs.{{ totalIva5 | number }}</strong>
+                </nz-tag>
+                <nz-tag nzColor="default">
+                    IVA 10%
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <strong>Gs.{{ totalIva10 | number }}</strong>
+                </nz-tag>
+                <nz-tag nzColor="red">
+                    Total
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <strong>Gs.{{ totalFactura | number }}</strong>
+                </nz-tag>
+            </div>
+        </div>
+    </div>
+    <div class="module-container">
+        <div nz-row [nzGutter]="16">
+            <div nz-col [nzSpan]="15">
+                <div class="module-content">
+                    <nz-space>
+                        <button *nzSpaceItem nz-button nzType="primary" (click)="mostrarModalCuotas()">
+                            <i nz-icon nzType="search" nzTheme="outline"></i>
+                            Cuotas{{ totalCuotasPendientes>0?' ('+totalCuotasPendientes+')':''}}
+                        </button>
+                        <button *nzSpaceItem nz-button nzType="primary" (click)="modalServiciosVisible = true;">
+                            <i nz-icon nzType="search" nzTheme="outline"></i>
+                            Servicios
+                        </button>
+                    </nz-space>
+                    <nz-modal [(nzVisible)]="modalServiciosVisible" nzTitle="Servicios"
+                        (nzOnCancel)="modalServiciosVisible = false;" [nzFooter]="footerModalServicios" [nzContent]="contentModalServicios">
+                        <ng-template #contentModalServicios>
+                            <nz-collapse nzGhost>
+                                <nz-collapse-panel *ngFor="let gs of lstGruposServicios" [nzHeader]="headerGrupo" [nzActive]="true">
+                                    <ng-template #headerGrupo>
+                                        <nz-tag [nzColor]="'magenta'">{{ gs.grupo.descripcion }}</nz-tag>
+                                    </ng-template>
+                                    <nz-list nzSize="small">
+                                        <nz-list-item *ngFor="let s of gs.servicios">
+                                            <nz-list-item-meta>
+                                                <nz-list-item-meta-title>
+                                                    {{ s.descripcion }}
+                                                </nz-list-item-meta-title>
+                                            </nz-list-item-meta>
+                                            Gs.{{ s.precio | number }}
+                                            <ul nz-list-item-actions>
+                                                <nz-list-item-action>
+                                                    <button
+                                                        nz-dropdown
+                                                        nz-button
+                                                        [nzDropdownMenu]="menuServicioSusc"
+                                                        [nzPlacement]="'bottomRight'"
+                                                        nzType="primary"
+                                                        nzSize="small">
+                                                        <i nz-icon nzType="plus" nzTheme="outline"></i>
+                                                    </button>
+                                                    <nz-dropdown-menu #menuServicioSusc>
+                                                        <ul nz-menu>
+                                                            <li nz-menu-item *ngFor="let sus of lstSuscServCuotas" (click)="agregarServicioDetalle(s, sus.suscripcion)">
+                                                                <nz-space>
+                                                                    <span *nzSpaceItem><strong>[{{ sus.suscripcion.id }}] {{ sus.suscripcion.servicio }}</strong></span>
+                                                                    <span *nzSpaceItem>
+                                                                        <nz-tag *ngIf="sus.suscripcion.estado === 'C'" nzColor="green">Conectado</nz-tag>
+                                                                        <nz-tag *ngIf="sus.suscripcion.estado === 'R'" nzColor="green">Reconectado</nz-tag>
+                                                                        <nz-tag *ngIf="sus.suscripcion.estado === 'D'" nzColor="red">Desconectado</nz-tag>
+                                                                    </span>
+                                                                    <span *nzSpaceItem><nz-tag>{{ sus.suscripcion.direccion }} | BARRIO: {{ sus.suscripcion.barrio }}</nz-tag></span>
+                                                                </nz-space>
+                                                            </li>
+                                                        </ul>
+                                                    </nz-dropdown-menu>
+                                                </nz-list-item-action>
+                                            </ul>
+                                        </nz-list-item>
+                                    </nz-list>
+                                </nz-collapse-panel>
+                            </nz-collapse>
+                        </ng-template>
+                        <ng-template #footerModalServicios>
+                            <button nz-button nzType="default">
+                                <i nz-icon nzType="reload"></i>
+                                Recargar
+                            </button>
+                            <button nz-button nzType="default" (click)="modalServiciosVisible = false;">
+                                Cerrar
+                            </button>
+                        </ng-template>
+                    </nz-modal>
+                    <nz-modal [(nzVisible)]="modalCuotasVisible" nzTitle="Cuotas pendientes"
+                        [nzFooter]="footerModalCuotas" [nzContent]="contentModalCuotas"
+                        (nzOnCancel)="ocultarModalCuotas()" nzWidth="600px">
+
+                        <ng-template #contentModalCuotas>
+                            <nz-spin [nzSpinning]="loadingSuscripcionesCli">
+                                <nz-alert *ngIf="lstSuscServCuotas.length === 0" nzType="warning"
+                                    nzMessage="Ninguna suscripción encontrada." nzShowIcon></nz-alert>
+                                <nz-collapse nzGhost>
+                                    <nz-collapse-panel *ngFor="let sc of lstSuscServCuotas"
+                                        [nzHeader]="cabeceraCollapseSus">
+                                        <ng-template #cabeceraCollapseSus>
+                                            <span>
+                                                <span nz-tooltip
+                                                    [nzTooltipTitle]="'Código de suscripción: '+sc.suscripcion.id">
+                                                    <strong>{{ sc.suscripcion.servicio }} </strong>
+                                                </span>
+                                                <nz-tag nz-tooltip [nzTooltipTitle]="'Cuotas pendientes'"
+                                                    [nzColor]="'orange'">{{ sc.cuotasPendientes }}</nz-tag>
+                                                <nz-tag *ngIf="sc.suscripcion.estado === 'C'" [nzColor]="'green'">
+                                                    Conectado
+                                                </nz-tag>
+                                                <nz-tag *ngIf="sc.suscripcion.estado === 'R'" [nzColor]="'green'">
+                                                    Reconectado
+                                                </nz-tag>
+                                                <nz-tag *ngIf="sc.suscripcion.estado === 'D'" [nzColor]="'red'">
+                                                    Desconectado
+                                                </nz-tag>
+                                                <br>
+                                                <span nz-tooltip
+                                                    [nzTooltipTitle]="'Código de domicilio: '+sc.suscripcion.iddomicilio"
+                                                    [nzTooltipPlacement]="'bottom'" nz-typography nzType="secondary"
+                                                    style="font-weight: smaller; margin-left: 24px;">
+                                                    {{ sc.suscripcion.direccion }} | BARRIO: {{ sc.suscripcion.barrio }}
+                                                </span>
+                                            </span>
+                                        </ng-template>
+                                        <nz-spin [nzSpinning]="sc.loadingServicios">
+                                            <nz-alert *ngIf="sc.servicioscuotas.length === 0" nzType="warning"
+                                                nzMessage="Ninguna cuota pendiente encontrada." nzShowIcon></nz-alert>
+                                            <nz-collapse *ngIf="sc.servicioscuotas.length > 0" nzGhost>
+                                                <nz-collapse-panel *ngFor="let srv of sc.servicioscuotas"
+                                                    [nzHeader]="cabeceraServ" [nzActive]="true">
+                                                    <ng-template #cabeceraServ>
+                                                        <nz-tag [nzColor]="'magenta'">{{ srv.servicio.descripcion }}
+                                                        </nz-tag>
+                                                    </ng-template>
+                                                    <nz-spin [nzSpinning]="srv.loadingCuotas">
+                                                        <nz-list nzSize="small">
+                                                            <nz-list-item *ngFor="let c of srv.cuotas">
+                                                                <nz-list-item-meta>
+                                                                    <nz-list-item-meta-title>
+                                                                        {{ c.cuota.fechavencimiento | date: 'dd MMM
+                                                                        yyyy' |
+                                                                        titlecase }}
+                                                                    </nz-list-item-meta-title>
+                                                                </nz-list-item-meta>
+                                                                Gs.{{ c.cuota.monto | number }}
+                                                                <ul nz-list-item-actions>
+                                                                    <nz-list-item-action>
+                                                                        <button *ngIf="!c.enDetalle" nz-tooltip
+                                                                            nzTooltipTitle="Agregar a la factura"
+                                                                            nz-button nzType="primary" nzSize="small"
+                                                                            (click)="agregarCuotaDetalle(c)">
+                                                                            <i nz-icon [nzType]="'plus'"
+                                                                                nzTheme="outline"></i>
+                                                                        </button>
+                                                                        <button *ngIf="c.enDetalle" nz-tooltip
+                                                                            nzTooltipTitle="Quitar de la factura"
+                                                                            nz-button nzType="primary" nzSize="small"
+                                                                            (click)="quitarCuotaDetalle(c)" nzDanger>
+                                                                            <i nz-icon [nzType]="'minus'"
+                                                                                nzTheme="outline"></i>
+                                                                        </button>
+                                                                    </nz-list-item-action>
+                                                                </ul>
+                                                            </nz-list-item>
+                                                        </nz-list>
+                                                    </nz-spin>
+                                                </nz-collapse-panel>
+                                            </nz-collapse>
+                                        </nz-spin>
+                                    </nz-collapse-panel>
+                                </nz-collapse>
+                            </nz-spin>
+                        </ng-template>
+                        <ng-template #footerModalCuotas>
+                            <button nz-button nzType="default" [nzLoading]="loadingSuscripcionesCli"
+                                (click)="cargarSuscripcionesCliente()">
+                                <i nz-icon nzType="reload" nzTheme="outline"></i>
+                                Recargar
+                            </button>
+                            <button nz-button nzType="default" (click)="ocultarModalCuotas()">Cerrar</button>
+                        </ng-template>
+                    </nz-modal>
+                    <nz-table #tablaDetalle style="padding-top: 10px;" nzSize="small" [nzData]="lstDetallesVenta" [nzFooter]="pieTablaDetalle">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dfv of tablaDetalle.data; let i = index">
+                                <td>{{ dfv.descripcion }}</td>
+                                <td [nzAlign]="'right'">Gs.{{ dfv.subtotal | number }}</td>
+                                <td [nzAlign]="'center'">
+                                    <button
+                                        nz-button 
+                                        nz-popconfirm
+                                        nzPopconfirmTitle="¿Desea eliminar el detalle?"
+                                        nzOkText="Elimnar"
+                                        nzType="primary" 
+                                        nzDanger
+                                        (nzOnConfirm)="quitarDetalleFactura(i)">
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                    <ng-template #pieTablaDetalle>
+                        Total: <strong>Gs.{{ totalFactura | number }}</strong>
+                    </ng-template>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="9">
+                <div nz-col nzSpan="24">
+                    <div class="module-content">
+                        <form nz-form [formGroup]="formCabecera">
+                            <nz-form-item>
+                                <nz-form-label [nzLg]="6" [nzMd]="24">Factura</nz-form-label>
+                                <nz-form-control [nzLg]="17" [nzMd]="24" [nzErrorTip]="errorTipNroFactura"
+                                    [nzValidateStatus]="statusNroFactura">
+                                    <nz-input-group [nzAddOnBefore]="prefijoFactura">
+                                        <ng-template #prefijoFactura>
+                                            <nz-select style="min-width: 7em;" [nzOptionOverflowSize]="32"
+                                                [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
+                                                <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
+                                                    [nzLabel]="'Pref: '+formatPrefijoTimbrado(timb)+' | '+ rangoTimbrado(timb)+' | venc: '+this.formatFechaVencimiento(timb)"
+                                                    [nzValue]="timb.id">
+                                                    {{ formatPrefijoTimbrado(timb) }}
+                                                </nz-option>
+                                            </nz-select>
+                                        </ng-template>
+                                        <nz-input-number style="width: 100%;" formControlName="nroFactura"
+                                            [nzDisabled]="nroFacturaDesactivado" [nzStep]="1" [nzMin]="nroFacturaMin"
+                                            [nzMax]="nroFacturaMax"></nz-input-number>
+                                    </nz-input-group>
+
+                                    <ng-template #renderPrefijo let-selected>
+                                        {{ selected.nzLabel.substring(6, 13) }}
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzLg]="6" [nzMd]="24">Fecha</nz-form-label>
+                                <nz-form-control [nzLg]="17" [nzMd]="24" nzErrorTip="Ingrese la fecha de la factura.">
+                                    <nz-date-picker style="width: 100%;" nzFormat="dd/MM/yyyy" formControlName="fecha">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [nzLg]="6" [nzMd]="24">Cliente</nz-form-label>
+                                <nz-form-control [nzLg]="17" [nzMd]="24"
+                                    nzErrorTip="Seleccione el cliente de la factura.">
+                                    <nz-select nzAllowClear nzShowSearch [nzLoading]="loadingClientes"
+                                        [nzDropdownRender]="spinCargarMasClientes" (nzOnSearch)="buscarCliente($event)"
+                                        (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
+                                        <nz-option *ngFor="let cli of lstClientes" [nzLabel]="cli.razonsocial"
+                                            [nzValue]="cli.id">
+                                        </nz-option>
+                                    </nz-select>
+                                    <ng-template #spinCargarMasClientes>
+                                        <nz-spin *ngIf="loadingMasClientes"></nz-spin>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+
+                            <div nz-row [nzGutter]="8" nzJustify="end">
+                                <div nz-col [nzMd]="24" [nzLg]="24" [nzXl]="8">
+                                    <button *ngIf="idventa !== 'nueva'" nz-button nzType="default" style="width: 100%;">
+                                        <i nz-icon nzType="printer"></i>
+                                        Imprimir
+                                    </button>
+                                </div>
+                                <div nz-col [nzMd]="24" [nzLg]="24" [nzXl]="8">
+                                    <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()">
+                                        <i nz-icon [nzType]="idventa === 'nueva'?'clear':'plus'"></i>
+                                        {{ idventa === 'nueva'?'Limpiar':'Nueva' }}
+                                    </button>
+                                </div>
+                                <div nz-col [nzMd]="24" [nzLg]="24" [nzXl]="8">
+                                    <button nz-button nzType="primary" (click)="guardar()" style="width: 100%;">
+                                        <i nz-icon nzType="save"></i>
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

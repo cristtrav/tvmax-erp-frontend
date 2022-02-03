@@ -6,7 +6,7 @@
     </nz-tabset>
     <nz-tabset *ngIf="lstServicios.length === 0" [nzTabBarExtraContent]="accionesTab">
         <nz-tab nzTitle="Sin servicio">
-            <h5 nz-typography>Ninguna cuota registrada...</h5>
+            <nz-alert nzType="warning" nzMessage="Ninguna cuota registrada" nzShowIcon></nz-alert>
         </nz-tab>
     </nz-tabset>
 </nz-spin>

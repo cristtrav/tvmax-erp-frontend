@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Cliente } from '../dto/cliente-dto';
 import { Observable } from 'rxjs';
 import { ServerResponseList } from '../dto/server-response-list.dto';
+import { Suscripcion } from '@dto/suscripcion-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,10 @@ export class ClientesService {
 
   getTotal(): Observable<any>{
     return this.http.get(`${this.url}/total`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getSuscripcionesPorCliente(idcliente: number,params: HttpParams): Observable<ServerResponseList<Suscripcion>>{
+    return this.http.get<ServerResponseList<Suscripcion>>(`${this.url}/${idcliente}/suscripciones`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }
 

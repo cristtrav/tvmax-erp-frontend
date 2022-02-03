@@ -1,5 +1,5 @@
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+  <nz-sider class="menu-sidebar"  nzCollapsible nzWidth="256px" nzBreakpoint="lg" [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
     <div class="sidebar-logo">
       <a [routerLink]="'/app/welcome'">
@@ -23,6 +23,16 @@
           </li>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="suscripciones">Suscripciones</a>
+          </li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="Facturación" nzIcon="file-done">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="ventas">Ventas</a>
+          </li>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="timbrados">Timbrados</a>
           </li>
         </ul>
       </li>

@@ -20,6 +20,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @NgModule({
   declarations: [TablaCuotasComponent, ContenidoVistaCuotasComponent, FormCuotaComponent],
@@ -42,7 +43,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzToolTipModule,
     NzPopconfirmModule,
     NzSpinModule,
-    NzSpaceModule
+    NzSpaceModule,
+    NzAlertModule
   ],
   exports: [ContenidoVistaCuotasComponent, FormCuotaComponent]
 })

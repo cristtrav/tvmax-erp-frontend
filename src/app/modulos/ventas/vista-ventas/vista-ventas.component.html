@@ -1,0 +1,126 @@
+<div class="inner-component">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Ventas
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <button nz-button nzType="primary" routerLink="nueva">
+                <i nz-icon nzType="plus" nzTheme="outline"></i>
+                Nueva
+            </button>
+            <nz-table #tablaVentas [nzData]="lstFacturasVenta" [nzFrontPagination]="true" [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex" [nzTotal]="totalRegisters" [nzLoading]="loadingVentas" nzShowPagination
+                nzShowSizeChanger nzSize="small" style="padding-top: 10px;"
+                (nzQueryParams)="onTableQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th nzWidth="60px"></th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
+                        <th [nzColumnKey]="'fecha_venta'" [nzSortFn]="true">Fecha</th>
+                        <th [nzColumnKey]="'prefijofactura, nrofactura'" [nzSortFn]="true">Nro. Factura</th>
+                        <th [nzColumnKey]="'total'" [nzSortFn]="true">Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let fv of tablaVentas.data">
+                        <tr>
+                            <td [nzExpand]="expandSet.has(fv.id ?? 0)"
+                                (nzExpandChange)="onExpandChange(fv.id ?? 0, $event)"></td>
+                            <td>{{ fv.id }}</td>
+                            <td>{{ fv.cliente }}</td>
+                            <td>{{ fv.fecha }}</td>
+                            <td>{{ fv.prefijofactura }}-{{ fv.nrofactura?.toString()?.padStart(7, '0') }}</td>
+                            <td>Gs.{{ fv.total | number }}</td>
+                            <td>
+                                <nz-tag *ngIf="!fv.anulado && fv.pagado" nzColor="green">Pagado</nz-tag>
+                                <nz-tag *ngIf="!fv.anulado && !fv.pagado" nzColor="orange">Pendiente</nz-tag>
+                                <nz-tag *ngIf="fv.anulado" nzColor="red">Anulado</nz-tag>
+                            </td>
+                            <td>
+                                <span>
+                                    <button 
+                                    *ngIf="!fv.anulado" 
+                                    nz-button 
+                                    nz-tooltip 
+                                    nz-popconfirm
+                                    nzType="primary"
+                                    nzTooltipTitle="Anular factura"
+                                    nzPopconfirmTitle="¿Desea anular la factura?"
+                                    nzOkText="Anular"
+                                    (nzOnConfirm)="anularFactura(fv.id)"
+                                        nzGhost nzDanger>
+                                        <i nz-icon nzTheme="outline" nzType="minus-circle"></i>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button 
+                                    *ngIf="fv.anulado" 
+                                    nz-button
+                                    nz-tooltip 
+                                    nz-popconfirm
+                                    nzType="primary"
+                                    nzTooltipTitle="Revertir anulación" 
+                                    nzPopconfirmTitle="¿Desea revertir la anulación?"
+                                    nzOkText="Revertir"
+                                    (nzOnConfirm)="revertirAnulacion(fv.id)"
+                                    nzGhost>
+                                        <i nz-icon nzTheme="outline" nzType="undo"></i>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(fv.id ?? 0)">
+                            <nz-collapse>
+                                <nz-collapse-panel [nzHeader]="'Ítems ('+fv.detalles.length+')'">
+                                    <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small"
+                                        nzShowPagination="false">
+                                        <thead>
+                                            <tr>
+                                                <th>Ítem</th>
+                                                <th>Monto</th>
+                                            </tr>
+                                        </thead>
+                <tbody>
+                    <tr *ngFor="let dfv of tablaDetalle.data">
+                        <td>{{ dfv.descripcion }}</td>
+                        <td>Gs.{{ dfv.subtotal | number }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+            </nz-collapse-panel>
+            <nz-collapse-panel [nzHeader]="'Cobro'">
+                <nz-table #tablaCobro [nzData]="fv.cobros" nzSize="small" nzShowPagination="false">
+                    <thead>
+                        <tr>
+                            <th>Cobrador</th>
+                            <th>Fecha</th>
+                            <th>Registrado Por</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of tablaCobro.data">
+                            <td>{{ c.comisionpara }}</td>
+                            <td>{{ c.fecha | date:'dd/MM/yyyy' }}</td>
+                            <td>{{ c.cobradopornombre }} {{ c.cobradoporapellido }}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-collapse-panel>
+            </nz-collapse>
+            </tr>
+            </ng-container>
+            </tbody>
+            </nz-table>
+        </div>
+    </div>
+</div>
