@@ -18,10 +18,14 @@ import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { PermisosUsuarioComponent } from './permisos-usuario/permisos-usuario.component';
+import { NzTreeModule} from 'ng-zorro-antd/tree';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
-  declarations: [VistaUsuariosComponent, DetalleUsuarioComponent],
+  declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent],
   imports: [
     CommonModule,
     UsuariosRoutingModule,
@@ -39,7 +43,11 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzNotificationModule,
     NzPopconfirmModule,
     NzSpinModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpaceModule,
+    NzTreeModule,
+    NzTypographyModule,
+    NzTagModule
   ]
 })
 export class UsuariosModule { }

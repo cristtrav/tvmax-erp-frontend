@@ -83,10 +83,18 @@
                             </nz-form-control>
                         </nz-form-item>
                         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                                <i nz-icon nzType="save"></i>
-                                Guardar
-                            </button>
+                            <nz-space>
+                                <span *nzSpaceItem>
+                                    <button *ngIf="idusuario!=='nuevo'" nz-button nzType="default" [routerLink]="'permisos'">
+                                        <i nz-icon nzType="key" nzTheme="outline"></i>
+                                        Permisos
+                                    </button>
+                                </span>
+                                <button *nzSpaceItem nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                    <i nz-icon nzType="save"></i>
+                                    Guardar
+                                </button>
+                            </nz-space>
                         </div>
                     </form>
                 </nz-spin>

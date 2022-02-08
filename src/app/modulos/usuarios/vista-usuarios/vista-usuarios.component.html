@@ -42,17 +42,20 @@
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.activo?'#00C853':'#f44336'" [nzType]="u.activo?'check-circle':'close-circle'"></i>
                         </td>
                         <td>
-                            <!--<a [routerLink]="u.id+''">Editar</a>-->
-                            <button nz-button nz-tooltip nzType="primary" [routerLink]="u.id+''" nzTooltipTitle="Editar">
-                                <i nz-icon nzType="edit" nzTheme="outline"></i>
-                            </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nz-tooltip nz-popconfirm 
-                            nzType="primary" nzTooltipTitle="Eliminar"
-                            nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(u.id)" nzDanger>
-                                <i nz-icon nzType="delete" nzTheme="outline"></i>
-                            </button>
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Permisos del usuario" nzType="default" [routerLink]="u.id+'/permisos'">
+                                    <i nz-icon nzType="key" nzTheme="outline"></i>
+                                </button>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="u.id+''" nzTooltipTitle="Editar">
+                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                </button>
+                                <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm 
+                                nzType="primary" nzTooltipTitle="Eliminar"
+                                nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                (nzOnConfirm)="eliminar(u.id)" nzDanger>
+                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                </button>
+                            </nz-space>
                         </td>
                     </tr>
                 </tbody>

@@ -1,0 +1,57 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <div nz-row>
+            <div nz-col nzFlex="auto">
+                <nz-breadcrumb>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/app/usuarios">Usuarios</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        <a routerLink="../">{{ idusuario }}</a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        Permisos
+                    </nz-breadcrumb-item>
+                </nz-breadcrumb>
+            </div>
+            <div *ngIf="usuario" nz-col>
+                <nz-tag [nzColor]="'magenta'">
+                    <strong>{{ usuario.nombres }} {{ usuario.apellidos }}</strong>
+                    <nz-divider nzType="vertical" *ngIf="usuario.ci"></nz-divider>
+                    <span *ngIf="usuario.ci">
+                        {{ usuario.ci | number }}
+                    </span>
+                </nz-tag>
+            </div>
+        </div>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="8" [nzXl]="12" [nzLg]="16" [nzMd]="18" [nzSm]="22" [nzXs]="24">
+                <nz-spin [nzSpinning]="cargandoPermisos">
+                    <nz-tree #nzTreeComponent [nzData]="nodosVistaPermisos" [nzCheckedKeys]="defaultCheckedKeys"
+                    [nzExpandedKeys]="defaultExpandedKeys" [nzSelectedKeys]="defaultSelectedKeys"
+                    [nzTreeTemplate]="treenode" nzCheckable></nz-tree>
+                </nz-spin>
+                
+                <ng-template #treenode let-node let-origin="origin">
+                    <span>
+                        {{ node.title }} 
+                        <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon nzType="info-circle" nzTheme="outline" [nzTheme]="'twotone'"></i>
+                    </span>
+                </ng-template>
+                <div nz-row>
+                    <div nz-col nzSpan="24" style="text-align: right;">
+                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardandoPermisos">
+                            <i nz-icon nzType="save" nzTheme="outline"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>s
