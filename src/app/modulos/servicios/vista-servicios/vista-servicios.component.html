@@ -11,10 +11,26 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="nuevo">
-                <i nz-icon nzType="plus"></i>
-                Nuevo
-            </a>
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <a nz-button nzType="primary" routerLink="nuevo">
+                        <i nz-icon nzType="plus"></i>
+                        Nuevo
+                    </a>
+                </div>
+                <div nz-col>
+                    <nz-space>
+                        <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                            <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()" AllowClear>
+                        </nz-input-group>
+                        <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
+                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                                <i nz-icon nzType="filter" nzTheme="outline"></i>
+                            </button>
+                        </nz-badge>
+                    </nz-space>
+                </div>
+            </div>
             <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;" nzShowSizeChanger
             [nzFrontPagination]="false" [nzLoading]="tableLoading" [nzTotal]="totalRegisters" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
             (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
@@ -25,7 +41,7 @@
                         <th nzColumnKey="grupo" [nzSortFn]="true">Grupo</th>
                         <th nzColumnKey="suscribible" [nzSortFn]="true" nzAlign="center">Suscribible</th>
                         <th nzColumnKey="precio" [nzSortFn]="true" nzAlign="center">Precio</th>
-                        <th>Acciones</th>
+                        <th >Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,21 +57,30 @@
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="srv.suscribible?'#00C853':'#f44336'" [nzType]="srv.suscribible?'check-circle':'close-circle'"></i>
                         </td>
                         <td nzAlign="right">{{ srv.precio | number }}</td>
-                        <td>
-                            <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="srv.id+''">
-                                <i nz-icon nzType="edit" nzTheme="outline"></i>
-                            </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nz-tooltip nzDanger nz-popconfirm
-                            nzType="primary" nzTooltipTitle="Eliminar"
-                            nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(srv.id)">
-                                <i nz-icon nzType="delete" nzTheme="outline"></i>
-                            </button>
+                        <td nzAlign="center">
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="srv.id+''">
+                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                </button>
+                                <button *nzSpaceItem nz-button nz-tooltip nzDanger nz-popconfirm
+                                nzType="primary" nzTooltipTitle="Eliminar"
+                                nzPopconfirmTitle="¿Desea eliminr el Servicio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                (nzOnConfirm)="eliminar(srv.id)">
+                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                </button>
+                            </nz-space>
                         </td>
                     </tr>
                 </tbody>
             </nz-table>
+            <nz-drawer [nzClosable]="true" nzPlacement="right" nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" (nzOnClose)="drawerFiltrosVisible = false">
+                <ng-container *nzDrawerContent>
+                    <div>
+                        <h3>Grupos <a nz-tooltip nzTooltipTitle="Limpiar filtro de grupos" (click)="limpiarFiltroGrupos()"><i nz-icon nzType="clear" nzTheme="outline"></i></a></h3>
+                    </div>
+                    <nz-checkbox-group [(ngModel)]="filtrosGrupoChk" (ngModelChange)="filtroGrupoChange()"></nz-checkbox-group>
+                </ng-container>
+            </nz-drawer>
         </div>
     </div>
 </div>

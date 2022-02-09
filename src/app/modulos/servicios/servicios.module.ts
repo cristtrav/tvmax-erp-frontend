@@ -20,6 +20,10 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSpaceModule} from 'ng-zorro-antd/space';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @NgModule({
   declarations: [VistaServiciosComponent, DetalleServicioComponent],
@@ -42,7 +46,11 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzDividerModule,
     NzPopconfirmModule,
     NzToolTipModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSpaceModule,
+    NzBadgeModule,
+    NzDrawerModule,
+    NzTypographyModule
   ]
 })
 export class ServiciosModule { }

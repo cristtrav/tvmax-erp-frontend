@@ -130,7 +130,7 @@ export class DetalleServicioComponent implements OnInit {
     this.serviciosSrv.putServicio(+this.idservicio, s).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente', '');
       this.idservicio = `${s.id}`;
-      this.router.navigateByUrl(`/servicios/${s.id}`);
+      this.router.navigate([s.id], {relativeTo: this.aroute.parent});
       ;this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al modificar Servicio');
