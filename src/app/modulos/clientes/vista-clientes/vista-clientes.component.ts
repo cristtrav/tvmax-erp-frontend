@@ -7,6 +7,8 @@ import { Cliente } from './../../../dto/cliente-dto';
 import { ClientesService } from './../../../servicios/clientes.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { Extra } from '../../../util/extra';
+import { Cobrador } from '@dto/cobrador-dto';
+import { CobradoresService } from '@servicios/cobradores.service';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -23,14 +25,38 @@ export class VistaClientesComponent implements OnInit {
   expandSet = new Set<number>();
   sortStr: string | null = '+razonsocial'
 
+  cantFiltrosAplicados: number = 0;
+  drawerFiltrosVisible: boolean = false;
+
+  textoBusqueda: string = '';
+  timerBusqueda: any;
+
+  lstCobradoresFiltro: Cobrador[] = [];
+  cobradoresSeleccionadosFiltro: number[] = [];
+
   constructor(
     private cliSrv: ClientesService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private cobradoresSrv: CobradoresService
   ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
+    this.cargarCobradoresFiltro();
+  }
+
+  cargarCobradoresFiltro(){
+    let params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    params = params.append('sort', '+razon_social');
+    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Cobrador>)=>{
+      this.lstCobradoresFiltro = resp.data;
+    }, (e)=>{
+      console.log('Error al cargar cobradores');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    });
   }
 
   cargarDatos(): void {
@@ -43,7 +69,7 @@ export class VistaClientesComponent implements OnInit {
       console.log('Error al cargar clientes');
       console.log(e);
       this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al cargar clientes', e.error);
+      this.tablaLoading = false;
     });
   }
 
@@ -83,7 +109,40 @@ export class VistaClientesComponent implements OnInit {
     }
     params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
+    if(this.textoBusqueda){
+      params = params.append('search', this.textoBusqueda);
+    }
+    if(this.cobradoresSeleccionadosFiltro){
+      console.log(this.cobradoresSeleccionadosFiltro);
+      this.cobradoresSeleccionadosFiltro.forEach((idcob: number)=>{
+        params = params.append('idcobrador[]', idcob);
+      });
+    }
     return params;
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(()=>{
+      this.cargarDatos();
+    }, 500);
+  }
+
+  calcularCantidadFiltros(){
+    let cant: number = 0;
+    cant += this.cobradoresSeleccionadosFiltro.length;
+    this.cantFiltrosAplicados = cant;
+  }
+
+  filtroCobradoresChange(){
+    this.calcularCantidadFiltros();
+    this.cargarDatos();
+  }
+
+  limpiarFiltroCobradores(){
+    this.cobradoresSeleccionadosFiltro = [];
+    this.calcularCantidadFiltros();
+    this.cargarDatos();
   }
 
 }

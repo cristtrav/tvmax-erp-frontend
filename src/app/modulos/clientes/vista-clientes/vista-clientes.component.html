@@ -11,10 +11,34 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="nuevo">
-                <i nz-icon nzType="plus"></i>
-                Nuevo
-            </a>
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <a nz-button nzType="primary" routerLink="nuevo">
+                        <i nz-icon nzType="plus"></i>
+                        Nuevo
+                    </a>
+                </div>
+                <div nz-col>
+                    <nz-space>
+                        <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                        </nz-input-group>
+                        <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
+                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                                <i nz-icon nzType="filter" nzTheme="outline"></i>
+                            </button>
+                        </nz-badge>
+                    </nz-space>
+                </div>
+            </div>
+            <nz-drawer [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzTitle="Filtros" (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                <ng-container *nzDrawerContent>
+                    <h3>Cobradores <a (click)="limpiarFiltroCobradores()"><i nz-icon nzType="clear" nzTheme="outline"></i></a></h3>
+                    <nz-select nzPlaceHolder="Seleccionar..." nzMode="multiple" [(ngModel)]="cobradoresSeleccionadosFiltro" (ngModelChange)="filtroCobradoresChange()" style="width: 100%;">
+                        <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial" [nzValue]="cob.id"></nz-option>
+                    </nz-select>
+                </ng-container>
+            </nz-drawer>
             <ng-template #pietabla>
                 <nz-space>
                     <span *nzSpaceItem><strong>Total:</strong></span>
@@ -94,17 +118,17 @@
                                 <nz-space nzSize="large">
                                     <span *nzSpaceItem>
                                         <strong>Email: </strong>
-                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(sinemail)'}}</span>
+                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(Sin email)'}}</span>
                                     </span>
                                     <span *nzSpaceItem>
                                         <strong>Teléfono princ.: </strong>
                                         <span [style]="!c.telefono1?'color: gray':''">{{
-                                            c.telefono1?c.telefono1:'(sinteléfono)' }}</span>
+                                            c.telefono1?c.telefono1:'(Sin teléfono)' }}</span>
                                     </span>
                                     <span *nzSpaceItem>
                                         <strong>Teléfono sec.:</strong>
                                         <span [style]="!c.telefono2?'color: gray':''"> {{
-                                            c.telefono2?c.telefono2:'(sinteléfono)' }}</span>
+                                            c.telefono2?c.telefono2:'(Sin teléfono)' }}</span>
                                     </span>
                                     <span *nzSpaceItem>
                                         <strong>Cobrador: </strong>

@@ -21,7 +21,7 @@
                 <div nz-col>
                     <nz-space>
                         <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
-                            <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()" AllowClear>
+                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
                         </nz-input-group>
                         <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
                             <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">

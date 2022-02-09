@@ -30,6 +30,8 @@ import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/
 import { CuotasModule } from './../cuotas/cuotas.module';
 import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
 @NgModule({
   declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent],
@@ -56,7 +58,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzTagModule,
     SuscripcionesModule,
     CuotasModule,
-    NzSpinModule
+    NzSpinModule,
+    NzBadgeModule,
+    NzDrawerModule
   ]
 })
 export class ClientesModule { }
