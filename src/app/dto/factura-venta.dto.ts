@@ -1,4 +1,3 @@
-import { Cobro } from "./cobro-dto";
 import { DetalleFacturaVenta } from "./detalle-factura-venta-dto";
 
 export class FacturaVenta {
@@ -10,11 +9,19 @@ export class FacturaVenta {
     iva5: number = 0;
     iva10: number = 0;
     exento: number = 0;
-    fecha: string | null = null;
+    fechafactura: string | null = null;
     idcliente: number | null = null;
     prefijofactura: string | null = null;
     nrofactura: number | null = null;
     idtimbrado: number | null = null;
     detalles: DetalleFacturaVenta [] = [];
-    cobros: Cobro [] = [];
+    fechacobro: string | null = null;
+    idcobradorcomision: number | null = null;
+    cobrador: string | null = null;
+    idusuarioregistrofactura: number | null = null;
+    nombresusuariofactura: string | null = null;
+    apellidosusuariofactura: string | null = null;
+    idusuarioregistrocobro: number | null = null;
+    nombresusuariocobro: string | null = null;
+    apellidosusuariocobro: string | null = null;
 }

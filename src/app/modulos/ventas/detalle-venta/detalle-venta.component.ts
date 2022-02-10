@@ -442,7 +442,7 @@ export class DetalleVentaComponent implements OnInit {
     fv.pagado = true;
     fv.idcliente = this.formCabecera.get('idCliente')?.value;
     const date: Date = this.formCabecera.get('fecha')?.value;
-    fv.fecha = formatDate(date, 'yyyy/MM/dd', 'es-PY');
+    fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
     console.log(fv);
     return fv;
   }
