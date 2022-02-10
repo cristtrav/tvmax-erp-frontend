@@ -32,7 +32,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
-import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'; 
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzPopoverModule,
     NzNotificationModule,
     NzDrawerModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzTabsModule
   ]
 })
 export class VentasModule { }
