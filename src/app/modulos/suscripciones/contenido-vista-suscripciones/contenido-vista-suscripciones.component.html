@@ -1,26 +1,111 @@
-<a nz-button nzType="primary" routerLink="nueva">
-    <i nz-icon nzType="plus"></i>
-    Nueva
-</a>
+<div nz-row>
+    <div nz-col nzFlex="auto">
+        <a nz-button nzType="primary" routerLink="nueva">
+            <i nz-icon nzType="plus"></i>
+            Nueva
+        </a>
+    </div>
+    <div nz-col>
+        <nz-space>
+            <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+            </nz-input-group>
+            <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
+                <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros"
+                    (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                    <i nz-icon nzType="filter" nzTheme="outline"></i>
+                </button>
+            </nz-badge>
+        </nz-space>
+    </div>
+</div>
+
+<nz-drawer [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzPlacement="right" nzTitle="Filtros"
+    (nzOnClose)="drawerFiltrosVisible = false">
+    <ng-container *nzDrawerContent>
+        <nz-space nzDirection="vertical" style="width: 100%;">
+            <div *nzSpaceItem>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de fecha de suscripción" (click)="limpiarFiltrosFechaSuscripcion()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Fecha de suscripción
+                </h3>
+                <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()"
+                    [nzDisabledDate]="disabledStartDate" nzPlaceHolder="Fecha desde" style="width: 100%;"
+                    nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+                <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()"
+                    [nzDisabledDate]="disabledEndDate" nzPlaceHolder="Fecha hasta"
+                    style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+            </div>
+            <div *nzSpaceItem>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de grupo / servicio"
+                        (click)="limpiarFiltrosGruposServicios()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Grupo / Servicio
+                </h3>
+                <nz-select nzPlaceHolder="Seleccionar grupo..." [(ngModel)]="idGruposFiltro" nzMode="multiple"
+                    [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="moreTagPlaceholer"
+                    (ngModelChange)="cambioGrupoFiltro()" style="width: 100%;" nzAllowClear>
+                    <nz-option *ngFor="let g of lstGruposFiltro" [nzLabel]="g.descripcion" [nzValue]="g.id"></nz-option>
+                </nz-select>
+                <nz-select nzPlaceHolder="Seleccionar servicio..." [(ngModel)]="idServiciosFiltro" nzMode="multiple"
+                    [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="moreTagPlaceholer" (ngModelChange)="filtrar()"
+                    style="width: 100%; margin-top: 10px;" nzAllowClear>
+                    <nz-option *ngFor="let s of lstServiciosFiltro" [nzLabel]="s.descripcion" [nzValue]="s.id">
+                    </nz-option>
+                </nz-select>
+                <ng-template #moreTagPlaceholer let-selectedList>{{ selectedList.length }} más</ng-template>
+            </div>
+            <div *nzSpaceItem>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de estado" (click)="limpiarFiltrosEstados()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Estado
+                </h3>
+                <label nz-checkbox [(ngModel)]="filtroConectado" (ngModelChange)="filtrar()">Conectado</label><br>
+                <label nz-checkbox [(ngModel)]="filtroReconectado" (ngModelChange)="filtrar()">Reconectado</label><br>
+                <label nz-checkbox [(ngModel)]="filtroDesconectado" (ngModelChange)="filtrar()">Desconectado</label>
+            </div>
+            <div *nzSpaceItem>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtro de cuotas pendientes" (click)="limpiarFiltroRangoCuotasPendientes()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Cuotas pendientes
+                </h3>
+                <nz-slider
+                    nzRange
+                    [nzMin]="0"
+                    [nzMax]="13"
+                    [(ngModel)]="rangoCuotasPendFiltro"
+                    (ngModelChange)="cambioFiltroRango()"
+                    [nzMarks]="marcasFiltroCuotasPend"
+                    [nzTipFormatter]="formatterTooltipRangoCuotas">
+                </nz-slider>
+            </div>
+        </nz-space>
+    </ng-container>
+</nz-drawer>
+
 <ng-template #pietabla>
     <nz-space>
-            <span *nzSpaceItem>
-                <strong>Total:</strong>
-            </span>
-            <span *nzSpaceItem>
-                {{ total | number}}
-            </span>
+        <span *nzSpaceItem>
+            <strong>Total:</strong>
+        </span>
+        <span *nzSpaceItem>
+            {{ total | number}}
+        </span>
     </nz-space>
 </ng-template>
 <nz-table #tbl [nzData]="lstSuscripciones" style="margin-top: 10px;" nzShowSizeChanger nzShowSizeChanger
-[nzFooter]="pietabla"
-[nzFrontPagination]="false"
-[nzLoading]="tableLoading"
-[(nzPageIndex)]="pageIndex"
-[(nzPageSize)]="pageSize"
-[nzTotal]="total"
-(nzQueryParams)="onTableParamsChange($event)"
-nzSize="small">
+    [nzFooter]="pietabla" [nzFrontPagination]="false" [nzLoading]="tableLoading" [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize" [nzTotal]="total" (nzQueryParams)="onTableParamsChange($event)" nzSize="small">
     <thead>
         <tr>
             <th nzWidth="60px"></th>
@@ -37,7 +122,8 @@ nzSize="small">
     <tbody>
         <ng-container *ngFor="let s of tbl.data">
             <tr>
-                <td [nzExpand]="expandSet.has(s.id?s.id:-1)" (nzExpandChange)="onExpandChange(s.id?s.id:-1, $event)"></td>
+                <td [nzExpand]="expandSet.has(s.id?s.id:-1)" (nzExpandChange)="onExpandChange(s.id?s.id:-1, $event)">
+                </td>
                 <td>{{ s.id }}</td>
                 <td *ngIf="mostrarCliente" nz-tooltip [nzTooltipTitle]="'Código: '+s.idcliente">{{ s.cliente }}</td>
                 <td nz-tooltip [nzTooltipTitle]="'Código: '+s.idservicio">{{ s.servicio }}</td>
@@ -50,23 +136,26 @@ nzSize="small">
                     </nz-tag>
                 </td>
                 <td nzAlign="center">
-                    <nz-tag *ngIf="s.cuotaspendientes === 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}</nz-tag>
-                    <nz-tag *ngIf="s.cuotaspendientes >= 1 && s.cuotaspendientes <= 3" [nzColor]="'orange'">{{ s.cuotaspendientes | number }}</nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes === 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}
+                    </nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes >= 1 && s.cuotaspendientes <= 3" [nzColor]="'orange'">{{
+                        s.cuotaspendientes | number }}</nz-tag>
                     <nz-tag *ngIf="s.cuotaspendientes >= 4" [nzColor]="'red'">{{ s.cuotaspendientes | number }}</nz-tag>
                 </td>
                 <td nzAlign="right">{{ s.deuda | number }}</td>
                 <td>
                     <nz-space>
-                        <button *nzSpaceItem nz-tooltip nz-button nzType="default"
-                        [routerLink]="s.id+'/cuotas'" nzTooltipTitle="Cuotas">
+                        <button *nzSpaceItem nz-tooltip nz-button nzType="default" [routerLink]="s.id+'/cuotas'"
+                            nzTooltipTitle="Cuotas">
                             <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
                         </button>
-                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="s.id+''">
+                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar"
+                            [routerLink]="s.id+''">
                             <i nz-icon nzType="edit" nzTheme="outline"></i>
                         </button>
-                        <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" nzDanger
-                        nzPopconfirmTitle="¿Desea eliminar la Suscripción?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                        (nzOnConfirm)="eliminar(s.id)">
+                        <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
+                            nzTooltipTitle="Eliminar" nzDanger nzPopconfirmTitle="¿Desea eliminar la Suscripción?"
+                            nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(s.id)">
                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                         </button>
                     </nz-space>
@@ -74,12 +163,12 @@ nzSize="small">
             </tr>
             <tr [nzExpand]="expandSet.has(s.id?s.id:-1)">
                 <nz-space nzSize="large">
-                        <span *nzSpaceItem>
-                            <strong>Dirección: </strong> {{ s.direccion }}
-                        </span>
-                        <span *nzSpaceItem>
-                            <strong>Fecha de Suscripción:</strong> {{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}
-                        </span>
+                    <span *nzSpaceItem>
+                        <strong>Dirección: </strong> {{ s.direccion }}
+                    </span>
+                    <span *nzSpaceItem>
+                        <strong>Fecha de Suscripción:</strong> {{ s.fechasuscripcion | date:'dd/MMMM/yyyy' }}
+                    </span>
                 </nz-space>
             </tr>
         </ng-container>

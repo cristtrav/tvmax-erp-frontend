@@ -51,7 +51,8 @@ export class FormCuotaComponent implements OnInit {
   }
 
   private cargarServicios() {
-    const param: HttpParams = new HttpParams().append('sort', '+descripcion');
+    let param: HttpParams = new HttpParams().append('sort', '+descripcion');
+    param = param.append('eliminado', 'false');
     this.serviciosSrv.getServicios(param).subscribe((resp: ServerResponseList<Servicio>) => {
       this.lstServicios = resp.data;
     }, (e) => {

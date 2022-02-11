@@ -53,11 +53,12 @@
                                     </h3>
                                     <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()"
                                         [nzDisabledDate]="disabledStartDate" nzPlaceHolder="Fecha desde"
-                                        style="width: 100%;">
+                                        style="width: 100%;" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                     <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()"
                                         [nzDisabledDate]="disabledEndDate" nzPlaceHolder="Fecha hasta"
-                                        style="width: 100%; margin-top: 10px;"></nz-date-picker>
+                                        style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
                                 </div>
                                 <div *nzSpaceItem>
                                     <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de pagos"
@@ -95,11 +96,11 @@
                                     </h3>
                                     <nz-date-picker [(ngModel)]="fechaInicioCobroFiltro" (ngModelChange)="filtrar()"
                                         [nzDisabledDate]="disabledStartDateCobro" nzPlaceHolder="Fecha desde"
-                                        style="width: 100%;">
+                                        style="width: 100%;" nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                     <nz-date-picker [(ngModel)]="fechaFinCobroFiltro" (ngModelChange)="filtrar()"
                                         [nzDisabledDate]="disabledEndDateCobro" nzPlaceHolder="Fecha hasta"
-                                        style="width: 100%; margin-top: 10px;"></nz-date-picker>
+                                        style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy"></nz-date-picker>
                                 </div>
                                 <div *nzSpaceItem>
                                     <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de usuario"
@@ -170,7 +171,7 @@
                                     [nzColor]="'default'">PE</nz-tag>
 
                             </td>
-                            <td>
+                            <td nzAlign="center">
                                 <nz-space>
                                     <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
                                         [nzTooltipTitle]="fv.anulado?'Revertir anulacion':'Anular factura'"

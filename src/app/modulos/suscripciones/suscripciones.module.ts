@@ -27,6 +27,9 @@ import { CuotasSuscripcionesComponent } from './cuotas-suscripciones/cuotas-susc
 import { CuotasModule } from '../cuotas/cuotas.module';
 import { DetalleCuotasSuscripcionesComponent } from './detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzSliderModule} from 'ng-zorro-antd/slider';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent],
@@ -53,7 +56,10 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     NzBreadCrumbModule,
     NzSpaceModule,
     CuotasModule,
-    NzGridModule
+    NzGridModule,
+    NzBadgeModule,
+    NzDrawerModule,
+    NzSliderModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })
