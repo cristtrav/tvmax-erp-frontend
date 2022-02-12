@@ -1,0 +1,5 @@
+<ng-template #moreTagPlaceholer let-selectedList>{{ selectedList.length }} más</ng-template>
+<nz-tree-select nzPlaceHolder="Seleccionar..." [nzMaxTagCount]="3" [nzNodes]="ubicacionesFiltroNodos"
+                [nzMaxTagPlaceholder]="moreTagPlaceholer" [nzAsyncData]="true" [(ngModel)]="value" (ngModelChange)="onValueChange()"
+                 (nzExpandChange)="cargarNodoCiudadBarrio($event)" nzCheckable nzAllowClear style="width: 100%;">
+</nz-tree-select>

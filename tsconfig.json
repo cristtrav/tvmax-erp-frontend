@@ -29,6 +29,9 @@
       ],
       "@servicios/*": [
         "./src/app/servicios/*"
+      ],
+      "@helper-componets/*":[
+        "./src/app/helper-components/*"
       ]
     }
   },
