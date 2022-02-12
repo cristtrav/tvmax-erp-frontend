@@ -30,9 +30,12 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSliderModule} from 'ng-zorro-antd/slider';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { FormFiltroSuscripcionesComponent } from './form-filtro-suscripciones/form-filtro-suscripciones.component';
 
 @NgModule({
-  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent],
+  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent],
   imports: [
     CommonModule,
     SuscripcionesRoutingModule,
@@ -59,7 +62,9 @@ import { NzSliderModule} from 'ng-zorro-antd/slider';
     NzGridModule,
     NzBadgeModule,
     NzDrawerModule,
-    NzSliderModule
+    NzSliderModule,
+    NzTreeSelectModule,
+    NzDescriptionsModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

@@ -1,0 +1,82 @@
+<div>
+    <ng-template #moreTagPlaceholer let-selectedList>{{ selectedList.length }} más</ng-template>
+    <nz-space nzDirection="vertical" style="width: 100%;">
+        <div *nzSpaceItem>
+            <nz-badge [nzShowDot]="fechaInicioFiltro !== null || fechaFinFiltro !== null" nzDot>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de fecha de suscripción"
+                        (click)="limpiarFiltrosFechaSuscripcion()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Fecha de suscripción
+                </h3>
+            </nz-badge>
+            <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()"
+                [nzDisabledDate]="disabledStartDate" nzPlaceHolder="Fecha desde" style="width: 100%;"
+                nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+            <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledEndDate"
+                nzPlaceHolder="Fecha hasta" style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+        </div>
+        <div *nzSpaceItem>
+            <nz-badge [nzShowDot]="gruposServiciosFiltro.length !== 0" nzDot>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de grupo / servicio"
+                        (click)="limpiarFiltrosGruposServicios()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Grupo / Servicio
+                </h3>
+            </nz-badge>
+            <nz-tree-select nzPlaceHolder="Seleccionar..." [nzNodes]="gruposServiciosFiltroNodos"
+                [(ngModel)]="gruposServiciosFiltro" [nzMaxTagCount]="3" [nzMaxTagPlaceholder]="moreTagPlaceholer"
+                [nzAsyncData]="true" (nzExpandChange)="cargarNodoServicio($event)" (ngModelChange)="filtrar()"
+                nzCheckable nzAllowClear style="width: 100%;">
+            </nz-tree-select>
+
+        </div>
+        <div *nzSpaceItem>
+            <nz-badge nzDot>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de ubicación">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Ubicación
+                </h3>
+            </nz-badge>
+            <nz-tree-select nzPlaceHolder="Seleccionar..." [nzMaxTagCount]="3" [nzNodes]="ubicacionesFiltroNodos"
+                [nzMaxTagPlaceholder]="moreTagPlaceholer" [nzAsyncData]="true" (ngModelChange)="filtrar()"
+                [(ngModel)]="ubicacionesFiltro" nzCheckable nzAllowClear style="width: 100%;">
+            </nz-tree-select>
+        </div>
+        <div *nzSpaceItem>
+            <nz-badge [nzShowDot]="filtroConectado || filtroReconectado || filtroDesconectado" nzDot>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de estado" (click)="limpiarFiltrosEstados()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Estado
+                </h3>
+            </nz-badge><br>
+            <label nz-checkbox [(ngModel)]="filtroConectado" (ngModelChange)="filtrar()">Conectado</label><br>
+            <label nz-checkbox [(ngModel)]="filtroReconectado" (ngModelChange)="filtrar()">Reconectado</label><br>
+            <label nz-checkbox [(ngModel)]="filtroDesconectado" (ngModelChange)="filtrar()">Desconectado</label>
+        </div>
+        <div *nzSpaceItem>
+            <nz-badge [nzShowDot]="rangoCuotasPendFiltro[0] !== 0 || rangoCuotasPendFiltro[1] !== 13" nzDot>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtro de cuotas pendientes"
+                        (click)="limpiarFiltroRangoCuotasPendientes()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a>
+                    Cuotas pendientes
+                </h3>
+            </nz-badge>
+            <nz-slider nzRange [nzMin]="0" [nzMax]="13" [(ngModel)]="rangoCuotasPendFiltro"
+                (ngModelChange)="cambioFiltroRango()" [nzMarks]="marcasFiltroCuotasPend"
+                [nzTipFormatter]="formatterTooltipRangoCuotas">
+            </nz-slider>
+        </div>
+    </nz-space>
+</div>
