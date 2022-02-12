@@ -35,6 +35,8 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
   cantFiltrosAplicados: number = 0;
   drawerFiltrosVisible: boolean = false;
 
+  timerBusqueda: any;
+
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -99,11 +101,15 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
     if(this.sortStr) params = params.append('sort', this.sortStr);
     if(this.idcliente) params = params.append('idcliente', `${this.idcliente}`);
     params = params.appendAll(this.paramsFiltros);
+    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     return params;
   }
 
   buscar(){
-
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.cargarDatos();
+    }, 500);
   }
 
   procesarHttpParamsFiltro(params: IParametroFiltro){

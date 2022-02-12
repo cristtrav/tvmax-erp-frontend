@@ -37,17 +37,17 @@
 
         </div>
         <div *nzSpaceItem>
-            <nz-badge nzDot>
+            <nz-badge [nzShowDot]="ubicacionesFiltro.length !== 0" nzDot>
                 <h3>
-                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de ubicación">
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtros de ubicación" (click)="limpiarFiltrosUbicacion()">
                         <i nz-icon nzType="clear" nzTheme="outline"></i>
                     </a>
                     Ubicación
                 </h3>
             </nz-badge>
             <nz-tree-select nzPlaceHolder="Seleccionar..." [nzMaxTagCount]="3" [nzNodes]="ubicacionesFiltroNodos"
-                [nzMaxTagPlaceholder]="moreTagPlaceholer" [nzAsyncData]="true" (ngModelChange)="filtrar()"
-                [(ngModel)]="ubicacionesFiltro" nzCheckable nzAllowClear style="width: 100%;">
+                [nzMaxTagPlaceholder]="moreTagPlaceholer" [nzAsyncData]="true" [(ngModel)]="ubicacionesFiltro" (ngModelChange)="filtrar()"
+                 (nzExpandChange)="cargarNodoCiudadBarrio($event)" nzCheckable nzAllowClear style="width: 100%;">
             </nz-tree-select>
         </div>
         <div *nzSpaceItem>

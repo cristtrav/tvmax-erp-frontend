@@ -1,8 +1,14 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Barrio } from '@dto/barrio-dto';
+import { Departamento } from '@dto/departamento-dto';
+import { Distrito } from '@dto/distrito-dto';
 import { Grupo } from '@dto/grupo-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { Servicio } from '@dto/servicio-dto';
+import { BarriosService } from '@servicios/barrios.service';
+import { DepartamentosService } from '@servicios/departamentos.service';
+import { DistritosService } from '@servicios/distritos.service';
 import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -48,11 +54,15 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private gruposSrv: GruposService,
-    private serviciosSrv: ServiciosService
+    private serviciosSrv: ServiciosService,
+    private departamentosSrv: DepartamentosService,
+    private distritosSrv: DistritosService,
+    private barriosSrv: BarriosService
   ) {}
 
   ngOnInit(): void {
     this.cargarGruposFiltro();
+    this.cargarDepartamentosFiltro();
   }
 
   limpiarFiltrosEstados(){
@@ -108,7 +118,8 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
   calcularCantFiltros(): number{
     let cant: number = 0;
     cant += this.gruposServiciosFiltro.length;
-    if(this.fechaFinFiltro) cant++;
+    cant += this.ubicacionesFiltro.length;
+    if(this.fechaInicioFiltro) cant++;
     if(this.fechaFinFiltro) cant++;
     if(this.filtroConectado) cant++;
     if(this.filtroReconectado) cant++;
@@ -132,6 +143,11 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
 
   limpiarFiltroRangoCuotasPendientes(){
     this.rangoCuotasPendFiltro = [0, 13];
+    this.filtrar();
+  }
+
+  limpiarFiltrosUbicacion() {
+    this.ubicacionesFiltro = [];
     this.filtrar();
   }
 
@@ -178,11 +194,76 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+descripcion');
-    
+    this.departamentosSrv.get(params).subscribe((resp: ServerResponseList<Departamento>)=>{
+      const nodes: NzTreeNodeOptions[] = [];
+      resp.data.forEach((d: Departamento)=>{
+        const node: NzTreeNodeOptions = {
+          title: `${d.descripcion}`,
+          key: `dep-${d.id}`
+        };
+        nodes.push(node);
+      });
+      this.ubicacionesFiltroNodos = nodes;
+    }, (e)=>{
+      console.log('Error al cargar deparatamentos filtro');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    });
+  }
+
+  cargarNodoCiudadBarrio(ev: NzFormatEmitEvent){
+    const node = ev.node;
+    if (node && node.getChildren().length === 0 && node.isExpanded) {
+      if(node.key.includes('dep')){
+        let params: HttpParams = new HttpParams();
+        params = params.append('eliminado', 'false');
+        params = params.append('sort', '+descripcion');
+        params = params.append('iddepartamento', node.key.split('-')[1]);
+        this.distritosSrv.get(params).subscribe((resp: ServerResponseList<Distrito>)=>{
+          const nodesDistrito: NzTreeNodeOptions[] = [];
+          resp.data.forEach((d: Distrito)=>{
+            const nodeDistrito: NzTreeNodeOptions = {
+              title: `${d.descripcion}`,
+              key: `dis-${d.id}`,
+              checked: node.isChecked
+            };
+            nodesDistrito.push(nodeDistrito);
+          });
+          node.addChildren(nodesDistrito);
+        }, (e)=>{
+          console.log('Error al cargar distritos filtro');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        });
+      }else{
+        let params: HttpParams = new HttpParams();
+        params = params.append('eliminado', 'false');
+        params = params.append('sort', '+descripcion');
+        params = params.append('iddistrito', node.key.split('-')[1]);
+        this.barriosSrv.get(params).subscribe((resp: ServerResponseList<Barrio>)=>{
+          const nodesBarrios: NzTreeNodeOptions[] = [];
+          resp.data.forEach((b: Barrio)=>{
+            const nodeBarrio: NzTreeNodeOptions = {
+              title: `${b.descripcion}`,
+              key: `bar-${b.id}`,
+              isLeaf: true,
+              checked: node.isChecked
+            };
+            nodesBarrios.push(nodeBarrio);
+          });
+          node.addChildren(nodesBarrios);
+        }, (e)=>{
+          console.log('Error al cargar barrios filtro');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        });
+      }
+    }
   }
 
   getHttpQueryParams(): IParametroFiltro {
     const params: IParametroFiltro = {};
+
     const idgrupos: number[] = [];
     const idservicios: number[] = [];    
     this.gruposServiciosFiltro.forEach((gs: string)=>{
@@ -191,6 +272,24 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
     });
     if(idgrupos.length !== 0) params['idgrupo'] = idgrupos;
     if(idservicios.length !== 0) params['idservicio'] = idservicios;
+    
+    const iddepartamentos: string[] = [];
+    const iddistritos: string[] = [];
+    const idbarrios: number[] = [];
+    
+    this.ubicacionesFiltro.forEach((ddb: string)=>{
+      if(ddb.includes('dep')) iddepartamentos.push(ddb.split('-')[1]);
+      if(ddb.includes('dis')) iddistritos.push(ddb.split('-')[1]);
+      if(ddb.includes('bar')) idbarrios.push(Number(ddb.split('-')[1]));
+    });
+    if(iddepartamentos.length !==0) params['iddepartamento'] = iddepartamentos;
+    if(iddistritos.length !== 0) params['iddistrito'] = iddistritos;
+    if(idbarrios.length !== 0) params['idbarrio'] = idbarrios;
+
+    console.log(iddepartamentos);
+    console.log(iddistritos);
+    console.log(idbarrios);
+    
 
     if(this.fechaInicioFiltro){
       const finiciostr: string = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2 ,'0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;
@@ -215,28 +314,5 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
     }
     return params;
   }
-
-  /*cargarParametros(p: IParametroFiltro){
-    if(p['fechainiciosuscripcion'] && typeof p['fechainiciosuscripcion'] === 'string'){
-      this.fechaInicioFiltro = new Date(Date.parse(p['fechainiciosuscripcion']));
-    }
-    if(p['fechafinsuscripcion'] && typeof p['fechafinsuscripcion'] === 'string'){
-      this.fechaFinFiltro = new Date(Date.parse(p['fechafinsuscripcion']));
-    }
-    const idgs: string[] = [];
-    if(p['idgrupo'] && Array.isArray(p['idgrupo'])){
-      p['idgrupo'].forEach((idg)=>{
-        idgs.push(`gru-${idg}`);
-      });
-    }
-    const idss: string[] = [];
-    if(p['idservicio'] && Array.isArray(p['idservicio'])){
-      p['idservicio'].forEach((ids)=>{
-        idss.push(`ser-${ids}`);
-      });
-    }
-    this.gruposServiciosFiltro = idgs.concat(idss);
-    console.log(this.gruposServiciosFiltro);
-  }*/
 
 }
