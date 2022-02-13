@@ -20,9 +20,19 @@
                 </div>
                 <div nz-col>
                     <nz-space>
-                        <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                        <nz-input-group *nzSpaceItem [nzSuffix]="inputClearTpl" [nzPrefixIcon]="'search'">
                             <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda"
                                 (ngModelChange)="buscar()">
+                                <ng-template #inputClearTpl>
+                                    <i
+                                      nz-icon
+                                      class="ant-input-clear-icon"
+                                      nzTheme="fill"
+                                      nzType="close-circle"
+                                      *ngIf="textoBusqueda"
+                                      (click)="limpiarBusqueda()"
+                                    ></i>
+                                  </ng-template>
                         </nz-input-group>
                         <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
                             <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros"

@@ -257,6 +257,11 @@ export class VistaVentasComponent implements OnInit {
     }, 500);
   }
 
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.cargarVentas();
+  }
+
   limpiarFiltroFechas(){
     this.fechaInicioFiltro = null;
     this.fechaFinFiltro = null;
