@@ -20,35 +20,47 @@
                 </div>
                 <div nz-col>
                     <nz-space>
-                        <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                        <nz-input-group *nzSpaceItem [nzPrefixIcon]="'search'" [nzSuffix]="inputClearTpl">
                             <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                            <ng-template #inputClearTpl>
+                                <i
+                                  nz-icon
+                                  class="ant-input-clear-icon"
+                                  nzTheme="fill"
+                                  nzType="close-circle"
+                                  *ngIf="textoBusqueda"
+                                  (click)="limpiarBusqueda()"
+                                ></i>
+                              </ng-template>
                         </nz-input-group>
+                        
                         <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
-                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros"
+                                (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
                                 <i nz-icon nzType="filter" nzTheme="outline"></i>
                             </button>
                         </nz-badge>
                     </nz-space>
                 </div>
             </div>
-            <nz-drawer [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzTitle="Filtros" (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible">
-                <ng-container *nzDrawerContent>
-                    <h3>Cobradores <a (click)="limpiarFiltroCobradores()"><i nz-icon nzType="clear" nzTheme="outline"></i></a></h3>
-                    <nz-select nzPlaceHolder="Seleccionar..." nzMode="multiple" [(ngModel)]="cobradoresSeleccionadosFiltro" (ngModelChange)="filtroCobradoresChange()" style="width: 100%;">
-                        <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial" [nzValue]="cob.id"></nz-option>
-                    </nz-select>
-                </ng-container>
-            </nz-drawer>
+            <nz-drawer [nzContent]="formfiltro" [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzTitle="Filtros"
+                (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible"></nz-drawer>
+
+            <ng-template #formfiltro>
+                <app-form-filtro-clientes (paramsFiltrosChange)="procesarParamsFiltro($event)"
+                    (cantFiltrosChange)="procesarCantidadFiltros($event)"></app-form-filtro-clientes>
+            </ng-template>
+
             <ng-template #pietabla>
                 <nz-space>
                     <span *nzSpaceItem><strong>Total:</strong></span>
                     <span *nzSpaceItem>{{ total | number}}</span>
                 </nz-space>
             </ng-template>
-            <nz-table #tbl [nzData]="lstClientes" nzShowSizeChanger nzShowPagination
-                [nzFrontPagination]="false" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
-                [nzLoading]="tablaLoading" (nzQueryParams)="onTableParamsChange($event)" [nzFooter]="pietabla"
-                nzSize="small" style="margin-top: 10px;">
+            <nz-table #tbl [nzData]="lstClientes" nzShowSizeChanger nzShowPagination [nzFrontPagination]="false"
+                [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" [nzLoading]="tablaLoading"
+                (nzQueryParams)="onTableParamsChange($event)" [nzFooter]="pietabla" nzSize="small"
+                style="margin-top: 10px;">
                 <thead>
                     <tr>
                         <th nzWidth="60px"></th>
@@ -74,29 +86,28 @@
                                 <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
                             </td>
                             <td>
-                                <span *ngIf="c.direccion">
+                                <span *ngIf="c.direccion" nz-tooltip
+                                    [nzTooltipTitle]="'Código de domicilio: '+c.iddomicilio">
                                     {{ c.direccion }}
-                                    ({{ c.barrio }})
                                 </span>
                                 <span *ngIf="!c.direccion" style="color: gray">
                                     (Sin domicilio principal)
                                 </span>
                             </td>
                             <td>
-                                    <nz-tag nz-tooltip nzTooltipTitle="Conectados" [nzColor]="'green'">{{
-                                        c.cantconectados }} </nz-tag>
-                                    <nz-tag nz-tooltip nzTooltipTitle="Desconectados" [nzColor]="'red'">{{
-                                        c.cantdesconectados }} </nz-tag>
+                                <nz-tag nz-tooltip nzTooltipTitle="Conectados" [nzColor]="'green'">{{
+                                    c.cantconectados }} </nz-tag>
+                                <nz-tag nz-tooltip nzTooltipTitle="Desconectados" [nzColor]="'red'">{{
+                                    c.cantdesconectados }} </nz-tag>
                             </td>
                             <td>
                                 <nz-space>
-                                    <button *nzSpaceItem nz-tooltip nzTooltipTitle="Domicilios"
-                                        nz-button nzType="default" [routerLink]="[c.id, 'domicilios']">
+                                    <button *nzSpaceItem nz-tooltip nzTooltipTitle="Domicilios" nz-button
+                                        nzType="default" [routerLink]="[c.id, 'domicilios']">
                                         <i nz-icon nzType="home" nzTheme="outline"></i>
                                     </button>
                                     <button *nzSpaceItem nz-tooltip nz-button nzType="default"
-                                        nzTooltipTitle="Suscripciones"
-                                        [routerLink]="c.id+'/suscripciones'">
+                                        nzTooltipTitle="Suscripciones" [routerLink]="c.id+'/suscripciones'">
                                         <i nz-icon nzType="carry-out" nzTheme="outline"></i>
                                     </button>
                                     <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
@@ -114,28 +125,64 @@
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(c.id===null?-1:c.id)">
-                            <span>
-                                <nz-space nzSize="large">
-                                    <span *nzSpaceItem>
-                                        <strong>Email: </strong>
-                                        <span [style]="!c.email?'color: gray':''">{{ c.email?c.email:'(Sin email)'}}</span>
+                            <nz-descriptions nzSize="small">
+                                <nz-descriptions-item [nzTitle]="tituloemail">
+                                    <ng-template #tituloemail>
+                                        <strong>Email</strong>
+                                    </ng-template>
+                                    <span [style]="!c.email?'color: gray':''">
+                                        {{ c.email?c.email:'(Sin email)'}}
                                     </span>
-                                    <span *nzSpaceItem>
-                                        <strong>Teléfono princ.: </strong>
-                                        <span [style]="!c.telefono1?'color: gray':''">{{
-                                            c.telefono1?c.telefono1:'(Sin teléfono)' }}</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulotelef1">
+                                    <ng-template #titulotelef1>
+                                        <strong>Teléfono princ.</strong>
+                                    </ng-template>
+                                    <span [style]="!c.telefono1?'color: gray':''">
+                                        {{c.telefono1?c.telefono1:'(Sinteléfono)' }}
                                     </span>
-                                    <span *nzSpaceItem>
-                                        <strong>Teléfono sec.:</strong>
-                                        <span [style]="!c.telefono2?'color: gray':''"> {{
-                                            c.telefono2?c.telefono2:'(Sin teléfono)' }}</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulotelef2">
+                                    <ng-template #titulotelef2>
+                                        <strong>Teléfono sec.</strong>
+                                    </ng-template>
+                                    <span [style]="!c.telefono2?'color: gray':''">
+                                        {{c.telefono2?c.telefono2:'(Sinteléfono)' }}
                                     </span>
-                                    <span *nzSpaceItem>
-                                        <strong>Cobrador: </strong>
-                                        <span>{{ c.cobrador }} ({{ c.idcobrador }})</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulocobrador">
+                                    <ng-template #titulocobrador>
+                                        <strong>Cobrador</strong>
+                                    </ng-template>
+                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+c.idcobrador">{{ c.cobrador }}</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulobarrio">
+                                    <ng-template #titulobarrio>
+                                        <strong>Barrio</strong>
+                                    </ng-template>
+                                    <span *ngIf="c.idbarrio" nz-tooltip [nzTooltipTitle]="'Código: '+c.idbarrio">
+                                        {{c.barrio }}
                                     </span>
-                                </nz-space>
-                            </span>
+                                    <span *ngIf="!c.idbarrio" style="color: gray;">(Sin barrio)</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulodist">
+                                    <ng-template #titulodist>
+                                        <strong>Distrito</strong>
+                                    </ng-template>
+                                    <span *ngIf="c.iddistrito" nz-tooltip [nzTooltipTitle]="'Código: '+c.iddistrito">
+                                        {{ c.distrito }}
+                                    </span>
+                                    <span *ngIf="!c.iddistrito" style="color: gray;">(Sin distrito)</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titulodep">
+                                    <ng-template #titulodep>
+                                        <strong>Departamento</strong>
+                                    </ng-template>
+                                    <span *ngIf="c.iddepartamento" nz-tooltip
+                                        [nzTooltipTitle]="'Código: '+c.iddepartamento">{{ c.departamento }}</span>
+                                    <span *ngIf="!c.iddepartamento" style="color: gray;">(Sin departamento)</span>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
                         </tr>
                     </ng-container>
                 </tbody>

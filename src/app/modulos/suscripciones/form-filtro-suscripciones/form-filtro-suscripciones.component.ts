@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzMarks } from 'ng-zorro-antd/slider';
@@ -8,7 +9,7 @@ import { NzMarks } from 'ng-zorro-antd/slider';
   templateUrl: './form-filtro-suscripciones.component.html',
   styleUrls: ['./form-filtro-suscripciones.component.scss']
 })
-export class FormFiltroSuscripcionesComponent implements OnInit {
+export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel {
 
   @Output()
   paramsFiltrosChange = new EventEmitter<IParametroFiltro>();
@@ -65,12 +66,12 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
     return endValue.getTime() <= fid.getTime();
   };
 
-  filtrar(){
-    this.cantFiltrosChange.emit(this.calcularCantFiltros());
-    this.paramsFiltrosChange.emit(this.getHttpQueryParams());
+  filtrar(): void{
+    this.cantFiltrosChange.emit(this.getCantidadFiltros());
+    this.paramsFiltrosChange.emit(this.getQueryParams());
   }
 
-  calcularCantFiltros(): number{
+  getCantidadFiltros(): number{
     let cant: number = 0;
     cant += this.gruposServiciosFiltro.length;
     cant += this.ubicacionesFiltro.length;
@@ -118,7 +119,7 @@ export class FormFiltroSuscripcionesComponent implements OnInit {
     return `${value}`;
   }
 
-  getHttpQueryParams(): IParametroFiltro {
+  getQueryParams(): IParametroFiltro {
     const params: IParametroFiltro = {};
 
     const idgrupos: number[] = [];

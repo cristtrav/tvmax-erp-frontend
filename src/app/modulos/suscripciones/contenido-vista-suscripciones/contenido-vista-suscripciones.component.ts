@@ -112,6 +112,11 @@ export class ContenidoVistaSuscripcionesComponent implements OnInit {
     }, 500);
   }
 
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.cargarDatos();
+  }
+
   procesarHttpParamsFiltro(params: IParametroFiltro){
     this.paramsFiltros = params;
     this.cargarDatos();

@@ -1,0 +1,28 @@
+<div nz-space nzDirection="vertical" style="width: 100%">
+    <div *nzSpaceItem>
+        <nz-badge [nzShowDot]="cobradoresSeleccionadosFiltro.length!==0" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de cobradores" (click)="limpiarFiltroCobradores()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Cobradores
+            </h3>
+        </nz-badge>
+        <nz-select nzPlaceHolder="Seleccionar..." nzMode="multiple" [(ngModel)]="cobradoresSeleccionadosFiltro"
+            (ngModelChange)="filtrar()" style="width: 100%;">
+            <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial" [nzValue]="cob.id">
+            </nz-option>
+        </nz-select>
+    </div>
+    <div *nzSpaceItem>
+        <nz-badge [nzShowDot]="ubicacionesSelec.length !== 0" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtros de ubicación" (click)="limpiarFiltrosUbicacion()">
+                    <i nz-icon nzType="clear"></i>
+                </a>
+                Ubicación
+            </h3>
+        </nz-badge>
+        <app-lugar-treeselect [(value)]="ubicacionesSelec" (valueChange)="filtrar()"></app-lugar-treeselect>
+    </div>
+</div>

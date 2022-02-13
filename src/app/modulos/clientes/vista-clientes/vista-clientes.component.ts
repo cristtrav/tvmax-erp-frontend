@@ -9,6 +9,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 import { Extra } from '../../../util/extra';
 import { Cobrador } from '@dto/cobrador-dto';
 import { CobradoresService } from '@servicios/cobradores.service';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -34,29 +35,16 @@ export class VistaClientesComponent implements OnInit {
   lstCobradoresFiltro: Cobrador[] = [];
   cobradoresSeleccionadosFiltro: number[] = [];
 
+  paramsFiltros: IParametroFiltro = {};
+
   constructor(
     private cliSrv: ClientesService,
     private notif: NzNotificationService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private cobradoresSrv: CobradoresService
   ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
-    this.cargarCobradoresFiltro();
-  }
-
-  cargarCobradoresFiltro(){
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
-    params = params.append('sort', '+razon_social');
-    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Cobrador>)=>{
-      this.lstCobradoresFiltro = resp.data;
-    }, (e)=>{
-      console.log('Error al cargar cobradores');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    });
   }
 
   cargarDatos(): void {
@@ -104,20 +92,11 @@ export class VistaClientesComponent implements OnInit {
 
   getHttpQueryParams(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
-    if(this.sortStr){
-      params = params.append('sort', this.sortStr);
-    }
+    if(this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
-    if(this.textoBusqueda){
-      params = params.append('search', this.textoBusqueda);
-    }
-    if(this.cobradoresSeleccionadosFiltro){
-      console.log(this.cobradoresSeleccionadosFiltro);
-      this.cobradoresSeleccionadosFiltro.forEach((idcob: number)=>{
-        params = params.append('idcobrador[]', idcob);
-      });
-    }
+    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
+    params = params.appendAll(this.paramsFiltros);
     return params;
   }
 
@@ -128,21 +107,24 @@ export class VistaClientesComponent implements OnInit {
     }, 500);
   }
 
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.cargarDatos();
+  }
+
   calcularCantidadFiltros(){
     let cant: number = 0;
     cant += this.cobradoresSeleccionadosFiltro.length;
     this.cantFiltrosAplicados = cant;
   }
 
-  filtroCobradoresChange(){
-    this.calcularCantidadFiltros();
+  procesarParamsFiltro(p: IParametroFiltro): void{
+    this.paramsFiltros = p;
     this.cargarDatos();
   }
 
-  limpiarFiltroCobradores(){
-    this.cobradoresSeleccionadosFiltro = [];
-    this.calcularCantidadFiltros();
-    this.cargarDatos();
+  procesarCantidadFiltros(c: number): void{
+    this.cantFiltrosAplicados = c;
   }
 
 }
