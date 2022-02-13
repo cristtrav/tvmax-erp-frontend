@@ -38,10 +38,10 @@
                 </nz-spin>
                 
                 <ng-template #treenode let-node let-origin="origin">
-                    <span>
-                        {{ node.title }} 
-                        <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon nzType="info-circle" nzTheme="outline" [nzTheme]="'twotone'"></i>
-                    </span>
+                    <i *ngIf="node.key.includes('mod')" nz-icon nzType="build" nzTheme="outline"></i>
+                    <i *ngIf="node.key.includes('fun')" nz-icon nzType="tool" nzTheme="outline"></i>
+                    {{ node.title }} 
+                    <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon nzType="info-circle" nzTheme="outline" [nzTheme]="'twotone'"></i>
                 </ng-template>
                 <div nz-row>
                     <div nz-col nzSpan="24" style="text-align: right;">
