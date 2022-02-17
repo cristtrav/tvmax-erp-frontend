@@ -6,7 +6,7 @@ import { Servicio } from '@dto/servicio-dto';
 import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzFormatEmitEvent, NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 @Component({
   selector: 'app-grupo-servicio-treeselect',
@@ -19,7 +19,7 @@ export class GrupoServicioTreeselectComponent implements OnInit {
   valueChange = new EventEmitter<string[]>();
 
   @Input()
-  value: string [] = [];
+  value: string[] = [];
   gruposServiciosFiltroNodos: NzTreeNodeOptions[] = [];
 
   constructor(
@@ -32,55 +32,61 @@ export class GrupoServicioTreeselectComponent implements OnInit {
     this.cargarGruposFiltro();
   }
 
-  cargarGruposFiltro(){
+  async cargarGruposFiltro() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', false);
     params = params.append('sort', '+descripcion');
-    this.gruposSrv.getGrupos(params).subscribe((resp: ServerResponseList<Grupo>)=>{
+    this.gruposSrv.getGrupos(params).subscribe((resp: ServerResponseList<Grupo>) => {
       const nodes: NzTreeNodeOptions[] = [];
-      resp.data.forEach((g: Grupo)=>{
+      resp.data.forEach((g: Grupo) => {
         const node: NzTreeNodeOptions = {
           title: `${g.descripcion}`,
-          key: `gru-${g.id}`
+          key: `gru-${g.id}`,
         }
         nodes.push(node);
+        const servSelec: string[] = this.value.filter(gs => gs.includes('ser')).filter(gs => gs.split('-')[2] === `${g.id}`);
+        if(servSelec.length !== 0) this.cargarServiciosEnNodo(node);
+        this.gruposServiciosFiltroNodos = nodes;
       });
-      this.gruposServiciosFiltroNodos = nodes;
-    }, (e)=>{
+    }, (e) => {
       console.log('Error al cargar grupos filtro');
       console.log(e);
       this.httpErrorHandler.handle(e);
     });
   }
 
-  cargarNodoServicio(ev: NzFormatEmitEvent){
+  cargarNodoServicio(ev: NzFormatEmitEvent) {
     const node = ev.node;
     if (node && node.getChildren().length === 0 && node.isExpanded) {
-      let params: HttpParams = new HttpParams();
-      params = params.append('eliminado', 'false');
-      params = params.append('sort', '+descripcion');
-      params = params.append('idgrupo', `${node.key.split('-')[1]}`);
-      this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>)=>{
-        const serviciosNodo: NzTreeNodeOptions[] = [];
-        resp.data.forEach((s: Servicio)=>{
-          const datosNodo: NzTreeNodeOptions = {
-            title: `${s.descripcion}`,
-            key: `ser-${s.id}`,
-            isLeaf: true,
-            checked: node.isChecked
-          }
-          serviciosNodo.push(datosNodo);
-        });
-        node.addChildren(serviciosNodo);
-      }, (e)=>{
-        console.log('Error al cargar servicios del nodo');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
+      this.cargarServiciosEnNodo(node);
     }
   }
 
-  onValueChange(){
+  private cargarServiciosEnNodo(node: NzTreeNodeOptions) {
+    let params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    params = params.append('sort', '+descripcion');
+    params = params.append('idgrupo', `${node.key.split('-')[1]}`);
+    this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>) => {
+      const serviciosNodo: NzTreeNodeOptions[] = [];
+      resp.data.forEach((s: Servicio) => {
+        const datosNodo: NzTreeNodeOptions = {
+          title: `${s.descripcion}`,
+          key: `ser-${s.id}-${node.key.split('-')[1]}`,
+          isLeaf: true,
+          checked: node.isChecked
+        }
+        serviciosNodo.push(datosNodo);
+      });
+      node.addChildren(serviciosNodo);
+    }, (e) => {
+      console.log('Error al cargar servicios del nodo');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    });
+  }
+
+  onValueChange() {
     this.valueChange.emit(this.value);
   }
 

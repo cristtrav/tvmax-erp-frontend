@@ -34,9 +34,12 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { FormFiltroSuscripcionesComponent } from './form-filtro-suscripciones/form-filtro-suscripciones.component';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { TablaSuscripcionesComponent } from './tabla-suscripciones/tabla-suscripciones.component';
+import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 
 @NgModule({
-  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent],
+  declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
   imports: [
     CommonModule,
     SuscripcionesRoutingModule,
@@ -66,7 +69,9 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
     NzSliderModule,
     NzTreeSelectModule,
     NzDescriptionsModule,
-    HelperComponentsModule
+    HelperComponentsModule,
+    NzTabsModule,
+    EstadisticasModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

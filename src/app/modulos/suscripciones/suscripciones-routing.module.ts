@@ -6,10 +6,11 @@ import { CuotasSuscripcionesComponent } from './cuotas-suscripciones/cuotas-susc
 import { DetalleCuotasSuscripcionesComponent } from './detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
 
 const routes: Routes = [
-  { path: '', component: VistaSuscripcionesComponent },
+  { path: '', component: VistaSuscripcionesComponent},
   { path: ':idsuscripcion', component: DetalleSuscripcionComponent },
   { path: ':idsuscripcion/cuotas', component: CuotasSuscripcionesComponent },
-  { path: ':idsuscripcion/cuotas/:idcuota', component: DetalleCuotasSuscripcionesComponent}
+  { path: ':idsuscripcion/cuotas/:idcuota', component: DetalleCuotasSuscripcionesComponent},
+  
 ];
 
 @NgModule({

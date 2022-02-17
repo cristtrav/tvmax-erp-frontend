@@ -1,0 +1,47 @@
+<div nz-row [nzGutter]="[16, 16]">
+    <div nz-col nzSpan="6">
+        <nz-card>
+            <nz-statistic nzTitle="Total" [nzValue]="totalSuscripciones"></nz-statistic>
+        </nz-card>
+    </div>
+
+    <div nz-col nzSpan="6">
+        <nz-card>
+            <nz-statistic nzTitle="Activas" [nzValue]="totalSuscActivos"></nz-statistic>
+        </nz-card>
+    </div>
+
+    <div nz-col nzSpan="6">
+        <nz-card>
+            <nz-statistic nzTitle="Inactivas" [nzValue]="totalSuscInactivos"></nz-statistic>
+        </nz-card>
+    </div>
+    
+    <div nz-col nzSpan="6">
+        <nz-card>
+            <nz-statistic nzTitle="Deuda total" [nzValue]="'Gs.'+(totalDeuda | number)!"></nz-statistic>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="12">
+        <app-card-resumen-cuotas-pendientes
+            [paramsFiltros]="paramsFiltros"
+            [textoBusqueda]="textoBusqueda"
+            (totalDeudaChange)="totalDeuda = $event"
+            (totalSuscripcionesChange)="totalSuscripciones = $event">
+        </app-card-resumen-cuotas-pendientes>
+    </div>
+
+    <div nz-col nzSpan="12">
+        <app-card-resumen-estados
+        [paramsFiltros]="paramsFiltros"
+        [textoBusqueda]="textoBusqueda"
+        (totalActivosChange)="totalSuscActivos = $event"
+        (totalInactivosChange)="totalSuscInactivos = $event"
+        >
+    </app-card-resumen-estados>
+    </div>
+
+    <div nz-col nzSpan="12">
+        <app-card-resumen-suscripciones-grupos-servicios [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda"></app-card-resumen-suscripciones-grupos-servicios>
+    </div>
+</div>

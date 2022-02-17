@@ -1,0 +1,86 @@
+<nz-table #tbl [nzData]="lstSuscripciones"  nzShowSizeChanger nzShowSizeChanger
+    [nzFooter]="pietabla" [nzFrontPagination]="false" [nzLoading]="tableLoading" [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize" [nzTotal]="total" (nzQueryParams)="onTableParamsChange($event)" nzSize="small" [ngStyle]="tableStyles">
+    <thead>
+        <tr>
+            <th nzWidth="60px"></th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="sortOrders['id']">Código</th>
+            <th *ngIf="mostrarCliente" [nzColumnKey]="'cliente'" [nzSortFn]="true" [nzSortOrder]="sortOrders['cliente']">Cliente</th>
+            <th [nzColumnKey]="'servicio'" [nzSortFn]="true" [nzSortOrder]="sortOrders['servicio']">Servicio</th>
+            <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true" [nzSortOrder]="sortOrders['monto']">Monto/mes</th>
+            <th [nzColumnKey]="'estado'" [nzSortFn]="true" [nzSortOrder]="sortOrders['estado']">Estado</th>
+            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true" [nzSortOrder]="sortOrders['cuotaspendientes']">Cuotas P.</th>
+            <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right" [nzSortOrder]="sortOrders['deuda']">Deuda</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let s of tbl.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(s.id?s.id:-1)" (nzExpandChange)="onExpandChange(s.id?s.id:-1, $event)">
+                </td>
+                <td>{{ s.id }}</td>
+                <td *ngIf="mostrarCliente" nz-tooltip [nzTooltipTitle]="'Código: '+s.idcliente">{{ s.cliente }}</td>
+                <td nz-tooltip [nzTooltipTitle]="'Código: '+s.idservicio">{{ s.servicio }}</td>
+                <td nzAlign="right">{{ s.monto | number }}</td>
+                <td>
+                    <nz-tag [nzColor]="s.estado==='D'?'red':'green'">
+                        <span *ngIf="s.estado === 'R'">Reconectado</span>
+                        <span *ngIf="s.estado === 'C'">Conectado</span>
+                        <span *ngIf="s.estado === 'D'">Desconectado</span>
+                    </nz-tag>
+                </td>
+                <td nzAlign="center">
+                    <nz-tag *ngIf="s.cuotaspendientes === 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}
+                    </nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes >= 1 && s.cuotaspendientes <= 3" [nzColor]="'orange'">{{
+                        s.cuotaspendientes | number }}</nz-tag>
+                    <nz-tag *ngIf="s.cuotaspendientes >= 4" [nzColor]="'red'">{{ s.cuotaspendientes | number }}</nz-tag>
+                </td>
+                <td nzAlign="right">{{ s.deuda | number }}</td>
+                <td>
+                    <nz-space>
+                        <button *nzSpaceItem nz-tooltip nz-button nzType="default" [routerLink]="s.id+'/cuotas'"
+                            nzTooltipTitle="Cuotas">
+                            <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar"
+                            [routerLink]="s.id+''">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
+                            nzTooltipTitle="Eliminar" nzDanger nzPopconfirmTitle="¿Desea eliminar la Suscripción?"
+                            nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(s.id)">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(s.id?s.id:-1)">
+                <nz-descriptions nzSize="small">
+                    <ng-template #titulodirec><strong>Dirección</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulodirec">{{ s.direccion }}</nz-descriptions-item>
+                    <ng-template #titulobarrio><strong>Barrio</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulobarrio">{{ s.barrio }}</nz-descriptions-item>
+                    <ng-template #titulofechasus><strong>Fecha de Suscripción</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulofechasus">{{ s.fechasuscripcion | date:'dd/MM/yyyy' }}
+                    </nz-descriptions-item>
+                    <ng-template #titulodist><strong>Distrito</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulodist">{{ s.distrito }}</nz-descriptions-item>
+                    <ng-template #titulodepa><strong>Departamento</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulodepa">{{ s.departamento }}</nz-descriptions-item>
+                </nz-descriptions>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>
+<ng-template #pietabla>
+    <nz-space>
+        <span *nzSpaceItem>
+            <strong>Total:</strong>
+        </span>
+        <span *nzSpaceItem>
+            {{ total | number}}
+        </span>
+    </nz-space>
+</ng-template>

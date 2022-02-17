@@ -6,13 +6,28 @@ export class Extra {
         return strF;
     }
 
-    public static buildSortString(sort: {key: string, value: any}[]): string | null{
-        for(let s of sort){
-            if(s.value === 'ascend') return `+${s.key}`;
-            if(s.value === 'descend') return `-${s.key}`;
+    public static buildSortString(sort: { key: string, value: any }[] | { [field: string]: string }): string | null {
+        if (Array.isArray(sort)) {
+            for (let s of sort) {
+                if (s.value === 'ascend') return `+${s.key}`;
+                if (s.value === 'descend') return `-${s.key}`;
+            }
+            return null;
+        }else{
+            for(let k of Object.keys(sort)){
+                if(sort[k] === 'ascend') return `+${k}`;
+                if(sort[k] === 'descend') return `-${k}`;
+            }
+            return null;
         }
+    }
+
+    public static toSortOrder(srtQuery: string | null): string | null {
+        if(srtQuery?.charAt(0) === '+') return 'ascend';
+        if(srtQuery?.charAt(0) === '-') return 'descend';
         return null;
     }
+
 
     static formatterNroFactura = (value: number): string => `${value ? value.toString().padStart(7, '0') : ''}`;
     static parserNroFactura = (value: string): string => `${value ? Number(value) : ''}`;

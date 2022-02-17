@@ -1,0 +1,32 @@
+<nz-card [nzTitle]="titulo" [nzExtra]="extraTitulo">
+    <ng-template #titulo>
+        <span nz-typography nzType="secondary" style="font-size: smaller;">Cuotas Pendientes</span>
+    </ng-template>
+    <ng-template #extraTitulo>
+        <button nz-button nzType="default" (click)="cargarDatos()">
+            <i nz-icon nzType="reload" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+    <nz-table #tablaResumenSuscCuoPend [nzData]="lstDatosResumen" [nzShowPagination]="false"
+        nzShowSizeChanger="false" nzSize="small" [nzLoading]="loadingDatos">
+        <thead>
+            <tr>
+                <th>Cuotas pendientes</th>
+                <th>No. suscripciones</th>
+                <th>Deuda total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let rcp of tablaResumenSuscCuoPend.data">
+                <td>
+                   <nz-tag *ngIf="rcp.referencia === 0" nzColor="green">{{ rcp.referencia }}</nz-tag>
+                   <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 1 && rcp.referencia <=3" nzColor="orange">{{ rcp.referencia }}</nz-tag>
+                   <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 4 " nzColor="red">{{ rcp.referencia }}</nz-tag>
+                   {{ rcp.referencia == 1 ? 'cuota' : 'cuotas'}}
+                </td>
+                <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
+                <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

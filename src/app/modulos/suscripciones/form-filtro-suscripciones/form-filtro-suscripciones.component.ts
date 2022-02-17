@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -143,11 +144,6 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     if(iddepartamentos.length !==0) params['iddepartamento'] = iddepartamentos;
     if(iddistritos.length !== 0) params['iddistrito'] = iddistritos;
     if(idbarrios.length !== 0) params['idbarrio'] = idbarrios;
-
-    console.log(iddepartamentos);
-    console.log(iddistritos);
-    console.log(idbarrios);
-    
 
     if(this.fechaInicioFiltro){
       const finiciostr: string = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2 ,'0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;

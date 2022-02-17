@@ -1,0 +1,32 @@
+<nz-card [nzTitle]="titulo" [nzExtra]="extraTitulo">
+    <ng-template #titulo>
+        <span nz-typography nzType="secondary" style="font-size: smaller;">Estados</span>
+    </ng-template>
+    <ng-template #extraTitulo>
+        <button nz-button nzType="default" (click)="cargarDatos()">
+            <i nz-icon nzType="reload" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+
+    <nz-table #tablaResumenEstados [nzData]="lstResumenDatos" [nzShowPagination]="false"
+        nzShowSizeChanger="false" nzSize="small" [nzLoading]="loadingDatos">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>No. suscripciones</th>
+                <th>Deuda total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let rcp of tablaResumenEstados.data">
+                <td>
+                    <nz-tag *ngIf="rcp.referencia === 'C'" nzColor="green">Conectados</nz-tag>
+                    <nz-tag *ngIf="rcp.referencia === 'R'" nzColor="green">Reconectados</nz-tag>
+                    <nz-tag *ngIf="rcp.referencia === 'D'" nzColor="red">Desconectados</nz-tag>
+                </td>
+                <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
+                <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
