@@ -18,6 +18,7 @@ import { CardResumenCuotasPendientesComponent } from './suscripciones/card-resum
 import { CardResumenEstadosComponent } from './suscripciones/card-resumen-estados/card-resumen-estados.component';
 import { CardResumenSuscripcionesGruposServiciosComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { CardResumenSuscripcionesDepartDistritoComponent } from './suscripciones/card-resumen-suscripciones-depart-distrito/card-resumen-suscripciones-depart-distrito.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     VistaEstadisticasSuscripcionesComponent,
     CardResumenCuotasPendientesComponent,
     CardResumenEstadosComponent,
-    CardResumenSuscripcionesGruposServiciosComponent
+    CardResumenSuscripcionesGruposServiciosComponent,
+    CardResumenSuscripcionesDepartDistritoComponent
   ],
   imports: [
     CommonModule,

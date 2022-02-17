@@ -53,6 +53,10 @@ export class SuscripcionesService {
     return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/gruposservicios`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
+  getResumenDepartamentosDistritos(params: HttpParams): Observable<ServerResponseList<ResumenCantSuscDeuda>>{
+    return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/departamentosdistritos`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
   count(params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/count`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
