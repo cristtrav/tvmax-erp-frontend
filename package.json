@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~12.2.4",
+    "@angular/cdk": "^13.2.3",
     "@angular/common": "~12.2.4",
     "@angular/compiler": "~12.2.4",
     "@angular/core": "~12.2.4",
@@ -21,6 +22,7 @@
     "@angular/router": "~12.2.4",
     "ng-zorro-antd": "^12.0.1",
     "ngx-currency": "^2.5.2",
+    "ngx-print": "^1.2.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"

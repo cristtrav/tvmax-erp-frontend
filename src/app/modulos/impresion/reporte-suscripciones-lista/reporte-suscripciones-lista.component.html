@@ -1,0 +1,52 @@
+<table class="tabla-reporte">
+    <thead class="gray-background-printable">
+        <tr >
+            <th style="text-align: left;">Cód. Susc.</th>
+            <th>Titular</th>
+            <th>Servicio</th>
+            <th>Est.</th>
+            <th>Monto</th>
+            <th>Fecha S.</th>
+            <th>Cuotas</th>
+            <th>Deuda</th>
+        </tr>
+        <tr>
+            <th style="text-align: left;">RUC</th>
+            <th colspan="7" style="text-align: left;">Direccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let s of lstSuscripciones">
+        <tr>
+            <td>{{ s.id | number }}</td>
+            <td>{{ s.cliente }}</td>
+            <td>{{ s.servicio }}</td>
+            <td style="text-align: center;">{{ s.estado }}</td>
+            <td style="text-align: right;">{{ s.monto | number }}</td>
+            <td style="text-align: center;">{{ s.fechasuscripcion | date: 'dd/MM/yy' }}</td>
+            <td style="text-align: center;">{{ s.cuotaspendientes | number }}</td>
+            <td style="text-align: right;">{{ s.deuda | number }}</td>
+        </tr>
+        <tr style="border-bottom-style: solid; border-width: 2px; border-color: #F5F5F5;">
+            <td>
+                {{ s.ci | number }}{{ s.dvruc?'-'+s.dvruc:'' }}
+            </td>
+            <td colSpan="7">
+                {{ s.direccion }}, Barrio: {{s.barrio}}
+            </td>
+        </tr>
+    </ng-container>
+    </tbody>
+    <tfoot class="gray-background-printable">
+        <tr>
+            <td colSpan="8">
+                <strong>Total de registros: </strong>{{ totalRegistros | number }}
+            </td>
+        </tr>
+        <tr>
+            <td colSpan="8">
+                <strong>Deuda total: </strong>{{ totalDeuda | number }}
+            </td>
+        </tr>
+    </tfoot>
+</table>

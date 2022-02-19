@@ -37,6 +37,9 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { TablaSuscripcionesComponent } from './tabla-suscripciones/tabla-suscripciones.component';
 import { EstadisticasModule } from '../estadisticas/estadisticas.module';
+import { ImpresionModule } from '../impresion/impresion.module';
+import { NgxPrintModule } from 'ngx-print';
+import { PortalModule } from '@angular/cdk/portal'
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -71,7 +74,10 @@ import { EstadisticasModule } from '../estadisticas/estadisticas.module';
     NzDescriptionsModule,
     HelperComponentsModule,
     NzTabsModule,
-    EstadisticasModule
+    EstadisticasModule,
+    ImpresionModule,
+    NgxPrintModule,
+    PortalModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })
