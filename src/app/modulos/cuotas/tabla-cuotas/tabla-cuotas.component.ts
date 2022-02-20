@@ -7,7 +7,6 @@ import { CuotasService} from './../../../servicios/cuotas.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '../../../util/extra';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-tabla-cuotas',
