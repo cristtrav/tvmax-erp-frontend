@@ -35,10 +35,11 @@
                             <tr>
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                                 <th [nzColumnKey]="'timbrado'" [nzSortFn]="true">Timbrado</th>
-                                <th [nzColumnKey]="'cod_establecimiento'" [nzSortFn]="true">Prefijo</th>
-                                <th [nzColumnKey]="'nro_inicio'" [nzSortFn]="true">Rango</th>
-                                <th [nzColumnKey]="'ultimo_nro_usado'" [nzSortFn]="true">Últ. núm usado</th>
-                                <th [nzColumnKey]="'fecha_vencimiento'" [nzSortFn]="true">Vencimiento</th>
+                                <th [nzColumnKey]="'codestablecimiento'" [nzSortFn]="true">Prefijo</th>
+                                <th [nzColumnKey]="'nroinicio'" [nzSortFn]="true">Rango</th>
+                                <th [nzColumnKey]="'ultnrousado'" [nzSortFn]="true">Últ. núm usado</th>
+                                <th [nzColumnKey]="'fechainicio'" [nzSortFn]="true">Inicio vigencia</th>
+                                <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true">Vencimiento</th>
                                 <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
                                 <th>Acciones</th>
                             </tr>
@@ -50,6 +51,7 @@
                                 <td>{{ t.codestablecimiento?.toString()?.padStart(3, '0') }}-{{ t.codpuntoemision?.toString()?.padStart(3, '0') }}</td>
                                 <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
                                 <td>{{ t.ultnrousado?t.ultnrousado?.toString()?.padStart(7, '0'):'(Ninguno)' }}</td>
+                                <td>{{ t.fechainicio | date: 'dd/MM/yyyy' }}</td>
                                 <td>{{ t.fechavencimiento | date:'dd/MM/yyyy' }}</td>
                                 <td nzAlign="center">
                                     <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="t.activo?'#00C853':'#f44336'" [nzType]="t.activo?'check-circle':'close-circle'"></i>

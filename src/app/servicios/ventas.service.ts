@@ -35,4 +35,8 @@ export class VentasService {
   delete(id: number): Observable<any>{
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
+
+  getPorId(id: number): Observable<FacturaVenta>{
+    return this.http.get<FacturaVenta>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
 }

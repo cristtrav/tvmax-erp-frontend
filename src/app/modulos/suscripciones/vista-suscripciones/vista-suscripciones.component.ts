@@ -1,28 +1,12 @@
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Injector, Input, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServerResponseList } from '@dto/server-response-list.dto';
-import { Suscripcion } from '@dto/suscripcion-dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import {
   ComponentPortal,
   DomPortalOutlet,
-  PortalOutlet,
-  TemplatePortal
-} from "@angular/cdk/portal";
-import { GruposService } from '@servicios/grupos.service';
-import { Grupo } from '@dto/grupo-dto';
-import { Servicio } from '@dto/servicio-dto';
-import { ServiciosService } from '@servicios/servicios.service';
-import { Departamento } from '@dto/departamento-dto';
-import { Barrio } from '@dto/barrio-dto';
-import { Distrito } from '@dto/distrito-dto';
-import { DepartamentosService } from '@servicios/departamentos.service';
-import { DistritosService } from '@servicios/distritos.service';
-import { BarriosService } from '@servicios/barrios.service';
+  PortalOutlet} from "@angular/cdk/portal";
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
+import { Extra } from '@util/extra';
 
 
 @Component({
@@ -32,8 +16,6 @@ import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripci
 })
 export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
 
-  @ViewChild(ReporteSuscripcionesComponent)
-  private reporteSuscComp!: ReporteSuscripcionesComponent;
   @ViewChild("iframe") iframe!: ElementRef; // target host to render the printable
   private portalHost!: PortalOutlet;
 
@@ -97,31 +79,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
     iframe.contentWindow.onafterprint = () => {
       iframe.contentDocument.body.innerHTML = "";
     };
-    this._attachStyles(iframe.contentWindow);
-  }
-
-  private _attachStyles(targetWindow: Window): void {
-    // Copy styles from parent window
-    document.querySelectorAll("style").forEach(htmlElement => {
-      targetWindow.document.head.appendChild(htmlElement.cloneNode(true));
-    });
-    // Copy stylesheet link from parent window
-    const styleSheetElement = this._getStyleSheetElement();
-    targetWindow.document.head.appendChild(styleSheetElement);
-  }
-
-  private _getStyleSheetElement() {
-    const styleSheetElement = document.createElement("link");
-    document.querySelectorAll("link").forEach(htmlElement => {
-      if (htmlElement.rel === "stylesheet") {
-        const absoluteUrl = new URL(htmlElement.href).href;
-        styleSheetElement.rel = "stylesheet";
-        styleSheetElement.type = "text/css";
-        styleSheetElement.href = absoluteUrl;
-      }
-    });
-    console.log(styleSheetElement.sheet);
-    return styleSheetElement;
+    Extra.agregarCssImpresion(iframe.contentWindow);
   }
 
 }

@@ -1,0 +1,117 @@
+<div nz-row [nzGutter]="[0, 16]">
+    <div nz-col nzSpan="24">
+        <div nz-row nzAlign="middle" class="gray-background-printable">
+            <div nz-col nzSpan="8" style="font-size: x-small;">
+                <div>
+                    <img style="width: 80px;" src="assets/img/logo-grayscale.png">
+                </div>
+                <div style="margin-top: -3px;">
+                    <strong>Dirección:</strong>
+                </div>
+                <div style="margin-top: -3px;">
+                    Carlos A. López c/ Enrique Scavenius
+                </div>
+                <div style="margin-top: -3px;">
+                    <strong>Teléfono: </strong>(0521) 200240 - 200241
+                </div>
+                <div style="margin-top: -3px;">
+                    Coronel Oviedo - Caaguazú - Paraguay
+                </div>
+            </div>
+            <div nz-col nzSpan="8" style="text-align: center;">
+                <span style="font-size: x-large;">Factura</span>
+            </div>
+            <div nz-col nzSpan="8" style="text-align: right; font-size: x-small;">
+                <div>
+                    <strong>Timbrado Nro.:</strong>
+                    {{ factura.timbrado }}
+                </div>
+                <div style="margin-top: -3px"><strong>Vigencia:</strong></div>
+                <div style="margin-top: -3px">
+                    desde {{ factura.iniciovigenciatimbrado | date: 'dd/MM/yyyy' }}
+                    <span *ngIf="factura.vencimientotimbrado">hasta {{ factura.vencimientotimbrado | date: 'dd/MM/yyyy' }}</span>
+                </div>
+                <div style="margin-top: -3px">
+                    <strong>RUC: </strong>80029009-7
+                </div>
+                <div style="margin-top: -3px">
+                    <strong>Factura Nro.: </strong>{{ factura.prefijofactura }}-{{ nroFacturaPadded(factura.nrofactura) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div nz-col nzSpan="24" >
+        <div nz-row class="gray-background-printable" style="font-size: small;">
+            <div nz-col nzSpan="12">
+                <div>
+                    <strong>Nombre o Razón social: </strong><br>
+                </div>
+                <div style="margin-top: -3px">
+                    {{ factura.cliente }}
+                </div>
+                <div style="margin-top: -3px">
+                    <strong>RUC: </strong><br>
+                </div>
+                <div style="margin-top: -3px">
+                    {{ factura.ci }}{{factura.dvruc !== null?'-':''}}{{factura.dvruc | number}}
+                </div>
+                <div style="margin-top: -3px">
+                    <strong>Dirección: </strong><br>
+                </div>
+                <div style="margin-top: -3px">
+                    {{ cliente?.direccion }}
+                </div>
+            </div>
+            <div nz-col nzSpan="12">
+                <div>
+                    <strong>Fecha de emisión: </strong><br>
+                </div>
+                <div style="margin-top: -3px">
+                    {{ factura.fechafactura | date: 'dd/MM/yyyy' }}
+                </div>
+                <div>
+                    <strong>Condición: </strong><br>
+                </div>
+                <div style="margin-top: -3px">
+                    Contado
+                </div>
+            </div>
+        </div>
+    </div>
+    <div nz-col nzSpan="24">
+        <table class="tabla-detalles">
+            <thead>
+                <tr>
+                    <th>Cant.</th>
+                    <th>Descripción</th>
+                    <th style="text-align: center;">Precio Un.</th>
+                    <th style="text-align: center;">Exenta</th>
+                    <th style="text-align: center;">5%</th>
+                    <th style="text-align: center;">10%</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let d of factura.detalles">
+                    <td style="text-align: center;">{{ d.cantidad }}</td>
+                    <td>{{ d.descripcion }}</td>
+                    <td style="text-align: right;">{{ d.monto | number }}</td>
+                    <td style="text-align: right;"><span *ngIf="d.porcentajeiva == 0">{{ d.subtotal | number }}</span></td>
+                    <td style="text-align: right;"><span *ngIf="d.porcentajeiva == 5">{{ d.subtotal | number }}</span></td>
+                    <td style="text-align: right;"><span *ngIf="d.porcentajeiva == 10">{{ d.subtotal | number }}</span></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="gray-background-printable">
+                    <td colSpan="3"><strong>Subtotal:</strong></td>
+                    <td style="text-align: right;">{{ factura.totalexento | number }}</td>
+                    <td style="text-align: right;">{{ factura.totaliva5 | number }}</td>
+                    <td style="text-align: right;">{{ factura.totaliva10 | number }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div nz-col nzSpan="24" class="gray-background-printable">
+        <div><strong>TOTAL A PAGAR: </strong>Gs.{{ factura.total | number }}</div>
+        <div><strong>EN LETRAS: </strong>{{ numeroALetras(factura.total) }}</div>
+    </div>
+</div>

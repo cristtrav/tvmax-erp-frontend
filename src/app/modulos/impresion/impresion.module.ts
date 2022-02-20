@@ -6,12 +6,14 @@ import { ReporteSuscripcionesResumenComponent } from './reporte-suscripciones-re
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { FacturaVentaComponent } from './factura-venta/factura-venta.component';
 
 @NgModule({
   declarations: [
     ReporteSuscripcionesComponent,
     ReporteSuscripcionesListaComponent,
-    ReporteSuscripcionesResumenComponent
+    ReporteSuscripcionesResumenComponent,
+    FacturaVentaComponent
   ],
   imports: [
     CommonModule,

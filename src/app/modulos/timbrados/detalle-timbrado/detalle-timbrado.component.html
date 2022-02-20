@@ -51,8 +51,20 @@
                                 </div>
                             </nz-form-control>
                         </nz-form-item>
+
                         <nz-form-item>
-                            <nz-form-label nzRequired [nzSm]="7" [nzXs]="24">Vencimiento</nz-form-label>
+                            <nz-form-label nzRequired [nzSm]="7" [nzXs]="24">Inicio vigencia</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24"
+                                nzErrorTip="Ingrese la fecha de inicio de vigencia del timbrado.">
+                                <div nz-col [nzSm]="12" [nzXs]="24">
+                                    <nz-date-picker style="width: 100%;" [nzFormat]="'dd/MM/yyyy'"
+                                        formControlName="iniciovigencia"></nz-date-picker>
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24">Vencimiento</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24"
                                 nzErrorTip="Ingrese la fecha de vencimiento del timbrado.">
                                 <div nz-col [nzSm]="12" [nzXs]="24">

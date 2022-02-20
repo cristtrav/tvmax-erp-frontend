@@ -13,22 +13,46 @@ export class Extra {
                 if (s.value === 'descend') return `-${s.key}`;
             }
             return null;
-        }else{
-            for(let k of Object.keys(sort)){
-                if(sort[k] === 'ascend') return `+${k}`;
-                if(sort[k] === 'descend') return `-${k}`;
+        } else {
+            for (let k of Object.keys(sort)) {
+                if (sort[k] === 'ascend') return `+${k}`;
+                if (sort[k] === 'descend') return `-${k}`;
             }
             return null;
         }
     }
 
     public static toSortOrder(srtQuery: string | null): string | null {
-        if(srtQuery?.charAt(0) === '+') return 'ascend';
-        if(srtQuery?.charAt(0) === '-') return 'descend';
+        if (srtQuery?.charAt(0) === '+') return 'ascend';
+        if (srtQuery?.charAt(0) === '-') return 'descend';
         return null;
     }
 
 
     static formatterNroFactura = (value: number): string => `${value ? value.toString().padStart(7, '0') : ''}`;
     static parserNroFactura = (value: string): string => `${value ? Number(value) : ''}`;
+
+    public static agregarCssImpresion(targetWindow: Window): void {
+        // Copy styles from parent window
+        document.querySelectorAll("style").forEach(htmlElement => {
+            targetWindow.document.head.appendChild(htmlElement.cloneNode(true));
+        });
+        // Copy stylesheet link from parent window
+        const styleSheetElement = this._getStyleSheetElement();
+        targetWindow.document.head.appendChild(styleSheetElement);
+    }
+
+    private static _getStyleSheetElement() {
+        const styleSheetElement = document.createElement("link");
+        document.querySelectorAll("link").forEach(htmlElement => {
+            if (htmlElement.rel === "stylesheet") {
+                const absoluteUrl = new URL(htmlElement.href).href;
+                styleSheetElement.rel = "stylesheet";
+                styleSheetElement.type = "text/css";
+                styleSheetElement.href = absoluteUrl;
+            }
+        });
+        console.log(styleSheetElement.sheet);
+        return styleSheetElement;
+    }
 }

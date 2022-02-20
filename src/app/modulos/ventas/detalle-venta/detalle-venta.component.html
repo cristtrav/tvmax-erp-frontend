@@ -288,7 +288,7 @@
 
                             <div nz-row [nzGutter]="8" nzJustify="end">
                                 <div nz-col [nzMd]="24" [nzLg]="24" [nzXl]="8">
-                                    <button *ngIf="idventa !== 'nueva'" nz-button nzType="default" style="width: 100%;">
+                                    <button *ngIf="idventa !== 'nueva'" nz-button nzType="default" style="width: 100%;" (click)="imprimir()">
                                         <i nz-icon nzType="printer"></i>
                                         Imprimir
                                     </button>
@@ -313,3 +313,4 @@
         </div>
     </div>
 </div>
+<iframe #iframe style="display: none"></iframe>

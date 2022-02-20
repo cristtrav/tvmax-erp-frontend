@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
@@ -20,6 +20,10 @@ import { VentasService } from '@servicios/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Grupo } from '@dto/grupo-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
+import { Extra } from '@util/extra';
+import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
+import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -27,6 +31,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
   styleUrls: ['./detalle-venta.component.scss']
 })
 export class DetalleVentaComponent implements OnInit {
+
+  @ViewChild("iframe") iframe!: ElementRef; // target host to render the printable
+  private portalHost!: PortalOutlet;
 
   idventa: string = 'nueva'
   lstTimbrados: Timbrado[] = [];
@@ -75,10 +82,16 @@ export class DetalleVentaComponent implements OnInit {
     private ventasSrv: VentasService,
     private router: Router,
     private aroute: ActivatedRoute,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private injector: Injector,
+    private appRef: ApplicationRef,
+    private viewContainerRef: ViewContainerRef,
   ) { }
 
   ngOnInit(): void {
+    const idv = this.aroute.snapshot.paramMap.get('idventa');
+    if(idv) this.idventa = idv;
     this.cargarTimbrados();
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
       if (value !== null) {
@@ -104,6 +117,29 @@ export class DetalleVentaComponent implements OnInit {
       this.calcularTotalFactura();
     });
     this.cargarServicios();
+    if(this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
+  }
+
+  private async cargarDatosVenta(idventa: number){
+    try{
+      const fv: FacturaVenta = await this.ventasSrv.getPorId(idventa).toPromise();
+      if(fv.idcliente){
+        const cli: Cliente= await this.clienteSrv.getPorId(fv.idcliente).toPromise();
+        this.lstClientes = [cli];
+      }
+      this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
+      this.totalFactura = fv.total;
+      this.totalIva5 = fv.liquidacioniva5;
+      this.totalIva10 = fv.liquidacioniva10;
+      this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
+      this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
+      this.lstDetallesVenta = fv.detalles;
+      if(fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
+    }catch(e){
+      console.log('Error al cargar venta por id')
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    }
   }
 
   actualizarControlNroFactura(t: Timbrado) {
@@ -201,7 +237,8 @@ export class DetalleVentaComponent implements OnInit {
 
   guardar() {
     if (this.validado()) {
-      this.registrar();
+      if(this.idventa === 'nueva')this.registrar();
+      else this.notif.create('error', 'Error', 'La funcion todavia no esta implementada bro');
     }
   }
 
@@ -423,10 +460,10 @@ export class DetalleVentaComponent implements OnInit {
     for (let dfv of this.lstDetallesVenta) {
       this.totalFactura += dfv.subtotal ?? 0;
       if (dfv.porcentajeiva === 5 && dfv.subtotal !== null) {
-        this.totalIva5 += Math.round((dfv.subtotal * 5) / 105);
+        this.totalIva5 += Math.round((dfv.subtotal * 100) / 105);
       }
       if (dfv.porcentajeiva === 10 && dfv.subtotal !== null) {
-        this.totalIva10 += Math.round((dfv.subtotal * 10) / 110);
+        this.totalIva10 += Math.round((dfv.subtotal * 100) / 110);
       }
     }
   }
@@ -434,8 +471,8 @@ export class DetalleVentaComponent implements OnInit {
   getDtoFacturaVenta(): FacturaVenta {
     const fv: FacturaVenta = new FacturaVenta();
     fv.total = this.totalFactura;
-    fv.iva10 = this.totalIva10;
-    fv.iva5 = this.totalIva5;
+    /*fv.total = this.liqu;
+    fv.iva5 = this.totalIva5;*/
     fv.detalles = this.lstDetallesVenta;
     fv.idtimbrado = this.formCabecera.get('idTimbrado')?.value;
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
@@ -496,6 +533,31 @@ export class DetalleVentaComponent implements OnInit {
     this.lstDetallesVenta = lstdt;
     this.calcularTotalFactura();
   }
+
+  imprimir(): void {
+    const iframe = this.iframe.nativeElement;
+    iframe.contentDocument.title = "TVMax ERP";
+    this.portalHost = new DomPortalOutlet(
+      iframe.contentDocument.body,
+      this.componentFactoryResolver,
+      this.appRef,
+      this.injector
+    );
+    const portal = new ComponentPortal(FacturaVentaComponent, this.viewContainerRef);
+    const attachObj = this.portalHost.attach(portal);
+    attachObj.instance.cargarFactura(this.idventa);
+    let timer: any;
+    attachObj.instance.dataLoaded.subscribe(()=>{
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        iframe.contentWindow.print();
+      }, 250);
+    });
+    iframe.contentWindow.onafterprint = () => {
+      iframe.contentDocument.body.innerHTML = "";
+    };
+    Extra.agregarCssImpresion(iframe.contentWindow);
+  }
 }
 
 interface ISuscripcionServicioCuota {
@@ -520,4 +582,3 @@ interface IGrupoServicio {
   grupo: Grupo;
   servicios: Servicio[];
 }
-

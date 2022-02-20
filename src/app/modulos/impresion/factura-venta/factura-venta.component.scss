@@ -1,0 +1,36 @@
+.gray-background-printable{
+    background-color: #F5F5F5;
+    color-adjust: exact !important;
+    padding: 4px;
+}
+
+.description-content{
+    font-size: x-small;
+}
+
+.descriptions-title{
+    font-size: x-small;
+    font-weight: bold;
+}
+
+.tabla-filtros td{
+    text-align: center;
+}
+
+.tabla-detalles{
+    width: 100%;
+    font-size: small;
+}
+
+.tabla-detalles thead{
+    background-color: #F5F5F5;
+    color-adjust: exact !important;
+    padding: 4px;
+}
+
+.tabla-detalles th, td{
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: left;
+    page-break-after: auto;
+}

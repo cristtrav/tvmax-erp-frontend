@@ -31,7 +31,8 @@ export class DetalleTimbradoComponent implements OnInit {
     nroInicial: [null, [Validators.required, Validators.min(1), Validators.max(9999999)]],
     nroFinal: [null, [Validators.required, Validators.min(1), Validators.max(9999999)]],
     ultNroUsado: [null, [Validators.max(9999999)]],
-    vencimiento: [null, [Validators.required]],
+    vencimiento: [null, null],
+    iniciovigencia: [null, [Validators.required]],
     activo: [true, [Validators.required]]
   });
 
@@ -89,6 +90,7 @@ export class DetalleTimbradoComponent implements OnInit {
         const venci: Date = new Date(data.fechavencimiento);
         this.formGroup.get('vencimiento')?.setValue(venci);
       }
+      if(data.fechainicio) this.formGroup.get('iniciovigencia')?.setValue(new Date(Date.parse(data.fechainicio)));
       this.formGroup.get('activo')?.setValue(data.activo);
       this.formLoading = false;
     }, (e) => {
@@ -161,7 +163,7 @@ export class DetalleTimbradoComponent implements OnInit {
     const ultNro: string | null = this.formGroup.get('ultNroUsado')?.value;
     if(ultNro) t.ultnrousado = this.formGroup.get('ultNroUsado')?.value;
     const fvDate: Date = this.formGroup.get('vencimiento')?.value;
-
+    if(this.formGroup.get('iniciovigencia')) t.fechainicio = Extra.dateToString(this.formGroup.get('iniciovigencia')?.value);
     t.fechavencimiento = Extra.dateToString(fvDate);
     t.activo = this.formGroup.get('activo')?.value;
     return t;
