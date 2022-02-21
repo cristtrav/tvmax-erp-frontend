@@ -47,7 +47,7 @@
                         <tbody>
                             <tr *ngFor="let t of tabla.data">
                                 <td>{{ t.id }}</td>
-                                <td>{{ t.timbrado?.toString()?.padStart(8, '0') }}</td>
+                                <td>{{ t.nrotimbrado?.toString()?.padStart(8, '0') }}</td>
                                 <td>{{ t.codestablecimiento?.toString()?.padStart(3, '0') }}-{{ t.codpuntoemision?.toString()?.padStart(3, '0') }}</td>
                                 <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
                                 <td>{{ t.ultnrousado?t.ultnrousado?.toString()?.padStart(7, '0'):'(Ninguno)' }}</td>

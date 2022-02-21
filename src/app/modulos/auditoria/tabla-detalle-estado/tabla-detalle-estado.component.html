@@ -1,6 +1,6 @@
 <h3>{{ titulo }}</h3>
 <nz-table #tablaestadoanterior [nzShowPagination]="false" [nzShowSizeChanger]="false"
-    [nzData]="objectToKeyValue(estado)" nzSize="small" nzBordered>
+    [nzData]="objectToKeyValue(estado)" nzSize="small" [nzPageSize]="50" nzBordered>
     <thead>
         <tr>
             <th>Campo</th>
@@ -8,12 +8,14 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let estadoa of tablaestadoanterior.data">
-            <td>{{ estadoa.key }}</td>
-            <td>
-                <span *ngIf="isBoolean(estadoa.value)">{{ estadoa.value?'Sí':'No' }}</span>
-                <span *ngIf="!isBoolean(estadoa.value)">{{ estadoa.value }}</span>
-            </td>
-        </tr>
+        <ng-container *ngFor="let estadoa of tablaestadoanterior.data">
+            <tr *ngIf="estadoa.key !== 'password'">
+                <td style="background-color: rgb(250, 250, 250);">{{ estadoa.key }}</td>
+                <td nzBreakWord>
+                    <span *ngIf="isBoolean(estadoa.value)">{{ estadoa.value?'Sí':'No' }}</span>
+                    <span *ngIf="!isBoolean(estadoa.value)">{{ estadoa.value }}</span>
+                </td>
+            </tr>
+        </ng-container>
     </tbody>
 </nz-table>

@@ -19,7 +19,7 @@ export class TablaDetalleEstadoComponent implements OnInit {
   }
 
   objectToKeyValue(p: {[name: string]: string | number | boolean | null} | null): {key: string, value: string | number | boolean | null}[] {
-    if(p) return Object.keys(p).map( k => {return { 'key': k, 'value': p[k]}});
+    if(p) return Object.keys(p).map( k => {return { 'key': `${k}`, 'value': p[`${k}`]}});
     return [];
   }
 

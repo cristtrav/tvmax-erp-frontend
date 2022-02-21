@@ -16,6 +16,10 @@ export class Extra {
         return strF;
     }
 
+    public static dateStrToDate(dateStr: string): Date{
+        return new Date(+dateStr.split('-')[0], (+dateStr.split('-')[1])-1, +dateStr.split('-')[2]);
+    }
+
     public static buildSortString(sort: { key: string, value: any }[] | { [field: string]: string }): string | null {
         if (Array.isArray(sort)) {
             for (let s of sort) {

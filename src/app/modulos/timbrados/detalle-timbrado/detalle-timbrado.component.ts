@@ -82,15 +82,12 @@ export class DetalleTimbradoComponent implements OnInit {
       this.formGroup.get('id')?.setValue(data.id);
       this.formGroup.get('codEstablecimiento')?.setValue(data.codestablecimiento);
       this.formGroup.get('codPuntoEmision')?.setValue(data.codpuntoemision);
-      this.formGroup.get('timbrado')?.setValue(data.timbrado);
+      this.formGroup.get('timbrado')?.setValue(data.nrotimbrado);
       this.formGroup.get('nroInicial')?.setValue(data.nroinicio);
       this.formGroup.get('nroFinal')?.setValue(data.nrofin);
       this.formGroup.get('ultNroUsado')?.setValue(data.ultnrousado);
-      if (data.fechavencimiento) {
-        const venci: Date = new Date(data.fechavencimiento);
-        this.formGroup.get('vencimiento')?.setValue(venci);
-      }
-      if(data.fechainicio) this.formGroup.get('iniciovigencia')?.setValue(new Date(Date.parse(data.fechainicio)));
+      if (data.fechavencimiento) this.formGroup.get('vencimiento')?.setValue(Extra.dateStrToDate(data.fechavencimiento));
+      if(data.fechainicio) this.formGroup.get('iniciovigencia')?.setValue(Extra.dateStrToDate(data.fechainicio));
       this.formGroup.get('activo')?.setValue(data.activo);
       this.formLoading = false;
     }, (e) => {
@@ -157,14 +154,14 @@ export class DetalleTimbradoComponent implements OnInit {
     t.id = this.formGroup.get('id')?.value;
     t.codestablecimiento = this.formGroup.get('codEstablecimiento')?.value;
     t.codpuntoemision = this.formGroup.get('codPuntoEmision')?.value;
-    t.timbrado = this.formGroup.get('timbrado')?.value;
+    t.nrotimbrado = this.formGroup.get('timbrado')?.value;
     t.nroinicio = this.formGroup.get('nroInicial')?.value;
     t.nrofin = this.formGroup.get('nroFinal')?.value;
     const ultNro: string | null = this.formGroup.get('ultNroUsado')?.value;
     if(ultNro) t.ultnrousado = this.formGroup.get('ultNroUsado')?.value;
     const fvDate: Date = this.formGroup.get('vencimiento')?.value;
-    if(this.formGroup.get('iniciovigencia')) t.fechainicio = Extra.dateToString(this.formGroup.get('iniciovigencia')?.value);
     t.fechavencimiento = Extra.dateToString(fvDate);
+    if(this.formGroup.get('iniciovigencia')) t.fechainicio = Extra.dateToString(this.formGroup.get('iniciovigencia')?.value);
     t.activo = this.formGroup.get('activo')?.value;
     return t;
   }
