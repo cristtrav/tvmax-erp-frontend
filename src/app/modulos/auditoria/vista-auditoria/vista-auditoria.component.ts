@@ -39,9 +39,12 @@ export class VistaAuditoriaComponent implements OnInit {
 
   tableLoading: boolean = false;
 
-  expandSet = new Set<number>();
-
   timerBusq: any;
+
+  ideventoSelec: number | null = null;
+  estadoAnteriorSelec: {[value: string]: string | number | boolean | null} | null = null;
+  estadoNuevoSelec: {[value: string]: string | number | boolean | null} | null = null;
+  modalDeteallesVisisble: boolean = false;
 
   constructor(
     private auditoriaSrv: AuditoriaService,
@@ -51,32 +54,25 @@ export class VistaAuditoriaComponent implements OnInit {
   ngOnInit(): void {
     this.cargarDatos();
   }
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
-
-  async cargarDatos(){
+  
+  cargarDatos(){
     this.tableLoading = true;
-    try{
-      const resp: ServerResponseList<EventoAuditoria> = await this.auditoriaSrv.getEventos(this.getHttpQueryParams()).toPromise();
+    this.auditoriaSrv.getEventos(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<EventoAuditoria>)=>{
       this.lstEventos = resp.data;
       this.totalRegistros = resp.queryRowCount;
       this.tableLoading = false;
-    }catch(e){
+    }, (e)=>{
       console.log('Error al cargar eventos de auditoria');
       console.log((e));
       this.httpErrorHandler.handle(e);
       this.tableLoading = false;
-    }
+    });
   }
 
   getHttpQueryParams(): HttpParams{
     let params: HttpParams = new HttpParams();
+    params = params.append('limit', `${this.pageSize}`);
+    params = params.append('offset', `${(this.pageIndex-1) * this.pageSize}`);
     if(this.sortStr) params = params.append('sort', this.sortStr);
     params = params.appendAll(this.paramsFiltros);
     if(this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
@@ -90,11 +86,6 @@ export class VistaAuditoriaComponent implements OnInit {
     this.cargarDatos();
   }
 
-  objectToKeyValue(p: {[name: string]: string | number | null} | null): {key: string, value: string | number | null}[] {
-    if(p) return Object.keys(p).map( k => {return { 'key': k, 'value': p[k]}});
-    return [];
-  }
-
   limpiarBusqueda(){
     this.textoBusqueda = "";
     this.cargarDatos();
@@ -105,6 +96,24 @@ export class VistaAuditoriaComponent implements OnInit {
     this.timerBusq = setTimeout(() => {
       this.cargarDatos();
     }, 300);
+  }
+
+  verDetalles(
+    idevento: number | null,
+    ea: {[value: string]: string | number | boolean | null} | null = null,
+    en: {[value: string]: string | number | boolean | null} | null = null
+  ){
+    this.estadoAnteriorSelec = ea;
+    this.estadoNuevoSelec = en;
+    this.ideventoSelec = idevento;
+    this.modalDeteallesVisisble = true;
+  }
+
+  cerrarDetalles(){
+    this.estadoAnteriorSelec = null;
+    this.estadoNuevoSelec = null;
+    this.ideventoSelec = null;
+    this.modalDeteallesVisisble = false;
   }
 
 }

@@ -1,0 +1,19 @@
+<h3>{{ titulo }}</h3>
+<nz-table #tablaestadoanterior [nzShowPagination]="false" [nzShowSizeChanger]="false"
+    [nzData]="objectToKeyValue(estado)" nzSize="small" nzBordered>
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let estadoa of tablaestadoanterior.data">
+            <td>{{ estadoa.key }}</td>
+            <td>
+                <span *ngIf="isBoolean(estadoa.value)">{{ estadoa.value?'Sí':'No' }}</span>
+                <span *ngIf="!isBoolean(estadoa.value)">{{ estadoa.value }}</span>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

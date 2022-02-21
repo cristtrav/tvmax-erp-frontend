@@ -20,12 +20,15 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { TablaDetalleEstadoComponent } from './tabla-detalle-estado/tabla-detalle-estado.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 @NgModule({
   declarations: [
     VistaAuditoriaComponent,
-    FormFiltroEventoAuditoriaComponent
+    FormFiltroEventoAuditoriaComponent,
+    TablaDetalleEstadoComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +48,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzButtonModule,
     NzSelectModule,
     NzDatePickerModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzModalModule
   ]
 })
 export class AuditoriaModule { }

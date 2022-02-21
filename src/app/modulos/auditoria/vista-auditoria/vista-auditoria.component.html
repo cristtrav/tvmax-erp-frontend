@@ -48,25 +48,39 @@
                 </ng-template>
             </nz-drawer>
 
+            <nz-modal [nzWidth]="700" [nzFooter]="modalDetallesFooter" [(nzVisible)]="modalDeteallesVisisble" [nzTitle]="'Evento #'+ideventoSelec" (nzOnCancel)="cerrarDetalles()">
+                <ng-container *nzModalContent="">
+                    <div nz-row nzGutter="16">
+                        <div nz-col nzSpan="12">
+                            <app-tabla-detalle-estado [estado]="estadoAnteriorSelec" titulo="Estado anterior"></app-tabla-detalle-estado>
+                        </div>
+                        <div nz-col nzSpan="12">
+                            <app-tabla-detalle-estado [estado]="estadoNuevoSelec" titulo="Estado nuevo"></app-tabla-detalle-estado> 
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #modalDetallesFooter>
+                    <button nz-button nzType="default" (click)="cerrarDetalles()">Cerrar</button>
+                  </ng-template>
+            </nz-modal>
+
             <nz-table #tabla [nzTotal]="totalRegistros" [nzData]="lstEventos" [nzShowPagination]="true"
-                [nzShowSizeChanger]="true" [nzFrontPagination]="true" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize"
+                [nzShowSizeChanger]="true" [nzTotal]="totalRegistros" [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize"
                 [nzLoading]="tableLoading" [nzFooter]="footer" (nzQueryParams)="onTableQueryParamsChange($event)"
                 nzSize="small" style="margin-top: 10px;">
                 <thead>
                     <tr>
-                        <th></th>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
                         <th [nzColumnKey]="'fechahora'" [nzSortFn]="true" nzSortOrder="descend">Fecha/Hora</th>
                         <th [nzColumnKey]="'nombresusuario'" [nzSortFn]="true">Usuario</th>
                         <th [nzColumnKey]="'operacion'" [nzSortFn]="true">Operación</th>
                         <th [nzColumnKey]="'tabla'" [nzSortFn]="true">Tabla</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let ea of tabla.data">
                         <tr>
-                            <td [nzExpand]="expandSet.has(+(ea.id+''))"
-                                (nzExpandChange)="onExpandChange(+(ea.id+''), $event)"></td>
                             <td>{{ ea.id }}</td>
                             <td>{{ ea.fechahora | date: 'dd/MM/yy HH:mm:ss' }}</td>
                             <td>
@@ -91,54 +105,11 @@
                             <td>
                                 {{ ea.tabla }}
                             </td>
-                        </tr>
-                        <tr [nzExpand]="expandSet.has(+(ea.id+''))">
-                            <div nz-row nzGutter="16">
-                                <div nz-col nzSpan="12">
-                                    <h3>Estado anterior</h3>
-                                    <nz-table #tablaestadoanterior
-                                        [nzShowPagination]="false"
-                                        [nzShowSizeChanger]="false"
-                                        [nzData]="objectToKeyValue(ea.estadoanterior)"
-                                        nzSize="small"
-                                        nzBordered>
-                                        <thead>
-                                            <tr>
-                                                <th>Campo</th>
-                                                <th>Valor</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let estadoa of tablaestadoanterior.data">
-                                                <td>{{ estadoa.key }}</td>
-                                                <td>{{ estadoa.value }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </nz-table>
-                                </div>
-                                <div nz-col nzSpan="12">
-                                    <h3>Estado nuevo</h3>
-                                    <nz-table #tablaestadonuevo
-                                        [nzShowPagination]="false"
-                                        [nzShowSizeChanger]="false"
-                                        [nzData]="objectToKeyValue(ea.estadonuevo)"
-                                        nzSize="small"
-                                        nzBordered>
-                                        <thead>
-                                            <tr>
-                                                <th>Campo</th>
-                                                <th>Valor</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let estadoa of tablaestadonuevo.data">
-                                                <td>{{ estadoa.key }}</td>
-                                                <td>{{ estadoa.value }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </nz-table>
-                                </div>
-                            </div>
+                            <td nzAlign="center">
+                                <button nz-button nzType="primary" nz-tooltip nzTooltipTitle="Ver detalles" (click)="verDetalles(ea.id, ea.estadoanterior, ea.estadonuevo)">
+                                    <i nz-icon nzType="eye" nzTheme="outline"></i>
+                                </button>
+                            </td>
                         </tr>
                     </ng-container>
                 </tbody>
