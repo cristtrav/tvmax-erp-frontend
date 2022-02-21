@@ -1,0 +1,64 @@
+<div nz-row [nzGutter]="[0, 12]">
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idUsuarioSelec !== null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de usuario" (click)="limpiarFiltroUsuario()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Usuario
+            </h3>
+        </nz-badge>
+        <nz-select nzPlaceHolder="Seleccionar..." [(ngModel)]="idUsuarioSelec" (ngModelChange)="onParamsFiltroChange()"
+            style="width: 100%;">
+            <nz-option *ngFor="let u of lstUsuarios" [nzValue]="u.id" [nzLabel]="u.nombres+' '+u.apellidos"></nz-option>
+        </nz-select>
+    </div>
+
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="fechaHoraDesde !== null || fechaHoraHasta !==null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtros de rango de fecha/hora"
+                    (click)="limpiarFiltrosFechaHora()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Fecha/Hora
+            </h3>
+        </nz-badge>
+        <nz-date-picker nzPlaceHolder="Desde..." [(ngModel)]="fechaHoraDesde" (ngModelChange)="onParamsFiltroChange()"
+            style="width: 100%;" [nzDisabledDate]="disabledStartDate" nzShowTime>
+        </nz-date-picker>
+        <nz-date-picker nzPlaceHolder="Hasta..." [(ngModel)]="fechaHoraHasta" (ngModelChange)="onParamsFiltroChange()"
+            style="width: 100%; margin-top: 5px;" [nzDisabledDate]="disabledEndDate" nzShowTime>
+        </nz-date-picker>
+    </div>
+
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idTablaAuditoriaSelec !== null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de tabla" (click)="limpiarFiltroTabla()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Tabla
+            </h3>
+        </nz-badge>
+        <nz-select nzPlaceHolder="Seleccionar..." [(ngModel)]="idTablaAuditoriaSelec"
+            (ngModelChange)="onParamsFiltroChange()" style="width: 100%;">
+            <nz-option *ngFor="let t of lstTablas" [nzValue]="t.id" [nzLabel]="t.descripcion"></nz-option>
+        </nz-select>
+    </div>
+
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="registroSelec || modificacionSelec || eliminacionSelec" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtros de operación" (click)="limpiarFiltrosOperacion()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Operación
+            </h3>
+        </nz-badge><br>
+        <label nz-checkbox [(ngModel)]="registroSelec" (ngModelChange)="onParamsFiltroChange()">Registro</label><br>
+        <label nz-checkbox [(ngModel)]="modificacionSelec"
+            (ngModelChange)="onParamsFiltroChange()">Modificación</label><br>
+        <label nz-checkbox [(ngModel)]="eliminacionSelec" (ngModelChange)="onParamsFiltroChange()">Eliminación</label>
+    </div>
+</div>

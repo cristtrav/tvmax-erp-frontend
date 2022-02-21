@@ -6,6 +6,16 @@ export class Extra {
         return strF;
     }
 
+    public static dateTimeToString(d: Date): string {
+        const dia = `${d.getDate()}`.padStart(2, '0');
+        const mes = `${d.getMonth() + 1}`.padStart(2, '0');
+        const hora = `${d.getHours()}`.padStart(2, '0') ;
+        const minuto = `${d.getMinutes()}`.padStart(2, '0');
+        const segundo = `${d.getSeconds()}`.padStart(2, '0');
+        const strF: string = `${d.getFullYear()}-${mes}-${dia}T${hora}:${minuto}:${segundo}`;
+        return strF;
+    }
+
     public static buildSortString(sort: { key: string, value: any }[] | { [field: string]: string }): string | null {
         if (Array.isArray(sort)) {
             for (let s of sort) {
