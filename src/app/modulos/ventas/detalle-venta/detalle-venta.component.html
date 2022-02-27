@@ -4,7 +4,7 @@
             <div nz-col nzFlex="auto">
                 <nz-breadcrumb>
                     <nz-breadcrumb-item>
-                        <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                        <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
                         <a routerLink="../">Ventas</a>
@@ -37,11 +37,13 @@
         <div nz-row [nzGutter]="16">
             <div nz-col [nzSpan]="15">
                 <div class="module-content">
-                    <nz-space>
-                        <button *nzSpaceItem nz-button nzType="primary" (click)="mostrarModalCuotas()">
+                    <nz-space nzSize="middle">
+                        <nz-badge [nzCount]="totalCuotasPendientes" *nzSpaceItem>
+                        <button  nz-button nzType="primary" (click)="mostrarModalCuotas()">
                             <i nz-icon nzType="search" nzTheme="outline"></i>
-                            Cuotas{{ totalCuotasPendientes>0?' ('+totalCuotasPendientes+')':''}}
+                            Cuotas
                         </button>
+                        </nz-badge>
                         <button *nzSpaceItem nz-button nzType="primary" (click)="modalServiciosVisible = true;">
                             <i nz-icon nzType="search" nzTheme="outline"></i>
                             Servicios

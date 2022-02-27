@@ -19,6 +19,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @NgModule({
   declarations: [VistaDepartamentosComponent, DetalleDepartamentoComponent],
@@ -40,7 +41,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzDividerModule,
     NzPopconfirmModule,
     NzSpinModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpaceModule
   ]
 })
 export class DepartamentosModule { }

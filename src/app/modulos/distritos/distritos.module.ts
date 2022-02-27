@@ -19,6 +19,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzDividerModule,
     NzPopconfirmModule,
     NzToolTipModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSpaceModule
   ]
 })
 export class DistritosModule { }

@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Ventas
@@ -183,11 +183,11 @@
                             </td>
                             <td nzAlign="center">
                                 <nz-space>
-                                    <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
+                                    <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm [nzType]="'default'"
                                         [nzTooltipTitle]="fv.anulado?'Revertir anulacion':'Anular factura'"
                                         [nzPopconfirmTitle]="fv.anulado?'¿Desea revertir la anulación?':'¿Desea anular la factura?'"
                                         [nzOkText]="fv.anulado?'Revertir':'Anular'"
-                                        (nzOnConfirm)="procesarAnulacion(fv)" nzGhost [nzDanger]="!fv.anulado">
+                                        (nzOnConfirm)="procesarAnulacion(fv)">
                                         <i nz-icon nzTheme="outline" [nzType]="fv.anulado?'undo':'minus-circle'"></i>
                                     </button>
                                     <button *nzSpaceItem nz-tooltip nz-button nz-popconfirm nzType="primary"

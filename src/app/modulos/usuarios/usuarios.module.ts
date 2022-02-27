@@ -47,7 +47,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzSpaceModule,
     NzTreeModule,
     NzTypographyModule,
-    NzTagModule
+    NzTagModule    
   ]
 })
 export class UsuariosModule { }

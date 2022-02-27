@@ -18,6 +18,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+
 
 @NgModule({
   declarations: [VistaGruposComponent, DetalleGrupoComponent],
@@ -38,7 +40,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzPopconfirmModule,
     NzGridModule,
     NzDividerModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSpaceModule
   ]
 })
 export class GruposModule { }

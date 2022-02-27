@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Distritos
@@ -32,17 +32,19 @@
                         <td>{{ dis.descripcion }}</td>
                         <td><span nz-tooltip [nzTooltipTitle]="'Código: '+dis.iddepartamento">{{ dis.departamento}}</span></td>
                         <td>
-                            <button nz-button nz-tooltip [routerLink]="dis.id+''"
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip [routerLink]="dis.id+''"
                             nzType="primary" nzTooltipTitle="Editar">
                                 <i nz-icon nzType="edit" nzTheme="outline"></i>
                             </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nz-tooltip nz-popconfirm
+                            <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm
                             nzType="primary" nzTooltipTitle="Eliminar" 
                             nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
                             (nzOnConfirm)="eliminar(dis.id)" nzDanger>
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
+                            </nz-space>
+                            
                         </td>
                     </tr>
                 </tbody>

@@ -38,7 +38,7 @@ export class LoginFormComponent implements OnInit {
       const pwd = this.form.get('pwd')?.value;
       this.sesionSrv.login(ci, pwd).subscribe((data) => {
         this.loginLoading = false;
-        this.router.navigate(['/app/welcome']);
+        this.router.navigate(['/app/dashboard']);
       }, (e) => {
         console.log('Error al iniciar sesión');
         console.log(e);

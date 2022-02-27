@@ -29,8 +29,8 @@ export class HttpErrorResponseHandlerService {
     } else {
       if (request === 'get') return `<b>Error al consultar</b>`
       if (request === 'post') return `<b>Error al registrar</b>`
-      if (request === 'put') return `<b>Error al editar}</b>`
-      if (request === 'delete') return `<b>Error al eliminar}</b>`
+      if (request === 'put') return `<b>Error al editar</b>`
+      if (request === 'delete') return `<b>Error al eliminar</b>`
       return `<b>Error al efectuar la operación</b>`;
     }
   }

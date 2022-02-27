@@ -19,6 +19,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @NgModule({
   declarations: [VistaCobradoresComponent, DetalleCobradorComponent],
@@ -40,7 +41,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzCheckboxModule,
     NzNotificationModule,
     NzSpinModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpaceModule
   ]
 })
 export class CobradoresModule { }

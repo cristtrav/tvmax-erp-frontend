@@ -20,6 +20,7 @@ import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent],
@@ -41,7 +42,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzNotificationModule,
     NzPopconfirmModule,
     NzToolTipModule,
-    NzSpinModule
+    NzSpinModule,
+    NzSpaceModule
   ]
 })
 export class BarriosModule { }

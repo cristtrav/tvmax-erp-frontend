@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Barrios
@@ -36,15 +36,16 @@
                             </span>
                         </td>
                         <td>
-                            <button nz-button nz-tooltip nzType="primary" [routerLink]="b.id+''" nzTooltipTitle="Editar">
-                                <i nz-icon nzType="edit" nzTheme="outline"></i>
-                            </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nz-popconfirm nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzDanger
-                            nzPopconfirmTitle="¿Desea eliminr el Barrio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                            (nzOnConfirm)="eliminar(b.id)">
-                                <i nz-icon nzType="delete" nzTheme="outline"></i>
-                            </button>
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="b.id+''" nzTooltipTitle="Editar">
+                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                </button>
+                                <button *nzSpaceItem nz-button nz-popconfirm nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzDanger
+                                nzPopconfirmTitle="¿Desea eliminr el Barrio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                (nzOnConfirm)="eliminar(b.id)">
+                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                </button>
+                            </nz-space>
                         </td>
                     </tr>
                 </tbody>

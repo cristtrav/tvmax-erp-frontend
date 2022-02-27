@@ -2,7 +2,7 @@
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
-                <a routerLink="/app/welcome"><i nz-icon nzType="home"></i></a>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
             </nz-breadcrumb-item>
             <nz-breadcrumb-item>
                 Cobradores
@@ -40,16 +40,18 @@
                             <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.activo?'#00C853':'#f44336'" [nzType]="c.activo?'check-circle':'close-circle'"></i>
                         </td>
                         <td>
-                            <button nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
                             nzTooltipTitle="Editar">
                                 <i nz-icon nzType="edit" nzTheme="outline"></i>
                             </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" 
+                            <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar" 
                             nzPopconfirmTitle="¿Desea eliminr el Cobrador?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" 
                             (nzOnConfirm)="eliminar(c.id)" nzDanger>
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
+                            </nz-space>
+                            
                         </td>
                     </tr>
                 </tbody>

@@ -18,6 +18,7 @@ import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzNotificationModule,
     NzDividerModule,
     NzSpinModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSpaceModule
   ]
 })
 export class TiposdomiciliosModule { }
