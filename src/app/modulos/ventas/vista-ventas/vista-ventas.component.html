@@ -1,13 +1,31 @@
 <div class="inner-component">
     <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                Ventas
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
+        <div nz-row>
+            <div nz-col nzFlex="auto">
+                <nz-breadcrumb>
+                    <nz-breadcrumb-item>
+                        <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+                    </nz-breadcrumb-item>
+                    <nz-breadcrumb-item>
+                        Ventas
+                    </nz-breadcrumb-item> 
+                </nz-breadcrumb>
+            </div>
+            <div nz-col>
+                <nz-button-group>
+                    <button nz-button [nzType]="vista !== 'estadisticas'?'primary':'default'" nzSize="small"
+                        (click)="cambiarVista('registros')">
+                        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+                        Registros
+                    </button>
+                    <button nz-button [nzType]="vista === 'estadisticas'?'primary':'default'" nzSize="small"
+                        (click)="cambiarVista('estadisticas')">
+                        <i nz-icon nzType="line-chart" nzTheme="outline"></i>
+                        Estadisticas
+                    </button>
+                </nz-button-group>
+            </div>
+        </div>        
     </div>
     <div class="module-container">
         <div class="module-content">
@@ -44,98 +62,12 @@
                 </div>
             </div>
 
-            <nz-drawer nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" [nzClosable]="true"
+            <nz-drawer [nzContent]="formFiltro" nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" [nzClosable]="true"
                 (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible">
-                <ng-container *nzDrawerContent>
-                    <nz-tabset>
-                        <nz-tab [nzTitle]="tituloTabFiltroFactura">
-                            <nz-space nzDirection="vertical">
-                                <ng-template #tituloTabFiltroFactura>
-                                    Factura 
-                                    <nz-tag [nzColor]="'processing'">
-                                        {{ cantFiltrosFacturas }}
-                                    </nz-tag>
-                                </ng-template>
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de fechas"
-                                            (click)="limpiarFiltroFechas()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Fecha
-                                    </h3>
-                                    <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()"
-                                        [nzDisabledDate]="disabledStartDate" nzPlaceHolder="Fecha desde"
-                                        style="width: 100%;" nzFormat="dd/MM/yyyy">
-                                    </nz-date-picker>
-                                    <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()"
-                                        [nzDisabledDate]="disabledEndDate" nzPlaceHolder="Fecha hasta"
-                                        style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
-                                    </nz-date-picker>
-                                </div>
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de pagos"
-                                            (click)="limpiarFiltroPagos()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Pago</h3>
-                                    <label nz-checkbox [(ngModel)]="filtroPagado"
-                                        (ngModelChange)="filtrar()">Pagado</label><br>
-                                    <label nz-checkbox [(ngModel)]="filtroPendiente"
-                                        (ngModelChange)="filtrar()">Pendiente</label><br>
-
-                                </div>
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de anulación"
-                                            (click)="limpiarFiltrosAnulacion()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Anulación</h3>
-                                    <label nz-checkbox [(ngModel)]="filtroAnulado"
-                                        (ngModelChange)="filtrar()">Anulado</label><br>
-                                    <label nz-checkbox [(ngModel)]="filtroNoAnulado" (ngModelChange)="filtrar()">No
-                                        Anulado</label>
-                                </div>
-                            </nz-space>
-                        </nz-tab>
-                        <nz-tab [nzTitle]="tituloTabFiltrosCobros">
-                            <ng-template #tituloTabFiltrosCobros>
-                                Cobro
-                                <nz-tag nzColor="processing">
-                                    {{ cantFiltrosCobros }}
-                                </nz-tag>
-                            </ng-template>
-                            <nz-space nzDirection="vertical" style="width: 100%;">
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de fechas"
-                                            (click)="limpiarFiltroFechas()" (click)="limpiarFiltrosFechasCobro()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Fecha
-                                    </h3>
-                                    <nz-date-picker [(ngModel)]="fechaInicioCobroFiltro" (ngModelChange)="filtrar()"
-                                        [nzDisabledDate]="disabledStartDateCobro" nzPlaceHolder="Fecha desde"
-                                        style="width: 100%;" nzFormat="dd/MM/yyyy">
-                                    </nz-date-picker>
-                                    <nz-date-picker [(ngModel)]="fechaFinCobroFiltro" (ngModelChange)="filtrar()"
-                                        [nzDisabledDate]="disabledEndDateCobro" nzPlaceHolder="Fecha hasta"
-                                        style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy"></nz-date-picker>
-                                </div>
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de usuario"
-                                            (click)="limpiarFiltroUsuarioCobro()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Registrado por</h3>
-                                    <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear
-                                        [(ngModel)]="idUsuarioCobroFiltro" (ngModelChange)="filtrar()" style="width: 100%;">
-                                        <nz-option *ngFor="let usu of lstUsuariosFiltro"
-                                            [nzLabel]="usu.nombres+' '+usu.apellidos" [nzValue]="usu.id"></nz-option>
-                                    </nz-select>
-                                </div>
-                                <div *nzSpaceItem>
-                                    <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de cobrador"
-                                            (click)="limpiarFiltroCobrador()"><i nz-icon nzType="clear"
-                                                nzTheme="outline"></i></a> Cobrador</h3>
-                                    <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear
-                                        [(ngModel)]="idCobradorFiltro" (ngModelChange)="filtrar()" style="width: 100%;">
-                                        <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial"
-                                            [nzValue]="cob.id"></nz-option>
-                                    </nz-select>
-                                </div>
-                            </nz-space>
-                        </nz-tab>
-                    </nz-tabset>
-                </ng-container>
+                <ng-template #formFiltro>
+                    <app-form-filtros-ventas (paramsFiltrosChange)="onParamsFiltrosChange($event)" (cantFiltrosChange)="cantFiltrosAplicados = $event">
+                    </app-form-filtros-ventas>
+                </ng-template>
             </nz-drawer>
 
             <ng-template #pietabla>

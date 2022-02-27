@@ -3,11 +3,7 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Servicio</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un servicio.">
-                <nz-select formControlName="idservicio" nzAllowClear nzShowSearch
-                    (ngModelChange)="seleccionServicio($event)">
-                    <nz-option *ngFor="let s of lstServicios" [nzLabel]="s.descripcion+' ('+s.grupo+')'"
-                        [nzValue]="s.id" nz-tooltip [nzTooltipTitle]="'Codigo: '+s.id"></nz-option>
-                </nz-select>
+                <nz-cascader [nzOptions]="opcionesServicios" formControlName="idservicio" nzExpandTrigger="hover"></nz-cascader>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
