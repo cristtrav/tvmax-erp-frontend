@@ -24,6 +24,7 @@ import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/por
 import { Extra } from '@util/extra';
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
+import { SesionService } from '@servicios/sesion.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -41,6 +42,8 @@ export class DetalleVentaComponent implements OnInit {
   lstSuscServCuotas: ISuscripcionServicioCuota[] = [];
   lstDetallesVenta: DetalleFacturaVenta[] = [];
   lstGruposServicios: IGrupoServicio [] = [];
+
+  clienteSeleccionado: Cliente | null = null;
 
   formCabecera: FormGroup = this.formBuilder.group({
     nroFactura: [null, [Validators.required]],
@@ -87,6 +90,7 @@ export class DetalleVentaComponent implements OnInit {
     private injector: Injector,
     private appRef: ApplicationRef,
     private viewContainerRef: ViewContainerRef,
+    private sesionSrv: SesionService
   ) { }
 
   ngOnInit(): void {
@@ -114,10 +118,25 @@ export class DetalleVentaComponent implements OnInit {
       this.totalCuotasPendientes = 0;
       this.lstDetallesVenta = [];
       this.cargarSuscripcionesCliente();
-      this.calcularTotalFactura();
+      this.calcularTotalFactura();      
+      if(value !== null){
+        this.cargarClienteSeleccionado(value);
+      }else{
+        this.clienteSeleccionado = null;
+      }
     });
     this.cargarServicios();
     if(this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
+  }
+
+  private cargarClienteSeleccionado(id: number){
+    this.clienteSrv.getPorId(id).subscribe((c: Cliente)=>{
+      this.clienteSeleccionado = c;
+    },(e)=>{
+      console.log('Error al cargar clente seleccionado');
+      console.log(e);
+      this.httpErrorHandler.handle(e, 'cargar datos del cliente seleccionado');
+    });
   }
 
   private async cargarDatosVenta(idventa: number){
@@ -480,7 +499,10 @@ export class DetalleVentaComponent implements OnInit {
     fv.idcliente = this.formCabecera.get('idCliente')?.value;
     const date: Date = this.formCabecera.get('fecha')?.value;
     fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
-    console.log(fv);
+    fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');
+    fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
+    if(this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
+    fv.idusuarioregistrofactura = this.sesionSrv.idusuario;    
     return fv;
   }
 

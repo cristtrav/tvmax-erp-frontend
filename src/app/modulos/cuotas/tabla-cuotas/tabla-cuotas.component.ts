@@ -27,6 +27,15 @@ export class TablaCuotasComponent implements OnInit {
   tableLoading: boolean = false;
   sortStr: string | null = null;
 
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
   constructor(
     private cuotaSrv: CuotasService,
     private notif: NzNotificationService,

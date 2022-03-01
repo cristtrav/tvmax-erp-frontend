@@ -3,40 +3,55 @@
 (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
+            <th nzWidth="60px"></th>
             <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
             <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" [nzSortOrder]="'descend'">Vencimiento</th>
             <th [nzColumnKey]="'nrocuota'" [nzSortFn]="true" nzAlign="center">Nro. Cuota</th>
             <th [nzColumnKey]="'monto'" [nzSortFn]="true" nzAlign="right">Monto</th>
             <th nzAlign="center">Pagado</th>
-            <th>F. de pago</th>
-            <th [nzColumnKey]="'observacion'" [nzSortFn]="true">Observación</th>
+            <th [nzColumnKey]="'fechapago'" [nzSortFn]="true">F. de pago</th>
+            <th [nzColumnKey]="'facturapago'" [nzSortFn]="true">Fac. Pago</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let c of tbl.data">
-            <td>{{ c.id }}</td>
-            <td>{{ c.fechavencimiento | date: 'dd/LL/yyyy' }}</td>
-            <td nzAlign="center">{{ c.nrocuota | number}}</td>
-            <td nzAlign="right">{{ c.monto | number}}</td>
-            <td nzAlign="center">
-                <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.pagado?'#00C853':'#f44336'" [nzType]="c.pagado?'check-circle':'close-circle'"></i>
-            </td>
-            <td>{{ c.fechapago }}</td>
-            <td nzBreakWord>{{ c.observacion }}</td>
-            <td>
-                <nz-space>
-                    <button nz-button nz-tooltip nzType="primary" *nzSpaceItem [routerLink]="c.id+''"
-                    nzTooltipTitle="Editar">
-                        <i nz-icon nzType="edit" nzTheme="outline"></i>
-                    </button>
-                    <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzDanger="" *nzSpaceItem
-                    nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminar la cuota?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                    (nzOnConfirm)="eliminar(c.id)">
-                        <i nz-icon nzType="delete" nzTheme="outline"></i>
-                    </button>
-                </nz-space>
-            </td>
-        </tr>
+        <ng-container  *ngFor="let c of tbl.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(+(c.id+''))" (nzExpandChange)="onExpandChange(+(c.id+''), $event)"></td>
+                <td>{{ c.id }}</td>
+                <td>{{ c.fechavencimiento | date: 'dd/LL/yyyy' }}</td>
+                <td nzAlign="center">{{ c.nrocuota | number}}</td>
+                <td nzAlign="right">{{ c.monto | number}}</td>
+                <td nzAlign="center">
+                    <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.pagado?'#00C853':'#f44336'" [nzType]="c.pagado?'check-circle':'close-circle'"></i>
+                </td>
+                <td>{{ c.fechapago | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ c.facturapago }}</td>
+                <td>
+                    <nz-space>
+                        <button nz-button nz-tooltip nzType="primary" *nzSpaceItem [routerLink]="c.id+''"
+                        nzTooltipTitle="Editar">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                        <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzDanger="" *nzSpaceItem
+                        nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminar la cuota?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                        (nzOnConfirm)="eliminar(c.id)">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(+(c.id+''))">
+                <nz-descriptions nzSize="small">
+                    <nz-descriptions-item [nzTitle]="tituloobs">
+                        <ng-template #tituloobs>
+                            <strong>Observación</strong>
+                        </ng-template>
+                        <span *ngIf="c.observacion">{{ c.observacion }}</span>
+                        <span *ngIf="!c.observacion" style="color: gray">(Sin observaciones)</span>
+                    </nz-descriptions-item>
+                </nz-descriptions>
+              </tr>
+        </ng-container>
     </tbody>
 </nz-table>
