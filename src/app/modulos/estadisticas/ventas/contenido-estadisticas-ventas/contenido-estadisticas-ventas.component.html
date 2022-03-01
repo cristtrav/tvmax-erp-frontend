@@ -1,0 +1,48 @@
+<nz-alert *ngIf="mostrarAlertaTotales"
+        nzType="warning"
+        nzMessage="La suma de algunos totales no distingue entre anulados, no anulados, pendientes y pagados. Seleccionar los filtros correspondientes para el efecto."
+        style="margin-bottom: 16px;"
+        nzCloseText="Entendido"
+        nzCloseable
+        nzShowIcon
+        (nzOnClose)="cerrarAlertaTotales()">
+    </nz-alert>
+<div nz-row [nzGutter]="[16, 16]">
+    <div nz-col nzSpan="6">
+        <nz-spin [nzSpinning]="loadingCantFacturas">
+            <nz-card>
+                <nz-statistic nzTitle="Cantidad de facturas" [nzValue]="(cantFacturas | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-spin [nzSpinning]="loadingMontoAnulado">
+            <nz-card>
+                <nz-statistic nzTitle="Total anulado" [nzValue]="'Gs.'+(montoTotalAnulado | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-spin [nzSpinning]="loadingMontoPendiente">
+            <nz-card>
+                <nz-statistic nzTitle="Total pendiente" [nzValue]="'Gs.'+(montoTotalPendiente | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-spin [nzSpinning]="loadingMontoPagado">
+            <nz-card>
+                <nz-statistic nzTitle="Total pagado" [nzValue]="'Gs.'+(montoTotalPagado | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+    <div nz-col nzSpan="12">
+        <app-card-resumen-ventas-grupos-servicios [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda">
+        </app-card-resumen-ventas-grupos-servicios>
+    </div>
+    <div nz-col nzSpan="12">
+        <app-card-resumen-ventas-cobradores [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda">
+        </app-card-resumen-ventas-cobradores>
+    </div>
+</div>
+

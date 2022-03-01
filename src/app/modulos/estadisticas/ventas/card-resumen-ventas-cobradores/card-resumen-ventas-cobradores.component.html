@@ -1,0 +1,34 @@
+<nz-card [nzTitle]="titulo" [nzExtra]="extraTitulo">
+    <ng-template #titulo>
+        <span nz-typography nzType="secondary" style="font-size: smaller;">Cobradores</span>
+    </ng-template>
+    <ng-template #extraTitulo>
+        
+        <button nz-button nzType="default" (click)="cargarDatos()">
+            <i nz-icon nzType="reload" nzTheme="outline"></i>
+        </button>
+    </ng-template>
+
+    <nz-table #tabla [nzData]="lstResumenDatos" [nzShowSizeChanger]="false" [nzShowPagination]="false"
+        [nzLoading]="loadingDatos" nzSize="small">
+        <thead>
+            <tr>
+                <th>Cobrador</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ri of tabla.data">
+                <td>
+                    <span *ngIf="ri.referencia" nz-tooltip [nzTooltipTitle]="'Código: '+ri.idreferencia">
+                        {{ ri.referencia }}
+                    </span>
+                    <span *ngIf="!ri.referencia" style="color: gray;">(Sin cobrador)</span>
+                </td>
+                <td>
+                    Gs.{{ ri.monto | number }}
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

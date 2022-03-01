@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { ResumenCantSuscDeuda } from '@dto/resumen-cantsusc-deuda-dto';
+import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -37,25 +37,10 @@ export class CardResumenSuscripcionesGruposServiciosComponent implements OnInit 
   private _textoBusqueda: string = '';
   private timerBusqueda: any;
 
-  lstResumenDatos: ResumenCantSuscDeuda[] = [];
+  lstResumenDatos: ResumenCantMonto[] = [];
   loadingDatos: boolean = false;
 
-  listOfMapData: TreeNodeInterface[] = [
-    {
-      key: '01',
-      referencia: 'Internet',
-      cantidad: 10,
-      monto: 10000,
-      children: [
-        {
-          key: '01-01',
-          referencia: 'Internet 100mb',
-          cantidad: 20,
-          monto: 30000
-        }
-      ]
-    }
-  ];
+  listOfMapData: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
 
   constructor(
@@ -65,9 +50,6 @@ export class CardResumenSuscripcionesGruposServiciosComponent implements OnInit 
 
   ngOnInit(): void {
     this.cargarDatos();
-    /*this.listOfMapData.forEach(item => {
-      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    });*/
   }
 
   private getHttpQueryParams(): HttpParams {
@@ -79,10 +61,10 @@ export class CardResumenSuscripcionesGruposServiciosComponent implements OnInit 
 
   cargarDatos() {
     this.loadingDatos = true;
-    this.suscripcionesSrv.getResumenGruposServicios(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantSuscDeuda>)=>{
+    this.suscripcionesSrv.getResumenGruposServicios(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
       console.log(resp.data);
       const mapData: TreeNodeInterface[] = [];
-      resp.data.forEach((rg: ResumenCantSuscDeuda)=>{
+      resp.data.forEach((rg: ResumenCantMonto)=>{
         const nodoGrupo: TreeNodeInterface = {
           key: `gru-${rg.idreferencia}`,
           idreferencia: rg.idreferencia,
@@ -92,7 +74,7 @@ export class CardResumenSuscripcionesGruposServiciosComponent implements OnInit 
         };
         if(rg.children){
           nodoGrupo.children = [];
-          rg.children.forEach((rs: ResumenCantSuscDeuda)=>{
+          rg.children.forEach((rs: ResumenCantMonto)=>{
             nodoGrupo.children?.push({
               key: `ser-${rs.idreferencia}`,
               idreferencia: rs.idreferencia,

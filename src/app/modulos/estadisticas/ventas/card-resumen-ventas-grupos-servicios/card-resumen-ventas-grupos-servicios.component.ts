@@ -2,16 +2,16 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { VentasService } from '@servicios/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
 @Component({
-  selector: 'app-card-resumen-suscripciones-depart-distrito',
-  templateUrl: './card-resumen-suscripciones-depart-distrito.component.html',
-  styleUrls: ['./card-resumen-suscripciones-depart-distrito.component.scss']
+  selector: 'app-card-resumen-ventas-grupos-servicios',
+  templateUrl: './card-resumen-ventas-grupos-servicios.component.html',
+  styleUrls: ['./card-resumen-ventas-grupos-servicios.component.scss']
 })
-export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
+export class CardResumenVentasGruposServiciosComponent implements OnInit {
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -40,34 +40,16 @@ export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
   lstResumenDatos: ResumenCantMonto[] = [];
   loadingDatos: boolean = false;
 
-  listOfMapData: TreeNodeInterface[] = [
-    {
-      key: '01',
-      referencia: 'Internet',
-      cantidad: 10,
-      monto: 10000,
-      children: [
-        {
-          key: '01-01',
-          referencia: 'Internet 100mb',
-          cantidad: 20,
-          monto: 30000
-        }
-      ]
-    }
-  ];
+  listOfMapData: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
 
   constructor(
-    private suscripcionesSrv: SuscripcionesService,
+    private ventasSrv: VentasService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
-    /*this.listOfMapData.forEach(item => {
-      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    });*/
   }
 
   private getHttpQueryParams(): HttpParams {
@@ -79,12 +61,11 @@ export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
 
   cargarDatos() {
     this.loadingDatos = true;
-    this.suscripcionesSrv.getResumenDepartamentosDistritos(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
-      console.log(resp.data);
+    this.ventasSrv.getResumenGruposServicios(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
       const mapData: TreeNodeInterface[] = [];
       resp.data.forEach((rg: ResumenCantMonto)=>{
         const nodoGrupo: TreeNodeInterface = {
-          key: `dep-${rg.idreferencia}`,
+          key: `gru-${rg.idreferencia}`,
           idreferencia: rg.idreferencia,
           referencia: rg.referencia,
           cantidad: rg.cantidad,
@@ -94,7 +75,7 @@ export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
           nodoGrupo.children = [];
           rg.children.forEach((rs: ResumenCantMonto)=>{
             nodoGrupo.children?.push({
-              key: `dis-${rs.idreferencia}`,
+              key: `ser-${rs.idreferencia}`,
               idreferencia: rs.idreferencia,
               referencia: rs.referencia,
               cantidad: rs.cantidad,
@@ -111,7 +92,7 @@ export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
       });
       this.loadingDatos = false;      
     }, (e)=>{
-      console.log('Error al consultar suscripciones por estado');
+      console.log('Error al consultar resumen de ventas por grupos-servicios');
       console.log(e);
       this.httpErrorHandler.handle(e);
       this.loadingDatos = false;

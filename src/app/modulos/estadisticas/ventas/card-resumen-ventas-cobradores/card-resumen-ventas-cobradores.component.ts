@@ -1,18 +1,17 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { VentasService } from '@servicios/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-card-resumen-cuotas-pendientes',
-  templateUrl: './card-resumen-cuotas-pendientes.component.html',
-  styleUrls: ['./card-resumen-cuotas-pendientes.component.scss']
+  selector: 'app-card-resumen-ventas-cobradores',
+  templateUrl: './card-resumen-ventas-cobradores.component.html',
+  styleUrls: ['./card-resumen-ventas-cobradores.component.scss']
 })
-export class CardResumenCuotasPendientesComponent implements OnInit {
+export class CardResumenVentasCobradoresComponent implements OnInit {
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -22,9 +21,6 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
     if (oldParams !== JSON.stringify(p)) this.cargarDatos();;
   };
   private _paramsFiltros: IParametroFiltro = {};
-
-  lstDatosResumen: ResumenCantMonto[] = [];
-  loadingDatos: boolean = false;
 
   @Input()
   get textoBusqueda(): string { return this._textoBusqueda };
@@ -41,14 +37,11 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
   private _textoBusqueda: string = '';
   private timerBusqueda: any;
 
-  @Output()
-  totalSuscripcionesChange: EventEmitter<number> = new EventEmitter();
-
-  @Output()
-  totalDeudaChange: EventEmitter<number> = new EventEmitter();
+  lstResumenDatos: ResumenCantMonto[] = [];
+  loadingDatos: boolean = false;
 
   constructor(
-    private suscripcionesSrv: SuscripcionesService,
+    private ventasSrv: VentasService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
@@ -65,27 +58,15 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
 
   cargarDatos() {
     this.loadingDatos = true;
-    this.suscripcionesSrv.getResumenCuotasPendientes(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>) => {
-      this.lstDatosResumen = resp.data;
-      this.loadingDatos = false;
-      this.calcularTotales();
-    }, (e) => {
-      console.log('Error al cargar resumen de cuotas pendientes');
+    this.ventasSrv.getResumenCobradores(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
+      this.lstResumenDatos = resp.data;
+      this.loadingDatos = false;      
+    }, (e)=>{
+      console.log('Error al consultar resumen de ventas por cobradores');
       console.log(e);
-      this.httpErrorHandler.handle(e, 'cargar resumen de cuotas pendientes');
+      this.httpErrorHandler.handle(e);
       this.loadingDatos = false;
     });
-  }
-
-  private calcularTotales(){
-    let totalSusc: number = 0;
-    let totalDeuda: number = 0;
-    this.lstDatosResumen.forEach((r: ResumenCantMonto)=>{
-      if(r.cantidad) totalSusc += Number(r.cantidad);
-      if(r.monto) totalDeuda+= Number(r.monto);
-    });
-    this.totalSuscripcionesChange.emit(totalSusc);
-    this.totalDeudaChange.emit(totalDeuda);
   }
 
 }

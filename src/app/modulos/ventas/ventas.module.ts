@@ -35,12 +35,15 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { FormFiltrosVentasComponent } from './form-filtros-ventas/form-filtros-ventas.component';
+import { TablaVentasComponent } from './tabla-ventas/tabla-ventas.component';
+import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 
 @NgModule({
   declarations: [
     VistaVentasComponent,
     DetalleVentaComponent,
-    FormFiltrosVentasComponent
+    FormFiltrosVentasComponent,
+    TablaVentasComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +78,8 @@ import { FormFiltrosVentasComponent } from './form-filtros-ventas/form-filtros-v
     NzNotificationModule,
     NzDrawerModule,
     NzCheckboxModule,
-    NzTabsModule
+    NzTabsModule,
+    EstadisticasModule
   ]
 })
 export class VentasModule { }

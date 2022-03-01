@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Suscripcion } from './../dto/suscripcion-dto';
 import { AppSettings } from './../util/app-settings';
 import { ServerResponseList } from '../dto/server-response-list.dto';
-import { ResumenCantSuscDeuda } from '@dto/resumen-cantsusc-deuda-dto';
+import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -41,20 +41,20 @@ export class SuscripcionesService {
     return this.http.get< number | null>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
-  getResumenCuotasPendientes(params: HttpParams): Observable<ServerResponseList<ResumenCantSuscDeuda>>{
-    return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/cuotaspendientes`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getResumenCuotasPendientes(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/cuotaspendientes`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getResumenEstados(params: HttpParams): Observable<ServerResponseList<ResumenCantSuscDeuda>>{
-    return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/estados`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getResumenEstados(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/estados`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getResumenGruposServicios(params: HttpParams): Observable<ServerResponseList<ResumenCantSuscDeuda>>{
-    return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/gruposservicios`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getResumenGruposServicios(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/gruposservicios`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getResumenDepartamentosDistritos(params: HttpParams): Observable<ServerResponseList<ResumenCantSuscDeuda>>{
-    return this.http.get<ServerResponseList<ResumenCantSuscDeuda>>(`${this.url}/resumen/departamentosdistritos`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getResumenDepartamentosDistritos(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/departamentosdistritos`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   count(params: HttpParams): Observable<number>{

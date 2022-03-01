@@ -1,9 +1,4 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { ResumenCantSuscDeuda } from '@dto/resumen-cantsusc-deuda-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
 @Component({

@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ResumenCantSuscDeuda } from '@dto/resumen-cantsusc-deuda-dto';
+import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -43,7 +43,7 @@ export class CardResumenEstadosComponent implements OnInit {
   @Output()
   totalInactivosChange: EventEmitter<number> = new EventEmitter();
 
-  lstResumenDatos: ResumenCantSuscDeuda[] = [];
+  lstResumenDatos: ResumenCantMonto[] = [];
   loadingDatos: boolean = false;
 
   constructor(
@@ -64,7 +64,7 @@ export class CardResumenEstadosComponent implements OnInit {
 
   cargarDatos() {
     this.loadingDatos = true;
-    this.suscripcionesSrv.getResumenEstados(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantSuscDeuda>)=>{
+    this.suscripcionesSrv.getResumenEstados(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
       this.lstResumenDatos = resp.data;
       this.loadingDatos = false;
       this.calcularTotales();
@@ -79,7 +79,7 @@ export class CardResumenEstadosComponent implements OnInit {
   private calcularTotales(){
     let totalActivos: number = 0;
     let totalInactivos: number = 0;
-    this.lstResumenDatos.forEach((r: ResumenCantSuscDeuda)=>{
+    this.lstResumenDatos.forEach((r: ResumenCantMonto)=>{
       switch(r.referencia){
         case 'C':
         case 'R':

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FacturaVenta } from '@dto/factura-venta.dto';
+import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
@@ -38,5 +39,21 @@ export class VentasService {
 
   getPorId(id: number): Observable<FacturaVenta>{
     return this.http.get<FacturaVenta>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getResumenGruposServicios(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/gruposservicios`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getResumenCobradores(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
+    return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/cobradores`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  count(params: HttpParams): Observable<number> {
+    return this.http.get<number>(`${this.url}/count`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getMontoTotal(params: HttpParams): Observable<number> {
+    return this.http.get<number>(`${this.url}/resumen/montototal`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

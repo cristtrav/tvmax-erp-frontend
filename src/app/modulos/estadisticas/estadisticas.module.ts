@@ -19,6 +19,11 @@ import { CardResumenEstadosComponent } from './suscripciones/card-resumen-estado
 import { CardResumenSuscripcionesGruposServiciosComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { CardResumenSuscripcionesDepartDistritoComponent } from './suscripciones/card-resumen-suscripciones-depart-distrito/card-resumen-suscripciones-depart-distrito.component';
+import { VistaEstadisticasVentasComponent } from './ventas/vista-estadisticas-ventas/vista-estadisticas-ventas.component';
+import { ContenidoEstadisticasVentasComponent } from './ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
+import { CardResumenVentasGruposServiciosComponent } from './ventas/card-resumen-ventas-grupos-servicios/card-resumen-ventas-grupos-servicios.component';
+import { CardResumenVentasCobradoresComponent } from './ventas/card-resumen-ventas-cobradores/card-resumen-ventas-cobradores.component';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,11 @@ import { CardResumenSuscripcionesDepartDistritoComponent } from './suscripciones
     CardResumenCuotasPendientesComponent,
     CardResumenEstadosComponent,
     CardResumenSuscripcionesGruposServiciosComponent,
-    CardResumenSuscripcionesDepartDistritoComponent
+    CardResumenSuscripcionesDepartDistritoComponent,
+    VistaEstadisticasVentasComponent,
+    ContenidoEstadisticasVentasComponent,
+    CardResumenVentasGruposServiciosComponent,
+    CardResumenVentasCobradoresComponent
   ],
   imports: [
     CommonModule,
@@ -42,10 +51,12 @@ import { CardResumenSuscripcionesDepartDistritoComponent } from './suscripciones
     NzStatisticModule,
     NzTypographyModule,
     NzTagModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzAlertModule
   ],
   exports: [
-    ContenidoEstadisticasSuscripcionesComponent
+    ContenidoEstadisticasSuscripcionesComponent,
+    ContenidoEstadisticasVentasComponent
   ]
 })
 export class EstadisticasModule { }
