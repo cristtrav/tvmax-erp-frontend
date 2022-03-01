@@ -37,6 +37,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { FormFiltrosVentasComponent } from './form-filtros-ventas/form-filtros-ventas.component';
 import { TablaVentasComponent } from './tabla-ventas/tabla-ventas.component';
 import { EstadisticasModule } from '../estadisticas/estadisticas.module';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { EstadisticasModule } from '../estadisticas/estadisticas.module';
     NzDrawerModule,
     NzCheckboxModule,
     NzTabsModule,
-    EstadisticasModule
+    EstadisticasModule,
+    NzDescriptionsModule
   ]
 })
 export class VentasModule { }

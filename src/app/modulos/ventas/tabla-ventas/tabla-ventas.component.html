@@ -49,32 +49,34 @@
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(fv.id ?? 0)">
-                <nz-collapse>
-                    <nz-collapse-panel [nzHeader]="'Ítems ('+fv.detalles.length+')'">
-                        <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small" nzShowPagination="false">
+                <nz-descriptions nzSize="small">
+                    <nz-descriptions-item [nzTitle]="titulocobrador">
+                        <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
+                        {{ fv.cobrador }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulofechacobro">
+                        <ng-template #titulofechacobro><strong>Fecha de cobro</strong></ng-template>
+                        {{ fv.fechacobro | date: 'dd/MM/yyyy' }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulousuarioreg">
+                        <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
+                        {{ fv.nombresusuariocobro }} {{ fv.apellidosusuariocobro }}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+                        <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50" nzBordered>
                             <thead>
                                 <tr>
                                     <th>Ítem</th>
-                                    <th>Monto</th>
+                                    <th nzAlign="center">Monto</th>
                                 </tr>
                             </thead>
-    <tbody>
-        <tr *ngFor="let dfv of tablaDetalle.data">
-            <td>{{ dfv.descripcion }}</td>
-            <td>Gs.{{ dfv.subtotal | number }}</td>
-        </tr>
-    </tbody>
-</nz-table>
-</nz-collapse-panel>
-<nz-collapse-panel [nzHeader]="'Cobro'">
-    <nz-space nzSize="large">
-        <span *nzSpaceItem><strong>Cobrador:</strong> {{ fv.cobrador }}</span>
-        <span *nzSpaceItem><strong>Fecha: </strong>{{ fv.fechacobro | date: 'dd/MM/yyyy' }}</span>
-        <span *nzSpaceItem><strong>Registrado por:</strong> {{ fv.nombresusuariocobro }} {{
-            fv.apellidosusuariocobro }}</span>
-    </nz-space>
-</nz-collapse-panel>
-</nz-collapse>
+                            <tbody>
+                                <tr *ngFor="let dfv of tablaDetalle.data">
+                                    <td>{{ dfv.descripcion }}</td>
+                                    <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
 </tr>
 </ng-container>
 </tbody>
