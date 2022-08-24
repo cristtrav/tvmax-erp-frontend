@@ -52,7 +52,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
   cargarCobradoresFiltro(){
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    params = params.append('sort', '+razon_social');
+    params = params.append('sort', '+razonsocial');
     this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Cobrador>)=>{
       this.lstCobradoresFiltro = resp.data;
     }, (e)=>{
