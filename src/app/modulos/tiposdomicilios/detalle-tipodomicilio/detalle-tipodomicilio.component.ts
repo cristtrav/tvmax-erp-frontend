@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { TipoDomicilio } from './../../../dto/tipodomicilio-dto';
@@ -14,7 +14,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 export class DetalleTipodomicilioComponent implements OnInit {
 
   idtipodomicilio = 'nuevo';
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(60)]]
   });
@@ -22,7 +22,7 @@ export class DetalleTipodomicilioComponent implements OnInit {
   formLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private aroute: ActivatedRoute,
     private router: Router,
     private tipoDomSrv: TiposdomiciliosService,

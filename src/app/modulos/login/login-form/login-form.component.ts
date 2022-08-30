@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SesionService } from '../../../servicios/sesion.service';
 
@@ -16,13 +16,13 @@ export class LoginFormComponent implements OnInit {
   tituloMsg: string = 'Error al iniciar sesion';
   descripcionMsg: string = ''
 
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     ci: [null, [Validators.required]],
     pwd: [null, [Validators.required]]
   });
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private sesionSrv: SesionService,
     private router: Router
   ) { }

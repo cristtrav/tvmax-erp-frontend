@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { Domicilio } from './../../../dto/domicilio-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -35,7 +35,7 @@ export class FormSuscripcionComponent implements OnInit {
   @Input()
   mostrarCliente: boolean = false;
 
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     iddomicilio: [null, [Validators.required]],
     idservicio: [null, [Validators.required]],
@@ -55,7 +55,7 @@ export class FormSuscripcionComponent implements OnInit {
   idLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private domiSrv: DomiciliosService,
     private notif: NzNotificationService,
     private serviciosSrv: ServiciosService,

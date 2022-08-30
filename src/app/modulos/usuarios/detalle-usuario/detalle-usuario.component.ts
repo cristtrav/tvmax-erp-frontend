@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { UsuariosService } from './../../../servicios/usuarios.service';
 import { Usuario } from './../../../dto/usuario-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -14,7 +14,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 export class DetalleUsuarioComponent implements OnInit {
 
   idusuario = 'nuevo';
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     nombres: [null, [Validators.required, Validators.maxLength(80)]],
     apellidos: [null, [Validators.required, Validators.maxLength(80)]],
@@ -31,7 +31,7 @@ export class DetalleUsuarioComponent implements OnInit {
   pwdRequired: boolean = true;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private usuarioSrv: UsuariosService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,

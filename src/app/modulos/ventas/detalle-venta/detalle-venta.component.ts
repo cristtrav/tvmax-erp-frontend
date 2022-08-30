@@ -4,7 +4,7 @@ import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
@@ -45,7 +45,7 @@ export class DetalleVentaComponent implements OnInit {
 
   clienteSeleccionado: Cliente | null = null;
 
-  formCabecera: FormGroup = this.formBuilder.group({
+  formCabecera: UntypedFormGroup = this.formBuilder.group({
     nroFactura: [null, [Validators.required]],
     idTimbrado: [null, [Validators.required]],
     fecha: [new Date(), Validators.required],
@@ -77,7 +77,7 @@ export class DetalleVentaComponent implements OnInit {
   constructor(
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private clienteSrv: ClientesService,
     private suscripcionesSrv: SuscripcionesService,
     private cuotasSrv: CuotasService,

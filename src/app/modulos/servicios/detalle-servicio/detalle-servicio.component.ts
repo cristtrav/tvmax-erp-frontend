@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GruposService } from './../../../servicios/grupos.service';
 import { Grupo } from './../../../dto/grupo-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Validators, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Servicio } from './../../../dto/servicio-dto';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ export class DetalleServicioComponent implements OnInit {
 
   idservicio = 'nuevo';
   lstGrupos: Grupo[] = [];
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(100)]],
     idgrupo: [null, [Validators.required]],
@@ -32,7 +32,7 @@ export class DetalleServicioComponent implements OnInit {
   constructor(
     private gruposSrv: GruposService,
     private notif: NzNotificationService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private serviciosSrv: ServiciosService,
     private aroute: ActivatedRoute,
     private router: Router,

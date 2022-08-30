@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cobrador } from './../../../dto/cobrador-dto';
@@ -14,7 +14,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 export class DetalleCobradorComponent implements OnInit {
 
   idcobrador = 'nuevo';
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     razonsocial: [null, [Validators.required, Validators.maxLength(150)]],
     ci: [null],
@@ -27,7 +27,7 @@ export class DetalleCobradorComponent implements OnInit {
   formLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private cobradoresSrv: CobradoresService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,

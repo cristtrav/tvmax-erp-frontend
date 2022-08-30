@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Barrio } from './../../../dto/barrio-dto';
 import { Distrito } from './../../../dto/distrito-dto';
@@ -18,7 +18,7 @@ import { ServerResponseList } from '../../../dto/server-response-list.dto';
 export class DetalleBarrioComponent implements OnInit {
 
   idbarrio = 'nuevo';
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(150)]],
     iddistrito: [null, [Validators.required]]
@@ -28,7 +28,7 @@ export class DetalleBarrioComponent implements OnInit {
   guardarLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private distSrv: DistritosService,
     private notif: NzNotificationService,
     private barrioSrv: BarriosService,

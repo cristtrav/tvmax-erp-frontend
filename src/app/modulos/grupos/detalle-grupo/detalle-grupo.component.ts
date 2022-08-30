@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Grupo } from '../../../dto/grupo-dto';
 import { GruposService } from '../../../servicios/grupos.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -15,7 +15,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 export class DetalleGrupoComponent implements OnInit {
 
   idgrupo = 'nuevo';
-  fg: FormGroup = this.fb.group({
+  fg: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(80)]]
   });
@@ -24,7 +24,7 @@ export class DetalleGrupoComponent implements OnInit {
 
   constructor(
     private aroute: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private grupoSrv: GruposService,
     private notif: NzNotificationService,
     private router: Router,

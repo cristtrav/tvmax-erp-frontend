@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { Servicio } from './../../../dto/servicio-dto';
@@ -21,7 +21,7 @@ export class FormCuotaComponent implements OnInit {
 
   opcionesServicios: {value: number, label: string, children: {value: number, label: string, isLeaf: boolean}[]}[] = [];
 
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     idservicio: [null, [Validators.required]],
     fechavencimiento: [null, [Validators.required]],
     monto: [null, [Validators.required]],
@@ -39,7 +39,7 @@ export class FormCuotaComponent implements OnInit {
   suscripcionActual: Suscripcion | null = null;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private serviciosSrv: ServiciosService,
     private notif: NzNotificationService,
     private cuotaSrv: CuotasService,

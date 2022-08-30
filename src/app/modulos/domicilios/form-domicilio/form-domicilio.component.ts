@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Barrio } from './../../../dto/barrio-dto';
 import { BarriosService } from './../../../servicios/barrios.service';
@@ -31,7 +31,7 @@ export class FormDomicilioComponent implements OnInit {
   idsuscripcionNav: string | null = 'nueva';
   navigate: string | null = '';
 
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     direccion: [null, [Validators.required, Validators.maxLength(200)]],
     idbarrio: [null, [Validators.required]],
@@ -46,7 +46,7 @@ export class FormDomicilioComponent implements OnInit {
   calculateIdLoading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private barriosSrv: BarriosService,
     private notif: NzNotificationService,
     private tipoDomiSrv: TiposdomiciliosService,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cliente } from 'src/app/dto/cliente-dto';
 import { Cobrador } from 'src/app/dto/cobrador-dto';
@@ -22,7 +22,7 @@ export class DetalleClienteComponent implements OnInit {
   formLoading: boolean = false;
   calculateBtnLoading: boolean = false;
 
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     nombres: [null, Validators.maxLength(50)],
     apellidos: [null, [Validators.maxLength(50)]],
@@ -37,7 +37,7 @@ export class DetalleClienteComponent implements OnInit {
   lstCobradores: Cobrador[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private cobradoresSrv: CobradoresService,
     private notif: NzNotificationService,
     private cliSrv: ClientesService,

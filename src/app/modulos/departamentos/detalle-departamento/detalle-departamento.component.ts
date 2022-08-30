@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Departamento } from './../../../dto/departamento-dto';
@@ -14,7 +14,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 export class DetalleDepartamentoComponent implements OnInit {
 
   iddepartamento = 'nuevo';
-  form: FormGroup = this.fb.group({
+  form: UntypedFormGroup = this.fb.group({
     id: [null, [Validators.required]],
     descripcion: [null, [Validators.required, Validators.maxLength(80)]],
   });
@@ -24,7 +24,7 @@ export class DetalleDepartamentoComponent implements OnInit {
   formatterCod = (value: number) => value === null ? '' : `${value}`.padStart(2, '0');
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private depSrv: DepartamentosService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,

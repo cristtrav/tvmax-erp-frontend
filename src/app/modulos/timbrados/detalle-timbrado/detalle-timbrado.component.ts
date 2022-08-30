@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Timbrado } from '@dto/timbrado.dto';
 import { Extra } from '@util/extra';
 import { TimbradosService } from '@servicios/timbrados.service';
@@ -23,7 +23,7 @@ export class DetalleTimbradoComponent implements OnInit {
   idtimbrado: string = 'nuevo';
   guardarLoading: boolean = false;
   formLoading: boolean = false;
-  formGroup: FormGroup = this.formBuilder.group({
+  formGroup: UntypedFormGroup = this.formBuilder.group({
     id: [null, [Validators.required]],
     codEstablecimiento: [null, [Validators.required, Validators.max(999), Validators.min(1)]],
     codPuntoEmision: [null, [Validators.required, Validators.max(999), Validators.min(1)]],
@@ -38,7 +38,7 @@ export class DetalleTimbradoComponent implements OnInit {
 
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private timbradosSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
