@@ -31,7 +31,7 @@
                     </nz-tag>
                 </td>
                 <td nzAlign="center">
-                    <nz-tag *ngIf="s.cuotaspendientes === 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}
+                    <nz-tag *ngIf="s.cuotaspendientes == 0" [nzColor]="'green'">{{ s.cuotaspendientes | number }}
                     </nz-tag>
                     <nz-tag *ngIf="s.cuotaspendientes >= 1 && s.cuotaspendientes <= 3" [nzColor]="'orange'">{{
                         s.cuotaspendientes | number }}</nz-tag>

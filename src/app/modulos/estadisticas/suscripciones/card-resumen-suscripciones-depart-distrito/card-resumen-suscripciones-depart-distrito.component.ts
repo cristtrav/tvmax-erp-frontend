@@ -80,7 +80,6 @@ export class CardResumenSuscripcionesDepartDistritoComponent implements OnInit {
   cargarDatos() {
     this.loadingDatos = true;
     this.suscripcionesSrv.getResumenDepartamentosDistritos(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>)=>{
-      console.log(resp.data);
       const mapData: TreeNodeInterface[] = [];
       resp.data.forEach((rg: ResumenCantMonto)=>{
         const nodoGrupo: TreeNodeInterface = {
