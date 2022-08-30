@@ -28,7 +28,7 @@ import { CuotasModule } from '../cuotas/cuotas.module';
 import { DetalleCuotasSuscripcionesComponent } from './detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+//import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSliderModule} from 'ng-zorro-antd/slider';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -68,7 +68,7 @@ import { PortalModule } from '@angular/cdk/portal'
     CuotasModule,
     NzGridModule,
     NzBadgeModule,
-    NzDrawerModule,
+   // NzDrawerModule,
     NzSliderModule,
     NzTreeSelectModule,
     NzDescriptionsModule,

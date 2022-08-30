@@ -43,8 +43,8 @@
                     </nz-space>
                 </div>
             </div>
-            <nz-drawer [nzContent]="formfiltro" [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzTitle="Filtros"
-                (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible"></nz-drawer>
+            <!--<nz-drawer [nzContent]="formfiltro" [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzTitle="Filtros"
+                (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible"></nz-drawer>-->
 
             <ng-template #formfiltro>
                 <app-form-filtro-clientes (paramsFiltrosChange)="procesarParamsFiltro($event)"

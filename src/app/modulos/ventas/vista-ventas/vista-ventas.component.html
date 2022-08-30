@@ -61,13 +61,13 @@
                 </div>
             </div>
 
-            <nz-drawer [nzContent]="formFiltro" nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" [nzClosable]="true"
+            <!--<nz-drawer [nzContent]="formFiltro" nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" [nzClosable]="true"
                 (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible">
                 <ng-template #formFiltro>
                     <app-form-filtros-ventas (paramsFiltrosChange)="paramsFiltros = $event" (cantFiltrosChange)="cantFiltrosAplicados = $event">
                     </app-form-filtros-ventas>
                 </ng-template>
-            </nz-drawer>
+            </nz-drawer>-->
 
             <app-tabla-ventas *ngIf="vista === 'registros'" [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda"></app-tabla-ventas>
         </div>

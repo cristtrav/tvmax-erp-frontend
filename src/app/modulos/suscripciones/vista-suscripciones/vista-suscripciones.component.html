@@ -63,13 +63,13 @@
                     </nz-space>
                 </div>
             </div>
-            <nz-drawer [nzContent]="contenidofiltros" [nzVisible]="drawerFiltrosVisible"
+            <!--<nz-drawer [nzContent]="contenidofiltros" [nzVisible]="drawerFiltrosVisible"
                 (nzOnClose)="drawerFiltrosVisible = false" nzTitle="Filtros" nzClosable>
                 <ng-template #contenidofiltros>
                     <app-form-filtro-suscripciones (paramsFiltrosChange)="paramsFiltro = $event"
                         (cantFiltrosChange)="cantFiltrosAplicados = $event"></app-form-filtro-suscripciones>
                 </ng-template>
-            </nz-drawer>
+            </nz-drawer>-->
             <app-tabla-suscripciones *ngIf="vista !== 'estadisticas'" [mostrarCliente]="true" [textoBusqueda]="textoBusqueda" [paramsFiltros]="paramsFiltro"
                 [tableStyles]="{'margin-top':'10px'}"></app-tabla-suscripciones>
         </div>
