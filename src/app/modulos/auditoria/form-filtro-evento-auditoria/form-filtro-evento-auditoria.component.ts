@@ -7,7 +7,6 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { DisabledTimeFn } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-form-filtro-evento-auditoria',
@@ -41,87 +40,93 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
     this.cargarDatos();
   }
 
-  cargarDatos(){
+  cargarDatos() {
     this.cargarUsuarios();
     this.cargarTablas();
   }
 
-  async cargarUsuarios(){
+  async cargarUsuarios() {
     let params: HttpParams = new HttpParams();
     params = params.append('sort', '+nombres');
-    try{
-      this.lstUsuarios = (await this.usuariosSrv.get(params).toPromise()).data;
-    }catch(e){
-      console.log('Error al cargar usuarios');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    }
+    this.usuariosSrv.get(params).subscribe({
+      next: (response) => {
+        this.lstUsuarios = response.data;
+      },
+      error: (e) => {
+        console.log('Error al cargar usuarios');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    })
   }
 
-  async cargarTablas(){
+  async cargarTablas() {
     let params: HttpParams = new HttpParams();
     params = params.append('sort', '+descripcion');
-    try{
-      this.lstTablas = (await this.auditoriaSrv.getTablas(params).toPromise()).data;
-    }catch(e){
-      console.log('Error al cargar tablas de auditoria')
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    }
+    this.auditoriaSrv.getTablas(params).subscribe({
+      next: (response) => {
+        this.lstTablas = response.data
+      },
+      error: (e) => {
+        console.log('Error al cargar tablas de auditoria')
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    });
   }
 
   private getParametrosFiltros(): IParametroFiltro {
     const par: IParametroFiltro = {};
-    if(this.idUsuarioSelec) par['idusuario'] = this.idUsuarioSelec;
-    if(this.idTablaAuditoriaSelec) par['idtabla'] = this.idTablaAuditoriaSelec;
-    if(this.fechaHoraDesde) par['fechahoradesde'] = Extra.dateTimeToString(this.fechaHoraDesde);
-    if(this.fechaHoraHasta) par['fechahorahasta'] = Extra.dateTimeToString(this.fechaHoraHasta);
-    if(this.registroSelec || this.modificacionSelec || this.eliminacionSelec){
+    if (this.idUsuarioSelec) par['idusuario'] = this.idUsuarioSelec;
+    if (this.idTablaAuditoriaSelec) par['idtabla'] = this.idTablaAuditoriaSelec;
+    if (this.fechaHoraDesde) par['fechahoradesde'] = Extra.dateTimeToString(this.fechaHoraDesde);
+    if (this.fechaHoraHasta) par['fechahorahasta'] = Extra.dateTimeToString(this.fechaHoraHasta);
+    if (this.registroSelec || this.modificacionSelec || this.eliminacionSelec) {
       const opeArr: string[] = [];
-      if(this.registroSelec) opeArr.push('R');
-      if(this.modificacionSelec) opeArr.push('M');
-      if(this.eliminacionSelec) opeArr.push('E');
+      if (this.registroSelec) opeArr.push('R');
+      if (this.modificacionSelec) opeArr.push('M');
+      if (this.eliminacionSelec) opeArr.push('E');
       par['operacion'] = opeArr;
     }
     return par;
   }
 
-  private getCantFiltros(): number{
+  private getCantFiltros(): number {
     let cant: number = 0;
-    if(this.idUsuarioSelec) cant++;
-    if(this.idTablaAuditoriaSelec) cant++;
-    if(this.fechaHoraDesde) cant++;
-    if(this.fechaHoraHasta) cant++;
-    if(this.registroSelec) cant++;
-    if(this.modificacionSelec) cant++;
-    if(this.eliminacionSelec) cant++
+    if (this.idUsuarioSelec) cant++;
+    if (this.idTablaAuditoriaSelec) cant++;
+    if (this.fechaHoraDesde) cant++;
+    if (this.fechaHoraHasta) cant++;
+    if (this.registroSelec) cant++;
+    if (this.modificacionSelec) cant++;
+    if (this.eliminacionSelec) cant++
     return cant;
   }
 
-  limpiarFiltroUsuario(){
+  limpiarFiltroUsuario() {
     this.idUsuarioSelec = null;
     this.onParamsFiltroChange();
   }
 
-  limpiarFiltroTabla(){
+  limpiarFiltroTabla() {
     this.idTablaAuditoriaSelec = null;
     this.onParamsFiltroChange();
   }
 
-  limpiarFiltrosFechaHora(){
+  limpiarFiltrosFechaHora() {
     this.fechaHoraDesde = null;
     this.fechaHoraHasta = null;
     this.onParamsFiltroChange();
   }
 
-  limpiarFiltrosOperacion(){
+  limpiarFiltrosOperacion() {
     this.registroSelec = false;
     this.modificacionSelec = false;
     this.eliminacionSelec = false;
     this.onParamsFiltroChange();
   }
 
-  onParamsFiltroChange(){
+  onParamsFiltroChange() {
     this.cantFiltrosChange.emit(this.getCantFiltros());
     this.paramsFiltrosChange.emit(this.getParametrosFiltros());
   }
@@ -131,7 +136,7 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
       return false;
     }
     const fh: Date = new Date(this.fechaHoraHasta.getTime());
-    fh.setDate(fh.getDate()+1);
+    fh.setDate(fh.getDate() + 1);
     return startValue.getTime() > fh.getTime();
   };
   disabledEndDate = (endValue: Date): boolean => {
@@ -139,7 +144,7 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
       return false;
     }
     const fd: Date = new Date(this.fechaHoraDesde.getTime());
-    fd.setDate(fd.getDate()-1);
+    fd.setDate(fd.getDate() - 1);
     return endValue.getTime() <= fd.getTime();
-  };  
+  };
 }

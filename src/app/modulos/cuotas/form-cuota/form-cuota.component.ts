@@ -11,6 +11,7 @@ import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from './../../../util/http-error-response-handler.service';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-form-cuota',
@@ -19,7 +20,7 @@ import { Suscripcion } from '@dto/suscripcion-dto';
 })
 export class FormCuotaComponent implements OnInit {
 
-  opcionesServicios: {value: number, label: string, children: {value: number, label: string, isLeaf: boolean}[]}[] = [];
+  opcionesServicios: { value: number, label: string, children: { value: number, label: string, isLeaf: boolean }[] }[] = [];
 
   form: UntypedFormGroup = this.fb.group({
     idservicio: [null, [Validators.required]],
@@ -54,24 +55,74 @@ export class FormCuotaComponent implements OnInit {
         this.cargarDatos();
       }
     }
-    this.form.get('idservicio')?.valueChanges.subscribe((v)=>{
+    this.form.get('idservicio')?.valueChanges.subscribe((v) => {
       const id: number | null = v ? v[1] : null;
       this.seleccionServicio(id);
     });
   }
 
-  private async cargarGruposServicios() {
+  private cargarGruposServicios() {
     let param: HttpParams = new HttpParams().append('sort', '+descripcion');
     param = param.append('eliminado', 'false');
-    const op: {value: number, label: string, children: {value: number, label: string, isLeaf: boolean}[]}[] = [];
+    const op: { value: number, label: string, children: { value: number, label: string, isLeaf: boolean }[] }[] = [];
+
+    forkJoin([
+      this.suscripcionesSrv.getPorId(Number(this.idsuscripcion)),
+      this.serviciosSrv.getServicios(param)
+    ]).subscribe({
+      next: (resp) => {
+        const susc: Suscripcion = resp[0];
+        const respSrv: ServerResponseList<Servicio> = resp[1];
+        for (let srv of respSrv.data) {
+          if (srv.id == susc.idservicio || !srv.suscribible) {
+            let existeg = false;
+            for (let o of op) {
+              if (o.value === srv.idgrupo) {
+                existeg = true;
+                o.children.push(
+                  {
+                    value: Number(srv.id),
+                    label: `${srv.descripcion}`,
+                    isLeaf: true
+                  }
+                );
+                break;
+              }
+            }
+            if (!existeg) {
+              op.push(
+                {
+                  value: Number(srv.idgrupo),
+                  label: `${srv.grupo}`,
+                  children: [
+                    {
+                      value: Number(srv.id),
+                      label: `${srv.descripcion}`,
+                      isLeaf: true
+                    }
+                  ]
+                }
+              );
+            }
+          }
+        }
+        this.opcionesServicios = op;
+      },
+      error: (e) => {
+        console.log('Error al cargar servicios');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    })
+    /*this.suscripcionesSrv.getPorId(Number(this.idsuscripcion));
     try {
       const susc: Suscripcion = await this.suscripcionesSrv.getPorId(Number(this.idsuscripcion)).toPromise();
       const respSrv: ServerResponseList<Servicio> = await this.serviciosSrv.getServicios(param).toPromise();
-      for(let srv of respSrv.data){
-        if(srv.id == susc.idservicio || !srv.suscribible){
+      for (let srv of respSrv.data) {
+        if (srv.id == susc.idservicio || !srv.suscribible) {
           let existeg = false;
-          for(let o of op){
-            if(o.value === srv.idgrupo){
+          for (let o of op) {
+            if (o.value === srv.idgrupo) {
               existeg = true;
               o.children.push(
                 {
@@ -83,11 +134,11 @@ export class FormCuotaComponent implements OnInit {
               break;
             }
           }
-          if(!existeg){
+          if (!existeg) {
             op.push(
               {
                 value: Number(srv.idgrupo),
-                label:`${srv.grupo}`,
+                label: `${srv.grupo}`,
                 children: [
                   {
                     value: Number(srv.id),
@@ -105,7 +156,7 @@ export class FormCuotaComponent implements OnInit {
       console.log('Error al cargar servicios');
       console.log(e);
       this.httpErrorHandler.handle(e);
-    }
+    }*/
   }
 
   private validado(): boolean {
@@ -195,9 +246,35 @@ export class FormCuotaComponent implements OnInit {
     });
   }
 
-  private async cargarDatos() {
+  private cargarDatos() {
     this.formLoading = true;
-    try{
+    this.cuotaSrv.getPorId(parseInt(this.idcuota)).subscribe({
+      next: (cuota) => {
+        this.serviciosSrv.getServicioPorId(Number(cuota.idservicio)).subscribe({
+          next: (serv) => {
+            this.form.get('idservicio')?.setValue([serv.idgrupo, serv.id]);
+            this.form.get('fechavencimiento')?.setValue(new Date(`${cuota.fechavencimiento}T00:00:00`));
+            this.form.get('monto')?.setValue(cuota.monto);
+            this.form.get('nrocuota')?.setValue(cuota.nrocuota);
+            this.form.get('observacion')?.setValue(cuota.observacion);
+            this.formLoading = false;
+          },
+          error: (er) => {
+            console.log('Error al cargar datos del servicio');
+            console.log(er);
+            this.httpErrorHandler.handle(er);
+            this.formLoading = false;
+          }
+        });
+      },
+      error: (e) => {
+        console.log('Error al cargar datos de la cuota');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.formLoading = false;
+      }
+    });
+    /*try {
       const data: Cuota = await this.cuotaSrv.getPorId(+this.idcuota).toPromise();
       const serv: Servicio = await this.serviciosSrv.getServicioPorId(Number(data.idservicio)).toPromise();
       this.form.get('idservicio')?.setValue([serv.idgrupo, serv.id]);
@@ -206,11 +283,11 @@ export class FormCuotaComponent implements OnInit {
       this.form.get('nrocuota')?.setValue(data.nrocuota);
       this.form.get('observacion')?.setValue(data.observacion);
       this.formLoading = false;
-    }catch(e){
+    } catch (e) {
       console.log('Error al cargar datos de la cuota');
       console.log(e);
       this.httpErrorHandler.handle(e);
       this.formLoading = false;
-    }
+    }*/
   }
 }

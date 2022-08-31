@@ -15,6 +15,8 @@ import { ServiciosService } from '@servicios/servicios.service';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { forkJoin, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reporte-suscripciones',
@@ -38,7 +40,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
   set paramsFiltros(p: IParametroFiltro) {
     const oldParams: string = JSON.stringify(this._paramsFiltros);
-    this._paramsFiltros = { ...p};
+    this._paramsFiltros = { ...p };
     if (oldParams !== JSON.stringify(p)) this.cargarDatos();
   };
   private _paramsFiltros: IParametroFiltro = {};
@@ -62,95 +64,175 @@ export class ReporteSuscripcionesComponent implements OnInit {
     //this.cargarDatos();
   }
 
-  async cargarDatos(){
+  cargarDatos() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+cliente');
     params = params.appendAll(this.paramsFiltros);
-    try{
+    const arrObservables: Observable<any>[] = [this.suscripcionesSrv.get(params)];
+    if (Array.isArray(this.paramsFiltros['idgrupo']) && this.paramsFiltros['idgrupo'].length !== 0)
+      arrObservables.push(this.cargarGruposReporte(this.paramsFiltros['idgrupo']));
+    if (Array.isArray(this.paramsFiltros['idservicio']) && this.paramsFiltros['idservicio'].length !== 0)
+      arrObservables.push(this.cargarServiciosReporte(this.paramsFiltros['idservicio']));
+    if (Array.isArray(this.paramsFiltros['idbarrio']))
+      arrObservables.push(this.cargarBarriosReporte(this.paramsFiltros['idbarrio']));
+    if (Array.isArray(this.paramsFiltros['iddistrito']))
+      arrObservables.push(this.cargarDistritosReporte(this.paramsFiltros['iddistrito']));
+    if (Array.isArray(this.paramsFiltros['iddepartamento']))
+      arrObservables.push(this.cargarDepartamentosReporte(this.paramsFiltros['iddepartamento']));
+
+    forkJoin(arrObservables).subscribe({
+      next: (resp) => {
+        this.suscripciones = resp[0].data;
+        this.totalDeuda = 0;
+        this.suscripciones.forEach((s) => {
+          this.totalDeuda += Number(s.deuda);
+        });
+        this.dataLoaded.emit(true);
+      },
+      error: (e) => {
+        console.log('Error al cargar datos para reporte');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    });
+    this.suscripcionesSrv.get(params);
+    /*try {
       const resp: ServerResponseList<Suscripcion> = await this.suscripcionesSrv.get(params).toPromise<ServerResponseList<Suscripcion>>();
       this.suscripciones = resp.data;
       this.totalDeuda = 0;
-      this.suscripciones.forEach((s)=>{
+      this.suscripciones.forEach((s) => {
         console.log()
         this.totalDeuda += Number(s.deuda);
       });
-      if(Array.isArray(this.paramsFiltros['idgrupo'])  && this.paramsFiltros['idgrupo'].length !== 0)
+      if (Array.isArray(this.paramsFiltros['idgrupo']) && this.paramsFiltros['idgrupo'].length !== 0)
         await this.cargarGruposReporte(this.paramsFiltros['idgrupo']);
-      if(Array.isArray(this.paramsFiltros['idservicio']) && this.paramsFiltros['idservicio'].length !== 0)
+      if (Array.isArray(this.paramsFiltros['idservicio']) && this.paramsFiltros['idservicio'].length !== 0)
         await this.cargarServiciosReporte(this.paramsFiltros['idservicio']);
-      if(Array.isArray(this.paramsFiltros['idbarrio']))
+      if (Array.isArray(this.paramsFiltros['idbarrio']))
         await this.cargarBarriosReporte(this.paramsFiltros['idbarrio']);
-      if(Array.isArray(this.paramsFiltros['iddistrito']))
+      if (Array.isArray(this.paramsFiltros['iddistrito']))
         await this.cargarDistritosReporte(this.paramsFiltros['iddistrito']);
-      if(Array.isArray(this.paramsFiltros['iddepartamento']))
+      if (Array.isArray(this.paramsFiltros['iddepartamento']))
         await this.cargarDepartamentosReporte(this.paramsFiltros['iddepartamento']);
       this.dataLoaded.emit(true);
-    }catch(e){
+    } catch (e) {
       console.log('Error al cargar suscripciones para reporte');
       console.log(e);
       this.httpErrorHandler.handle(e);
-    }
+    }*/
   };
 
-  private async cargarDepartamentosReporte(id: string[] | number[]){
-    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({id});
-      const consulta: Promise<ServerResponseList<Departamento>> = this.departamentosSrv.get(params).toPromise<ServerResponseList<Departamento>>()
-      try{
-        this.departamentos = (await consulta).data;
-      }catch(e){
-        console.log('Error al cargar departamentos para reporte');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      }
+  private cargarDepartamentosReporte(id: string[] | number[]): Observable<ServerResponseList<Departamento>> {
+    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
+    return this.departamentosSrv.get(params).pipe(
+      tap({
+        next: resp => this.departamentos = resp.data,
+        error: (e) => {
+          console.log('Error al cargar departamentos para reporte');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        }
+      })
+    );
+    /*const consulta: Promise<ServerResponseList<Departamento>> = this.departamentosSrv.get(params).toPromise<ServerResponseList<Departamento>>()
+    try {
+      this.departamentos = (await consulta).data;
+    } catch (e) {
+      console.log('Error al cargar departamentos para reporte');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    }*/
   }
 
-  private async cargarDistritosReporte(id: string[] | number[]){
-    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({id});
-      const consulta: Promise<ServerResponseList<Distrito>> = this.distritosSrv.get(params).toPromise<ServerResponseList<Distrito>>()
-      try{
-        this.distritos = (await consulta).data;
-      }catch(e){
-        console.log('Error al cargar distritos para reporte');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      }
+  private cargarDistritosReporte(id: string[] | number[]): Observable<ServerResponseList<Distrito>> {
+    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
+    return this.distritosSrv.get(params).pipe(
+      tap({
+        next: resp => this.distritos = resp.data,
+        error: e => {
+          console.log('Error al cargar distritos para reporte');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        }
+      })
+    );
+    /*const consulta: Promise<ServerResponseList<Distrito>> = this.distritosSrv.get(params).toPromise<ServerResponseList<Distrito>>()
+    try {
+      this.distritos = (await consulta).data;
+    } catch (e) {
+      console.log('Error al cargar distritos para reporte');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    }*/
   }
 
-  private async cargarBarriosReporte(id: string[] | number[]){
-    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({id});
-      const consulta: Promise<ServerResponseList<Barrio>> = this.barriosSrv.get(params).toPromise<ServerResponseList<Barrio>>()
-      try{
-        this.barrios = (await consulta).data;
-      }catch(e){
-        console.log('Error al cargar barrios para reporte');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      }
+  private cargarBarriosReporte(id: string[] | number[]): Observable<ServerResponseList<Barrio>> {
+    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
+    return this.barriosSrv.get(params).pipe(
+      tap({
+        next: resp => this.barrios = resp.data,
+        error: (e) => {
+          console.log('Error al cargar barrios para reporte');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        }
+      })
+    );
+    /*const consulta: Promise<ServerResponseList<Barrio>> = this.barriosSrv.get(params).toPromise<ServerResponseList<Barrio>>()
+    try {
+      this.barrios = (await consulta).data;
+    } catch (e) {
+      console.log('Error al cargar barrios para reporte');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    }*/
   }
 
-  private async cargarGruposReporte(id: string[] | number[]){
-      const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({id});
-      const consulta: Promise<ServerResponseList<Grupo>> = this.gruposSrv.getGrupos(params).toPromise<ServerResponseList<Grupo>>()
-      try{
-        this.grupos = (await consulta).data;
-      }catch(e){
-        console.log('Error al cargar grupos para reporte');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+  private cargarGruposReporte(id: string[] | number[]): Observable<ServerResponseList<Grupo>> {
+    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
+    return this.gruposSrv.getGrupos(params).pipe(
+      tap({
+        next: (resp: ServerResponseList<Grupo>) => {
+          this.grupos = resp.data;
+        },
+        error: (e) => {
+          console.log('Error al cargar grupos para reporte');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        }
       }
+      ));
+    /*const consulta: Promise<ServerResponseList<Grupo>> = this.gruposSrv.getGrupos(params).toPromise<ServerResponseList<Grupo>>()
+    try {
+      this.grupos = (await consulta).data;
+    } catch (e) {
+      console.log('Error al cargar grupos para reporte');
+      console.log(e);
+      this.httpErrorHandler.handle(e);
+    }*/
   }
 
-  private async cargarServiciosReporte(id: string[] | number[]){
-    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({id});
-    const consulta: Promise<ServerResponseList<Servicio>> = this.serviciosSrv.getServicios(params).toPromise<ServerResponseList<Servicio>>();
-    try{
+  private cargarServiciosReporte(id: string[] | number[]): Observable<ServerResponseList<Servicio>> {
+    const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
+    return this.serviciosSrv.getServicios(params).pipe(
+      tap({
+        next: resp => this.servicios = resp.data,
+        error: (e) => {
+          console.log('Error al cargar servicios para reporte');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+        }
+      })
+    );
+    /*const consulta: Promise<ServerResponseList<Servicio>> = this.serviciosSrv.getServicios(params).toPromise<ServerResponseList<Servicio>>();
+    try {
       this.servicios = (await consulta).data;
-    }catch(e){
+    } catch (e) {
       console.log('Error al cargar servicios para reporte');
       console.log(e);
       this.httpErrorHandler.handle(e);
-    }
+    }*/
   }
 
   estadoArrayConverter(): string[] {
@@ -174,7 +256,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.grupos.map(g => `${g.descripcion}`);
   }
 
-  nombresServicios(): string[]{
-    return this.servicios.map( s => `${s.descripcion}`);
+  nombresServicios(): string[] {
+    return this.servicios.map(s => `${s.descripcion}`);
   }
 }

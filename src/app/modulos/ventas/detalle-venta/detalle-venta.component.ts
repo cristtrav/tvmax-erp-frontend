@@ -41,7 +41,7 @@ export class DetalleVentaComponent implements OnInit {
   lstClientes: Cliente[] = [];
   lstSuscServCuotas: ISuscripcionServicioCuota[] = [];
   lstDetallesVenta: DetalleFacturaVenta[] = [];
-  lstGruposServicios: IGrupoServicio [] = [];
+  lstGruposServicios: IGrupoServicio[] = [];
 
   clienteSeleccionado: Cliente | null = null;
 
@@ -95,7 +95,7 @@ export class DetalleVentaComponent implements OnInit {
 
   ngOnInit(): void {
     const idv = this.aroute.snapshot.paramMap.get('idventa');
-    if(idv) this.idventa = idv;
+    if (idv) this.idventa = idv;
     this.cargarTimbrados();
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
       if (value !== null) {
@@ -118,32 +118,59 @@ export class DetalleVentaComponent implements OnInit {
       this.totalCuotasPendientes = 0;
       this.lstDetallesVenta = [];
       this.cargarSuscripcionesCliente();
-      this.calcularTotalFactura();      
-      if(value !== null){
+      this.calcularTotalFactura();
+      if (value !== null) {
         this.cargarClienteSeleccionado(value);
-      }else{
+      } else {
         this.clienteSeleccionado = null;
       }
     });
     this.cargarServicios();
-    if(this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
+    if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
   }
 
-  private cargarClienteSeleccionado(id: number){
-    this.clienteSrv.getPorId(id).subscribe((c: Cliente)=>{
+  private cargarClienteSeleccionado(id: number) {
+    this.clienteSrv.getPorId(id).subscribe((c: Cliente) => {
       this.clienteSeleccionado = c;
-    },(e)=>{
+    }, (e) => {
       console.log('Error al cargar clente seleccionado');
       console.log(e);
       this.httpErrorHandler.handle(e, 'cargar datos del cliente seleccionado');
     });
   }
 
-  private async cargarDatosVenta(idventa: number){
-    try{
+  private cargarDatosVenta(idventa: number) {
+    this.ventasSrv.getPorId(idventa).subscribe({
+      next: (fv) => {
+        if (fv.idcliente) this.clienteSrv.getPorId(fv.idcliente).subscribe({
+          next: (cli) => {
+            this.lstClientes = [cli];
+            this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
+            this.totalFactura = fv.total;
+            this.totalIva5 = fv.liquidacioniva5;
+            this.totalIva10 = fv.liquidacioniva10;
+            this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
+            this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
+            this.lstDetallesVenta = fv.detalles;
+            if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
+          },
+          error: (er) => {
+            console.log('Error al cargar cliente de la factura')
+            console.log(er);
+            this.httpErrorHandler.handle(er);
+          }
+        });
+      },
+      error: (e) => {
+        console.log('Error al cargar venta por id')
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    });
+    /*try {
       const fv: FacturaVenta = await this.ventasSrv.getPorId(idventa).toPromise();
-      if(fv.idcliente){
-        const cli: Cliente= await this.clienteSrv.getPorId(fv.idcliente).toPromise();
+      if (fv.idcliente) {
+        const cli: Cliente = await this.clienteSrv.getPorId(fv.idcliente).toPromise();
         this.lstClientes = [cli];
       }
       this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
@@ -153,12 +180,12 @@ export class DetalleVentaComponent implements OnInit {
       this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
       this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
       this.lstDetallesVenta = fv.detalles;
-      if(fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
-    }catch(e){
+      if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
+    } catch (e) {
       console.log('Error al cargar venta por id')
       console.log(e);
       this.httpErrorHandler.handle(e);
-    }
+    }*/
   }
 
   actualizarControlNroFactura(t: Timbrado) {
@@ -169,17 +196,17 @@ export class DetalleVentaComponent implements OnInit {
     this.formCabecera.get('nroFactura')?.setValue(t.ultnrousado ? Number(t.ultnrousado) + 1 : this.nroFacturaMin);
   }
 
-  actualizarControlNroFacturaSeleccionado(){
-    if(this.formCabecera.get('idTimbrado')?.value){
+  actualizarControlNroFacturaSeleccionado() {
+    if (this.formCabecera.get('idTimbrado')?.value) {
       const idtimb: number = this.formCabecera.get('idTimbrado')?.value;
-      for(let t of this.lstTimbrados){
-        if(t.id === idtimb){
+      for (let t of this.lstTimbrados) {
+        if (t.id === idtimb) {
           this.actualizarControlNroFactura(t);
           break;
         }
       }
     }
-    
+
   }
 
   private cargarTimbrados() {
@@ -256,7 +283,7 @@ export class DetalleVentaComponent implements OnInit {
 
   guardar() {
     if (this.validado()) {
-      if(this.idventa === 'nueva')this.registrar();
+      if (this.idventa === 'nueva') this.registrar();
       else this.notif.create('error', 'Error', 'La funcion todavia no esta implementada bro');
     }
   }
@@ -266,7 +293,7 @@ export class DetalleVentaComponent implements OnInit {
     this.ventasSrv.post(this.getDtoFacturaVenta()).subscribe((idgenerado: number) => {
       this.guardandoFactura = false;
       this.idventa = `${idgenerado}`;
-      this.router.navigate(['../', idgenerado], {relativeTo: this.aroute});
+      this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
       this.cargarSuscripcionesCliente();
       this.notif.create('success', '<strong>Éxito</strong>', 'Se guardó la factura de venta correctamente.');
     }, (e) => {
@@ -501,12 +528,12 @@ export class DetalleVentaComponent implements OnInit {
     fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
     fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');
     fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
-    if(this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
-    fv.idusuarioregistrofactura = this.sesionSrv.idusuario;    
+    if (this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
+    fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
     return fv;
   }
 
-  limpiar(){
+  limpiar() {
     this.cargarTimbrados();
     this.formCabecera.controls['idCliente']?.reset();
     this.router.navigate(['../', 'nueva'], { relativeTo: this.aroute });
@@ -514,34 +541,34 @@ export class DetalleVentaComponent implements OnInit {
     this.calcularTotalFactura();
   }
 
-  cargarServicios(){
+  cargarServicios() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('suscribible', 'false');
-    this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>)=>{
+    this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>) => {
       //console.log(resp.data);
       const lstgs: IGrupoServicio[] = [];
-      for(let s of resp.data){
+      for (let s of resp.data) {
         let existe: boolean = false;
-        for(let gs of lstgs){
-          if(s.idgrupo === gs.grupo.id){
+        for (let gs of lstgs) {
+          if (s.idgrupo === gs.grupo.id) {
             existe = true;
             gs.servicios.push(s);
           }
         }
-        if(!existe){
-          lstgs.push({grupo: {id: s.idgrupo, descripcion: s.grupo}, servicios: [s]});
+        if (!existe) {
+          lstgs.push({ grupo: { id: s.idgrupo, descripcion: s.grupo }, servicios: [s] });
         }
       }
       this.lstGruposServicios = lstgs;
-    }, (e)=>{
+    }, (e) => {
       console.log('Error al cargar servicios');
       console.log(e);
       this.httpErrorHandler.handle(e);
     });
   }
 
-  agregarServicioDetalle(srv: Servicio, susc: Suscripcion){
+  agregarServicioDetalle(srv: Servicio, susc: Suscripcion) {
     const lstdt: DetalleFacturaVenta[] = this.lstDetallesVenta.slice();
     const dt: DetalleFacturaVenta = new DetalleFacturaVenta();
     dt.cantidad = 1;
@@ -569,7 +596,7 @@ export class DetalleVentaComponent implements OnInit {
     const attachObj = this.portalHost.attach(portal);
     attachObj.instance.cargarFactura(this.idventa);
     let timer: any;
-    attachObj.instance.dataLoaded.subscribe(()=>{
+    attachObj.instance.dataLoaded.subscribe(() => {
       clearTimeout(timer);
       timer = setTimeout(() => {
         iframe.contentWindow.print();

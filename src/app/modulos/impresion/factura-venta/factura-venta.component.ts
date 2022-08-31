@@ -16,9 +16,9 @@ export class FacturaVentaComponent implements OnInit {
   @Output()
   dataLoaded: EventEmitter<boolean> = new EventEmitter();
   factura: FacturaVenta = new FacturaVenta();
-  
+
   cliente: Cliente | null = null;
-  
+
   constructor(
     private ventasSrv: VentasService,
     private clientesSrv: ClientesService,
@@ -28,24 +28,45 @@ export class FacturaVentaComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async cargarFactura(id: number){
-    try{
+  cargarFactura(id: number) {
+    this.ventasSrv.getPorId(id).subscribe({
+      next: (fact) => {
+        this.factura = fact;
+        if (this.factura.idcliente) this.clientesSrv.getPorId(this.factura.idcliente).subscribe({
+          next: (cli) => {
+            this.cliente = cli;
+            this.dataLoaded.emit(true);
+          },
+          error: (er) => {
+            console.log('Error al cargar cliente de la factura');
+            console.log(er);
+            this.httpErrorHandler.handle(er);
+          }
+        });
+      },
+      error: (e) => {
+        console.log('Error al cargar factura para impresion');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
+    });
+    /*try {
       this.factura = await this.ventasSrv.getPorId(id).toPromise();
-      if(this.factura.idcliente) this.cliente = await this.clientesSrv.getPorId(this.factura.idcliente).toPromise();
+      if (this.factura.idcliente) this.cliente = await this.clientesSrv.getPorId(this.factura.idcliente).toPromise();
       this.dataLoaded.emit(true);
-    }catch(e){
+    } catch (e) {
       console.log('Error al cargar factura para impresion');
       console.log(e);
       this.httpErrorHandler.handle(e);
-    }
+    }*/
   }
 
-  nroFacturaPadded(nro: number | null): string{
-    if(nro) return nro.toString().padStart(7, '0');
+  nroFacturaPadded(nro: number | null): string {
+    if (nro) return nro.toString().padStart(7, '0');
     return '';
   }
 
-  numeroALetras(num: number): string{
+  numeroALetras(num: number): string {
     return NumberToWords.convert(num);
   }
 
