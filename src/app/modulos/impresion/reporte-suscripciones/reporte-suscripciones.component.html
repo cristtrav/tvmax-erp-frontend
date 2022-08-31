@@ -33,10 +33,10 @@
                         <span *nzSpaceItem class="descriptions-content">
                             <span *ngIf="!paramsFiltros['fechainiciosuscripcion']">desde * </span>
                             <span *ngIf="paramsFiltros['fechainiciosuscripcion']">desde {{
-                                paramsFiltros['fechainiciosuscripcion']?.toString() | date: 'dd/MM/yy' }} </span>
+                                paramsFiltros['fechainiciosuscripcion'].toString() | date: 'dd/MM/yy' }} </span>
                             <span *ngIf="!paramsFiltros['fechafinsuscripcion']">hasta * </span>
                             <span *ngIf="paramsFiltros['fechafinsuscripcion']">hasta {{
-                                paramsFiltros['fechafinsuscripcion']?.toString() | date: 'dd/MM/yy' }}</span>
+                                paramsFiltros['fechafinsuscripcion'].toString() | date: 'dd/MM/yy' }}</span>
                         </span>
                     </nz-space>
                 </div>
