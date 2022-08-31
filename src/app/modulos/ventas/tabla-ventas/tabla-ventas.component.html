@@ -1,4 +1,4 @@
-<nz-table #tablaVentas [nzData]="lstFacturasVenta" [nzFrontPagination]="true" [nzPageSize]="pageSize"
+<nz-table #tablaVentas [nzData]="lstFacturasVenta" [nzFrontPagination]="false" [nzPageSize]="pageSize"
     [nzPageIndex]="pageIndex" [nzTotal]="totalRegisters" [nzLoading]="loadingVentas" nzShowPagination nzShowSizeChanger
     nzSize="small" style="padding-top: 10px;" [nzFooter]="pietabla" (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
