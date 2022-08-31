@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Cobrador } from '../dto/cobrador-dto';
 import { Observable } from 'rxjs';
 import { ServerResponseList } from '../dto/server-response-list.dto';
+import { Funcionario } from '@dto/funcionario.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +16,20 @@ export class CobradoresService {
     private http: HttpClient
   ) { }
 
-  post(c: Cobrador): Observable<any> {
+  post(c: Funcionario): Observable<any> {
     return this.http.post(this.url, c, AppSettings.getHttpOptionsAuth());
   }
 
-  getPorId(id: number): Observable<Cobrador> {
-    return this.http.get<Cobrador>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  getPorId(id: number): Observable<Funcionario> {
+    return this.http.get<Funcionario>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  put(id: number, c: Cobrador): Observable<any> {
+  put(id: number, c: Funcionario): Observable<any> {
     return this.http.put(`${this.url}/${id}`, c, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Cobrador>> {
-    return this.http.get<ServerResponseList<Cobrador>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<ServerResponseList<Funcionario>> {
+    return this.http.get<ServerResponseList<Funcionario>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   delete(id: number): Observable<any> {

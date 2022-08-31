@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Funcionario } from '@dto/funcionario.dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
-import { Usuario } from '@dto/usuario-dto';
 import { AuditoriaService } from '@servicios/auditoria.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { Extra } from '@util/extra';
@@ -20,7 +20,7 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
   @Output()
   cantFiltrosChange: EventEmitter<number> = new EventEmitter();
 
-  lstUsuarios: Usuario[] = [];
+  lstUsuarios: Funcionario[] = [];
   lstTablas: TablaAuditoria[] = [];
   idUsuarioSelec: number | null = null;
   idTablaAuditoriaSelec: number | null = null

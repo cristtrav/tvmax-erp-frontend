@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router' ;
+import { ActivatedRoute } from '@angular/router' ;
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { Modulo } from '@dto/modulo-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
@@ -8,9 +8,8 @@ import { PermisosService } from '@servicios/permisos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cliente } from '@dto/cliente-dto';
 import { UsuariosService } from '@servicios/usuarios.service';
-import { Usuario } from '@dto/usuario-dto';
+import { Funcionario } from '@dto/funcionario.dto';
 
 @Component({
   selector: 'app-permisos-usuario',
@@ -31,7 +30,7 @@ export class PermisosUsuarioComponent implements OnInit {
   guardandoPermisos: boolean = false;
   cargandoPermisos: boolean = false;
 
-  usuario: Usuario | null = null;
+  usuario: Funcionario | null = null;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -49,7 +48,7 @@ export class PermisosUsuarioComponent implements OnInit {
 
   cargarUsuario(): void{
     if(this.idusuario){
-      this.usuarioSrv.getPorId(Number(this.idusuario)).subscribe((data: Usuario)=>{
+      this.usuarioSrv.getPorId(Number(this.idusuario)).subscribe((data: Funcionario)=>{
         this.usuario = data;
       }, (e)=>{
         console.log('Error al cargar usuario');

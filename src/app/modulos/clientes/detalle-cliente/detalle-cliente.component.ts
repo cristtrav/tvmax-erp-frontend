@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cliente } from 'src/app/dto/cliente-dto';
-import { Cobrador } from 'src/app/dto/cobrador-dto';
 import { CobradoresService } from './../../../servicios/cobradores.service';
 import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
+import { Funcionario } from '@dto/funcionario.dto';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -34,7 +34,7 @@ export class DetalleClienteComponent implements OnInit {
     email: [null, [Validators.maxLength(120), Validators.email]],
     idcobrador: [null, [Validators.required]],
   });
-  lstCobradores: Cobrador[] = [];
+  lstCobradores: Funcionario[] = [];
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -70,7 +70,7 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   private cargarCobradores(): void {
-    this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Cobrador>) => {
+    this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Funcionario>) => {
       this.lstCobradores = resp.data;
     }, (e) => {
       console.log('Error al cargar cobradores');

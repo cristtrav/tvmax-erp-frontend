@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { UsuariosService } from './../../../servicios/usuarios.service';
-import { Usuario } from './../../../dto/usuario-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { Funcionario } from '@dto/funcionario.dto';
 
 @Component({
   selector: 'app-detalle-usuario',
@@ -94,8 +94,8 @@ export class DetalleUsuarioComponent implements OnInit {
     }
   }
 
-  private getDto(): Usuario {
-    const u: Usuario = new Usuario();
+  private getDto(): Funcionario {
+    const u: Funcionario = new Funcionario();
     u.id = this.form.get('id')?.value;
     u.nombres = this.form.get('nombres')?.value;
     u.apellidos = this.form.get('apellidos')?.value;
@@ -125,7 +125,7 @@ export class DetalleUsuarioComponent implements OnInit {
 
   private modificar(): void {
     this.guardarLoading = true;
-    const usu: Usuario = this.getDto();
+    const usu: Funcionario = this.getDto();
     this.usuarioSrv.put(+this.idusuario, usu).subscribe(() => {
       this.notif.create('success', 'Usuario guardado correctamente', '');
       this.guardarLoading = false;

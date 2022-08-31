@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cobrador } from './../../../dto/cobrador-dto';
 import { CobradoresService } from './../../../servicios/cobradores.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { Funcionario } from '@dto/funcionario.dto';
 
 @Component({
   selector: 'app-detalle-cobrador',
@@ -47,21 +47,24 @@ export class DetalleCobradorComponent implements OnInit {
 
   cargarDatos(): void {
     this.formLoading = true;
-    this.cobradoresSrv.getPorId(+this.idcobrador).subscribe((data) => {
-      this.form.get('id')?.setValue(data.id);
-      this.form.get('razonsocial')?.setValue(data.razonsocial);
-      this.form.get('ci')?.setValue(data.ci);
-      this.form.get('dv')?.setValue(data.dvruc);
-      this.form.get('telefono')?.setValue(data.telefono);
-      this.form.get('email')?.setValue(data.email);
-      this.form.get('activo')?.setValue(data.activo);
-      this.formLoading = false;
-    }, (e) => {
-      console.log('Error al cargar datos');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al cargar datos del cobrador', e.error);
-      this.formLoading = false;
+    this.cobradoresSrv.getPorId(parseInt(this.idcobrador)).subscribe({
+      next: (data) => {
+        this.form.get('id')?.setValue(data.id);
+        this.form.get('razonsocial')?.setValue(data.razonsocial);
+        this.form.get('ci')?.setValue(data.ci);
+        this.form.get('dv')?.setValue(data.dvruc);
+        this.form.get('telefono')?.setValue(data.telefono);
+        this.form.get('email')?.setValue(data.email);
+        this.form.get('activo')?.setValue(data.activo);
+        this.formLoading = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar datos');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        //this.notif.create('error', 'Error al cargar datos del cobrador', e.error);
+        this.formLoading = false;
+      }
     });
   }
 
@@ -80,15 +83,15 @@ export class DetalleCobradorComponent implements OnInit {
     return val;
   }
 
-  private getDto(): Cobrador {
+  private getDto(): Funcionario {
     const ci = this.form.get('ci')?.value;
     const dvruc = this.form.get('dv')?.value;
     const telefono = this.form.get('telefono')?.value;
     const email = this.form.get('email')?.value;
 
-    const c: Cobrador = new Cobrador();
+    const c: Funcionario = new Funcionario();
     c.id = this.form.get('id')?.value;
-    c.razonsocial = this.form.get('razonsocial')?.value;
+    c.nombres = this.form.get('razonsocial')?.value;
     c.ci = ci === '' ? null : ci;
     c.dvruc = dvruc === '' ? null : dvruc;
     c.telefono = telefono === '' ? null : telefono;

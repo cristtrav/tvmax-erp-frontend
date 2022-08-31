@@ -1,8 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Cobrador } from '@dto/cobrador-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
-import { Usuario } from '@dto/usuario-dto';
+import { Funcionario } from '@dto/funcionario.dto';
 import { CobradoresService } from '@servicios/cobradores.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -17,7 +15,7 @@ export class FormFiltrosVentasComponent implements OnInit {
 
   @Output()
   paramsFiltrosChange = new EventEmitter<IParametroFiltro>();
-  
+
   @Output()
   cantFiltrosChange = new EventEmitter<number>();
 
@@ -30,10 +28,10 @@ export class FormFiltrosVentasComponent implements OnInit {
   fechaInicioCobroFiltro: Date | null = null;
   fechaFinCobroFiltro: Date | null = null;
 
-  lstCobradoresFiltro: Cobrador[] = [];
+  lstCobradoresFiltro: Funcionario[] = [];
   idCobradorFiltro: number | null = null;
 
-  lstUsuariosFiltro: Usuario[] = [];
+  lstUsuariosFiltro: Funcionario[] = [];
   idUsuarioCobroFiltro: number | null = null;
 
   filtroPagado: boolean = false;
@@ -64,7 +62,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (!endValue || !this.fechaInicioFiltro) {
       return false;
     }
-    const fid: Date = new Date(this.fechaInicioFiltro.getFullYear(), this.fechaInicioFiltro.getMonth(), this.fechaInicioFiltro.getDate()-1);
+    const fid: Date = new Date(this.fechaInicioFiltro.getFullYear(), this.fechaInicioFiltro.getMonth(), this.fechaInicioFiltro.getDate() - 1);
     return endValue.getTime() <= fid.getTime();
   };
 
@@ -80,121 +78,127 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (!endValue || !this.fechaInicioCobroFiltro) {
       return false;
     }
-    const fid: Date = new Date(this.fechaInicioCobroFiltro.getFullYear(), this.fechaInicioCobroFiltro.getMonth(), this.fechaInicioCobroFiltro.getDate()-1);
+    const fid: Date = new Date(this.fechaInicioCobroFiltro.getFullYear(), this.fechaInicioCobroFiltro.getMonth(), this.fechaInicioCobroFiltro.getDate() - 1);
     return endValue.getTime() <= fid.getTime();
   };
 
-  filtrar(){
+  filtrar() {
     this.cantFiltrosChange.emit(this.getCantidadFiltros());
     this.paramsFiltrosChange.emit(this.getParams());
     this.cantFiltrosCobros = this.getCantidadFiltrosCobros();
     this.cantFiltrosFacturas = this.getCantidadFiltrosFacturas();
   }
 
-  limpiarFiltroFechas(){
+  limpiarFiltroFechas() {
     this.fechaInicioFiltro = null;
     this.fechaFinFiltro = null;
     this.filtrar();
   }
 
   getCantidadFiltros(): number {
-    return this.getCantidadFiltrosCobros()+this.getCantidadFiltrosFacturas();
+    return this.getCantidadFiltrosCobros() + this.getCantidadFiltrosFacturas();
   }
 
   getCantidadFiltrosCobros(): number {
     let cantCobro: number = 0;
-    if(this.idCobradorFiltro) cantCobro++;
-    if(this.idUsuarioCobroFiltro) cantCobro++;
-    if(this.fechaInicioCobroFiltro) cantCobro++;
-    if(this.fechaFinCobroFiltro) cantCobro++;
+    if (this.idCobradorFiltro) cantCobro++;
+    if (this.idUsuarioCobroFiltro) cantCobro++;
+    if (this.fechaInicioCobroFiltro) cantCobro++;
+    if (this.fechaFinCobroFiltro) cantCobro++;
     return cantCobro;
   }
-  
-  getCantidadFiltrosFacturas(): number{
+
+  getCantidadFiltrosFacturas(): number {
     let cantFactura: number = 0;
-    if(this.fechaInicioFiltro) cantFactura++;
-    if(this.fechaFinFiltro) cantFactura++;
-    if(this.filtroPagado) cantFactura++;
-    if(this.filtroPendiente) cantFactura++;
-    if(this.filtroAnulado) cantFactura++;
-    if(this.filtroNoAnulado) cantFactura++;
+    if (this.fechaInicioFiltro) cantFactura++;
+    if (this.fechaFinFiltro) cantFactura++;
+    if (this.filtroPagado) cantFactura++;
+    if (this.filtroPendiente) cantFactura++;
+    if (this.filtroAnulado) cantFactura++;
+    if (this.filtroNoAnulado) cantFactura++;
     return cantFactura;
   }
 
-  limpiarFiltroPagos(){
+  limpiarFiltroPagos() {
     this.filtroPendiente = false;
     this.filtroPagado = false;
     this.filtrar();
   }
 
-  limpiarFiltrosAnulacion(){
+  limpiarFiltrosAnulacion() {
     this.filtroAnulado = false;
     this.filtroNoAnulado = false;
     this.filtrar();
   }
 
-  limpiarFiltroCobrador(){
+  limpiarFiltroCobrador() {
     this.idCobradorFiltro = null;
     this.filtrar();
   }
 
-  limpiarFiltroUsuarioCobro(){
+  limpiarFiltroUsuarioCobro() {
     this.idUsuarioCobroFiltro = null;
     this.filtrar();
   }
 
-  limpiarFiltrosFechasCobro(){
+  limpiarFiltrosFechasCobro() {
     this.fechaInicioCobroFiltro = null;
     this.fechaFinCobroFiltro = null;
     this.filtrar();
   }
 
-  cargarCobradoresFiltro(){
+  cargarCobradoresFiltro() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    params = params.append('sort', '+razon_social');
-    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Cobrador>)=>{
-      this.lstCobradoresFiltro = resp.data;
-    }, (e)=>{
-      console.log('Error al cargar cobradores filtro');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    params = params.append('sort', '+razonsocial');
+    this.cobradoresSrv.get(params).subscribe({
+      next: (resp) => {
+        this.lstCobradoresFiltro = resp.data;
+      },
+      error: (e) => {
+        console.log('Error al cargar cobradores filtro');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
     });
   }
 
-  cargarUsuarioFiltro(){
+  cargarUsuarioFiltro() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+nombres');
-    this.usuariosSrv.get(params).subscribe((resp: ServerResponseList<Usuario>)=>{
-      this.lstUsuariosFiltro = resp.data;
-    }, (e)=>{
-      console.log('Error al cargar usuarios del filtro');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    this.usuariosSrv.get(params).subscribe({
+      next: (resp) => {
+        this.lstUsuariosFiltro = resp.data;
+      },
+      error: (e) => {
+        console.log('Error al cargar usuarios del filtro');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
     });
   }
 
-  getParams(): IParametroFiltro{
+  getParams(): IParametroFiltro {
     let params: IParametroFiltro = {};
-    if(this.fechaInicioFiltro){
-      const fechaInicioStr = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;      
+    if (this.fechaInicioFiltro) {
+      const fechaInicioStr = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechainiciofactura'] = fechaInicioStr;
     }
-    if(this.fechaFinFiltro){
+    if (this.fechaFinFiltro) {
       const fechaFinStr = `${this.fechaFinFiltro.getFullYear()}-${(this.fechaFinFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechafinfactura'] = fechaFinStr;
     }
-    if(this.filtroAnulado != this.filtroNoAnulado) params['anulado'] = `${this.filtroAnulado}`;
-    if(this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
-    if(this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
-    if(this.idUsuarioCobroFiltro) params['idusuarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
-    if(this.fechaInicioCobroFiltro){
-      const fechaIniCobroStr: string = `${this.fechaInicioCobroFiltro.getFullYear()}-${(this.fechaInicioCobroFiltro.getMonth()+1).toString().padStart(2,'0')}-${this.fechaInicioCobroFiltro.getDate().toString().padStart(2, '0')}`;
+    if (this.filtroAnulado != this.filtroNoAnulado) params['anulado'] = `${this.filtroAnulado}`;
+    if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
+    if (this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
+    if (this.idUsuarioCobroFiltro) params['idusuarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
+    if (this.fechaInicioCobroFiltro) {
+      const fechaIniCobroStr: string = `${this.fechaInicioCobroFiltro.getFullYear()}-${(this.fechaInicioCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioCobroFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechainiciocobro'] = fechaIniCobroStr;
     }
-    if(this.fechaFinCobroFiltro){
-      const fechaFinCobroStr: string = `${this.fechaFinCobroFiltro.getFullYear()}-${(this.fechaFinCobroFiltro.getMonth()+1).toString().padStart(2,'0')}-${this.fechaFinCobroFiltro.getDate().toString().padStart(2, '0')}`;
+    if (this.fechaFinCobroFiltro) {
+      const fechaFinCobroStr: string = `${this.fechaFinCobroFiltro.getFullYear()}-${(this.fechaFinCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinCobroFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechafincobro'] = fechaFinCobroStr;
     }
     return params;
