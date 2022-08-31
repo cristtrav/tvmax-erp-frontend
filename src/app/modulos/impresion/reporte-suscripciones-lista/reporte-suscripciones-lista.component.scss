@@ -2,10 +2,10 @@ $color-background: #F5F5F5;
 
 .gray-background-printable{
     background-color: $color-background;
-    color-adjust: exact !important;    
+    print-color-adjust: exact !important;    
 }
     .tabla-reporte{
-        color-adjust: exact !important;
+        print-color-adjust: exact !important;
         border-collapse: collapse;
         border-spacing: 0;
         width: 100%;

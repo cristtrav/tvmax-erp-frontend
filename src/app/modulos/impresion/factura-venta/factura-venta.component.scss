@@ -1,6 +1,6 @@
 .gray-background-printable{
     background-color: #F5F5F5;
-    color-adjust: exact !important;
+    print-color-adjust: exact !important;
     padding: 4px;
 }
 
@@ -24,7 +24,7 @@
 
 .tabla-detalles thead{
     background-color: #F5F5F5;
-    color-adjust: exact !important;
+    print-color-adjust: exact !important;
     padding: 4px;
 }
 
