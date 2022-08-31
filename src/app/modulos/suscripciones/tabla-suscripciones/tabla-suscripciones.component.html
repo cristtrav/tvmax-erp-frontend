@@ -1,16 +1,16 @@
-<nz-table #tbl [nzData]="lstSuscripciones"  nzShowSizeChanger nzShowSizeChanger
+<nz-table #tbl [nzData]="lstSuscripciones" nzShowSizeChanger nzShowSizeChanger
     [nzFooter]="pietabla" [nzFrontPagination]="false" [nzLoading]="tableLoading" [(nzPageIndex)]="pageIndex"
     [(nzPageSize)]="pageSize" [nzTotal]="total" (nzQueryParams)="onTableParamsChange($event)" nzSize="small" [ngStyle]="tableStyles">
     <thead>
         <tr>
             <th nzWidth="60px"></th>
-            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="sortOrders['id']">Código</th>
-            <th *ngIf="mostrarCliente" [nzColumnKey]="'cliente'" [nzSortFn]="true" [nzSortOrder]="sortOrders['cliente']">Cliente</th>
-            <th [nzColumnKey]="'servicio'" [nzSortFn]="true" [nzSortOrder]="sortOrders['servicio']">Servicio</th>
-            <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true" [nzSortOrder]="sortOrders['monto']">Monto/mes</th>
-            <th [nzColumnKey]="'estado'" [nzSortFn]="true" [nzSortOrder]="sortOrders['estado']">Estado</th>
-            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true" [nzSortOrder]="sortOrders['cuotaspendientes']">Cuotas P.</th>
-            <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right" [nzSortOrder]="sortOrders['deuda']">Deuda</th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+            <th *ngIf="mostrarCliente" [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
+            <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
+            <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true">Monto/mes</th>
+            <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
+            <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true">Cuotas P.</th>
+            <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right">Deuda</th>
             <th>Acciones</th>
         </tr>
     </thead>

@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
@@ -26,8 +25,13 @@ export class TablaSuscripcionesComponent implements OnInit {
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
   set paramsFiltros(p: IParametroFiltro) {
     const oldParams: string = JSON.stringify(this._paramsFiltros);
-    this._paramsFiltros = { ...p};
-    if (oldParams !== JSON.stringify(p)) this.cargarDatos();
+    this._paramsFiltros = { ...p };
+    if (oldParams !== JSON.stringify(p)) {
+      /*console.log("Los parametros son distintos");
+      console.log(oldParams);
+      console.log(JSON.stringify(p));*/
+      this.cargarDatos()
+    };
   };
   private _paramsFiltros: IParametroFiltro = {};
   private paramsFiltrosTabla: IParametroFiltro = {};
@@ -66,7 +70,7 @@ export class TablaSuscripcionesComponent implements OnInit {
     }
   }
 
-  sortOrders: { [field: string]: string | null } = {}
+  //sortOrders: { [field: string]: string | null } = {}
   srtOrderCliente: string | null = null;
   srtOrderId: string | null = null;
 
@@ -76,22 +80,26 @@ export class TablaSuscripcionesComponent implements OnInit {
     private notif: NzNotificationService
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   private cargarDatos(): void {
     this.tableLoading = true;
 
-    this.suscripSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Suscripcion>) => {
-      this.lstSuscripciones = resp.data;
-      this.total = resp.queryRowCount;
-      this.tableLoading = false;
-    }, (e) => {
-      console.log('Error al cargar suscripciones');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.tableLoading = false;
-    });
+    this.suscripSrv.get(this.getHttpQueryParams()).subscribe(
+      {
+        next: (resp) => {
+          this.lstSuscripciones = resp.data;
+          this.total = resp.queryRowCount;
+          this.tableLoading = false;
+        },
+        error: (e) => {
+          console.log('Error al cargar suscripciones');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+          this.tableLoading = false;
+        }
+      }
+    );
   }
 
   eliminar(id: number | null): void {
@@ -109,7 +117,7 @@ export class TablaSuscripcionesComponent implements OnInit {
 
   onTableParamsChange(params: NzTableQueryParams) {
     const srtString: string | null = Extra.buildSortString(params.sort);
-    if(srtString) this.paramsFiltrosTabla['sort'] = srtString;
+    if (srtString) this.paramsFiltrosTabla['sort'] = srtString;
 
     this.paramsFiltrosTabla['offset'] = `${(this.pageIndex - 1) * this.pageSize}`;
     this.paramsFiltrosTabla['limit'] = `${this.pageSize}`;

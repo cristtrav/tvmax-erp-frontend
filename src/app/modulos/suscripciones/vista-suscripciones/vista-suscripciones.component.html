@@ -70,11 +70,12 @@
                         (cantFiltrosChange)="cantFiltrosAplicados = $event"></app-form-filtro-suscripciones>
                 </ng-template>
             </nz-drawer>
-            <app-tabla-suscripciones *ngIf="vista !== 'estadisticas'" [mostrarCliente]="true" [textoBusqueda]="textoBusqueda" [paramsFiltros]="paramsFiltro"
+            <app-tabla-suscripciones [style]="vista === 'registros'?'display: block':'display: none'" [mostrarCliente]="true" [textoBusqueda]="textoBusqueda" [paramsFiltros]="paramsFiltro"
                 [tableStyles]="{'margin-top':'10px'}"></app-tabla-suscripciones>
         </div>
         <div style="margin-top: 16px;">
-            <app-contenido-estadisticas-suscripciones *ngIf="vista === 'estadisticas'" [paramsFiltros]="paramsFiltro" [textoBusqueda]="textoBusqueda"></app-contenido-estadisticas-suscripciones>
+            <app-contenido-estadisticas-suscripciones [style]="vista === 'estadisticas'?'display: block':'display: none'" [paramsFiltros]="paramsFiltro" [textoBusqueda]="textoBusqueda">
+            </app-contenido-estadisticas-suscripciones>
         </div>
     </div>
 </div>
