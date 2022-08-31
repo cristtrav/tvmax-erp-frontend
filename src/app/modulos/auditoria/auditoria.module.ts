@@ -11,7 +11,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { FormFiltroEventoAuditoriaComponent } from './form-filtro-evento-auditoria/form-filtro-evento-auditoria.component';
-//import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -40,7 +40,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzGridModule,
     NzDescriptionsModule,
     NzTagModule,
-  //  NzDrawerModule,
+    NzDrawerModule,
     NzSpaceModule,
     NzBadgeModule,
     NzInputModule,

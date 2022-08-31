@@ -42,11 +42,11 @@
                 </div>
             </div>
 
-            <!--<nz-drawer [nzContent]="contenidoFiltros" nzPlacement="right" nzTitle="Filtros" nzClosable="true" [nzVisible]="drawerFiltrosVisible" (nzOnClose)="drawerFiltrosVisible = false">
+            <nz-drawer [nzContent]="contenidoFiltros" nzPlacement="right" nzTitle="Filtros" nzClosable="true" [nzVisible]="drawerFiltrosVisible" (nzOnClose)="drawerFiltrosVisible = false">
                 <ng-template #contenidoFiltros>
                     <app-form-filtro-evento-auditoria (cantFiltrosChange)="cantFiltrosAplicados = $event" (paramsFiltrosChange)="paramsFiltros = $event"></app-form-filtro-evento-auditoria>
                 </ng-template>
-            </nz-drawer>-->
+            </nz-drawer>
 
             <nz-modal [nzWidth]="750" [nzFooter]="modalDetallesFooter" [(nzVisible)]="modalDeteallesVisisble" [nzTitle]="'Evento #'+ideventoSelec" (nzOnCancel)="cerrarDetalles()">
                 <ng-container *nzModalContent="">

@@ -31,7 +31,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-//import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { FormFiltrosVentasComponent } from './form-filtros-ventas/form-filtros-ventas.component';
@@ -77,7 +77,7 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     NzPopconfirmModule,
     NzPopoverModule,
     NzNotificationModule,
-    //NzDrawerModule,
+    NzDrawerModule,
     NzCheckboxModule,
     NzTabsModule,
     EstadisticasModule,

@@ -31,7 +31,7 @@ import { CuotasModule } from './../cuotas/cuotas.module';
 import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-//import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { FormFiltroClientesComponent } from './form-filtro-clientes/form-filtro-clientes.component';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
@@ -63,7 +63,7 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
     CuotasModule,
     NzSpinModule,
     NzBadgeModule,
-   // NzDrawerModule,
+    NzDrawerModule,
     NzDescriptionsModule,
     HelperComponentsModule
   ]

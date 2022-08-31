@@ -33,9 +33,9 @@
     </div>
 </div>
 
-<!--<nz-drawer [nzContent]="formFiltros" [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzPlacement="right" nzTitle="Filtros"
+<nz-drawer [nzContent]="formFiltros" [nzVisible]="drawerFiltrosVisible" nzClosable="true" nzPlacement="right" nzTitle="Filtros"
     (nzOnClose)="drawerFiltrosVisible = false">
-</nz-drawer>-->
+</nz-drawer>
 
 <ng-template #formFiltros>
     <app-form-filtro-suscripciones (paramsFiltrosChange)="paramsFiltros = $event" (cantFiltrosChange)="cantFiltrosAplicados = $event"></app-form-filtro-suscripciones>

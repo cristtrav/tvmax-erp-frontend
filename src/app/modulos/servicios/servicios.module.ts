@@ -22,7 +22,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule} from 'ng-zorro-antd/space';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
-//import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @NgModule({
@@ -49,7 +49,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzSpinModule,
     NzSpaceModule,
     NzBadgeModule,
-    //NzDrawerModule,
+    NzDrawerModule,
     NzTypographyModule
   ]
 })
