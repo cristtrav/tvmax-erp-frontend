@@ -26,8 +26,8 @@
                                 </nz-input-group>
                             </nz-form-control> 
                             <ng-template #btnCargarId>
-                                <button nz-button nz-tooltip [nzTooltipTitle]="'Consultar código disponible'" nzSearch (click)="cargarId()">
-                                    <i nz-icon [nzType]="lastIdLoading?'loading':'monitor'" nzTheme="outline"></i>
+                                <button nz-button nz-tooltip [nzTooltipTitle]="'Consultar código disponible'" nzSearch [nzLoading]="lastIdLoading" (click)="cargarId()">
+                                    <i nz-icon nzType="monitor" nzTheme="outline"></i>
                                 </button>
                             </ng-template>
                         </nz-form-item>

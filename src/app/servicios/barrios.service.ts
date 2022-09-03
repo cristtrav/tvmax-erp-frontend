@@ -40,4 +40,8 @@ export class BarriosService {
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
+  getLastId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
+  }
+
 }

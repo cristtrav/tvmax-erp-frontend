@@ -26,6 +26,7 @@ export class DetalleBarrioComponent implements OnInit {
   lstDist: Distrito[] = [];
   formLoading: boolean = false;
   guardarLoading: boolean = false;
+  lastIdLoading: boolean = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -140,6 +141,22 @@ export class DetalleBarrioComponent implements OnInit {
   getHttpParamsDistrito(): HttpParams{
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     return params;
+  }
+
+  cargarId(): void{
+    this.lastIdLoading = true;
+    this.barrioSrv.getLastId().subscribe({
+      next: (id) => {
+        this.form.get('id')?.setValue(id+1);
+        this.lastIdLoading = false;
+      },
+      error: (e) => {
+        console.log('Error al consultar ultimo id de barrios');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.lastIdLoading = false;
+      }
+    });
   }
 
 }
