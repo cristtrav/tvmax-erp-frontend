@@ -20,7 +20,7 @@
                 </div>
                 <div nz-col>
                     <nz-space>
-                        <nz-input-group *nzSpaceItem [nzSuffixIcon]="'search'">
+                        <nz-input-group *nzSpaceItem [nzSuffix]="suffixBusqueda">
                             <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
                         </nz-input-group>
                         <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
@@ -29,6 +29,10 @@
                             </button>
                         </nz-badge>
                     </nz-space>
+                    <ng-template #suffixBusqueda>
+                        <i nz-icon *ngIf="!textoBusqueda" nzType="search" nzTheme="outline"></i>
+                        <i nz-icon *ngIf="textoBusqueda" nzType="close-circle" nzTheme="outline" (click)="limpiarBusqueda()" style="cursor: pointer;"></i>
+                    </ng-template>
                 </div>
             </div>
             <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;" nzShowSizeChanger

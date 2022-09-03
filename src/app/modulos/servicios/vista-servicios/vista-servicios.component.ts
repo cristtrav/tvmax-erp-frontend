@@ -178,6 +178,11 @@ export class VistaServiciosComponent implements OnInit {
     }, 500);
     
   }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = "";
+    this.cargarServicios();
+  }
 }
 
 interface ICheckboxData{
