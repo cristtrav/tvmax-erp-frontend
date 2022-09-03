@@ -21,9 +21,12 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { FormFiltroBarriosComponent } from './form-filtro-barrios/form-filtro-barrios.component';
 
 @NgModule({
-  declarations: [VistaBarriosComponent, DetalleBarrioComponent],
+  declarations: [VistaBarriosComponent, DetalleBarrioComponent, FormFiltroBarriosComponent],
   imports: [
     CommonModule,
     BarriosRoutingModule,
@@ -43,7 +46,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzPopconfirmModule,
     NzToolTipModule,
     NzSpinModule,
-    NzSpaceModule
+    NzSpaceModule,
+    NzDrawerModule,
+    NzBadgeModule
   ]
 })
 export class BarriosModule { }

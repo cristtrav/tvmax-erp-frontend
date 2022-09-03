@@ -75,8 +75,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
 
     params['idbarrio'] = this.ubicacionesSelec.filter(item => item.includes('bar')).map(item => Number(item.split('-')[1]));
     params['iddistrito'] = this.ubicacionesSelec.filter(item => item.includes('dis')).map(item => item.split('-')[1]);
-    params['iddepartamento'] = this.ubicacionesSelec.filter(item => item.includes('dep')).map(item => item.split('-')[1]);
-    
+    params['iddepartamento'] = this.ubicacionesSelec.filter(item => item.includes('dep')).map(item => item.split('-')[1]);    
     return params;
   }
 

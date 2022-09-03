@@ -1,0 +1,36 @@
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <h3>
+            <a nz-tooltip nzTooltipTitle="Limpiar filtro de departamento" (click)="limpiarFiltroDepartamento()">
+                <i nz-icon nzType="clear" nzTheme="outline"></i>
+            </a>
+            Departamento
+        </h3>
+    </div>
+    <div nz-col nzSpan="24">
+        <nz-select nzPlaceHolder="Seleccionar..." style="width: 100%;" [(ngModel)]="idDepartamentoSeleccion" (ngModelChange)="seleccionDepartamento()" nzAllowClear>
+            <nz-option *ngFor="let dep of lstDepartamentos" [nzValue]="dep.id" [nzLabel]="dep.descripcion"></nz-option>
+        </nz-select>
+    </div>
+
+    <div nz-col nzSpan="24">
+        <h3>
+            <a nz-tooltip nzTooltipTitle="Limpiar filtro de distrito" (click)="limpiarFiltroDistrito()">
+                <i nz-icon nzType="clear" nzTheme="outline"></i>
+            </a>
+            Distrito
+        </h3>
+    </div>
+    <div nz-col nzSpan="24">
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            style="width: 100%;"
+            [(ngModel)]="idDistritoSeleccion"
+            (ngModelChange)="seleccionDistrito()"
+            [nzLoading]="loadingDistritos"
+            [nzDisabled]="!idDepartamentoSeleccion"
+            nzAllowClear>
+            <nz-option *ngFor="let dis of lstDistritos" [nzValue]="dis.id" [nzLabel]="dis.descripcion"></nz-option>
+        </nz-select>
+    </div>
+</div>

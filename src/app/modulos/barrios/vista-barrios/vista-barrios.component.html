@@ -11,6 +11,16 @@
     </div>
     <div class="module-container">
         <div class="module-content">
+            <nz-drawer
+                [(nzVisible)]="drawerFiltrosVisible"
+                (nzOnClose)="drawerFiltrosVisible = false"
+                nzTitle="Filtros"
+                [nzContent]="formFiltros">
+                
+            </nz-drawer>
+            <ng-template #formFiltros>
+                <app-form-filtro-barrios (paramsFiltrosChange)="filtrar($event)" (cantFiltrosChange)="cantFiltros = $event"></app-form-filtro-barrios>
+            </ng-template>
             <div nz-row>
                 <nz-col nzFlex="auto">
                     <a nz-button nzType="primary" routerLink="nuevo">
@@ -19,9 +29,16 @@
                     </a>
                 </nz-col>
                 <nz-col>
-                    <nz-input-group [nzSuffix]="suffixBusqueda">
-                        <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
-                    </nz-input-group>
+                    <nz-space>
+                        <nz-input-group *nzSpaceItem [nzSuffix]="suffixBusqueda">
+                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                        </nz-input-group>
+                        <nz-badge *nzSpaceItem [nzCount]="cantFiltros">
+                            <button nz-button nzType="primary"(click)="drawerFiltrosVisible = true">
+                                <i nz-icon nzType="filter" nzTheme="outline"></i>
+                            </button>
+                        </nz-badge>
+                    </nz-space>
                     
                     <ng-template #suffixBusqueda>
                         <i *ngIf="!textoBusqueda" nz-icon nzType="search" nzTheme="outline"></i>

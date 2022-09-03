@@ -6,6 +6,7 @@ import { BarriosService } from './../../../servicios/barrios.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
 @Component({
   selector: 'app-vista-barrios',
@@ -23,6 +24,10 @@ export class VistaBarriosComponent implements OnInit {
 
   timerBusqueda: any;
   textoBusqueda: string = '';
+
+  drawerFiltrosVisible: boolean = false;
+  paramsFiltros: IParametroFiltro = {};
+  cantFiltros: number = 0;
 
   constructor(
     private barrioSrv: BarriosService,
@@ -77,6 +82,7 @@ export class VistaBarriosComponent implements OnInit {
     httpParams = httpParams.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
     httpParams = httpParams.append('limit', `${this.pageSize}`);
     if(this.textoBusqueda) httpParams = httpParams.append('search', this.textoBusqueda);
+    httpParams = httpParams.appendAll(this.paramsFiltros);
     return httpParams;
   }
 
@@ -97,6 +103,11 @@ export class VistaBarriosComponent implements OnInit {
 
   limpiarBusqueda(){
     this.textoBusqueda = '';
+    this.cargarDatos();
+  }
+
+  filtrar(params: IParametroFiltro){
+    this.paramsFiltros = params;
     this.cargarDatos();
   }
 
