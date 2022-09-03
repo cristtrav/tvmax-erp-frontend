@@ -21,6 +21,9 @@ export class VistaBarriosComponent implements OnInit {
   tableLoading: boolean = false;
   sortStr: string | null = "+id";
 
+  timerBusqueda: any;
+  textoBusqueda: string = '';
+
   constructor(
     private barrioSrv: BarriosService,
     private notif: NzNotificationService,
@@ -73,6 +76,7 @@ export class VistaBarriosComponent implements OnInit {
     }
     httpParams = httpParams.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
     httpParams = httpParams.append('limit', `${this.pageSize}`);
+    if(this.textoBusqueda) httpParams = httpParams.append('search', this.textoBusqueda);
     return httpParams;
   }
 
@@ -82,6 +86,18 @@ export class VistaBarriosComponent implements OnInit {
       if(s.value === 'descend') return `-${s.key}`;
     }
     return null;
+  }
+
+  buscar(): void{
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(()=>{
+      this.cargarDatos();
+    }, 500)
+  }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.cargarDatos();
   }
 
 }

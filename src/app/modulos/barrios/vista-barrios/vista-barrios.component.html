@@ -11,18 +11,33 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="nuevo">
-                <i nz-icon nzType="plus"></i>
-                Nuevo
-            </a>
-            <nz-table #tbl [nzData]="lstBarrios" style="margin-top: 10px;"
-            [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
-            (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
+            <div nz-row>
+                <nz-col nzFlex="auto">
+                    <a nz-button nzType="primary" routerLink="nuevo">
+                        <i nz-icon nzType="plus"></i>
+                        Nuevo
+                    </a>
+                </nz-col>
+                <nz-col>
+                    <nz-input-group [nzSuffix]="suffixBusqueda">
+                        <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                    </nz-input-group>
+                    
+                    <ng-template #suffixBusqueda>
+                        <i *ngIf="!textoBusqueda" nz-icon nzType="search" nzTheme="outline"></i>
+                        <i *ngIf="textoBusqueda" nz-icon nzType="close-circle" nzTheme="outline" (click)="limpiarBusqueda()" style="cursor: pointer;"></i>
+                    </ng-template>
+                </nz-col>
+            </div>
+
+            <nz-table #tbl [nzData]="lstBarrios" style="margin-top: 10px;" [nzFrontPagination]="false"
+                [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
+                (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                         <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
-                        <th [nzColumnKey]="'distrito'" [nzSortFn]="true" >Distrito</th>
+                        <th [nzColumnKey]="'distrito'" [nzSortFn]="true">Distrito</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -32,17 +47,18 @@
                         <td>{{ b.descripcion }}</td>
                         <td>
                             <span nz-tooltip [nzTooltipTitle]="'Código: '+b.iddistrito">
-                                {{ b.distrito }}, {{b.departamento}} 
+                                {{ b.distrito }}, {{b.departamento}}
                             </span>
                         </td>
                         <td>
                             <nz-space>
-                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="b.id+''" nzTooltipTitle="Editar">
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="b.id+''"
+                                    nzTooltipTitle="Editar">
                                     <i nz-icon nzType="edit" nzTheme="outline"></i>
                                 </button>
-                                <button *nzSpaceItem nz-button nz-popconfirm nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzDanger
-                                nzPopconfirmTitle="¿Desea eliminr el Barrio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                                (nzOnConfirm)="eliminar(b.id)">
+                                <button *nzSpaceItem nz-button nz-popconfirm nz-tooltip nzType="primary"
+                                    nzTooltipTitle="Eliminar" nzDanger nzPopconfirmTitle="¿Desea eliminr el Barrio?"
+                                    nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(b.id)">
                                     <i nz-icon nzType="delete" nzTheme="outline"></i>
                                 </button>
                             </nz-space>
