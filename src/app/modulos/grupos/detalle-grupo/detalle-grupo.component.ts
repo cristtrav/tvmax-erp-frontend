@@ -128,6 +128,7 @@ export class DetalleGrupoComponent implements OnInit {
         console.log('Error al cargar ultimpo id de grupos');
         console.log(e);
         this.httpErrorHandler.handle(e);
+        this.lastIdLoading = false;
       }
     });
   }

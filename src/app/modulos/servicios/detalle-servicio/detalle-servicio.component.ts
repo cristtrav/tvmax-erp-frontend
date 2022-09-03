@@ -28,6 +28,7 @@ export class DetalleServicioComponent implements OnInit {
   });
   formLoading: boolean = false;
   guardarLoading: boolean = false;
+  lastIdLoading: boolean = false;
 
   constructor(
     private gruposSrv: GruposService,
@@ -143,6 +144,22 @@ export class DetalleServicioComponent implements OnInit {
   getQueryParamsGrupos(): HttpParams{
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     return params;
+  }
+
+  cargarId(): void{
+    this.lastIdLoading = true;
+    this.serviciosSrv.getLastId().subscribe({
+      next: (id) => {
+        this.form.get('id')?.setValue(id+1);
+        this.lastIdLoading = false;
+      },
+      error: (e) => {
+        console.log('Error al consultar ultimo ID de servicios');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.lastIdLoading = false;
+      }
+    });
   }
 
 }

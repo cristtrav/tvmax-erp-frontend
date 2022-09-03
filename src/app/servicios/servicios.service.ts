@@ -46,4 +46,8 @@ export class ServiciosService {
   getServiciosPorCuotasDeSuscripcion(idsusc: number, params: HttpParams): Observable<ServerResponseList<Servicio>>{
     return this.http.get<ServerResponseList<Servicio>>(`${this.urlSusc}/${idsusc}/cuotas/servicios`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
+
+  getLastId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
+  }
 }
