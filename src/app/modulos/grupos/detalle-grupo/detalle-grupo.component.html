@@ -20,9 +20,16 @@
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
-                                <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 50%;">
-                                </nz-input-number>
-                            </nz-form-control>
+                                <nz-input-group style="width: 50%;" [nzAddOnAfter]="btnCargarId" nzSearch>
+                                    <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading" nzSearch>
+                                    </nz-input-number>
+                                </nz-input-group>
+                            </nz-form-control> 
+                            <ng-template #btnCargarId>
+                                <button nz-button nz-tooltip [nzTooltipTitle]="'Consultar código disponible'" nzSearch (click)="cargarId()">
+                                    <i nz-icon [nzType]="lastIdLoading?'loading':'monitor'" nzTheme="outline"></i>
+                                </button>
+                            </ng-template>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>

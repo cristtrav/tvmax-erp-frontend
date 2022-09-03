@@ -41,4 +41,8 @@ export class GruposService {
   putGrupo(id: number, g: Grupo): Observable<any>{
     return this.http.put(`${this.url}/${id}`, g, AppSettings.getHttpOptionsJsonTextAuth());
   }
+
+  getLastId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
+  }
 }

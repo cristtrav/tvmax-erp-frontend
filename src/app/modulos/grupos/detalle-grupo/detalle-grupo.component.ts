@@ -21,6 +21,7 @@ export class DetalleGrupoComponent implements OnInit {
   });
   formLoading: boolean = false;
   guardarLoading: boolean = false;
+  lastIdLoading: boolean = false;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -113,6 +114,21 @@ export class DetalleGrupoComponent implements OnInit {
       console.log(e);
       this.httpErrorHandler.handle(e);
       this.guardarLoading = false;
+    });
+  }
+
+  cargarId(): void{
+    this.lastIdLoading = true;
+    this.grupoSrv.getLastId().subscribe({
+      next: (id) => {
+        this.fg.get('id')?.setValue(id+1);
+        this.lastIdLoading = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar ultimpo id de grupos');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
     });
   }
 }
