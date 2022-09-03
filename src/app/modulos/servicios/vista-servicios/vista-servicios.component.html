@@ -37,7 +37,7 @@
             </div>
             <nz-table #tbl [nzData]="lstServicios" style="margin-top: 10px;" nzShowSizeChanger
             [nzFrontPagination]="false" [nzLoading]="tableLoading" [nzTotal]="totalRegisters" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"
-            (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
+            (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small" [nzFooter]="pietabla">
                 <thead>
                     <tr>
                         <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>
@@ -86,5 +86,11 @@
                 </ng-container>
             </nz-drawer>
         </div>
+        <ng-template #pietabla>
+            <nz-space>
+                <span *nzSpaceItem><strong>Total:</strong></span>
+                <span *nzSpaceItem>{{ totalRegisters | number}}</span>
+            </nz-space>
+        </ng-template>
     </div>
 </div>

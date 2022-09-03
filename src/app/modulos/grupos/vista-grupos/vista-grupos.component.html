@@ -32,7 +32,7 @@
             <nz-table #tbl [nzData]="lstGrupos" [nzFrontPagination]="false" style="margin-top: 10px;"
                 [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters"
                 (nzQueryParams)="onQueryParamsChange($event)" [nzLoading]="loadingData" nzShowPagination
-                nzShowSizeChanger nzSize="small">
+                nzShowSizeChanger nzSize="small" [nzFooter]="pietabla">
                 <thead>
                     <tr>
                         <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>
@@ -61,6 +61,12 @@
                     </tr>
                 </tbody>
             </nz-table>
+            <ng-template #pietabla>
+                <nz-space>
+                    <span *nzSpaceItem><strong>Total:</strong></span>
+                    <span *nzSpaceItem>{{ totalRegisters | number}}</span>
+                </nz-space>
+            </ng-template>
         </div>
     </div>
     <ng-template #suffixIconSearch>

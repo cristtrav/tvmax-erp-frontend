@@ -32,7 +32,8 @@
 
             <nz-table #tbl [nzData]="lstBarrios" style="margin-top: 10px;" [nzFrontPagination]="false"
                 [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
-                (nzQueryParams)="onTableQueryParamsChange($event)" nzSize="small">
+                (nzQueryParams)="onTableQueryParamsChange($event)" nzShowSizeChanger nzSize="small"
+                [nzFooter]="pietabla">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
@@ -66,6 +67,12 @@
                     </tr>
                 </tbody>
             </nz-table>
+            <ng-template #pietabla>
+                <nz-space>
+                    <span *nzSpaceItem><strong>Total:</strong></span>
+                    <span *nzSpaceItem>{{ totalRegisters | number}}</span>
+                </nz-space>
+            </ng-template>
         </div>
     </div>
 </div>
