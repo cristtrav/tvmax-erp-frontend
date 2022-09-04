@@ -10,7 +10,7 @@ nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($ev
             <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
             <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Dirección</th>
             <th [nzColumnKey]="'barrio'" [nzSortFn]="true">Barrio</th>
-            <th [nzColumnKey]="'tipodomicilio'" [nzSortFn]="true">Tipo de domicilio</th>
+            <th [nzColumnKey]="'tipo'" [nzSortFn]="true">Tipo</th>
             <th [nzColumnKey]="'nromedidor'" [nzSortFn]="true">Medidor ANDE</th>
             <th [nzColumnKey]="'principal'" [nzSortFn]="true">Principal</th>
             <th>Acciones</th>
@@ -21,7 +21,9 @@ nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($ev
             <td>{{ d.id }}</td>
             <td>{{ d.direccion }}</td>
             <td>{{ d.barrio }} ({{d.distrito}}, {{d.departamento}})</td>
-            <td>{{ d.tipodomicilio }}</td>
+            <td>
+                {{ d.tipo === 'PRO' ? 'Propio' : (d.tipo === 'ALQ' ? 'Alquiler' : 'Préstamo')}}
+            </td>
             <td>{{ d.nromedidor }}</td>
             <td>
                 <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="d.principal?'#00C853':'#f44336'" [nzType]="d.principal?'check-circle':'close-circle'"></i>

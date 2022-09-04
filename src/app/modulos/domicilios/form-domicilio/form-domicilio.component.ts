@@ -27,7 +27,6 @@ export class FormDomicilioComponent implements OnInit {
   @Input()
   idcliente: number | null = null;
   lstBarrios: Barrio[] = []
-  lstTiposDomicilios: TipoDomicilio[] = [];
   idsuscripcionNav: string | null = 'nueva';
   navigate: string | null = '';
 
@@ -36,7 +35,7 @@ export class FormDomicilioComponent implements OnInit {
     direccion: [null, [Validators.required, Validators.maxLength(200)]],
     idbarrio: [null, [Validators.required]],
     nromedidor: [null, Validators.maxLength(30)],
-    idtipodomicilio: [null, [Validators.required]],
+    tipo: [null, [Validators.required]],
     observacion: [null, [Validators.maxLength(150)]],
     principal: [false]
   });
@@ -49,7 +48,6 @@ export class FormDomicilioComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private barriosSrv: BarriosService,
     private notif: NzNotificationService,
-    private tipoDomiSrv: TiposdomiciliosService,
     private domiSrv: DomiciliosService,
     private router: Router,
     private aroute: ActivatedRoute,
@@ -58,7 +56,6 @@ export class FormDomicilioComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarBarrios();
-    this.cargarTiposDomicilios();
     console.log(`Iddomiciliio ${this.iddomicilio}`);
     if (this.iddomicilio !== 'nuevo') {
       this.cargarDatos();
@@ -73,7 +70,7 @@ export class FormDomicilioComponent implements OnInit {
       this.form.get('id')?.setValue(data.id);
       this.form.get('direccion')?.setValue(data.direccion);
       this.form.get('idbarrio')?.setValue(data.idbarrio);
-      this.form.get('idtipodomicilio')?.setValue(data.idtipodomicilio);
+      this.form.get('tipo')?.setValue(data.tipo);
       this.form.get('nromedidor')?.setValue(data.nromedidor);
       this.form.get('observacion')?.setValue(data.observacion);
       this.form.get('principal')?.setValue(data.principal);
@@ -99,16 +96,6 @@ export class FormDomicilioComponent implements OnInit {
       }
     });
     return val;
-  }
-
-  private cargarTiposDomicilios(): void {
-    this.tipoDomiSrv.get(this.getHttpParamsTD()).subscribe((resp: ServerResponseList<TipoDomicilio>) => {
-      this.lstTiposDomicilios = resp.data;
-    }, (e) => {
-      console.log('Error al cargar tipos de domicilios');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar tipos de domicilios', e.error);
-    });
   }
 
   private cargarBarrios(): void {
@@ -137,7 +124,7 @@ export class FormDomicilioComponent implements OnInit {
     domi.direccion = this.form.get('direccion')?.value;
     domi.idbarrio = this.form.get('idbarrio')?.value;
     domi.idcliente = this.idcliente;
-    domi.idtipodomicilio = this.form.get('idtipodomicilio')?.value;
+    domi.tipo = this.form.get('tipo')?.value;
     domi.nromedidor = this.form.get('nromedidor')?.value;
     domi.observacion = this.form.get('observacion')?.value;
     domi.principal = this.form.get('principal')?.value;

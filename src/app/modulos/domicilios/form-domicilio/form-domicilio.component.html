@@ -7,8 +7,8 @@
                     <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;"></nz-input-number>
                 </nz-input-group>
                 <ng-template #btnCalcularId>
-                    <button nz-button nz-tooltip nzTooltipTitle="Calcular código" (click)="consultarUltimoId()" [nzLoading]="calculateIdLoading" nzType="default" nzSearch>
-                        <i nz-icon nzTheme="outline" nzType="import"></i>
+                    <button nz-button nz-tooltip nzTooltipTitle="Consultar código disponible" (click)="consultarUltimoId()" [nzLoading]="calculateIdLoading" nzType="default" nzSearch>
+                        <i nz-icon nzTheme="outline" nzType="monitor"></i>
                     </button>
                 </ng-template>
             </nz-form-control>
@@ -29,11 +29,12 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo de domicilio</nz-form-label>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un tipo de domicilio.">
-                <nz-select formControlName="idtipodomicilio" nzAllowClear nzShowSearch>
-                    <nz-option *ngFor="let td of lstTiposDomicilios" [nzValue]="td.id" [nzLabel]="td.descripcion">
-                    </nz-option>
+                <nz-select formControlName="tipo" nzAllowClear nzShowSearch>
+                    <nz-option  [nzValue]="'PRO'" [nzLabel]="'Propio'"></nz-option>
+                    <nz-option  [nzValue]="'ALQ'" [nzLabel]="'Alquiler'"></nz-option>
+                    <nz-option  [nzValue]="'PRE'" [nzLabel]="'Préstamo'"></nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
