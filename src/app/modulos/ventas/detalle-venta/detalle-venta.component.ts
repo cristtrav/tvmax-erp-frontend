@@ -147,8 +147,8 @@ export class DetalleVentaComponent implements OnInit {
             this.lstClientes = [cli];
             this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
             this.totalFactura = fv.total;
-            this.totalIva5 = fv.liquidacioniva5;
-            this.totalIva10 = fv.liquidacioniva10;
+            this.totalIva5 = fv.totaliva5;
+            this.totalIva10 = fv.totaliva10;
             this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
             this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
             this.lstDetallesVenta = fv.detalles;
@@ -527,9 +527,9 @@ export class DetalleVentaComponent implements OnInit {
     const date: Date = this.formCabecera.get('fecha')?.value;
     fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
     fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');
-    fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
+    fv.idfuncionarioregistrocobro = this.sesionSrv.idusuario;
     if (this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
-    fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
+    fv.idfuncionarioregistrofactura = this.sesionSrv.idusuario;
     return fv;
   }
 
