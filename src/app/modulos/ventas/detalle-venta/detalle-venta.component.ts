@@ -8,7 +8,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Cuota } from '@dto/cuota-dto';
 import { CuotasService } from '@servicios/cuotas.service';
 import { ServiciosService } from '@servicios/servicios.service';
@@ -22,7 +21,6 @@ import { Grupo } from '@dto/grupo-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import { Extra } from '@util/extra';
-import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
 import { SesionService } from '@servicios/sesion.service';
 
@@ -66,7 +64,6 @@ export class DetalleVentaComponent implements OnInit {
   loadingClientes: boolean = false;
   loadingMasClientes: boolean = false;
   loadingSuscripcionesCli: boolean = false;
-  //refreshingCuotasPendientes: boolean = false;
   guardandoFactura: boolean = false;
 
   lastSearchStrCli: string = '';
@@ -79,7 +76,6 @@ export class DetalleVentaComponent implements OnInit {
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private formBuilder: UntypedFormBuilder,
     private clienteSrv: ClientesService,
-    private suscripcionesSrv: SuscripcionesService,
     private cuotasSrv: CuotasService,
     private serviciosSrv: ServiciosService,
     private ventasSrv: VentasService,
@@ -98,14 +94,19 @@ export class DetalleVentaComponent implements OnInit {
     if (idv) this.idventa = idv;
     this.cargarTimbrados();
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
+      this.guardarUltimoTimbradoSeleccionado(this.sesionSrv.idusuario, value);
       if (value !== null) {
-        this.nroFacturaDesactivado = false;
-        for (let i = 0; i < this.lstTimbrados.length; i++) {
-          if (this.lstTimbrados[i].id === value) {
-            this.actualizarControlNroFactura(this.lstTimbrados[i]);
-            break;
+        this.timbradoSrv.getPorId(value).subscribe({
+          next: (t) => {
+            this.actualizarControlNroFactura(t);
+            this.nroFacturaDesactivado = false;
+          },
+          error: (e) => {
+            console.log('Error al cargar timbrado por id');
+            console.log(e);
+            this.httpErrorHandler.handle(e, "cargar último número de factura");
           }
-        }
+        });
       } else {
         this.nroFacturaDesactivado = true;
       }
@@ -127,16 +128,64 @@ export class DetalleVentaComponent implements OnInit {
     });
     this.cargarServicios();
     if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
+    const idtimbradoPreferencia: number | null = this.getUltimoTimbradoSeleccionado(this.sesionSrv.idusuario);
+    if (idtimbradoPreferencia) {
+      this.formCabecera.get('idTimbrado')?.setValue(idtimbradoPreferencia);
+    }
+  }
+
+  private getUltimoTimbradoSeleccionado(idfuncionario: number): number | null {
+    let idtimbrado: number | null = null;
+    if (typeof (Storage) !== 'undefined') {
+      const clave: string = 'preferencias-detalle-venta';
+      const preferenciasStr: string | null = localStorage.getItem(clave);
+      let preferencias: any = preferenciasStr ? JSON.parse(preferenciasStr) : null;
+
+      if (preferencias) {
+        for (let pref of preferencias) {
+          if (pref.idfuncionario === idfuncionario) {
+            idtimbrado = pref.idUltimoTimbradoSeleccionado;
+            break;
+          }
+        }
+      }
+    }
+    return idtimbrado;
+  }
+
+  private guardarUltimoTimbradoSeleccionado(idfuncionario: number, idtimbrado: number | null) {
+    if (typeof (Storage) !== 'undefined') {
+      const clave: string = 'preferencias-detalle-venta';
+      const preferenciasStr: string | null = localStorage.getItem(clave);
+      let preferencias: any = preferenciasStr ? JSON.parse(preferenciasStr) : null;
+      if (!preferencias) {
+        preferencias = [
+          {
+            'idfuncionario': idfuncionario,
+          }
+        ]
+      }
+      for (let pref of preferencias) {
+        if (pref.idfuncionario === idfuncionario) {
+          pref.idUltimoTimbradoSeleccionado = idtimbrado;
+          break;
+        }
+      }
+      localStorage.setItem(clave, JSON.stringify(preferencias));
+    }
   }
 
   private cargarClienteSeleccionado(id: number) {
-    this.clienteSrv.getPorId(id).subscribe((c: Cliente) => {
-      this.clienteSeleccionado = c;
-    }, (e) => {
-      console.log('Error al cargar clente seleccionado');
-      console.log(e);
-      this.httpErrorHandler.handle(e, 'cargar datos del cliente seleccionado');
-    });
+    this.clienteSrv.getPorId(id).subscribe({
+      next: (c) => {
+        this.clienteSeleccionado = c;
+      },
+      error: (e) => {
+        console.log('Error al cargar clente seleccionado');
+        console.log(e);
+        this.httpErrorHandler.handle(e, 'cargar datos del cliente seleccionado');
+      }
+    })
   }
 
   private cargarDatosVenta(idventa: number) {
@@ -167,25 +216,6 @@ export class DetalleVentaComponent implements OnInit {
         this.httpErrorHandler.handle(e);
       }
     });
-    /*try {
-      const fv: FacturaVenta = await this.ventasSrv.getPorId(idventa).toPromise();
-      if (fv.idcliente) {
-        const cli: Cliente = await this.clienteSrv.getPorId(fv.idcliente).toPromise();
-        this.lstClientes = [cli];
-      }
-      this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
-      this.totalFactura = fv.total;
-      this.totalIva5 = fv.liquidacioniva5;
-      this.totalIva10 = fv.liquidacioniva10;
-      this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
-      this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
-      this.lstDetallesVenta = fv.detalles;
-      if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
-    } catch (e) {
-      console.log('Error al cargar venta por id')
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    }*/
   }
 
   actualizarControlNroFactura(t: Timbrado) {
@@ -213,13 +243,16 @@ export class DetalleVentaComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('activo', 'true');
-    this.timbradoSrv.get(params).subscribe((resp: ServerResponseList<Timbrado>) => {
-      this.lstTimbrados = resp.data;
-      this.actualizarControlNroFacturaSeleccionado();
-    }, (e) => {
-      console.log('Error al consultar timbrados');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    this.timbradoSrv.get(params).subscribe({
+      next: (resp) => {
+        this.lstTimbrados = resp.data;
+        this.actualizarControlNroFacturaSeleccionado();
+      },
+      error: (e) => {
+        console.log('Error al consultar timbrados');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+      }
     });
   }
 
@@ -252,13 +285,7 @@ export class DetalleVentaComponent implements OnInit {
     } else if (this.formCabecera.controls['nroFactura'].hasError('required')) {
       this.statusNroFactura = 'error';
       this.errorTipNroFactura = `Ingrese un núm. Mín. ${this.nroFacturaMin}, máx. ${this.nroFacturaMax}.`;
-    } /*else if (this.formCabecera.controls['nroFactura'].hasError('min')) {
-      this.statusNroFactura = 'error';
-      this.errorTipNroFactura = `El número de factura no puede ser menor a ${this.nroFacturaMin}.`;
-    } else if (this.formCabecera.controls['nroFactura'].hasError('max')) {
-      this.statusNroFactura = 'error';
-      this.errorTipNroFactura = `El número de factura no puede ser mayor a ${this.nroFacturaMin}.`;
-    }*/ else {
+    } else {
       this.statusNroFactura = 'success';
     }
   }
@@ -290,17 +317,20 @@ export class DetalleVentaComponent implements OnInit {
 
   private registrar() {
     this.guardandoFactura = true;
-    this.ventasSrv.post(this.getDtoFacturaVenta()).subscribe((idgenerado: number) => {
-      this.guardandoFactura = false;
-      this.idventa = `${idgenerado}`;
-      this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
-      this.cargarSuscripcionesCliente();
-      this.notif.create('success', '<strong>Éxito</strong>', 'Se guardó la factura de venta correctamente.');
-    }, (e) => {
-      console.log('Error al registrar venta');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardandoFactura = false;
+    this.ventasSrv.post(this.getDtoFacturaVenta()).subscribe({
+      next: (idgenerado) => {
+        this.guardandoFactura = false;
+        this.idventa = `${idgenerado}`;
+        this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
+        this.cargarSuscripcionesCliente();
+        this.notif.create('success', '<strong>Éxito</strong>', 'Se guardó la factura de venta correctamente.');
+      },
+      error: (e) => {
+        console.log('Error al registrar venta');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.guardandoFactura = false;
+      }
     });
   }
 
@@ -312,16 +342,18 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('offset', '0');
     if (consulta.length > 0) params = params.append('search', consulta);
     this.loadingClientes = true;
-    this.clienteSrv.get(params).subscribe((resp: ServerResponseList<Cliente>) => {
-      this.lstClientes = resp.data;
-      this.loadingClientes = false;
-    }, (e) => {
-      console.log('Error al buscar cliente');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.loadingClientes = false;
+    this.clienteSrv.get(params).subscribe({
+      next: (resp) => {
+        this.lstClientes = resp.data;
+        this.loadingClientes = false;
+      },
+      error: (e) => {
+        console.log('Error al buscar cliente');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.loadingClientes = false;
+      }
     });
-
   }
 
   cargarMasClientes() {
@@ -331,19 +363,21 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('limit', '10');
     params = params.append('offset', `${this.lstClientes.length}`);
     this.loadingMasClientes = true;
-    this.clienteSrv.get(params).subscribe((resp: ServerResponseList<Cliente>) => {
-      this.lstClientes = [...this.lstClientes, ...resp.data];
-      this.loadingMasClientes = false;
-    }, (e) => {
-      console.log('Error al cargar mas clientes');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.loadingMasClientes = false;
-    })
+    this.clienteSrv.get(params).subscribe({
+      next: (resp) => {
+        this.lstClientes = [...this.lstClientes, ...resp.data];
+        this.loadingMasClientes = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar mas clientes');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.loadingMasClientes = false;
+      }
+    });
   }
 
   mostrarModalCuotas() {
-    //this.cargarSuscripcionesCliente();
     this.modalCuotasVisible = true;
   }
 
@@ -356,7 +390,6 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   cargarServiciosCuotasPendientes() {
-    //this.refreshingCuotasPendientes = true;
     this.lstSuscServCuotas.forEach((sc: ISuscripcionServicioCuota) => {
       let paramsServicios: HttpParams = new HttpParams();
       paramsServicios = paramsServicios.append('eliminado', 'false');
@@ -376,7 +409,6 @@ export class DetalleVentaComponent implements OnInit {
           console.log(e);
           this.httpErrorHandler.handle(e);
           sc.loadingServicios = false;
-          //this.refreshingCuotasPendientes = false;
         });
 
       }
@@ -394,20 +426,21 @@ export class DetalleVentaComponent implements OnInit {
         paramsCuotas = paramsCuotas.append('idservicio', `${servcuo.servicio.id}`);
 
         servcuo.loadingCuotas = true;
-        this.cuotasSrv.get(paramsCuotas).subscribe((resp: ServerResponseList<Cuota>) => {
-          const arrCuotas: ICuotaDetalle[] = [];
-          for (let c of resp.data) {
-            arrCuotas.push({ cuota: c, enDetalle: this.existeCuotaEnDetalle(c.id) });
+        this.cuotasSrv.get(paramsCuotas).subscribe({
+          next: (resp) => {
+            const arrCuotas: ICuotaDetalle[] = [];
+            for (let c of resp.data) {
+              arrCuotas.push({ cuota: c, enDetalle: this.existeCuotaEnDetalle(c.id) });
+            }
+            servcuo.cuotas = arrCuotas;
+            servcuo.loadingCuotas = false;
+          },
+          error: (e) => {
+            console.log(`Error al cargar las cuotas del servicio ${suscservcuo.servicioscuotas}`);
+            console.log(e);
+            this.httpErrorHandler.handle(e);
+            servcuo.loadingCuotas = false;
           }
-          servcuo.cuotas = arrCuotas;
-          servcuo.loadingCuotas = false;
-          //this.refreshingCuotasPendientes = false;
-        }, (e) => {
-          console.log(`Error al cargar las cuotas del servicio ${suscservcuo.servicioscuotas}`);
-          console.log(e);
-          this.httpErrorHandler.handle(e);
-          servcuo.loadingCuotas = false;
-          //this.refreshingCuotasPendientes = false;
         });
       });
     });
@@ -420,22 +453,25 @@ export class DetalleVentaComponent implements OnInit {
       this.loadingSuscripcionesCli = true;
       let params: HttpParams = new HttpParams();
       params = params.append('eliminado', 'false');
-      this.clienteSrv.getSuscripcionesPorCliente(idcli, params).subscribe((resp: ServerResponseList<Suscripcion>) => {
-        const arrSusCuotas: ISuscripcionServicioCuota[] = [];
-        let totalCuoutas: number = 0;
-        resp.data.forEach((s) => {
-          totalCuoutas += Number(s.cuotaspendientes);
-          arrSusCuotas.push({ suscripcion: s, servicioscuotas: [], loadingServicios: false, cuotasPendientes: s.cuotaspendientes });
-        });
-        this.totalCuotasPendientes = totalCuoutas;
-        this.lstSuscServCuotas = arrSusCuotas;
-        this.loadingSuscripcionesCli = false;
-        this.cargarServiciosCuotasPendientes();
-      }, (e) => {
-        console.log('Error al cargar suscripciones');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.loadingSuscripcionesCli = false;
+      this.clienteSrv.getSuscripcionesPorCliente(idcli, params).subscribe({
+        next: (resp) => {
+          const arrSusCuotas: ISuscripcionServicioCuota[] = [];
+          let totalCuoutas: number = 0;
+          resp.data.forEach((s) => {
+            totalCuoutas += Number(s.cuotaspendientes);
+            arrSusCuotas.push({ suscripcion: s, servicioscuotas: [], loadingServicios: false, cuotasPendientes: s.cuotaspendientes });
+          });
+          this.totalCuotasPendientes = totalCuoutas;
+          this.lstSuscServCuotas = arrSusCuotas;
+          this.loadingSuscripcionesCli = false;
+          this.cargarServiciosCuotasPendientes();
+        },
+        error: (e) => {
+          console.log('Error al cargar suscripciones');
+          console.log(e);
+          this.httpErrorHandler.handle(e);
+          this.loadingSuscripcionesCli = false;
+        }
       });
     } else {
       this.lstSuscServCuotas = [];
@@ -452,7 +488,6 @@ export class DetalleVentaComponent implements OnInit {
     dfv.idsuscripcion = c.cuota.idsuscripcion;
     dfv.idservicio = c.cuota.idservicio;
     dfv.idcuota = c.cuota.id;
-    //const venc: Date = c.fechavencimiento ? new Date(c.fechavencimiento) : new Date();
     const vencStr: string = c.cuota.fechavencimiento ? formatDate(c.cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
     dfv.descripcion = `CUOTA ${vencStr} | ${c.cuota.servicio} [${c.cuota.idsuscripcion}]`.toUpperCase();
     const arrDFV: DetalleFacturaVenta[] = this.lstDetallesVenta.slice();
@@ -506,10 +541,10 @@ export class DetalleVentaComponent implements OnInit {
     for (let dfv of this.lstDetallesVenta) {
       this.totalFactura += dfv.subtotal ?? 0;
       if (Number(dfv.porcentajeiva) === 5 && dfv.subtotal !== null) {
-        this.totalIva5 += Math.round((dfv.subtotal * 100) / 105);
+        this.totalIva5 += Math.round((dfv.subtotal * 5) / 105);
       }
       if (Number(dfv.porcentajeiva) === 10 && dfv.subtotal !== null) {
-        this.totalIva10 += Math.round((dfv.subtotal * 100) / 110);
+        this.totalIva10 += Math.round((dfv.subtotal * 10) / 110);
       }
     }
   }
@@ -517,8 +552,6 @@ export class DetalleVentaComponent implements OnInit {
   getDtoFacturaVenta(): FacturaVenta {
     const fv: FacturaVenta = new FacturaVenta();
     fv.total = this.totalFactura;
-    /*fv.total = this.liqu;
-    fv.iva5 = this.totalIva5;*/
     fv.detalles = this.lstDetallesVenta;
     fv.idtimbrado = this.formCabecera.get('idTimbrado')?.value;
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
@@ -545,26 +578,28 @@ export class DetalleVentaComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('suscribible', 'false');
-    this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>) => {
-      //console.log(resp.data);
-      const lstgs: IGrupoServicio[] = [];
-      for (let s of resp.data) {
-        let existe: boolean = false;
-        for (let gs of lstgs) {
-          if (s.idgrupo === gs.grupo.id) {
-            existe = true;
-            gs.servicios.push(s);
+    this.serviciosSrv.getServicios(params).subscribe({
+      next: (resp) => {
+        const lstgs: IGrupoServicio[] = [];
+        for (let s of resp.data) {
+          let existe: boolean = false;
+          for (let gs of lstgs) {
+            if (s.idgrupo === gs.grupo.id) {
+              existe = true;
+              gs.servicios.push(s);
+            }
+          }
+          if (!existe) {
+            lstgs.push({ grupo: { id: s.idgrupo, descripcion: s.grupo }, servicios: [s] });
           }
         }
-        if (!existe) {
-          lstgs.push({ grupo: { id: s.idgrupo, descripcion: s.grupo }, servicios: [s] });
-        }
+        this.lstGruposServicios = lstgs;
+      },
+      error: (e) => {
+        console.log('Error al cargar servicios');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
       }
-      this.lstGruposServicios = lstgs;
-    }, (e) => {
-      console.log('Error al cargar servicios');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
     });
   }
 
