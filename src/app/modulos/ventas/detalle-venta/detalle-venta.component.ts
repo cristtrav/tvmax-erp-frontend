@@ -424,7 +424,7 @@ export class DetalleVentaComponent implements OnInit {
         const arrSusCuotas: ISuscripcionServicioCuota[] = [];
         let totalCuoutas: number = 0;
         resp.data.forEach((s) => {
-          totalCuoutas += s.cuotaspendientes;
+          totalCuoutas += Number(s.cuotaspendientes);
           arrSusCuotas.push({ suscripcion: s, servicioscuotas: [], loadingServicios: false, cuotasPendientes: s.cuotaspendientes });
         });
         this.totalCuotasPendientes = totalCuoutas;
@@ -505,10 +505,10 @@ export class DetalleVentaComponent implements OnInit {
     this.totalIva10 = 0;
     for (let dfv of this.lstDetallesVenta) {
       this.totalFactura += dfv.subtotal ?? 0;
-      if (dfv.porcentajeiva === 5 && dfv.subtotal !== null) {
+      if (Number(dfv.porcentajeiva) === 5 && dfv.subtotal !== null) {
         this.totalIva5 += Math.round((dfv.subtotal * 100) / 105);
       }
-      if (dfv.porcentajeiva === 10 && dfv.subtotal !== null) {
+      if (Number(dfv.porcentajeiva) === 10 && dfv.subtotal !== null) {
         this.totalIva10 += Math.round((dfv.subtotal * 100) / 110);
       }
     }
