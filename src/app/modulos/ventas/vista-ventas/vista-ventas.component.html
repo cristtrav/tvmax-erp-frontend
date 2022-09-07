@@ -31,10 +31,17 @@
         <div class="module-content">
             <div nz-row>
                 <div nz-col nzFlex="auto">
-                    <button nz-button nzType="primary" routerLink="nueva">
-                        <i nz-icon nzType="plus" nzTheme="outline"></i>
-                        Nueva
-                    </button>
+                    <nz-space>
+                        <button *nzSpaceItem nz-button nzType="primary" routerLink="nueva">
+                            <i nz-icon nzType="plus" nzTheme="outline"></i>
+                            Nueva
+                        </button>
+                        <button *nzSpaceItem nz-button nzType="default">
+                            <i nz-icon nzType="printer" nzTheme="outline"></i>
+                            Imprimir
+                        </button>
+                    </nz-space>
+                    
                 </div>
                 <div nz-col>
                     <nz-space>

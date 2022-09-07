@@ -1,66 +1,62 @@
-import { DomPortalOutlet, PortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType, DomPortalOutlet, PortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { ApplicationRef, ComponentFactoryResolver, ElementRef, Injectable, Injector, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Extra } from '@util/extra';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImpresionService {
 
-  private portalHost!: PortalOutlet;
+  constructor() { }
 
-  constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector,
-    private appRef: ApplicationRef,
-    private viewContainerRef: ViewContainerRef
-  ) { }
-
-  imprimir(template: TemplateRef<any>, iframeNative: any): void {
-    //const iframe = this.iframe.nativeElement;
-    this.portalHost = new DomPortalOutlet(
-      iframeNative.contentDocument.body,
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector
+  imprimirReporte(
+    component: ComponentType<any>,
+    iframeNative: ElementRef,
+    componentFactoryResolver: ComponentFactoryResolver,
+    appRef: ApplicationRef,
+    injector: Injector,
+    viewContainerRef: ViewContainerRef,
+    paramsFiltro: IParametroFiltro | null
+  ): Observable<any> {
+    let portalHost: PortalOutlet | null = null;
+    const iframe = iframeNative.nativeElement;
+    iframe.contentDocument.title = "TVMax ERP";
+    portalHost = new DomPortalOutlet(
+      iframe.contentDocument.body,
+      componentFactoryResolver,
+      appRef,
+      injector
     );
-    const portal = new TemplatePortal(
-      template,
-      this.viewContainerRef,
-      {}
-    );
-    this.portalHost.attach(portal);
-    iframeNative.contentWindow.onafterprint = () => {
-      iframeNative.contentDocument.body.innerHTML = "";
-    };
-    this._attachStyles(iframeNative.contentWindow);
-
-    setTimeout(() => {
-      iframeNative.contentWindow.print();  
-    }, 5000);
     
+    const portal = new ComponentPortal(
+      component,
+      viewContainerRef      
+    );
+    const attachObj = portalHost.attach(portal);
+    if (paramsFiltro) attachObj.instance.paramsFiltros = { ...paramsFiltro };
+    let timer: any;
+    const obsPrint: Observable<any> = attachObj.instance.dataLoaded.pipe(
+      tap({
+        next: () => {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            iframe.contentWindow.print();
+          }, 250);
+        },
+        error: (e) => {
+          console.log('Error al imprimir');
+          console.log(e);
+        }
+      })
+    );
+    attachObj.instance.cargarDatos();
+    iframe.contentWindow.onafterprint = () => {
+      iframe.contentDocument.body.innerHTML = "";
+    };
+    Extra.agregarCssImpresion(iframe.contentWindow);
+    return obsPrint;
   }
 
-  private _attachStyles(targetWindow: Window): void {
-    // Copy styles from parent window
-    document.querySelectorAll("style").forEach(htmlElement => {
-      targetWindow.document.head.appendChild(htmlElement.cloneNode(true));
-    });
-    // Copy stylesheet link from parent window
-    const styleSheetElement = this._getStyleSheetElement();
-    targetWindow.document.head.appendChild(styleSheetElement);
-  }
-
-  private _getStyleSheetElement() {
-    const styleSheetElement = document.createElement("link");
-    document.querySelectorAll("link").forEach(htmlElement => {
-      if (htmlElement.rel === "stylesheet") {
-        const absoluteUrl = new URL(htmlElement.href).href;
-        styleSheetElement.rel = "stylesheet";
-        styleSheetElement.type = "text/css";
-        styleSheetElement.href = absoluteUrl;
-      }
-    });
-    console.log(styleSheetElement.sheet);
-    return styleSheetElement;
-  }
 }

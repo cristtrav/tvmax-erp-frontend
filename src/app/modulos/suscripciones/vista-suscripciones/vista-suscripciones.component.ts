@@ -7,6 +7,7 @@ import {
   PortalOutlet} from "@angular/cdk/portal";
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { Extra } from '@util/extra';
+import { ImpresionService } from '@servicios/impresion.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
     private injector: Injector,
     private appRef: ApplicationRef,
     private viewContainerRef: ViewContainerRef,
+    private impresionSrv: ImpresionService
   ) { }
 
   ngOnInit(): void {
@@ -54,7 +56,22 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
     });
   }
 
-  printMainContent(): void {
+  public printWithSrv(): void{
+    this.loadingDatosReporte = true;
+    this.impresionSrv.imprimirReporte(
+      ReporteSuscripcionesComponent,
+      this.iframe,
+      this.componentFactoryResolver,
+      this.appRef,
+      this.injector,
+      this.viewContainerRef,
+      this.paramsFiltro
+    ).subscribe(()=>{
+      this.loadingDatosReporte = false;
+    });
+  }
+
+  /*printMainContent(): void {
     this.loadingDatosReporte = true;
     const iframe = this.iframe.nativeElement;
     iframe.contentDocument.title = "TVMax ERP";
@@ -80,6 +97,6 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
       iframe.contentDocument.body.innerHTML = "";
     };
     Extra.agregarCssImpresion(iframe.contentWindow);
-  }
+  }*/
 
 }
