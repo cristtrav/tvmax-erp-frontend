@@ -21,19 +21,14 @@
                 </nz-date-picker>
             </div>
             <div *nzSpaceItem>
-                <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de pagos" (click)="limpiarFiltroPagos()"><i nz-icon
-                            nzType="clear" nzTheme="outline"></i></a> Pago</h3>
-                <label nz-checkbox [(ngModel)]="filtroPagado" (ngModelChange)="filtrar()">Pagado</label><br>
-                <label nz-checkbox [(ngModel)]="filtroPendiente" (ngModelChange)="filtrar()">Pendiente</label><br>
-
-            </div>
-            <div *nzSpaceItem>
-                <h3><a nz-tooltip nzTooltipTitle="Limpiar filtro de anulación" (click)="limpiarFiltrosAnulacion()"><i
-                            nz-icon nzType="clear" nzTheme="outline"></i></a>
-                    Anulación</h3>
+                <h3>
+                    <a nz-tooltip nzTooltipTitle="Limpiar filtro de estados" (click)="limpiarFiltroEstados()">
+                        <i nz-icon nzType="clear" nzTheme="outline"></i>
+                    </a> Estado
+                </h3>
                 <label nz-checkbox [(ngModel)]="filtroAnulado" (ngModelChange)="filtrar()">Anulado</label><br>
-                <label nz-checkbox [(ngModel)]="filtroNoAnulado" (ngModelChange)="filtrar()">No
-                    Anulado</label>
+                <label nz-checkbox [nzDisabled]="filtroAnulado" [(ngModel)]="filtroPagado" (ngModelChange)="filtrar()">Pagado</label><br>
+                <label nz-checkbox [nzDisabled]="filtroAnulado" [(ngModel)]="filtroPendiente" (ngModelChange)="filtrar()">Pendiente</label><br>
             </div>
         </nz-space>
     </nz-tab>

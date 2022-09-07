@@ -37,7 +37,6 @@ export class FormFiltrosVentasComponent implements OnInit {
   filtroPagado: boolean = false;
   filtroPendiente: boolean = false;
   filtroAnulado: boolean = false;
-  filtroNoAnulado: boolean = false;
 
   constructor(
     private cobradoresSrv: CobradoresService,
@@ -83,6 +82,10 @@ export class FormFiltrosVentasComponent implements OnInit {
   };
 
   filtrar() {
+    if(this.filtroAnulado){
+      this.filtroPagado = false;
+      this.filtroPendiente = false;
+    }
     this.cantFiltrosChange.emit(this.getCantidadFiltros());
     this.paramsFiltrosChange.emit(this.getParams());
     this.cantFiltrosCobros = this.getCantidadFiltrosCobros();
@@ -115,19 +118,19 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (this.filtroPagado) cantFactura++;
     if (this.filtroPendiente) cantFactura++;
     if (this.filtroAnulado) cantFactura++;
-    if (this.filtroNoAnulado) cantFactura++;
     return cantFactura;
   }
 
-  limpiarFiltroPagos() {
+  limpiarFiltroEstados() {
     this.filtroPendiente = false;
     this.filtroPagado = false;
+    this.filtroAnulado = false;
     this.filtrar();
   }
 
   limpiarFiltrosAnulacion() {
     this.filtroAnulado = false;
-    this.filtroNoAnulado = false;
+    //this.filtroNoAnulado = false;
     this.filtrar();
   }
 
@@ -189,10 +192,12 @@ export class FormFiltrosVentasComponent implements OnInit {
       const fechaFinStr = `${this.fechaFinFiltro.getFullYear()}-${(this.fechaFinFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechafinfactura'] = fechaFinStr;
     }
-    if (this.filtroAnulado != this.filtroNoAnulado) params['anulado'] = `${this.filtroAnulado}`;
-    if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
+    params['anulado'] = `${this.filtroAnulado}`;
+    if(!this.filtroAnulado){
+      if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
+    }
     if (this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
-    if (this.idUsuarioCobroFiltro) params['idusuarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
+    if (this.idUsuarioCobroFiltro) params['idfuncionarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
     if (this.fechaInicioCobroFiltro) {
       const fechaIniCobroStr: string = `${this.fechaInicioCobroFiltro.getFullYear()}-${(this.fechaInicioCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioCobroFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechainiciocobro'] = fechaIniCobroStr;
