@@ -6,7 +6,7 @@
             <th nzWidth="60px"></th>
             <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
             <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
-            <th [nzColumnKey]="'fecha_factura'" [nzSortFn]="true" >Fecha</th>
+            <th [nzColumnKey]="'fecha_factura'" [nzSortFn]="true">Fecha</th>
             <th [nzColumnKey]="'prefijofactura, nrofactura'" [nzSortFn]="true">Nro. Factura</th>
             <th [nzColumnKey]="'total'" [nzSortFn]="true">Total</th>
             <th>Estado</th>
@@ -25,12 +25,7 @@
                 <td>
                     <nz-tag *ngIf="fv.anulado" nzColor="red">Anulado</nz-tag>
                     <nz-tag *ngIf="!fv.anulado && fv.pagado" [nzColor]="'green'">Pagado</nz-tag>
-                    <nz-tag *ngIf="fv.anulado && fv.pagado" nz-tooltip nzTooltipTitle="Pagado" [nzColor]="'default'">PA
-                    </nz-tag>
                     <nz-tag *ngIf="!fv.anulado && !fv.pagado" [nzColor]="'orange'">Pendiente</nz-tag>
-                    <nz-tag *ngIf="fv.anulado && !fv.pagado" nz-tooltip nzTooltipTitle="Pendiente"
-                        [nzColor]="'default'">PE</nz-tag>
-
                 </td>
                 <td nzAlign="center">
                     <nz-space>
@@ -63,20 +58,21 @@
                         {{ fv.funcionarioregistrocobro }}
                     </nz-descriptions-item>
                 </nz-descriptions>
-                        <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50" nzBordered>
-                            <thead>
-                                <tr>
-                                    <th>Ítem</th>
-                                    <th nzAlign="center">Monto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let dfv of tablaDetalle.data">
-                                    <td>{{ dfv.descripcion }}</td>
-                                    <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
+                <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50"
+                    nzBordered>
+                    <thead>
+                        <tr>
+                            <th>Ítem</th>
+                            <th nzAlign="center">Monto</th>
+                        </tr>
+                    </thead>
+    <tbody>
+        <tr *ngFor="let dfv of tablaDetalle.data">
+            <td>{{ dfv.descripcion }}</td>
+            <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
+        </tr>
+    </tbody>
+</nz-table>
 </tr>
 </ng-container>
 </tbody>
