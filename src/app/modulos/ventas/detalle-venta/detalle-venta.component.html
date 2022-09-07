@@ -50,7 +50,7 @@
                                                     {{ s.descripcion }}
                                                 </nz-list-item-meta-title>
                                             </nz-list-item-meta>
-                                            Gs.{{ s.precio | number }}
+                                            <span>Gs. {{ s.precio | number }}</span>
                                             <ul nz-list-item-actions>
                                                 <nz-list-item-action>
                                                     <button nz-dropdown nz-button [nzDropdownMenu]="menuServicioSusc"
@@ -156,7 +156,7 @@
                                                                         titlecase }}
                                                                     </nz-list-item-meta-title>
                                                                 </nz-list-item-meta>
-                                                                Gs.{{ c.cuota.monto | number }}
+                                                                <span>Gs. {{ c.cuota.monto | number }}</span>
                                                                 <ul nz-list-item-actions>
                                                                     <nz-list-item-action>
                                                                         <button *ngIf="!c.enDetalle" nz-tooltip
@@ -205,7 +205,9 @@
                         <tbody>
                             <tr *ngFor="let dfv of tablaDetalle.data; let i = index">
                                 <td>{{ dfv.descripcion }}</td>
-                                <td [nzAlign]="'right'">Gs.{{ dfv.subtotal | number }}</td>
+                                <td [nzAlign]="'right'">
+                                    <span>Gs. {{ dfv.subtotal | number }}</span>
+                                </td>
                                 <td [nzAlign]="'center'">
                                     <button nz-button nz-popconfirm nzPopconfirmTitle="¿Desea eliminar el detalle?"
                                         nzOkText="Elimnar" nzType="primary" nzDanger
@@ -225,7 +227,7 @@
                             <div><span nz-typography nzType="secondary">Total</span></div>
                             <div>
                                 <span nz-typography style="font-size: x-large;">
-                                    {{ totalFactura | number }} Gs.
+                                    <span>Gs. {{ totalFactura | number }}</span>
                                 </span>
                             </div>
                         </div>
@@ -236,12 +238,12 @@
                                 <span nz-typography nzType="secondary">IVA</span>
                             </div>
                             <div>
-                                <span>{{ totalIva10 | number }} Gs.</span>
+                                <span>Gs. {{ totalIva10 | number }}</span>
                                 <nz-divider nzType="vertical"></nz-divider>
                                 <span nz-typography nzType="secondary">10%</span>
                             </div>
                             <div>
-                                <span>{{ totalIva5 | number }} Gs.</span>
+                                <span>Gs. {{ totalIva5 | number }}</span>
                                 <nz-divider nzType="vertical"></nz-divider>
                                 <span nz-typography nzType="secondary">5%</span>
                             </div>
