@@ -1,38 +1,44 @@
-<nz-alert *ngIf="mostrarAlertaTotales"
-        nzType="warning"
-        nzMessage="La suma de algunos totales no distingue entre anulados, no anulados, pendientes y pagados. Seleccionar los filtros correspondientes para el efecto."
-        style="margin-bottom: 16px;"
-        nzCloseText="Entendido"
-        nzCloseable
-        nzShowIcon
-        (nzOnClose)="cerrarAlertaTotales()">
-    </nz-alert>
 <div nz-row [nzGutter]="[16, 16]">
+
+    <div nz-col nzSpan="12">
+        <nz-spin [nzSpinning]="loadingMontoPagado">
+            <nz-card>
+                <nz-statistic nzTitle="Monto pagado" [nzValue]="'Gs. '+(montoTotalPagado | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+    <div nz-col nzSpan="12">
+        <nz-spin [nzSpinning]="loadingMontoPendiente">
+            <nz-card>
+                <nz-statistic nzTitle="Monto pendiente" [nzValue]="'Gs. '+(montoTotalPendiente | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
     <div nz-col nzSpan="6">
         <nz-spin [nzSpinning]="loadingCantFacturas">
             <nz-card>
-                <nz-statistic nzTitle="Cantidad de facturas" [nzValue]="(cantFacturas | number)!"></nz-statistic>
+                <nz-statistic nzTitle="Total de facturas" [nzValue]="(cantFacturas | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
     </div>
     <div nz-col nzSpan="6">
-        <nz-spin [nzSpinning]="loadingMontoAnulado">
+        <nz-spin [nzSpinning]="loadingCantPagadas">
             <nz-card>
-                <nz-statistic nzTitle="Total anulado" [nzValue]="'Gs.'+(montoTotalAnulado | number)!"></nz-statistic>
+                <nz-statistic nzTitle="Facturas pagadas" [nzValue]="(cantFactPagadas | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
     </div>
     <div nz-col nzSpan="6">
-        <nz-spin [nzSpinning]="loadingMontoPendiente">
+        <nz-spin [nzSpinning]="loadingCantPendientes">
             <nz-card>
-                <nz-statistic nzTitle="Total pendiente" [nzValue]="'Gs.'+(montoTotalPendiente | number)!"></nz-statistic>
+                <nz-statistic nzTitle="Facturas pendientes" [nzValue]="(cantFactPendientes | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
     </div>
     <div nz-col nzSpan="6">
-        <nz-spin [nzSpinning]="loadingMontoPagado">
+        <nz-spin [nzSpinning]="loadingCantAnuladas">
             <nz-card>
-                <nz-statistic nzTitle="Total pagado" [nzValue]="'Gs.'+(montoTotalPagado | number)!"></nz-statistic>
+                <nz-statistic nzTitle="Facturas anuladas" [nzValue]="(cantFactAnuladas | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
     </div>

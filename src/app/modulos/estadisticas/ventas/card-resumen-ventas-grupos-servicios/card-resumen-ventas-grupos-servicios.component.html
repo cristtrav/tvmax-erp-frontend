@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th>Grupo / servicio</th>
-                <th>Monto</th>
+                <th>{{ tituloColumnaMonto }}</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,9 @@
                                 [nzTooltipTitle]="'Código: '+item.idreferencia">{{ item.referencia }}</span>
                             <span *ngIf="!item.idreferencia">{{ item.referencia }}</span>
                         </td>
-                        <td nzAlign="right">Gs.{{ item.monto | number }}</td>
+                        <td nzAlign="right">
+                            <span>Gs. {{ item.monto | number }}</span>
+                        </td>
                     </tr>
                 </ng-container>
             </ng-container>

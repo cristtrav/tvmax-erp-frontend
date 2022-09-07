@@ -42,6 +42,7 @@ export class CardResumenVentasGruposServiciosComponent implements OnInit {
 
   listOfMapData: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+  tituloColumnaMonto: string = 'Total pagado';
 
   constructor(
     private ventasSrv: VentasService,
@@ -53,7 +54,17 @@ export class CardResumenVentasGruposServiciosComponent implements OnInit {
   }
 
   private getHttpQueryParams(): HttpParams {
-    let params: HttpParams = new HttpParams().appendAll(this.paramsFiltros);
+    const p: IParametroFiltro = { ...this.paramsFiltros };
+    if (!Object.keys(p).includes('anulado')) p['anulado'] = 'false';
+    if (p['anulado'] == 'true') {
+      delete p['pagado'];
+      this.tituloColumnaMonto = 'Total anulado';
+    } else {
+      if (!Object.keys(p).includes('pagado')) p['pagado'] = 'true';
+      if (p['pagado'] == 'true') this.tituloColumnaMonto = 'Total pagado';
+      else this.tituloColumnaMonto = 'Total pendiente';
+    }
+    let params: HttpParams = new HttpParams().appendAll(p);
     params = params.append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     return params;

@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { SesionService } from '@servicios/sesion.service';
 import { VentasService } from '@servicios/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -37,6 +36,10 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
   private timerBusqueda: any;
 
   cantFacturas: number = 0;
+  cantFactPagadas: number = 0;
+  cantFactPendientes: number = 0;
+  cantFactAnuladas: number = 0;
+
   montoTotalPagado: number = 0;
   montoTotalAnulado: number = 0;
   montoTotalPendiente: number = 0;
@@ -44,37 +47,120 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
   loadingMontoPagado: boolean = false;
   loadingMontoPendiente: boolean = false;
   loadingMontoAnulado: boolean = false;
-  loadingCantFacturas: boolean = false;
 
-  mostrarAlertaTotales: boolean = false;
+  loadingCantFacturas: boolean = false;
+  loadingCantPagadas: boolean = false;
+  loadingCantPendientes: boolean = false;
+  loadingCantAnuladas: boolean = false
 
   constructor(
     private ventasSrv: VentasService,
-    private httpErrorHandler: HttpErrorResponseHandlerService,
-    private sesionSrv: SesionService
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
     this.cargarTotales();
-    this.mostrarAlertaTotales = localStorage.getItem(`${this.sesionSrv.idusuario}-mostrarMsgEstadisticasVentas`) !== 'false';
   }
 
   private cargarCantidadFacturas() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    params = params.appendAll(this.paramsFiltros);
+    const p: IParametroFiltro = { ...this.paramsFiltros };
+    delete p['anulado'];
+    params = params.appendAll(p);
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     this.loadingCantFacturas = true;
-    this.ventasSrv.count(params).subscribe((cant: number) => {
-      this.cantFacturas = cant;
-      this.loadingCantFacturas = false;
-    }, (e) => {
-      console.log('Error al cargar total de facturas');
-      console.log();
-      this.httpErrorHandler.handle(e);
-      this.loadingCantFacturas = false;
+    this.ventasSrv.count(params).subscribe({
+      next: (cant) => {
+        this.cantFacturas = cant;
+        this.loadingCantFacturas = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar total de facturas');
+        console.log();
+        this.httpErrorHandler.handle(e);
+        this.loadingCantFacturas = false;
+      }
     });
   }
+
+  private cargarCantidadPagadas() {
+    let params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    const p: IParametroFiltro = { ...this.paramsFiltros };
+    if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
+    if (p['pagado'] == 'false' || p['anulado'] == 'true') {
+      this.cantFactPagadas = 0;
+    } else {
+      p['pagado'] = 'true';
+      p['anulado'] = 'false';
+      params = params.appendAll(p);
+      this.loadingCantPagadas = true;
+      this.ventasSrv.count(params).subscribe({
+        next: (cant) => {
+          this.cantFactPagadas = cant;
+          this.loadingCantPagadas = false;
+        },
+        error: (e) => {
+          console.log('Error al cargar cantidad de facturas pagadas');
+          console.log(e);
+          this.httpErrorHandler.handle(e, 'consultar facturas pagadas.');
+          this.loadingCantPagadas = false;
+        }
+      });
+    }
+  }
+
+  private cargarCantidadPendientes() {
+    let params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    const p: IParametroFiltro = { ...this.paramsFiltros };
+    if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
+    if (p['pagado'] == 'true' || p['anulado'] == 'true') {
+      this.cantFactPagadas = 0;
+    } else {
+      p['pagado'] = 'false';
+      p['anulado'] = 'false';
+      params = params.appendAll(p);
+      this.loadingCantPendientes = true;
+      this.ventasSrv.count(params).subscribe({
+        next: (cant) => {
+          this.cantFactPendientes = cant;
+          this.loadingCantPendientes = false;
+        },
+        error: (e) => {
+          console.log('Error al cargar cantidad de facturas pendientes');
+          console.log(e);
+          this.httpErrorHandler.handle(e, 'consultar facturas pendientes.');
+          this.loadingCantPendientes = false;
+        }
+      });
+    }
+  }
+
+  private cargarCantidadAnulados() {
+    let params: HttpParams = new HttpParams();
+    params = params.append('eliminado', 'false');
+    const p: IParametroFiltro = { ...this.paramsFiltros };
+    if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
+    delete p['pagado'];
+    p['anulado'] = 'true';
+    params = params.appendAll(p);
+    this.loadingCantAnuladas = true;
+    this.ventasSrv.count(params).subscribe({
+      next: (cant) => {
+        this.cantFactAnuladas = cant;
+        this.loadingCantAnuladas = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar cantidad de facturas anuladas');
+        console.log(e);
+        this.httpErrorHandler.handle(e, 'consultar facturas anuladas.');
+        this.loadingCantAnuladas = false;
+      }
+    });
+  }
+
 
   private cargarMontoTotalPagado() {
     let params: HttpParams = new HttpParams();
@@ -87,7 +173,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       p['pagado'] = 'true';
       p['anulado'] = 'false';
       params = params.appendAll(p);
-      
+
       this.loadingMontoPagado = true;
       this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
         this.montoTotalPagado = m;
@@ -113,7 +199,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       delete p.pagado;
       p['anulado'] = 'true';
       params = params.appendAll(p);
-      
+
       this.loadingMontoAnulado = true;
       this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
         this.montoTotalAnulado = m;
@@ -158,11 +244,9 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
     this.cargarMontoTotalPagado();
     this.cargarMontoTotalAnulado();
     this.cargarMontoTotalPendiente();
-  }
 
-  cerrarAlertaTotales() {
-    this.mostrarAlertaTotales = false;
-    localStorage.setItem(`${this.sesionSrv.idusuario}-mostrarMsgEstadisticasVentas`, 'false');
+    this.cargarCantidadPagadas();
+    this.cargarCantidadPendientes();
+    this.cargarCantidadAnulados();
   }
-
 }

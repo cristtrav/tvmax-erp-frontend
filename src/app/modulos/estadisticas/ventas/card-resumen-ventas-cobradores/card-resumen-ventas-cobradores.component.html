@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th>Cobrador</th>
-                <th>Monto</th>
+                <th>{{ tituloColumnaMonto }}</th>
             </tr>
         </thead>
         <tbody>
@@ -25,8 +25,8 @@
                     </span>
                     <span *ngIf="!ri.referencia" style="color: gray;">(Sin cobrador)</span>
                 </td>
-                <td>
-                    Gs.{{ ri.monto | number }}
+                <td [nzAlign]="'right'">
+                    <span>Gs. {{ ri.monto | number }}</span>
                 </td>
             </tr>
         </tbody>
