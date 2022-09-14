@@ -66,7 +66,6 @@ export class Extra {
                 styleSheetElement.href = absoluteUrl;
             }
         });
-        console.log(styleSheetElement.sheet);
         return styleSheetElement;
     }
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ReporteSuscripcionesComponent } from './reporte-suscripciones/reporte-suscripciones.component';
 import { ReporteSuscripcionesListaComponent } from './reporte-suscripciones-lista/reporte-suscripciones-lista.component';
 import { ReporteSuscripcionesResumenComponent } from './reporte-suscripciones-resumen/reporte-suscripciones-resumen.component';
@@ -7,7 +7,9 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { FacturaVentaComponent } from './factura-venta/factura-venta.component';
-import { ReporteFacturasVentaComponent } from './reporte-facturas-venta/reporte-facturas-venta.component';
+import { CabeceraReporteComponent } from './cabecera-reporte/cabecera-reporte.component';
+import { FiltrosReporteComponent } from './filtros-reporte/filtros-reporte.component';
+
 
 @NgModule({
   declarations: [
@@ -15,7 +17,8 @@ import { ReporteFacturasVentaComponent } from './reporte-facturas-venta/reporte-
     ReporteSuscripcionesListaComponent,
     ReporteSuscripcionesResumenComponent,
     FacturaVentaComponent,
-    ReporteFacturasVentaComponent
+    CabeceraReporteComponent,
+    FiltrosReporteComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +28,9 @@ import { ReporteFacturasVentaComponent } from './reporte-facturas-venta/reporte-
   ],
   exports: [
     ReporteSuscripcionesComponent
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class ImpresionModule { }

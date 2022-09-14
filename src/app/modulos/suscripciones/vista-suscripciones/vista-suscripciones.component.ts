@@ -1,12 +1,8 @@
 import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import {
-  ComponentPortal,
-  DomPortalOutlet,
-  PortalOutlet} from "@angular/cdk/portal";
+import { PortalOutlet } from "@angular/cdk/portal";
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
-import { Extra } from '@util/extra';
 import { ImpresionService } from '@servicios/impresion.service';
 
 
@@ -29,7 +25,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
   componenteReporteRendered: boolean = false;
 
   constructor(
-    private aroute: ActivatedRoute,
+    private aroute: ActivatedRoute, 
     private router: Router,
     private componentFactoryResolver: ComponentFactoryResolver,
     private injector: Injector,
@@ -44,7 +40,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.portalHost) this.portalHost.detach();
+    if (this.portalHost) this.portalHost.detach();
   }
 
   cambiarVista(v: string) {
@@ -56,7 +52,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
     });
   }
 
-  public printWithSrv(): void{
+  public printWithSrv(): void {
     this.loadingDatosReporte = true;
     this.impresionSrv.imprimirReporte(
       ReporteSuscripcionesComponent,
@@ -66,7 +62,7 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
       this.injector,
       this.viewContainerRef,
       this.paramsFiltro
-    ).subscribe(()=>{
+    ).subscribe(() => {
       this.loadingDatosReporte = false;
     });
   }

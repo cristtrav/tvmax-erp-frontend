@@ -1,14 +1,7 @@
-import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FacturaVenta } from '@dto/factura-venta.dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
-import { VentasService } from '@servicios/ventas.service';
-import { Extra } from '@util/extra';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ImpresionService } from '@servicios/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 @Component({
   selector: 'app-vista-ventas',
@@ -17,22 +10,26 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 })
 export class VistaVentasComponent implements OnInit {
 
+  @ViewChild("iframe") iframe!: ElementRef;
   vista: string = 'registros';
 
   textoBusqueda: string = '';
   cantFiltrosAplicados: number = 0;
-  drawerFiltrosVisible: boolean = false; 
+  drawerFiltrosVisible: boolean = false;
 
   expandSet = new Set<number>();
 
   paramsFiltros: IParametroFiltro = {};
+  loadingImpresion: boolean = false;
 
   constructor(
-    private ventasSrv: VentasService,
-    private httpErrorHandler: HttpErrorResponseHandlerService,
-    private notif: NzNotificationService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private injector: Injector,
+    private appRef: ApplicationRef,
+    private viewConteinerRef: ViewContainerRef,
+    private impresionSrv: ImpresionService
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +44,21 @@ export class VistaVentasComponent implements OnInit {
       queryParams: { vista: this.vista },
       queryParamsHandling: 'merge'
     });
+  }
+
+  imprimir(): void {
+    /*this.loadingImpresion = true;
+    this.impresionSrv.imprimirReporte(
+      ReporteFacturasVentaComponent,
+      this.iframe,
+      this.componentFactoryResolver,
+      this.appRef,
+      this.injector,
+      this.viewConteinerRef,
+      null
+    ).subscribe(()=>{
+      this.loadingImpresion = false;
+    });*/
   }
 
 }

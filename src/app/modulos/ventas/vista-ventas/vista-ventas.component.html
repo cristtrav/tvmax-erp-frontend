@@ -36,7 +36,7 @@
                             <i nz-icon nzType="plus" nzTheme="outline"></i>
                             Nueva
                         </button>
-                        <button *nzSpaceItem nz-button nzType="default">
+                        <button *nzSpaceItem nz-button nzType="default" (click)="imprimir()" [nzLoading]="loadingImpresion">
                             <i nz-icon nzType="printer" nzTheme="outline"></i>
                             Imprimir
                         </button>
@@ -83,3 +83,4 @@
         </div>
     </div>
 </div>
+<iframe #iframe style="display: none;"></iframe>
