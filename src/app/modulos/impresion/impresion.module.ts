@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReporteSuscripcionesComponent } from './reporte-suscripciones/reporte-suscripciones.component';
-import { ReporteSuscripcionesListaComponent } from './reporte-suscripciones-lista/reporte-suscripciones-lista.component';
 import { ReporteSuscripcionesResumenComponent } from './reporte-suscripciones-resumen/reporte-suscripciones-resumen.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
@@ -16,7 +15,6 @@ import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
 @NgModule({
   declarations: [
     ReporteSuscripcionesComponent,
-    ReporteSuscripcionesListaComponent,
     ReporteSuscripcionesResumenComponent,
     FacturaVentaComponent,
     CabeceraReporteComponent,
@@ -33,8 +31,6 @@ import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
   exports: [
     ReporteSuscripcionesComponent
   ],
-  providers: [
-    DatePipe
-  ]
+  providers: []
 })
 export class ImpresionModule { }

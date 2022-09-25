@@ -1,6 +1,6 @@
-import { DatePipe } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
@@ -58,7 +58,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     private distritosSrv: DistritosService,
     private barriosSrv: BarriosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private datePipe: DatePipe
+    @Inject(LOCALE_ID) private locale: string,
   ) { }
 
   ngOnInit(): void {
@@ -84,11 +84,11 @@ export class ReporteSuscripcionesComponent implements OnInit {
 
     forkJoin(observables).subscribe({
       next: (resp) => {
-        if(resp.departamento) this.departamentos = resp.departamento.data;
-        if(resp.distrito) this.distritos = resp.distrito.data;
-        if(resp.barrio) this.barrios = resp.barrio.data;
-        if(resp.grupo) this.grupos = resp.grupo.data
-        if(resp.servicio) this.servicios = resp.servicio.data;
+        if (resp.departamento) this.departamentos = resp.departamento.data;
+        if (resp.distrito) this.distritos = resp.distrito.data;
+        if (resp.barrio) this.barrios = resp.barrio.data;
+        if (resp.grupo) this.grupos = resp.grupo.data
+        if (resp.servicio) this.servicios = resp.servicio.data;
 
         this.lstFiltrosReporte = [];
         this.suscripciones = resp.suscripciones.data;
@@ -175,12 +175,10 @@ export class ReporteSuscripcionesComponent implements OnInit {
     let desde: string = '*';
     let hasta: string = '*';
     if (this.paramsFiltros['fechainiciosuscripcion']) {
-      const desdeFormated: string | null = this.datePipe.transform(this.paramsFiltros['fechainiciosuscripcion'].toString(), 'dd/MM/yy');
-      if (desdeFormated) desde = desdeFormated;
+      desde = formatDate(this.paramsFiltros['fechainiciosuscripcion'].toString(), 'dd/MM/yy', this.locale);;
     }
     if (this.paramsFiltros['fechafinsuscripcion']) {
-      const hastaFormated: string | null = this.datePipe.transform(this.paramsFiltros['fechafinsuscripcion'].toString(), 'dd/MM/yy');
-      if (hastaFormated) hasta = hastaFormated;
+      hasta = formatDate(this.paramsFiltros['fechafinsuscripcion'].toString(), 'dd/MM/yy', this.locale);;
     }
     return { titulo, contenido: `desde ${desde} hasta ${hasta}` };
   }
