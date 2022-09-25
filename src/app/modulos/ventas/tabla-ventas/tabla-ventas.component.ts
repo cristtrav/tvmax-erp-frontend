@@ -20,10 +20,10 @@ export class TablaVentasComponent implements OnInit {
   get paramsFiltros(): IParametroFiltro {
     return this._paramsFiltros;
   }
-  set paramsFiltros(p: IParametroFiltro){
+  set paramsFiltros(p: IParametroFiltro) {
     const oldParams: string = JSON.stringify(this._paramsFiltros);
     this._paramsFiltros = p;
-    if(oldParams !== JSON.stringify(p)) this.cargarVentas();
+    if (oldParams !== JSON.stringify(p)) this.cargarVentas();
   }
   _paramsFiltros: IParametroFiltro = {};
 
@@ -43,7 +43,8 @@ export class TablaVentasComponent implements OnInit {
   timerBusqueda: any;
 
   lstFacturasVenta: FacturaVenta[] = [];
-  
+  loadingDetalleMap: { [param: number]: boolean } = {};
+
   sortStr: string | null = '+id';
   pageIndex: number = 1;
   pageSize: number = 10;
@@ -63,54 +64,82 @@ export class TablaVentasComponent implements OnInit {
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
+      this.cargarDetalleVenta(id);
     } else {
       this.expandSet.delete(id);
     }
   }
 
-  cargarVentas(){
+  cargarVentas() {
     this.loadingVentas = true;
-    this.ventasSrv.get(this.getHttpParams()).subscribe((resp: ServerResponseList<FacturaVenta>)=>{
-      this.totalRegisters = resp.queryRowCount;
-      this.lstFacturasVenta = resp.data;
-      this.loadingVentas = false;
-    }, (e)=>{
-      console.log('Error al consultar ventas');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.loadingVentas = false;
+    this.ventasSrv.get(this.getHttpParams()).subscribe({
+      next: (resp) => {
+        this.totalRegisters = resp.queryRowCount;
+        this.lstFacturasVenta = resp.data;
+        resp.data.forEach(v => {
+          if (v.id) this.loadingDetalleMap[v.id] = false;
+        });
+        this.loadingVentas = false;
+      },
+      error: (e) => {
+        console.log('Error al consultar ventas');
+        console.log(e);
+        this.httpErrorHandler.handle(e);
+        this.loadingVentas = false;
+      }
     });
   }
 
-  onTableQueryParamsChange(tParams: NzTableQueryParams){
+  private cargarDetalleVenta(idventa: number): void{
+    this.loadingDetalleMap[idventa] = true;
+    this.ventasSrv.getDetallePorIdVenta(idventa).subscribe({
+      next: (resp) => {
+        for(let v of this.lstFacturasVenta){
+          if(v.id === idventa){
+            v.detalles = resp.data;
+            break;
+          }
+        }
+        this.loadingDetalleMap[idventa] = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar detalles de venta');
+        console.log(e);
+        this.httpErrorHandler.handle(e, 'cargar detalle de ventas');
+        this.loadingDetalleMap[idventa] = false;
+      }
+    });
+  }
+
+  onTableQueryParamsChange(tParams: NzTableQueryParams) {
     this.pageIndex = tParams.pageIndex;
     this.pageSize = tParams.pageSize;
     this.sortStr = Extra.buildSortString(tParams.sort);
     this.cargarVentas();
   }
 
-  getHttpParams(): HttpParams{
+  getHttpParams(): HttpParams {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    if(this.sortStr) params = params.append('sort', this.sortStr);
-    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
+    if (this.sortStr) params = params.append('sort', this.sortStr);
+    params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
-    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
+    if (this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     params = params.appendAll(this.paramsFiltros);
     return params;
   }
 
-  private anularFactura(id: number | null): void{
-    if(id){
-      this.ventasSrv.anular(id).subscribe(()=>{
-        for(let fv of this.lstFacturasVenta){
-          if(fv.id === id){
+  private anularFactura(id: number | null): void {
+    if (id) {
+      this.ventasSrv.anular(id).subscribe(() => {
+        for (let fv of this.lstFacturasVenta) {
+          if (fv.id === id) {
             fv.anulado = true;
             break;
           }
         }
         this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
-      }, (e)=>{
+      }, (e) => {
         console.log('Error al anular factura');
         console.log(e);
         this.httpErrorHandler.handle(e, 'anular factura');
@@ -118,9 +147,9 @@ export class TablaVentasComponent implements OnInit {
     }
   }
 
-  private revertirAnulacion(id: number | null): void{
-    if(id){
-      this.ventasSrv.revertiranul(id).subscribe(()=>{
+  private revertirAnulacion(id: number | null): void {
+    if (id) {
+      this.ventasSrv.revertiranul(id).subscribe(() => {
         /*for(let fv of this.lstFacturasVenta){
           if(fv.id === id){
             fv.anulado = false;
@@ -128,8 +157,8 @@ export class TablaVentasComponent implements OnInit {
           }
         }*/
         this.cargarVentas();
-        this.notif.create('success','<b>Éxito</b>', 'Anulación revertida correctamente');
-      }, (e)=>{
+        this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
+      }, (e) => {
         console.log('Error al revertir anulacion de factura');
         console.log(e);
         this.httpErrorHandler.handle(e, 'revertir anulación');
@@ -137,12 +166,12 @@ export class TablaVentasComponent implements OnInit {
     }
   }
 
-  eliminarVenta(id: number | null): void{
-    if(id){
-      this.ventasSrv.delete(id).subscribe(()=>{
+  eliminarVenta(id: number | null): void {
+    if (id) {
+      this.ventasSrv.delete(id).subscribe(() => {
         this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
         this.cargarVentas();
-      }, (e)=>{
+      }, (e) => {
         console.log('Error al eliminar venta');
         console.log(e);
         this.httpErrorHandler.handle(e);
@@ -150,11 +179,11 @@ export class TablaVentasComponent implements OnInit {
     }
   }
 
-  procesarAnulacion(fv: FacturaVenta | null){
-    if(fv){
-      if(fv.anulado){
+  procesarAnulacion(fv: FacturaVenta | null) {
+    if (fv) {
+      if (fv.anulado) {
         this.revertirAnulacion(fv.id);
-      }else{
+      } else {
         this.anularFactura(fv.id);
       }
     }

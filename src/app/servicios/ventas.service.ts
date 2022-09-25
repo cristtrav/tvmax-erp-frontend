@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DetalleFacturaVenta } from '@dto/detalle-factura-venta-dto';
 import { FacturaVenta } from '@dto/factura-venta.dto';
 import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
@@ -55,5 +56,9 @@ export class VentasService {
 
   getMontoTotal(params: HttpParams): Observable<number> {
     return this.http.get<number>(`${this.url}/resumen/montototal`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getDetallePorIdVenta(idventa: number): Observable<ServerResponseList<DetalleFacturaVenta>>{
+    return this.http.get<ServerResponseList<DetalleFacturaVenta>>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
   }
 }

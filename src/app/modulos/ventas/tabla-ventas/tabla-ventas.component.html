@@ -58,7 +58,7 @@
                         {{ fv.funcionarioregistrocobro }}
                     </nz-descriptions-item>
                 </nz-descriptions>
-                <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50"
+                <nz-table #tablaDetalle [nzLoading]="loadingDetalleMap[fv.id?fv.id:0]" [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50"
                     nzBordered>
                     <thead>
                         <tr>
