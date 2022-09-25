@@ -9,6 +9,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { FacturaVentaComponent } from './factura-venta/factura-venta.component';
 import { CabeceraReporteComponent } from './cabecera-reporte/cabecera-reporte.component';
 import { FiltrosReporteComponent } from './filtros-reporte/filtros-reporte.component';
+import { ReporteVentasComponent } from './reporte-ventas/reporte-ventas.component';
+import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { FiltrosReporteComponent } from './filtros-reporte/filtros-reporte.compo
     ReporteSuscripcionesResumenComponent,
     FacturaVentaComponent,
     CabeceraReporteComponent,
-    FiltrosReporteComponent
+    FiltrosReporteComponent,
+    ReporteVentasComponent,
+    TablaReporteComponent
   ],
   imports: [
     CommonModule,

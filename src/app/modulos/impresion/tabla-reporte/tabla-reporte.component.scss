@@ -1,0 +1,21 @@
+$color-background: #F5F5F5;
+
+.gray-background-printable {
+    background-color: $color-background;
+    print-color-adjust: exact !important;
+}
+
+.tabla-reporte {
+    print-color-adjust: exact !important;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    font-size: x-small;
+}
+
+.tabla-reporte th,td {
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: left;
+    page-break-after: auto;
+}

@@ -1,0 +1,56 @@
+<div nz-row [nzGutter]="[0, 16]">
+    <div nz-col nzSpan="24">
+        <app-cabecera-reporte titulo="Ventas - Facturas"></app-cabecera-reporte>
+    </div>
+    <div nz-col nzSpan="24">
+        <div>Filtros</div>
+        <app-filtros-reporte [lstFiltrosReporte]="lstFiltrosReporte"></app-filtros-reporte>
+    </div>
+    <div nz-col nzSpan="24">
+        <div>Registros</div>
+        <app-tabla-reporte>
+            <ng-container reporte-header>
+                <tr>
+                    <th>CI/RUC</th>
+                    <th>Cliente</th>
+                    <th>Factura</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Monto (Gs.)</th>
+                </tr>
+            </ng-container>
+
+            <ng-container reporte-body>
+                <ng-container *ngFor="let venta of lstVentas">
+                    <tr>
+                        <td>
+                            {{ venta.ci | number }}<span *ngIf="venta.dvruc">-{{ venta.dvruc }}</span>
+                        </td>
+                        <td>{{ venta.cliente }}</td>
+
+                        <td style="text-align: center;">{{ venta.prefijofactura }}-{{
+                            venta.nrofactura?.toString()?.padStart(7, '0') }}</td>
+                        <td style="text-align: center;">{{ venta.fechafactura | date: 'dd/MM/yy' }}</td>
+                        <td style="text-align: center;">
+                            <span *ngIf="venta.anulado">ANUL</span>
+                            <span *ngIf="!venta.anulado">{{ venta.pagado?'PAG':'PEND' }}</span>
+                        </td>
+                        <td style="text-align: right;">{{ venta.total | number }}</td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+            <ng-container reporte-footer>
+                <tr>
+                    <td colSpan="6">
+                        <strong>Total de registros: </strong>{{ cantRegistros | number }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colSpan="6">
+                        <strong>Monto total: </strong>Gs.{{ montoTotal | number }}
+                    </td>
+                </tr>
+            </ng-container>
+        </app-tabla-reporte>
+    </div>
+</div>

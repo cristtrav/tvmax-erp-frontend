@@ -18,7 +18,6 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { forkJoin, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reporte-suscripciones',

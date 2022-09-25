@@ -2,6 +2,7 @@ import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Inject
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImpresionService } from '@servicios/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { ReporteVentasComponent } from '../../impresion/reporte-ventas/reporte-ventas.component';
 
 @Component({
   selector: 'app-vista-ventas',
@@ -47,18 +48,23 @@ export class VistaVentasComponent implements OnInit {
   }
 
   imprimir(): void {
-    /*this.loadingImpresion = true;
+    this.loadingImpresion = true;
     this.impresionSrv.imprimirReporte(
-      ReporteFacturasVentaComponent,
+      ReporteVentasComponent,
       this.iframe,
       this.componentFactoryResolver,
       this.appRef,
       this.injector,
       this.viewConteinerRef,
-      null
-    ).subscribe(()=>{
-      this.loadingImpresion = false;
-    });*/
+      this.paramsFiltros
+    ).subscribe({
+      next: () => {
+        this.loadingImpresion = false;
+      },
+      error: () => {
+        this.loadingImpresion = false;
+      }
+    });
   }
 
 }
