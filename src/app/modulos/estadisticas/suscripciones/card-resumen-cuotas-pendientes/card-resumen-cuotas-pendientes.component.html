@@ -19,7 +19,7 @@
         <tbody>
             <tr *ngFor="let rcp of tablaResumenSuscCuoPend.data">
                 <td>
-                   <nz-tag *ngIf="rcp.referencia === 0" nzColor="green">{{ rcp.referencia }}</nz-tag>
+                   <nz-tag *ngIf="rcp.referencia == 0" nzColor="green">{{ rcp.referencia }}</nz-tag>
                    <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 1 && rcp.referencia <=3" nzColor="orange">{{ rcp.referencia }}</nz-tag>
                    <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 4 " nzColor="red">{{ rcp.referencia }}</nz-tag>
                    {{ rcp.referencia == 1 ? 'cuota' : 'cuotas'}}
