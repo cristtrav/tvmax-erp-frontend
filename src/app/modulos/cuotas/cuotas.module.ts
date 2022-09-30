@@ -23,6 +23,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
   declarations: [TablaCuotasComponent, ContenidoVistaCuotasComponent, FormCuotaComponent],
@@ -48,7 +49,8 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     NzSpaceModule,
     NzAlertModule,
     NzCascaderModule,
-    NzDescriptionsModule
+    NzDescriptionsModule,
+    NzTagModule
   ],
   exports: [ContenidoVistaCuotasComponent, FormCuotaComponent]
 })

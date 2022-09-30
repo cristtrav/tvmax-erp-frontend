@@ -5,6 +5,7 @@ import { Servicio } from './../dto/servicio-dto';
 import { AppSettings } from './../util/app-settings';
 import { Cuota } from './../dto/cuota-dto';
 import { ServerResponseList } from '../dto/server-response-list.dto';
+import { CobroCuota } from '@dto/cobro-cuota.dto';
 
 
 @Injectable({
@@ -46,5 +47,9 @@ export class CuotasService {
 
   getCuotasPorSuscripcion(idsusc: number, queryParams: HttpParams): Observable<ServerResponseList<Cuota>>{
     return this.http.get<ServerResponseList<Cuota>>(`${this.urlSusc}/${idsusc}/cuotas`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getCobroCuota(idcuota: number): Observable<CobroCuota>{
+    return this.http.get<CobroCuota>(`${this.url}/${idcuota}/cobro`, AppSettings.getHttpOptionsAuth());
   }
 }

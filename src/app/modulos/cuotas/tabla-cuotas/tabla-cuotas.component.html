@@ -1,6 +1,6 @@
 <nz-table #tbl [nzData]="lstCuotas" nzSize="small" nzFrontPagination="false"
 [nzLoading]="tableLoading" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" [nzTotal]="totalRegisters"
-(nzQueryParams)="onTableQueryParamsChange($event)">
+[nzShowSizeChanger]="true" (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
             <th nzWidth="60px"></th>
@@ -8,9 +8,8 @@
             <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" [nzSortOrder]="'descend'">Vencimiento</th>
             <th [nzColumnKey]="'nrocuota'" [nzSortFn]="true" nzAlign="center">Nro. Cuota</th>
             <th [nzColumnKey]="'monto'" [nzSortFn]="true" nzAlign="right">Monto</th>
-            <th nzAlign="center">Pagado</th>
-            <th [nzColumnKey]="'fechapago'" [nzSortFn]="true">F. de pago</th>
-            <th [nzColumnKey]="'facturapago'" [nzSortFn]="true">Fac. Pago</th>
+            <th nzAlign="center">Estado</th>
+            <th>Observación</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -19,14 +18,23 @@
             <tr>
                 <td [nzExpand]="expandSet.has(+(c.id+''))" (nzExpandChange)="onExpandChange(+(c.id+''), $event)"></td>
                 <td>{{ c.id }}</td>
-                <td>{{ c.fechavencimiento | date: 'dd/LL/yyyy' }}</td>
+                <td>{{ c.fechavencimiento | date: 'dd/MMM/yyyy' }}</td>
                 <td nzAlign="center">{{ c.nrocuota | number}}</td>
                 <td nzAlign="right">{{ c.monto | number}}</td>
                 <td nzAlign="center">
-                    <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="c.pagado?'#00C853':'#f44336'" [nzType]="c.pagado?'check-circle':'close-circle'"></i>
+                    <nz-tag nzColor="green" *ngIf="c.pagado">Pagado</nz-tag>
+                    <nz-tag nzColor="red" *ngIf="!c.pagado">Pendiente</nz-tag>
                 </td>
-                <td>{{ c.fechapago | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ c.facturapago }}</td>
+                <td>
+                    <span *ngIf="c.observacion && c.observacion.length > 25"
+                        nz-tooltip [nzTooltipTitle]="c.observacion" style="cursor: pointer;">
+                        {{ c.observacion | slice: 0:25 }} ...
+                    </span>
+                    <span *ngIf="c.observacion && c.observacion.length <= 25">
+                        {{ c.observacion }}
+                    </span>
+                    <span *ngIf="!c.observacion" nz-typography nzType="secondary">-</span>
+                </td>
                 <td>
                     <nz-space>
                         <button nz-button nz-tooltip nzType="primary" *nzSpaceItem [routerLink]="c.id+''"
@@ -42,14 +50,40 @@
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(+(c.id+''))">
+                <nz-spin [nzSpinning]="consultaCobros[+(c.id+'')]"></nz-spin>
                 <nz-descriptions nzSize="small">
-                    <nz-descriptions-item [nzTitle]="tituloobs">
-                        <ng-template #tituloobs>
-                            <strong>Observación</strong>
+                    <nz-descriptions-item [nzTitle]="titulofactura">
+                        <ng-template #titulofactura>
+                            <strong>Factura</strong>
                         </ng-template>
-                        <span *ngIf="c.observacion">{{ c.observacion }}</span>
-                        <span *ngIf="!c.observacion" style="color: gray">(Sin observaciones)</span>
+                        {{ c.cobro?.facturacobro }}
+                        <span nz-typography nzType="secondary" *ngIf="!c.cobro?.facturacobro">-</span>
                     </nz-descriptions-item>
+
+                    <nz-descriptions-item [nzTitle]="titulofechapago">
+                        <ng-template #titulofechapago>
+                            <strong>Fecha de pago</strong>
+                        </ng-template>
+                        <span>{{ c.cobro?.fechacobro| date: 'dd/MMM/yyyy' }}</span>
+                        <span nz-typography nzType="secondary" *ngIf="!c.cobro?.fechacobro">-</span>
+                    </nz-descriptions-item>
+
+                    <nz-descriptions-item [nzTitle]="titulocobrador">
+                        <ng-template #titulocobrador>
+                            <strong>Cobrador</strong>
+                        </ng-template>
+                        <span>{{ c.cobro?.cobrador}}</span>
+                        <span nz-typography nzType="secondary" *ngIf="!c.cobro?.cobrador">-</span>
+                    </nz-descriptions-item>
+
+                    <nz-descriptions-item [nzTitle]="titulousuario">
+                        <ng-template #titulousuario>
+                            <strong>Cobro registrado por</strong>
+                        </ng-template>
+                        <span>{{ c.cobro?.usuario}}</span>
+                        <span nz-typography nzType="secondary" *ngIf="!c.cobro?.usuario">-</span>
+                    </nz-descriptions-item>
+
                 </nz-descriptions>
               </tr>
         </ng-container>
