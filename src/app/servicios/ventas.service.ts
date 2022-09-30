@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DetalleFacturaVenta } from '@dto/detalle-factura-venta-dto';
-import { FacturaVenta } from '@dto/factura-venta.dto';
+import { DetalleVenta } from '@dto/detalle-venta-dto';
+import { Venta } from '@dto/venta.dto';
 import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { AppSettings } from '@util/app-settings';
@@ -18,12 +18,12 @@ export class VentasService {
     private http: HttpClient
   ) { }
 
-  post(fv: FacturaVenta): Observable<number>{
+  post(fv: Venta): Observable<number>{
     return this.http.post<number>(this.url, fv, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<FacturaVenta>>{
-    return this.http.get<ServerResponseList<FacturaVenta>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<ServerResponseList<Venta>>{
+    return this.http.get<ServerResponseList<Venta>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   anular(idventa: number): Observable<any>{
@@ -38,8 +38,8 @@ export class VentasService {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  getPorId(id: number): Observable<FacturaVenta>{
-    return this.http.get<FacturaVenta>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  getPorId(id: number): Observable<Venta>{
+    return this.http.get<Venta>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   getResumenGruposServicios(params: HttpParams): Observable<ServerResponseList<ResumenCantMonto>>{
@@ -58,7 +58,7 @@ export class VentasService {
     return this.http.get<number>(`${this.url}/resumen/montototal`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getDetallePorIdVenta(idventa: number): Observable<ServerResponseList<DetalleFacturaVenta>>{
-    return this.http.get<ServerResponseList<DetalleFacturaVenta>>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
+  getDetallePorIdVenta(idventa: number): Observable<ServerResponseList<DetalleVenta>>{
+    return this.http.get<ServerResponseList<DetalleVenta>>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
   }
 }

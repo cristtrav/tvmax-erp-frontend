@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
-import { FacturaVenta } from '@dto/factura-venta.dto';
+import { Venta } from '@dto/venta.dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { VentasService } from '@servicios/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -15,7 +15,7 @@ export class FacturaVentaComponent implements OnInit {
 
   @Output()
   dataLoaded: EventEmitter<boolean> = new EventEmitter();
-  factura: FacturaVenta = new FacturaVenta();
+  factura: Venta = new Venta();
 
   cliente: Cliente | null = null;
 

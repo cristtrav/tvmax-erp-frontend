@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { FacturaVenta } from '@dto/factura-venta.dto';
+import { Venta } from '@dto/venta.dto';
 import { Funcionario } from '@dto/funcionario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { VentasService } from '@servicios/ventas.service';
@@ -22,7 +22,7 @@ export class ReporteVentasComponent implements OnInit {
   dataLoaded: EventEmitter<boolean> = new EventEmitter();
   @Input()
   private paramsFiltros: IParametroFiltro = {};
-  public lstVentas: FacturaVenta[] = [];
+  public lstVentas: Venta[] = [];
   public cantRegistros: number = 0;
   public montoTotal: number = 0;
 

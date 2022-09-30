@@ -12,9 +12,9 @@ import { Cuota } from '@dto/cuota-dto';
 import { CuotasService } from '@servicios/cuotas.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { Servicio } from '@dto/servicio-dto';
-import { DetalleFacturaVenta } from '@dto/detalle-factura-venta-dto';
+import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { formatDate } from '@angular/common';
-import { FacturaVenta } from '@dto/factura-venta.dto';
+import { Venta } from '@dto/venta.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Grupo } from '@dto/grupo-dto';
@@ -38,7 +38,7 @@ export class DetalleVentaComponent implements OnInit {
   lstTimbrados: Timbrado[] = [];
   lstClientes: Cliente[] = [];
   lstSuscServCuotas: ISuscripcionServicioCuota[] = [];
-  lstDetallesVenta: DetalleFacturaVenta[] = [];
+  lstDetallesVenta: DetalleVenta[] = [];
   lstGruposServicios: IGrupoServicio[] = [];
 
   clienteSeleccionado: Cliente | null = null;
@@ -480,7 +480,7 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   agregarCuotaDetalle(c: ICuotaDetalle) {
-    const dfv: DetalleFacturaVenta = new DetalleFacturaVenta();
+    const dfv: DetalleVenta = new DetalleVenta();
     dfv.cantidad = 1;
     dfv.monto = c.cuota.monto;
     dfv.subtotal = dfv.monto * dfv.cantidad;
@@ -490,7 +490,7 @@ export class DetalleVentaComponent implements OnInit {
     dfv.idcuota = c.cuota.id;
     const vencStr: string = c.cuota.fechavencimiento ? formatDate(c.cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
     dfv.descripcion = `CUOTA ${vencStr} | ${c.cuota.servicio} [${c.cuota.idsuscripcion}]`.toUpperCase();
-    const arrDFV: DetalleFacturaVenta[] = this.lstDetallesVenta.slice();
+    const arrDFV: DetalleVenta[] = this.lstDetallesVenta.slice();
     arrDFV.push(dfv);
     this.lstDetallesVenta = arrDFV;
     c.enDetalle = true;
@@ -516,7 +516,7 @@ export class DetalleVentaComponent implements OnInit {
 
   quitarDetalleFactura(indice: number) {
     const idcuota: number = this.lstDetallesVenta[indice].idcuota ?? 0;
-    const arrDfv: DetalleFacturaVenta[] = this.lstDetallesVenta.slice();
+    const arrDfv: DetalleVenta[] = this.lstDetallesVenta.slice();
     arrDfv.splice(indice, 1);
     this.lstDetallesVenta = arrDfv;
     if (idcuota !== null) {
@@ -549,8 +549,8 @@ export class DetalleVentaComponent implements OnInit {
     }
   }
 
-  getDtoFacturaVenta(): FacturaVenta {
-    const fv: FacturaVenta = new FacturaVenta();
+  getDtoFacturaVenta(): Venta {
+    const fv: Venta = new Venta();
     fv.total = this.totalFactura;
     fv.detalles = this.lstDetallesVenta;
     fv.idtimbrado = this.formCabecera.get('idTimbrado')?.value;
@@ -604,8 +604,8 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   agregarServicioDetalle(srv: Servicio, susc: Suscripcion) {
-    const lstdt: DetalleFacturaVenta[] = this.lstDetallesVenta.slice();
-    const dt: DetalleFacturaVenta = new DetalleFacturaVenta();
+    const lstdt: DetalleVenta[] = this.lstDetallesVenta.slice();
+    const dt: DetalleVenta = new DetalleVenta();
     dt.cantidad = 1;
     dt.monto = srv.precio;
     dt.idservicio = srv.id;

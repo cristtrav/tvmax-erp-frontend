@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { FacturaVenta } from '@dto/factura-venta.dto';
+import { Venta } from '@dto/venta.dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
@@ -42,7 +42,7 @@ export class TablaVentasComponent implements OnInit {
   private _textoBusqueda: string = '';
   timerBusqueda: any;
 
-  lstFacturasVenta: FacturaVenta[] = [];
+  lstFacturasVenta: Venta[] = [];
   loadingDetalleMap: { [param: number]: boolean } = {};
 
   sortStr: string | null = '+id';
@@ -179,7 +179,7 @@ export class TablaVentasComponent implements OnInit {
     }
   }
 
-  procesarAnulacion(fv: FacturaVenta | null) {
+  procesarAnulacion(fv: Venta | null) {
     if (fv) {
       if (fv.anulado) {
         this.revertirAnulacion(fv.id);
