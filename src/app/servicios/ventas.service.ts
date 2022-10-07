@@ -6,6 +6,7 @@ import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
+import { DetalleVentaCobro } from '@dto/detalle-venta-cobro.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,9 @@ export class VentasService {
 
   getDetallePorIdVenta(idventa: number): Observable<ServerResponseList<DetalleVenta>>{
     return this.http.get<ServerResponseList<DetalleVenta>>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getDetallesVentaCobros(params: HttpParams): Observable<ServerResponseList<DetalleVentaCobro>>{
+    return this.http.get<ServerResponseList<DetalleVentaCobro>>(`${this.url}/detalles/cobros`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

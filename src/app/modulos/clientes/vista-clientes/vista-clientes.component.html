@@ -83,15 +83,16 @@
                                 <span *ngIf="c.ci">
                                     {{ c.ci | number }}{{ c.ci!==null && c.dvruc!=null?' - ':'' }}{{ c.dvruc }}
                                 </span>
-                                <span *ngIf="!c.ci" style="color: gray">(Sin CI/RUC)</span>
+                                <span *ngIf="!c.ci" nz-typography nzType="secondary">-</span>
                             </td>
                             <td>
                                 <span *ngIf="c.direccion" nz-tooltip
-                                    [nzTooltipTitle]="'Código de domicilio: '+c.iddomicilio">
-                                    {{ c.direccion }}
+                                    [nzTooltipTitle]="c.direccion+' (Cód. Domic.:'+c.iddomicilio+')'">
+                                    {{ c.direccion | slice:0-30 }}
+                                    <span *ngIf="c.direccion.length>30">...</span>
                                 </span>
-                                <span *ngIf="!c.direccion" style="color: gray">
-                                    (Sin domicilio principal)
+                                <span *ngIf="!c.direccion" nz-typography nzType="secondary">
+                                    -
                                 </span>
                             </td>
                             <td>

@@ -4,12 +4,13 @@
     <thead>
         <tr>
             <th nzWidth="60px"></th>
-            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+            <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
             <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
-            <th [nzColumnKey]="'fecha_factura'" [nzSortFn]="true">Fecha</th>
-            <th [nzColumnKey]="'prefijofactura, nrofactura'" [nzSortFn]="true">Nro. Factura</th>
+            <th [nzColumnKey]="'fecha_factura'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Factura</th>
             <th [nzColumnKey]="'total'" [nzSortFn]="true">Total</th>
             <th>Estado</th>
+            <th>F. Cobro</th>
+            <th [nzColumnKey]="'prefijofactura, nrofactura'" [nzSortFn]="true">Nro. Factura</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -17,16 +18,21 @@
         <ng-container *ngFor="let fv of tablaVentas.data">
             <tr>
                 <td [nzExpand]="expandSet.has(fv.id ?? 0)" (nzExpandChange)="onExpandChange(fv.id ?? 0, $event)"></td>
-                <td>{{ fv.id }}</td>
+                <td>
+                    <span *ngIf="!fv.dvruc">{{ fv.ci | number }}</span>
+                    <span *ngIf="fv.dvruc">{{ fv.ci | number }}-{{ fv.dvruc }}</span>
+                </td>
                 <td>{{ fv.cliente }}</td>
                 <td>{{ fv.fechafactura | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ fv.prefijofactura }}-{{ fv.nrofactura?.toString()?.padStart(7, '0') }}</td>
-                <td>Gs.{{ fv.total | number }}</td>
+
+                <td nzAlign="right">Gs.{{ fv.total | number }}</td>
                 <td>
                     <nz-tag *ngIf="fv.anulado" nzColor="red">Anulado</nz-tag>
                     <nz-tag *ngIf="!fv.anulado && fv.pagado" [nzColor]="'green'">Pagado</nz-tag>
                     <nz-tag *ngIf="!fv.anulado && !fv.pagado" [nzColor]="'orange'">Pendiente</nz-tag>
                 </td>
+                <td>{{ fv.fechacobro | date: 'dd/MM/yy' }}</td>
+                <td>{{ fv.prefijofactura }}-{{ fv.nrofactura?.toString()?.padStart(7, '0') }}</td>
                 <td nzAlign="center">
                     <nz-space>
                         <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm [nzType]="'default'"
@@ -45,21 +51,21 @@
             </tr>
             <tr [nzExpand]="expandSet.has(fv.id ?? 0)">
                 <nz-descriptions nzSize="small">
+                    <nz-descriptions-item [nzTitle]="tituloidventa">
+                        <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
+                        {{ fv.id }}
+                    </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulocobrador">
                         <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
                         {{ fv.cobrador }}
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="titulofechacobro">
-                        <ng-template #titulofechacobro><strong>Fecha de cobro</strong></ng-template>
-                        {{ fv.fechacobro | date: 'dd/MM/yyyy' }}
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulousuarioreg">
                         <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
                         {{ fv.funcionarioregistrocobro }}
                     </nz-descriptions-item>
                 </nz-descriptions>
-                <nz-table #tablaDetalle [nzLoading]="loadingDetalleMap[fv.id?fv.id:0]" [nzData]="fv.detalles" nzSize="small" nzShowPagination="false" [nzPageSize]="50"
-                    nzBordered>
+                <nz-table #tablaDetalle [nzLoading]="loadingDetalleMap[fv.id?fv.id:0]" [nzData]="fv.detalles"
+                    nzSize="small" nzShowPagination="false" [nzPageSize]="50" nzBordered>
                     <thead>
                         <tr>
                             <th>Ítem</th>

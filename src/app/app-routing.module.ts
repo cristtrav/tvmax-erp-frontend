@@ -21,7 +21,8 @@ const routes: Routes = [
       { path: 'suscripciones', loadChildren: () => import('./modulos/suscripciones/suscripciones.module').then(m => m.SuscripcionesModule) },
       { path: 'ventas', loadChildren: () => import ('./modulos/ventas/ventas.module').then(m => m.VentasModule)},
       { path: 'timbrados', loadChildren: () => import ('./modulos/timbrados/timbrados.module').then(m => m.TimbradosModule) },
-      { path: 'auditoria', loadChildren: () => import('./modulos/auditoria/auditoria.module') .then(m => m.AuditoriaModule) }
+      { path: 'auditoria', loadChildren: () => import('./modulos/auditoria/auditoria.module').then(m => m.AuditoriaModule) },
+      { path: 'cobros', loadChildren: () => import('./modulos/cobros/cobros.module').then(m => m.CobrosModule)}
     ]
   },
 

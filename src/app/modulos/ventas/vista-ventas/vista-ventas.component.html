@@ -13,7 +13,7 @@
             </div>
             <div nz-col>
                 <nz-button-group>
-                    <button nz-button [nzType]="vista !== 'estadisticas'?'primary':'default'" nzSize="small"
+                    <button nz-button [nzType]="vista === 'registros'?'primary':'default'" nzSize="small"
                         (click)="cambiarVista('registros')">
                         <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
                         Registros

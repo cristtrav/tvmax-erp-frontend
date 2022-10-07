@@ -1,0 +1,58 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Cobros
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <nz-space>
+                        <button *nzSpaceItem nz-button nzType="primary" (click)="imprimir()" [nzLoading]="loadingImpresion">
+                            <i nz-icon nzType="printer" nzTheme="outline"></i>
+                            Imprimir
+                        </button>
+                    </nz-space>
+                </div>
+                <div nz-col>
+                    <nz-space>
+                        <nz-input-group *nzSpaceItem [nzSuffix]="inputClearTpl" [nzPrefixIcon]="'search'">
+                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda">
+                                <ng-template #inputClearTpl>
+                                    <i
+                                      nz-icon
+                                      class="ant-input-clear-icon"
+                                      nzTheme="fill"
+                                      nzType="close-circle"
+                                      *ngIf="textoBusqueda"
+                                      (click)="textoBusqueda = ''"
+                                    ></i>
+                                  </ng-template>
+                        </nz-input-group>
+                        <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
+                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros"
+                                (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                                <i nz-icon nzType="filter" nzTheme="outline"></i>
+                            </button>
+                        </nz-badge>
+                    </nz-space>
+                </div>
+            </div>
+            <app-tabla-detalle-ventas-cobros #tablaCobros [textoBusqueda]="textoBusqueda" [paramsFiltros]="paramsFiltros"></app-tabla-detalle-ventas-cobros>
+        </div>
+    </div>
+</div>
+<nz-drawer [nzVisible]="drawerFiltrosVisible" [nzContent]="formfiltro" (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible" [nzTitle]="'Filtros'">
+</nz-drawer>
+<ng-template #formfiltro>
+    <app-form-filtros-cobros
+        (cantFiltrosChange)="cantFiltrosAplicados = $event"
+        (paramsFiltrosChange)="paramsFiltros = $event">
+    </app-form-filtros-cobros>
+</ng-template>

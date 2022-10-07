@@ -12,7 +12,7 @@ import { ReporteVentasComponent } from '../../impresion/reporte-ventas/reporte-v
 export class VistaVentasComponent implements OnInit {
 
   @ViewChild("iframe") iframe!: ElementRef;
-  vista: string = 'registros';
+  vista: 'registros' |'estadisticas' = 'registros';
 
   textoBusqueda: string = '';
   cantFiltrosAplicados: number = 0;

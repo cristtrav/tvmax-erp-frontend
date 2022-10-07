@@ -1,0 +1,83 @@
+<nz-table #tabla
+    [nzData]="lstDetallesCobros"
+    [nzShowSizeChanger]="true"
+    style="margin-top: 10px;"
+    [nzLoading]="cargandoDetalles"
+    [nzSize]="'small'"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzTotal]="totalRegisters"
+    [nzFrontPagination]="false"
+    (nzQueryParams)="onTableQueryParamsChange($event)"
+    [nzFooter]="pietabla">
+    <thead>
+        <tr>
+            <th nzWidth="60px"></th>
+            <!--<th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>-->
+            <th>Cobrador</th>
+            <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
+            <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
+            <th [nzColumnKey]="'grupo'" [nzSortFn]="true">Grupo</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Monto</th>
+            <th [nzColumnKey]="'fecha_cobro'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Cobro</th>
+            <th [nzColumnKey]="'facturacobro'" [nzSortFn]="true">Factura</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let detalle of tabla.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)" (nzExpandChange)="onExpandChange(detalle.iddetalleventa ?? 0, $event)"></td>
+                <!--<td>{{ detalle.ci | number }}</td>-->
+                <td>{{ detalle.cobrador }}</td>
+                <td>{{ detalle.cliente }}</td>
+                <td>{{ detalle.servicio }}</td>
+                <td>{{ detalle.grupo }}</td>
+                <td nzAlign="right">Gs.{{ detalle.monto | number }}</td>
+                <td>
+                    <span *ngIf="!detalle.fechacobro" nz-typography nzType="secondary">-</span>
+                    <span *ngIf="detalle.fechacobro">{{ detalle.fechacobro | date: 'dd/MM/yy' }}</span>
+                </td>
+                <td>
+                    <span *ngIf="!detalle.facturacobro" nz-typography nzType="secondary">-</span>
+                    <span *ngIf="detalle.facturacobro">{{ detalle.facturacobro }}</span>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)">
+                <nz-descriptions>
+                    <nz-descriptions-item [nzTitle]="tituloiddetalle">
+                        <ng-template #tituloiddetalle>
+                            <strong>Código de detalle</strong>
+                        </ng-template>
+                        {{ detalle.iddetalleventa }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="tituloruc">
+                        <ng-template #tituloruc>
+                            <strong>CI/RUC Cliente</strong>
+                        </ng-template>
+                        <span *ngIf="detalle.ci && detalle.dvruc">{{ detalle.ci | number }}-{{ detalle.dvruc }}</span>
+                        <span *ngIf="detalle.ci && !detalle.dvruc">{{ detalle.ci | number }}</span>
+                        <span *ngIf="!detalle.ci" nz-typography nzType="secondary">-</span>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulousuario">
+                        <ng-template #titulousuario>
+                            <strong>Cobro registrado por</strong>
+                        </ng-template>
+                        <span *ngIf="detalle.usuario">{{ detalle.usuario }}</span>
+                        <span *ngIf="!detalle.usuario" nz-typography nzType="secondary">-</span>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulovencimiento">
+                        <ng-template #titulovencimiento>
+                            <strong>Vencimiento cuota</strong>
+                        </ng-template>
+                            <span *ngIf="detalle.fechavencimiento">{{ detalle.fechavencimiento | date: 'dd/MM/yy' }}</span>
+                            <span *ngIf="!detalle.fechavencimiento" nz-typography nzType="secondary">-</span>
+                    </nz-descriptions-item>
+                </nz-descriptions>
+            </tr>
+        </ng-container>
+    </tbody>
+    <ng-template #pietabla>
+        <strong>Totales: </strong>
+        <span>{{ totalRegisters | number }} registros</span>
+    </ng-template>
+</nz-table>
