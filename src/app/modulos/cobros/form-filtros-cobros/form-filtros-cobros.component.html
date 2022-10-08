@@ -57,37 +57,20 @@
     </div>
     <div nz-col nzSpan="24">
         <h3>
-            <a (click)="limpiarGrupo()" nz-tooltip nzTooltipTitle="Limpiar filtro de grupos">
+            <a (click)="limpiarGrupoServicio()" nz-tooltip nzTooltipTitle="Limpiar filtro de grupos y servicios">
                 <i nz-icon nzType="clear"></i>
             </a>
-            Grupo
+            Grupo / Servicio
         </h3>
-        <nz-select
+        <nz-tree-select #treeSelectServicios
+            [nzNodes]="nodosGruposServicios"
+            [(ngModel)]="idgruposIdservicios"
             [nzPlaceHolder]="'Seleccionar...'"
-            style="width: 100%;"
-            [nzLoading]="cargandoGrupos"
-            [(ngModel)]="idgrupo"
-            (ngModelChange)="onGrupoChange($event)"
-            nzAllowClear>
-            <nz-option *ngFor="let grupo of lstGrupos" [nzLabel]="grupo.descripcion" [nzValue]="grupo.id"></nz-option>
-        </nz-select>
-    </div>
-    <div nz-col nzSpan="24">
-        <h3>
-            <a (click)="limpiarServicio()" nz-tooltip nzTooltipTitle="Limpiar filtro de servicio">
-                <i nz-icon nzType="clear"></i>
-            </a>
-            Servicio
-        </h3>
-        <nz-select
-            [nzPlaceHolder]="'Seleccionar...'"
-            style="width: 100%;"
-            [nzLoading]="cargandoServicios"
-            [(ngModel)]="idservicio"
+            [nzCheckable]="true"
+            [nzVirtualHeight]="treeNodeServiciosVirtualScroll"
             (ngModelChange)="filtrar()"
-            nzAllowClear
-            [nzDisabled]="idgrupo === null">
-            <nz-option *ngFor="let servicio of lstServicios" [nzLabel]="servicio.descripcion" [nzValue]="servicio.id"></nz-option>
-        </nz-select>
+            (nzExpandChange)="onExpandTreeSelectServicios($event)"
+            style="width: 100%;">
+        </nz-tree-select>
     </div>
 </div>

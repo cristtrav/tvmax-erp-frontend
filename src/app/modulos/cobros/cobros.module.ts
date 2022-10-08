@@ -22,6 +22,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
     NzDrawerModule,
     NzDatePickerModule,
     NzToolTipModule,
-    NzSelectModule
+    NzSelectModule,
+    NzTreeSelectModule
   ]
 })
 export class CobrosModule { }

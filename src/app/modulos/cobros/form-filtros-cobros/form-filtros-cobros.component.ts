@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { Funcionario } from '@dto/funcionario.dto';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
@@ -11,6 +11,10 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { TreeUtils } from '@util/tree-utils';
+import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
+
 
 @Component({
   selector: 'app-form-filtros-cobros',
@@ -18,6 +22,8 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
   styleUrls: ['./form-filtros-cobros.component.scss']
 })
 export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
+
+  @ViewChild('treeSelectServicios') treeSelectServicios!: NzTreeSelectComponent;
 
   @Output()
   paramsFiltrosChange: EventEmitter<IParametroFiltro> = new EventEmitter();
@@ -35,19 +41,15 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
   public lstUsuarios: Funcionario[] = [];
   public cargandoUsuarios: boolean = false;
 
-  public idgrupo: number | null = null;
-  public lstGrupos: Grupo[] = [];
-  public cargandoGrupos: boolean = false;
+  public nodosGruposServicios: NzTreeNodeOptions[] = [];
+  public idgruposIdservicios: string[] = [];
 
-  public idservicio: number | null = null;
-  public lstServicios: Servicio[] = [];
-  public cargandoServicios: boolean = false;
+  public treeNodeServiciosVirtualScroll: string | null = null;
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private cobradorService: CobradoresService,
     private usuarioService: UsuariosService,
-    private grupoService: GruposService,
     private serviciosServicie: ServiciosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
@@ -55,46 +57,15 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
   ngOnInit(): void {
     this.cargarCobradores();
     this.cargarUsuarios();
-    this.cargarGrupos();
+    this.cargarGruposServicios();
   }
 
-  private cargarGrupos(): void {
-    const params: HttpParams = new HttpParams()
-      .append('eliminado', 'false')
-      .append('sort', '+id');
-    this.cargandoGrupos = true;
-    this.grupoService.getGrupos(params).subscribe({
-      next: (resp) => {
-        this.lstGrupos = resp.data;
-        this.cargandoGrupos = false;
-      },
-      error: (e) => {
-        console.log('Error al cargar grupos');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'cargar grupos');
-        this.cargandoGrupos = false;
-      }
-    });
-  }
-
-  private cargarServicios(idgrupo: number): void {
-    const params: HttpParams = new HttpParams()
-      .append('eliminado', 'false')
-      .append('idgrupo', `${idgrupo}`)
-      .append('sort', '+descripcion');
-    this.cargandoServicios = true;
-    this.serviciosServicie.getServicios(params).subscribe({
-      next: (resp) => {
-        this.cargandoServicios = false;
-        this.lstServicios = resp.data;
-      },
-      error: (e) => {
-        console.log('Error al cargar servicios');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'cargar servicios');
-        this.cargandoServicios = false;
-      }
-    });
+  onExpandTreeSelectServicios(event: NzFormatEmitEvent) {
+    let cantNodosVisibles: number = this.nodosGruposServicios.length;
+    for (let treeNode of this.treeSelectServicios.getExpandedNodeList()) {
+      cantNodosVisibles += treeNode.getChildren().length;
+    }
+    this.treeNodeServiciosVirtualScroll = cantNodosVisibles > 11 ? '300px' : null;
   }
 
   private cargarCobradores() {
@@ -112,6 +83,22 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
         console.log('Error al cargar cobradores en filtro cobros');
         console.log(e);
         this.httpErrorHandler.handle(e, 'cargar cobradores');
+      }
+    });
+  }
+
+  private cargarGruposServicios() {
+    const params: HttpParams = new HttpParams()
+      .append('eliminado', 'false');
+    this.serviciosServicie.getServicios(params).subscribe({
+      next: (resp) => {
+        this.nodosGruposServicios = TreeUtils.serviciosToNodos(resp.data);
+        this.treeNodeServiciosVirtualScroll = this.nodosGruposServicios.length > 11 ? '300px' : null;
+      },
+      error: (e) => {
+        console.log('Error al cargar servicios');
+        console.log(e);
+        this.httpErrorHandler.handle(e, 'cargar servicios');
       }
     });
   }
@@ -168,21 +155,8 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     this.filtrar();
   }
 
-  limpiarGrupo() {
-    this.idgrupo = null;
-    this.idservicio = null;
-    this.filtrar();
-  }
-
-  limpiarServicio() {
-    this.idservicio = null;
-    this.filtrar();
-  }
-
-  onGrupoChange(idgrupo: number | null) {
-    this.idservicio = null;
-    this.lstServicios = [];
-    if (idgrupo) this.cargarServicios(idgrupo);
+  limpiarGrupoServicio() {
+    this.idgruposIdservicios = [];
     this.filtrar();
   }
 
@@ -192,8 +166,17 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     if (this.fechaFinCobro) params['fechafincobro'] = formatDate(this.fechaFinCobro, 'yyyy-MM-dd', this.locale);
     if (this.idcobrador) params['idcobradorcomision'] = this.idcobrador;
     if (this.idusuario) params['idfuncionarioregistrocobro'] = this.idusuario;
-    if (this.idgrupo) params['idgrupo'] = this.idgrupo;
-    if (this.idservicio) params['idservicio'] = this.idservicio;
+
+    const idgrupos: number[] = this.idgruposIdservicios
+      .filter(key => !key.includes('-'))
+      .map(key => Number(key));
+
+    const idservicios: number[] = this.idgruposIdservicios
+      .filter(key => key.includes('-'))
+      .map(key => Number(key.substring(key.indexOf('-') + 1, key.length)));
+
+    if (idgrupos.length > 0) params['idgrupo'] = idgrupos;
+    if (idservicios.length > 0) params['idservicio'] = idservicios;
     return params;
   }
 
@@ -203,8 +186,7 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     if (this.fechaFinCobro) cant++;
     if (this.idcobrador) cant++;
     if (this.idusuario) cant++;
-    if (this.idgrupo) cant++;
-    if (this.idservicio) cant++;
+    if (this.idgruposIdservicios.length > 0) cant++;
     return cant;
   }
 
