@@ -40,9 +40,9 @@ export class LugarTreeselectComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+descripcion');
-    this.departamentosSrv.get(params).subscribe((resp: ServerResponseList<Departamento>)=>{
+    this.departamentosSrv.get(params).subscribe((resp: Departamento[])=>{
       const nodes: NzTreeNodeOptions[] = [];
-      resp.data.forEach((d: Departamento)=>{
+      resp.forEach((d: Departamento)=>{
         const node: NzTreeNodeOptions = {
           title: `${d.descripcion}`,
           key: `dep-${d.id}`

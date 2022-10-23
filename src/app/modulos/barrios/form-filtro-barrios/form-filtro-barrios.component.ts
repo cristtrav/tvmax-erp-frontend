@@ -45,7 +45,7 @@ export class FormFiltroBarriosComponent implements OnInit {
     httpParams = httpParams.append('sort', '+descripcion');
     this.departamentosSrv.get(httpParams).subscribe({
       next: (resp) => {
-        this.lstDepartamentos = resp.data;
+        this.lstDepartamentos = resp;
         this.loadingDepartamentos = false;
       },
       error: (e) => {

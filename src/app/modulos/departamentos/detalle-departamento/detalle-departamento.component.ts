@@ -52,7 +52,7 @@ export class DetalleDepartamentoComponent implements OnInit {
     }, (e)=>{
       console.log('Error al cargar departamento');
       console.log(e);
-      this.httpErrorHandler.handle(e);
+      this.httpErrorHandler.process(e);
       this.formLoading = false;
     });
   }
@@ -91,7 +91,7 @@ export class DetalleDepartamentoComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar departamento');
       console.log(e);
-      this.httpErrorHandler.handle(e);
+      this.httpErrorHandler.process(e);
       this.guardarLoading = false;
     });
   }

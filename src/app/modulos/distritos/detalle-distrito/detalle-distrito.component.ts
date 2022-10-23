@@ -74,8 +74,8 @@ export class DetalleDistritoComponent implements OnInit {
   }
 
   private cargarDep(): void {
-    this.depSrv.get(this.getHttpQueryParamsDepartamento()).subscribe((resp: ServerResponseList<Departamento>) => {
-      this.lstDep = resp.data;
+    this.depSrv.get(this.getHttpQueryParamsDepartamento()).subscribe((resp: Departamento[]) => {
+      this.lstDep = resp;
     }, (e) => {
       console.log('Error al cargar departamentos');
       console.log(e);

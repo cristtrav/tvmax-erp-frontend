@@ -118,7 +118,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     this.suscripcionesSrv.get(params);
   };
 
-  private cargarDepartamentosReporte(id: string[] | number[]): Observable<ServerResponseList<Departamento>> {
+  private cargarDepartamentosReporte(id: string[] | number[]): Observable<Departamento[]> {
     const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
     return this.departamentosSrv.get(params);
   }

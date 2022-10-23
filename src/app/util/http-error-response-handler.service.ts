@@ -9,8 +9,14 @@ export class HttpErrorResponseHandlerService {
 
   constructor(private notif: NzNotificationService) { }
 
+  public process(e: HttpErrorResponse) {
+
+    const responseError: IHttpExceptionResponse = typeof e.error === 'string' ? JSON.parse(e.error) : e.error;
+    this.notif.create('error', `<strong>${responseError.error}<strong>`, responseError.message, { nzDuration: 5000 });
+  }
+
   public handle(e: HttpErrorResponse | unknown, actionName?: string): void {
-    if(e instanceof HttpErrorResponse){
+    if (e instanceof HttpErrorResponse) {
       if (e.status === 403) {
         this.notif.create('warning', 'No autorizado', 'El usuario no tiene permisos para realizar esta acción.')
       } else {
@@ -18,7 +24,7 @@ export class HttpErrorResponseHandlerService {
         //this.notif.create('error', this.getTitulo(srvError.request), srvError.description)
         this.notif.create('error', this.getTitulo(srvError.request, actionName), srvError.description ?? e.message)
       }
-    }else{
+    } else {
       this.notif.create('error', 'Error desconocido', `${e}`);
     }
   }
@@ -34,5 +40,11 @@ export class HttpErrorResponseHandlerService {
       return `<b>Error al efectuar la operación</b>`;
     }
   }
+}
+
+interface IHttpExceptionResponse {
+  statusCode: number;
+  error: string;
+  message: string;
 }
 

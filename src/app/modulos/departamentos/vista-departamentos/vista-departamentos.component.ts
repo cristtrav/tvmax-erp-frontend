@@ -6,6 +6,7 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 import { HttpParams } from '@angular/common/http';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { ServerResponseList } from '../../../dto/server-response-list.dto';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-departamentos',
@@ -33,7 +34,24 @@ export class VistaDepartamentosComponent implements OnInit {
 
   private cargarDatos(): void{
     this.tableLoading = true;
-    this.depSrv.get(this.getRequestParams()).subscribe((resp: ServerResponseList<Departamento>)=>{
+    forkJoin({
+      departamentos: this.depSrv.get(this.getRequestParams()),
+      total: this.depSrv.getTotal(this.getRequestParams())
+    }).subscribe({
+      next: (resp) =>{
+        this.lstDepartamentos = resp.departamentos;
+        this.totalRegisters = resp.total;
+        this.tableLoading = false;
+      }, 
+      error: (e)=>{
+        this.tableLoading = false;
+        console.log('Error al cargar departamentos');
+        console.log(e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+
+    /*this.depSrv.get(this.getRequestParams()).subscribe((resp: ServerResponseList<Departamento>)=>{
       this.lstDepartamentos = resp.data;
       this.totalRegisters = resp.queryRowCount;
       this.tableLoading = false;
@@ -42,7 +60,7 @@ export class VistaDepartamentosComponent implements OnInit {
       console.log('Error al cargar departamentos');
       console.log(e);
       this.httpErrorHandler.handle(e);
-    });
+    });*/
   }
 
   eliminar(id: string | null): void {
