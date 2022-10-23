@@ -123,7 +123,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.departamentosSrv.get(params);
   }
 
-  private cargarDistritosReporte(id: string[] | number[]): Observable<ServerResponseList<Distrito>> {
+  private cargarDistritosReporte(id: string[] | number[]): Observable<Distrito[]> {
     const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
     return this.distritosSrv.get(params);
   }

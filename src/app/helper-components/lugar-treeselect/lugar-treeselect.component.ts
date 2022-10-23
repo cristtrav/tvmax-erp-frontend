@@ -23,8 +23,8 @@ export class LugarTreeselectComponent implements OnInit {
   value: string[] = [];
 
   ubicacionesFiltroNodos: NzTreeNodeOptions[] = [];
-  
-  
+
+
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private departamentosSrv: DepartamentosService,
@@ -36,13 +36,13 @@ export class LugarTreeselectComponent implements OnInit {
     this.cargarDepartamentosFiltro();
   }
 
-  cargarDepartamentosFiltro(){
+  cargarDepartamentosFiltro() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+descripcion');
-    this.departamentosSrv.get(params).subscribe((resp: Departamento[])=>{
+    this.departamentosSrv.get(params).subscribe((resp: Departamento[]) => {
       const nodes: NzTreeNodeOptions[] = [];
-      resp.forEach((d: Departamento)=>{
+      resp.forEach((d: Departamento) => {
         const node: NzTreeNodeOptions = {
           title: `${d.descripcion}`,
           key: `dep-${d.id}`
@@ -50,45 +50,47 @@ export class LugarTreeselectComponent implements OnInit {
         nodes.push(node);
       });
       this.ubicacionesFiltroNodos = nodes;
-    }, (e)=>{
+    }, (e) => {
       console.log('Error al cargar deparatamentos filtro');
       console.log(e);
       this.httpErrorHandler.handle(e);
     });
   }
 
-  cargarNodoCiudadBarrio(ev: NzFormatEmitEvent){
+  cargarNodoCiudadBarrio(ev: NzFormatEmitEvent) {
     const node = ev.node;
     if (node && node.getChildren().length === 0 && node.isExpanded) {
-      if(node.key.includes('dep')){
+      if (node.key.includes('dep')) {
         let params: HttpParams = new HttpParams();
         params = params.append('eliminado', 'false');
         params = params.append('sort', '+descripcion');
         params = params.append('iddepartamento', node.key.split('-')[1]);
-        this.distritosSrv.get(params).subscribe((resp: ServerResponseList<Distrito>)=>{
-          const nodesDistrito: NzTreeNodeOptions[] = [];
-          resp.data.forEach((d: Distrito)=>{
-            const nodeDistrito: NzTreeNodeOptions = {
-              title: `${d.descripcion}`,
-              key: `dis-${d.id}`,
-              checked: node.isChecked
-            };
-            nodesDistrito.push(nodeDistrito);
-          });
-          node.addChildren(nodesDistrito);
-        }, (e)=>{
-          console.log('Error al cargar distritos filtro');
-          console.log(e);
-          this.httpErrorHandler.handle(e);
+        this.distritosSrv.get(params).subscribe({
+          next: (distritos) => {
+            const nodesDistrito: NzTreeNodeOptions[] = [];
+            distritos.forEach((d: Distrito) => {
+              const nodeDistrito: NzTreeNodeOptions = {
+                title: `${d.descripcion}`,
+                key: `dis-${d.id}`,
+                checked: node.isChecked
+              };
+              nodesDistrito.push(nodeDistrito);
+            });
+            node.addChildren(nodesDistrito);
+          },
+          error: (e) => {
+            console.error('Error al cargar distritos', e);
+            this.httpErrorHandler.process(e);
+          }
         });
-      }else{
+      } else {
         let params: HttpParams = new HttpParams();
         params = params.append('eliminado', 'false');
         params = params.append('sort', '+descripcion');
         params = params.append('iddistrito', node.key.split('-')[1]);
-        this.barriosSrv.get(params).subscribe((resp: ServerResponseList<Barrio>)=>{
+        this.barriosSrv.get(params).subscribe((resp: ServerResponseList<Barrio>) => {
           const nodesBarrios: NzTreeNodeOptions[] = [];
-          resp.data.forEach((b: Barrio)=>{
+          resp.data.forEach((b: Barrio) => {
             const nodeBarrio: NzTreeNodeOptions = {
               title: `${b.descripcion}`,
               key: `bar-${b.id}`,
@@ -98,7 +100,7 @@ export class LugarTreeselectComponent implements OnInit {
             nodesBarrios.push(nodeBarrio);
           });
           node.addChildren(nodesBarrios);
-        }, (e)=>{
+        }, (e) => {
           console.log('Error al cargar barrios filtro');
           console.log(e);
           this.httpErrorHandler.handle(e);
@@ -107,7 +109,7 @@ export class LugarTreeselectComponent implements OnInit {
     }
   }
 
-  onValueChange(){
+  onValueChange() {
     this.valueChange.emit(this.value);
   }
 

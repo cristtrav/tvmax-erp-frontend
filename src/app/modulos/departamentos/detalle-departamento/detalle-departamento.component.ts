@@ -40,21 +40,22 @@ export class DetalleDepartamentoComponent implements OnInit {
         this.cargarDatos();
       }
     }
-
   }
 
   private cargarDatos(): void {
     this.formLoading = true;
-    this.depSrv.getPorId(this.iddepartamento).subscribe((data)=>{
-      this.form.get('id')?.setValue(data.id);
-      this.form.get('descripcion')?.setValue(data.descripcion);
-      this.formLoading = false;
-    }, (e)=>{
-      console.log('Error al cargar departamento');
-      console.log(e);
-      this.httpErrorHandler.process(e);
-      this.formLoading = false;
-    });
+    this.depSrv.getPorId(this.iddepartamento).subscribe({
+      next: (departamento) => {
+        this.form.get('id')?.setValue(departamento.id);
+        this.form.get('descripcion')?.setValue(departamento.descripcion);
+        this.formLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar departamento', e);
+        this.httpErrorHandler.process(e);
+        this.formLoading = false;
+      }
+    })
   }
 
   private validado(): boolean {
@@ -84,31 +85,35 @@ export class DetalleDepartamentoComponent implements OnInit {
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.depSrv.post(this.getDto()).subscribe(() => {
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.form.reset();
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al registrar departamento');
-      console.log(e);
-      this.httpErrorHandler.process(e);
-      this.guardarLoading = false;
+    this.depSrv.post(this.getDto()).subscribe({
+      next: () => {
+        this.notif.create('success', 'Guardado correctamente', '');
+        this.form.reset();
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al registrar departamento', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
     const d: Departamento = this.getDto();
-    this.depSrv.put(this.iddepartamento, d).subscribe(()=>{
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.iddepartamento = `${d.id}`;
-      this.router.navigate([d.id], {relativeTo: this.aroute.parent});
-      this.guardarLoading = false;
-    }, (e)=>{
-      console.log('Error al modificar departamento');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardarLoading = false;
+    this.depSrv.put(this.iddepartamento, d).subscribe({
+      next: () => {
+        this.notif.create('success', 'Guardado correctamente', '');
+        this.iddepartamento = `${d.id}`;
+        this.router.navigate([d.id], { relativeTo: this.aroute.parent });
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al modificar departamento', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
     });
   }
 

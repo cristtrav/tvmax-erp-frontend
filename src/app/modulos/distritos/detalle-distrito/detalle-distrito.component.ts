@@ -8,7 +8,6 @@ import { DistritosService } from './../../../servicios/distritos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { ServerResponseList } from 'src/app/dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-distrito',
@@ -60,26 +59,30 @@ export class DetalleDistritoComponent implements OnInit {
 
   private cargarDatos(): void {
     this.formLoading = true;
-    this.distSrv.getPorId(this.iddistrito).subscribe((data) => {
-      this.form.get('id')?.setValue(data.id?.slice(-2));
-      this.form.get('descripcion')?.setValue(data.descripcion);
-      this.form.get('iddepartamento')?.setValue(data.iddepartamento);
-      this.formLoading = false;
-    }, (e) => {
-      console.log('Error al cargar datos del distrito');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.formLoading = false;
+    this.distSrv.getPorId(this.iddistrito).subscribe({
+      next: (distrito) => {
+        this.form.get('id')?.setValue(distrito.id?.slice(-2));
+        this.form.get('descripcion')?.setValue(distrito.descripcion);
+        this.form.get('iddepartamento')?.setValue(distrito.iddepartamento);
+        this.formLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar datos del distrito', e);
+        this.httpErrorHandler.process(e);
+        this.formLoading = false;
+      }
     });
   }
 
   private cargarDep(): void {
-    this.depSrv.get(this.getHttpQueryParamsDepartamento()).subscribe((resp: Departamento[]) => {
-      this.lstDep = resp;
-    }, (e) => {
-      console.log('Error al cargar departamentos');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    this.depSrv.get(this.getHttpQueryParamsDepartamento()).subscribe({
+      next: (departamentos) => {
+        this.lstDep = departamentos;
+      },
+      error: (e) => {
+        console.error('Error al cargar departamentos', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 
@@ -110,33 +113,37 @@ export class DetalleDistritoComponent implements OnInit {
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.distSrv.post(this.getDto()).subscribe(() => {
-      this.form.reset();
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al registrar distrito');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardarLoading = false;
-    })
+    this.distSrv.post(this.getDto()).subscribe({
+      next: () => {
+        this.form.reset();
+        this.notif.create('success', 'Guardado correctamente', '');
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al registrar distrito', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
+    });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
     const d = this.getDto();
-    this.distSrv.put(this.iddistrito, d).subscribe(() => {
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.router.navigate([d.id], { relativeTo: this.aroute.parent } );
-      if (d.id !== null) {
-        this.iddistrito = d.id;
+    this.distSrv.put(this.iddistrito, d).subscribe({
+      next: () => {
+        this.notif.create('success', 'Guardado correctamente', '');
+        this.router.navigate([d.id], { relativeTo: this.aroute.parent });
+        if (d.id !== null) {
+          this.iddistrito = d.id;
+        }
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al modificar distrito', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
       }
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al modificar distrito');
-      console.log(e);
-      this.notif.create('error', 'Error al guardar', e.error);
-      this.guardarLoading = false;
     });
   }
 

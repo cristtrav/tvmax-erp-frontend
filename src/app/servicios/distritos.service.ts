@@ -20,8 +20,8 @@ export class DistritosService {
     return this.http.post(this.url, d, AppSettings.getHttpOptionsAuth());
   } 
 
-  get(params: HttpParams): Observable<ServerResponseList<Distrito>> {
-    return this.http.get<ServerResponseList<Distrito>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Distrito[]> {
+    return this.http.get<Distrito[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: string): Observable<Distrito> {

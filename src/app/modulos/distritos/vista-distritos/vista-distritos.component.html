@@ -15,7 +15,7 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstDist" style="margin-top: 10px;"
+            <nz-table #tbl [nzData]="lstDistritos" style="margin-top: 10px;"
             [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
              (nzQueryParams)="onQueryParamsChange($event)" nzShowPagination nzShowSizeChanger nzSize="small">
                 <thead>
@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let dis of lstDist">
+                    <tr *ngFor="let dis of lstDistritos">
                         <td>{{ dis.id }}</td>
                         <td>{{ dis.descripcion }}</td>
                         <td><span nz-tooltip [nzTooltipTitle]="'Código: '+dis.iddepartamento">{{ dis.departamento}}</span></td>

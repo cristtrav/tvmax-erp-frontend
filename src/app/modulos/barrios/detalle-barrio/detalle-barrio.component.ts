@@ -23,7 +23,7 @@ export class DetalleBarrioComponent implements OnInit {
     descripcion: [null, [Validators.required, Validators.maxLength(150)]],
     iddistrito: [null, [Validators.required]]
   });
-  lstDist: Distrito[] = [];
+  lstDistritos: Distrito[] = [];
   formLoading: boolean = false;
   guardarLoading: boolean = false;
   lastIdLoading: boolean = false;
@@ -81,12 +81,14 @@ export class DetalleBarrioComponent implements OnInit {
   }
 
   cargarDistritos(): void {
-    this.distSrv.get(this.getHttpParamsDistrito()).subscribe((resp: ServerResponseList<Distrito>) => {
-      this.lstDist = resp.data;
-    }, (e) => {
-      console.log('Error al cargar distritos');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar distritos', e.error);
+    this.distSrv.get(this.getHttpParamsDistrito()).subscribe({
+      next: (distritos) => {
+        this.lstDistritos = distritos;
+      },
+      error: (e) => {
+        console.error('Error al cargar distritos', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 
