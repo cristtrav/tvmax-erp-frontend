@@ -3,7 +3,6 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Barrio } from '../dto/barrio-dto';
 import { Observable } from 'rxjs';
-import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +19,8 @@ export class BarriosService {
     return this.http.post(this.url, b, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Barrio>> {
-    return this.http.get<ServerResponseList<Barrio>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Barrio[]> {
+    return this.http.get<Barrio[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: number): Observable<Barrio>{

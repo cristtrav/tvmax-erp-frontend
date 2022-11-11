@@ -128,7 +128,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.distritosSrv.get(params);
   }
 
-  private cargarBarriosReporte(id: string[] | number[]): Observable<ServerResponseList<Barrio>> {
+  private cargarBarriosReporte(id: string[] | number[]): Observable<Barrio[]> {
     const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
     return this.barriosSrv.get(params);
   }

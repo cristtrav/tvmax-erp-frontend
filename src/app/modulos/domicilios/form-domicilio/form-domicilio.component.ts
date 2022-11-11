@@ -99,12 +99,14 @@ export class FormDomicilioComponent implements OnInit {
   }
 
   private cargarBarrios(): void {
-    this.barriosSrv.get(this.getBarriosHttpParams()).subscribe((resp: ServerResponseList<Barrio>) => {
-      this.lstBarrios = resp.data;
-    }, (e) => {
-      console.log('Error al cargar barrios');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar barrios', e.error);
+    this.barriosSrv.get(this.getBarriosHttpParams()).subscribe({
+      next: (barrios)=>{
+        this.lstBarrios = barrios;
+      },
+      error: (e)=> {
+        console.error('Error al cargar barrios', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

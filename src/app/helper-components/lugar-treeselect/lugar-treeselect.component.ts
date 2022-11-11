@@ -88,22 +88,24 @@ export class LugarTreeselectComponent implements OnInit {
         params = params.append('eliminado', 'false');
         params = params.append('sort', '+descripcion');
         params = params.append('iddistrito', node.key.split('-')[1]);
-        this.barriosSrv.get(params).subscribe((resp: ServerResponseList<Barrio>) => {
-          const nodesBarrios: NzTreeNodeOptions[] = [];
-          resp.data.forEach((b: Barrio) => {
-            const nodeBarrio: NzTreeNodeOptions = {
-              title: `${b.descripcion}`,
-              key: `bar-${b.id}`,
-              isLeaf: true,
-              checked: node.isChecked
-            };
-            nodesBarrios.push(nodeBarrio);
-          });
-          node.addChildren(nodesBarrios);
-        }, (e) => {
-          console.log('Error al cargar barrios filtro');
-          console.log(e);
-          this.httpErrorHandler.handle(e);
+        this.barriosSrv.get(params).subscribe({
+          next: (barrios) => {
+            const nodesBarrios: NzTreeNodeOptions[] = [];
+            barrios.forEach((b: Barrio) => {
+              const nodeBarrio: NzTreeNodeOptions = {
+                title: `${b.descripcion}`,
+                key: `bar-${b.id}`,
+                isLeaf: true,
+                checked: node.isChecked
+              };
+              nodesBarrios.push(nodeBarrio);
+            });
+            node.addChildren(nodesBarrios);
+          },
+          error: (e) => {
+            console.error('Error al cargar barrios', e);
+            this.httpErrorHandler.process(e);
+          }
         });
       }
     }

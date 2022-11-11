@@ -5,8 +5,8 @@ import { Barrio } from './../../../dto/barrio-dto';
 import { BarriosService } from './../../../servicios/barrios.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-barrios',
@@ -41,15 +41,20 @@ export class VistaBarriosComponent implements OnInit {
 
   cargarDatos(): void {
     this.tableLoading = true;
-    this.barrioSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Barrio>)=>{
-      this.lstBarrios = resp.data;
-      this.totalRegisters = resp.queryRowCount;
-      this.tableLoading = false;
-    }, (e)=>{
-      console.log('Error al cargar barrios');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.tableLoading = false;
+    forkJoin({
+      barrios: this.barrioSrv.get(this.getHttpQueryParams()),
+      total: this.barrioSrv.getTotalRegistros(this.getHttpQueryParams())
+    }).subscribe({
+      next: (respuesta) => {
+        this.lstBarrios = respuesta.barrios;
+        this.totalRegisters = respuesta.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar barrios', e);
+        this.httpErrorHandler.process(e);
+        this.tableLoading = false;
+      }
     });
   }
 
