@@ -56,25 +56,27 @@ export class VistaServiciosComponent implements OnInit {
     });
   }
 
-  cargarGruposFiltro(){
+  cargarGruposFiltro() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+descripcion');
-    this.gruposSrv.getGrupos(params).subscribe((resp: ServerResponseList<Grupo>)=>{
-      const gruposChkbox: ICheckboxData[] = [];
-      for(let g of resp.data){
-        gruposChkbox.push(
-          {
-            label: `${g.descripcion}`,
-            value: `${g.id}`
-          }
-        );
+    this.gruposSrv.getGrupos(params).subscribe({
+      next: (grupos) => {
+        const gruposChkbox: ICheckboxData[] = [];
+        for (let g of grupos) {
+          gruposChkbox.push(
+            {
+              label: `${g.descripcion}`,
+              value: `${g.id}`
+            }
+          );
+        }
+        this.filtrosGrupoChk = gruposChkbox;
+      },
+      error: (e) => {
+        console.error('Error al cargar grupos', e);
+        this.httpErrorRespSrv.process(e);
       }
-      this.filtrosGrupoChk = gruposChkbox;
-    }, (e)=>{
-      console.log('Error al cargar grupos en filtro');
-      console.log(e);
-      this.httpErrorRespSrv.handle(e, 'cargar grupos en filtro');
     });
   }
 
@@ -98,7 +100,7 @@ export class VistaServiciosComponent implements OnInit {
     this.cargarServicios();
   }
 
-  private buildSortStr(sort: {key: string, value: any}[]): string | null {
+  private buildSortStr(sort: { key: string, value: any }[]): string | null {
     for (let s of sort) {
       if (s.value === 'ascend') return `+${s.key}`;
       if (s.value === 'descend') return `-${s.key}`;
@@ -109,30 +111,30 @@ export class VistaServiciosComponent implements OnInit {
   private getHttpQueryParams(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     params = params.append('limit', `${this.pageSize}`);
-    params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
-    if(this.sortStr){
+    params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
+    if (this.sortStr) {
       params = params.append('sort', this.sortStr);
     }
-    if(this.existeFiltroGrupos()){
-      this.getIdsGruposFiltro().forEach((idg: string)=>{
+    if (this.existeFiltroGrupos()) {
+      this.getIdsGruposFiltro().forEach((idg: string) => {
         params = params.append('idgrupo[]', idg);
       });
     }
-    if(this.textoBusqueda){
+    if (this.textoBusqueda) {
       params = params.append('search', this.textoBusqueda);
     }
     return params;
   }
 
-  filtroGrupoChange(){
+  filtroGrupoChange() {
     console.log('el grupo cambio');
     console.log(this.filtrosGrupoChk);
     this.calcularCantFiltros();
     this.cargarServicios();
   }
 
-  limpiarFiltroGrupos(){
-    this.filtrosGrupoChk = this.filtrosGrupoChk.map((check: ICheckboxData)=>{
+  limpiarFiltroGrupos() {
+    this.filtrosGrupoChk = this.filtrosGrupoChk.map((check: ICheckboxData) => {
       check.checked = false;
       return check;
     });
@@ -142,18 +144,18 @@ export class VistaServiciosComponent implements OnInit {
 
   getIdsGruposFiltro(): string[] {
     const idg: string[] = [];
-    for(let chk of this.filtrosGrupoChk){
-      if(chk.checked){
+    for (let chk of this.filtrosGrupoChk) {
+      if (chk.checked) {
         idg.push(chk.value);
       }
     }
     return idg;
   }
 
-  calcularCantFiltros(){
+  calcularCantFiltros() {
     let cant: number = 0;
-    for(let chkgrupo of this.filtrosGrupoChk){
-      if(chkgrupo.checked){
+    for (let chkgrupo of this.filtrosGrupoChk) {
+      if (chkgrupo.checked) {
         cant++;
       }
     }
@@ -162,8 +164,8 @@ export class VistaServiciosComponent implements OnInit {
 
   existeFiltroGrupos(): boolean {
     let existe: boolean = false;
-    for(let chk of this.filtrosGrupoChk){
-      if(chk.checked){
+    for (let chk of this.filtrosGrupoChk) {
+      if (chk.checked) {
         existe = true;
         break;
       }
@@ -171,21 +173,21 @@ export class VistaServiciosComponent implements OnInit {
     return existe;
   }
 
-  buscar(){
+  buscar() {
     clearTimeout(this.timerBusqueda);
-    this.timerBusqueda = setTimeout(()=>{
+    this.timerBusqueda = setTimeout(() => {
       this.cargarServicios();
     }, 500);
-    
+
   }
 
-  limpiarBusqueda(){
+  limpiarBusqueda() {
     this.textoBusqueda = "";
     this.cargarServicios();
   }
 }
 
-interface ICheckboxData{
+interface ICheckboxData {
   label: string,
   value: string,
   checked?: boolean,

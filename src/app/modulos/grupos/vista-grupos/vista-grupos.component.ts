@@ -4,8 +4,8 @@ import { GruposService } from '../../../servicios/grupos.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { HttpParams } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-grupos',
@@ -35,17 +35,19 @@ export class VistaGruposComponent implements OnInit {
 
   private cargarDatos() {
     this.loadingData = true;
-    this.grupoSrv.getGrupos(this.getQueryHttpParams()).subscribe({
-      next: (resp) => {
-        this.lstGrupos = resp.data;
-        this.totalRegisters = resp.queryRowCount;
+    forkJoin({
+      grupos: this.grupoSrv.getGrupos(this.getQueryHttpParams()),
+      count: this.grupoSrv.getTotal(this.getQueryHttpParams())
+    }).subscribe({
+      next: (respuesta) => {
+        this.lstGrupos = respuesta.grupos;
+        this.totalRegisters = respuesta.count;
         this.loadingData = false;
       },
       error: (e) => {
+        console.error('Error al cargar grupos', e);
+        this.httpErrorHandler.process(e);
         this.loadingData = false;
-        console.log(`Error al cargar grupos`);
-        console.log(e);
-        this.httpErrorHandler.handle(e);
       }
     });
   }

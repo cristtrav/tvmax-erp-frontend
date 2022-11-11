@@ -36,22 +36,24 @@ export class GrupoServicioTreeselectComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', false);
     params = params.append('sort', '+descripcion');
-    this.gruposSrv.getGrupos(params).subscribe((resp: ServerResponseList<Grupo>) => {
-      const nodes: NzTreeNodeOptions[] = [];
-      resp.data.forEach((g: Grupo) => {
-        const node: NzTreeNodeOptions = {
-          title: `${g.descripcion}`,
-          key: `gru-${g.id}`,
-        }
-        nodes.push(node);
-        const servSelec: string[] = this.value.filter(gs => gs.includes('ser')).filter(gs => gs.split('-')[2] === `${g.id}`);
-        if(servSelec.length !== 0) this.cargarServiciosEnNodo(node);
-        this.gruposServiciosFiltroNodos = nodes;
-      });
-    }, (e) => {
-      console.log('Error al cargar grupos filtro');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    this.gruposSrv.getGrupos(params).subscribe({
+      next: (grupos) => {
+        const nodes: NzTreeNodeOptions[] = [];
+        grupos.forEach((g: Grupo) => {
+          const node: NzTreeNodeOptions = {
+            title: `${g.descripcion}`,
+            key: `gru-${g.id}`,
+          }
+          nodes.push(node);
+          const servSelec: string[] = this.value.filter(gs => gs.includes('ser')).filter(gs => gs.split('-')[2] === `${g.id}`);
+          if (servSelec.length !== 0) this.cargarServiciosEnNodo(node);
+          this.gruposServiciosFiltroNodos = nodes;
+        });
+      },
+      error: (e) => {
+        console.error('Error al cargar grupos', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

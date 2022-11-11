@@ -67,12 +67,14 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private cargarGrupos(): void{
-    this.gruposSrv.getGrupos(this.getQueryParamsGrupos()).subscribe((resp: ServerResponseList<Grupo>)=>{
-      this.lstGrupos = resp.data;
-    }, (e)=>{
-      console.log('Error al cargar grupos');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar Grupos', e.error);
+    this.gruposSrv.getGrupos(this.getQueryParamsGrupos()).subscribe({
+      next: (grupos) => {
+        this.lstGrupos = grupos;
+      },
+      error: (e) => {
+        console.error('Error al cargar grupos', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 
