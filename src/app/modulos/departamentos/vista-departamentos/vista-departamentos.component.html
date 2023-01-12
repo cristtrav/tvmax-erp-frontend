@@ -15,9 +15,19 @@
                 <i nz-icon nzType="plus"></i>
                 Nuevo
             </a>
-            <nz-table #tbl [nzData]="lstDepartamentos" style="margin-top: 10px;" nzShowPagination nzShowSizeChanger
-            [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
-            (nzQueryParams)="onQueryParamsChange($event)" nzSize="small">
+            <nz-table
+                #tbl
+                [nzData]="lstDepartamentos"
+                style="margin-top: 10px;"
+                nzShowPagination
+                nzShowSizeChanger
+                [nzFrontPagination]="false"
+                [nzPageIndex]="pageIndex"
+                [nzPageSize]="pageSize"
+                [nzTotal]="totalRegisters"
+                [nzLoading]="tableLoading"
+                (nzQueryParams)="onQueryParamsChange($event)" 
+                nzSize="small">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'" >Código</th>

@@ -10,9 +10,12 @@ export class HttpErrorResponseHandlerService {
   constructor(private notif: NzNotificationService) { }
 
   public process(e: HttpErrorResponse) {
-
-    const responseError: IHttpExceptionResponse = typeof e.error === 'string' ? JSON.parse(e.error) : e.error;
-    this.notif.create('error', `<strong>${responseError.error}<strong>`, responseError.message, { nzDuration: 5000 });
+    if (e.status === 0) {
+      this.notif.create('error', `<strong>Error al conectar al servidor<strong>`, e.statusText, { nzDuration: 5000 });
+    } else {
+      const responseError: IHttpExceptionResponse = typeof e.error === 'string' ? JSON.parse(e.error) : e.error;
+      this.notif.create('error', `<strong>${responseError.error}<strong>`, responseError.message, { nzDuration: 5000 });
+    }
   }
 
   public handle(e: HttpErrorResponse | unknown, actionName?: string): void {

@@ -114,11 +114,11 @@ export class DetalleServicioComponent implements OnInit {
   }
 
   private registrar(): void {
-    ;this.guardarLoading = true;
+    this.guardarLoading = true;
     this.serviciosSrv.postServicio(this.getDto()).subscribe(()=>{
       this.notif.create('success', 'Guardado correctamente','');
       this.form.reset();
-      ;this.guardarLoading = false;
+      this.guardarLoading = false;
     }, (e)=>{
       console.log('Error al registrar Servicio');
       console.log(e);

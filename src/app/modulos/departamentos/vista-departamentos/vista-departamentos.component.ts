@@ -5,8 +5,7 @@ import { DepartamentosService } from './../../../servicios/departamentos.service
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { HttpParams } from '@angular/common/http';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-vista-departamentos',
@@ -21,6 +20,7 @@ export class VistaDepartamentosComponent implements OnInit {
   pageIndex: number = 1;
   sortStr: string | null = "+id"
   tableLoading: boolean = false;
+  departamentosDataObs!: Observable<{departamentos: Departamento[], total: number}>;
 
   constructor(
     private depSrv: DepartamentosService,
@@ -29,7 +29,7 @@ export class VistaDepartamentosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   private cargarDatos(): void{
@@ -50,17 +50,6 @@ export class VistaDepartamentosComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
-
-    /*this.depSrv.get(this.getRequestParams()).subscribe((resp: ServerResponseList<Departamento>)=>{
-      this.lstDepartamentos = resp.data;
-      this.totalRegisters = resp.queryRowCount;
-      this.tableLoading = false;
-    }, (e)=>{
-      this.tableLoading = false;
-      console.log('Error al cargar departamentos');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    });*/
   }
 
   eliminar(id: string | null): void {

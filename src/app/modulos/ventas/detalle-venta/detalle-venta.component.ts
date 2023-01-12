@@ -579,9 +579,9 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('suscribible', 'false');
     this.serviciosSrv.getServicios(params).subscribe({
-      next: (resp) => {
+      next: (servicios) => {
         const lstgs: IGrupoServicio[] = [];
-        for (let s of resp.data) {
+        for (let s of servicios) {
           let existe: boolean = false;
           for (let gs of lstgs) {
             if (s.idgrupo === gs.grupo.id) {

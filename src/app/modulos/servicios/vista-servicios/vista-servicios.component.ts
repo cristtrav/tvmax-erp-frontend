@@ -8,7 +8,7 @@ import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { HttpParams } from '@angular/common/http';
 import { GruposService } from '@servicios/grupos.service';
 import { Grupo } from '@dto/grupo-dto';
-import { timer } from 'rxjs';
+import { forkJoin, timer } from 'rxjs';
 
 @Component({
   selector: 'app-vista-servicios',
@@ -44,15 +44,20 @@ export class VistaServiciosComponent implements OnInit {
 
   private cargarServicios(): void {
     this.tableLoading = true;
-    this.serviciosSrv.getServicios(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Servicio>) => {
-      this.lstServicios = resp.data;
-      this.totalRegisters = resp.queryRowCount;
-      this.tableLoading = false;
-    }, (e) => {
-      console.log('Error al cargar Servicios');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar servicios', e.error);
-      this.tableLoading = false;
+    forkJoin({
+      servicios: this.serviciosSrv.getServicios(this.getHttpQueryParams()),
+      total: this.serviciosSrv.getTotalRegistros(this.getHttpQueryParams())
+    }).subscribe({
+      next: (respuesta) => {
+        this.lstServicios = respuesta.servicios;
+        this.totalRegisters = respuesta.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar servicios', e);
+        this.httpErrorRespSrv.process(e);
+        this.tableLoading = false;
+      }
     });
   }
 

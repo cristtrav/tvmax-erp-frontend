@@ -19,15 +19,11 @@ export class ServiciosService {
     return this.http.post(this.url, srv, AppSettings.getHttpOptionsJsonTextAuth());
   }
 
-  getServicios(params: HttpParams): Observable<ServerResponseList<Servicio>> {
-    return this.http.get<ServerResponseList<Servicio>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  getServicios(params: HttpParams): Observable<Servicio[]> {
+    return this.http.get<Servicio[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getTotalRegistros(filters: Array<{key: string, value: any | null}>): Observable<number>{
-    let params = new HttpParams();
-    for(let p of filters){
-      params = params.append(p.key, p.value);
-    }
+  getTotalRegistros(params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 

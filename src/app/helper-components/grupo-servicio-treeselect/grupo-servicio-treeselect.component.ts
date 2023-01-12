@@ -69,22 +69,24 @@ export class GrupoServicioTreeselectComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+descripcion');
     params = params.append('idgrupo', `${node.key.split('-')[1]}`);
-    this.serviciosSrv.getServicios(params).subscribe((resp: ServerResponseList<Servicio>) => {
-      const serviciosNodo: NzTreeNodeOptions[] = [];
-      resp.data.forEach((s: Servicio) => {
-        const datosNodo: NzTreeNodeOptions = {
-          title: `${s.descripcion}`,
-          key: `ser-${s.id}-${node.key.split('-')[1]}`,
-          isLeaf: true,
-          checked: node.isChecked
-        }
-        serviciosNodo.push(datosNodo);
-      });
-      node.addChildren(serviciosNodo);
-    }, (e) => {
-      console.log('Error al cargar servicios del nodo');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    this.serviciosSrv.getServicios(params).subscribe({
+      next: (servicios) => {
+        const serviciosNodo: NzTreeNodeOptions[] = [];
+        servicios.forEach((s: Servicio) => {
+          const datosNodo: NzTreeNodeOptions = {
+            title: `${s.descripcion}`,
+            key: `ser-${s.id}-${node.key.split('-')[1]}`,
+            isLeaf: true,
+            checked: node.isChecked
+          }
+          serviciosNodo.push(datosNodo);
+        });
+        node.addChildren(serviciosNodo);
+      },
+      error: (e) => {
+        console.log('Error al cargar servicios', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

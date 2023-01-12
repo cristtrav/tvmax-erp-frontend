@@ -91,8 +91,8 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     const params: HttpParams = new HttpParams()
       .append('eliminado', 'false');
     this.serviciosServicie.getServicios(params).subscribe({
-      next: (resp) => {
-        this.nodosGruposServicios = TreeUtils.serviciosToNodos(resp.data);
+      next: (servicios) => {
+        this.nodosGruposServicios = TreeUtils.serviciosToNodos(servicios);
         this.treeNodeServiciosVirtualScroll = this.nodosGruposServicios.length > 11 ? '300px' : null;
       },
       error: (e) => {

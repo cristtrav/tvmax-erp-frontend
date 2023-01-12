@@ -119,13 +119,14 @@ export class FormSuscripcionComponent implements OnInit {
 
   private cargarServicios(): void {
     const param = new HttpParams().append('suscribible', 'true');
-    this.serviciosSrv.getServicios(param).subscribe((resp: ServerResponseList<Servicio>) => {
-      this.lstServicios = resp.data;
-    }, (e) => {
-      console.log('Error al cargar servicios');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al cargar servicios', e.error);
+    this.serviciosSrv.getServicios(param).subscribe({
+      next: (servicios) => {
+        this.lstServicios = servicios;
+      },
+      error: (e) => {
+        console.error('Error al cargar servicios', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

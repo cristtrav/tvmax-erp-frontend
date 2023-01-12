@@ -138,7 +138,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.gruposSrv.getGrupos(params);
   }
 
-  private cargarServiciosReporte(id: string[] | number[]): Observable<ServerResponseList<Servicio>> {
+  private cargarServiciosReporte(id: string[] | number[]): Observable<Servicio[]> {
     const params: HttpParams = new HttpParams().append('eliminado', 'false').appendAll({ id });
     return this.serviciosSrv.getServicios(params);
   }
