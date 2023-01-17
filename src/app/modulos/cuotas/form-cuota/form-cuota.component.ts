@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ServiciosService } from './../../../servicios/servicios.service';
 import { Servicio } from './../../../dto/servicio-dto';
-import { Cuota } from 'src/app/dto/cuota-dto';
+import { CuotaDTO } from 'src/app/dto/cuota-dto';
 import { CuotasService } from './../../../servicios/cuotas.service';
 import { Extra } from './../../../util/extra';
 import { HttpParams } from '@angular/common/http';
@@ -127,8 +127,8 @@ export class FormCuotaComponent implements OnInit {
     return val;
   }
 
-  private getDto(): Cuota {
-    const c: Cuota = new Cuota();
+  private getDto(): CuotaDTO {
+    const c: CuotaDTO = new CuotaDTO();
     if (this.idcuota !== 'nueva') {
       c.id = +this.idcuota;
     }
@@ -180,21 +180,21 @@ export class FormCuotaComponent implements OnInit {
     }, (e) => {
       console.log('Error al registrar cuota');
       console.log(e);
-      this.httpErrorHandler.handle(e);
+      this.httpErrorHandler.process(e);
       this.guardarLoading = false;
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
-    const c: Cuota = this.getDto();
+    const c: CuotaDTO = this.getDto();
     this.cuotaSrv.put(+this.idcuota, c).subscribe(() => {
       this.notif.create('success', 'Cuota guardada correctamente', '');
       this.guardarLoading = false;
     }, (e) => {
       console.log('Error al modificar cuota');
       console.log(e);
-      this.httpErrorHandler.handle(e);
+      this.httpErrorHandler.process(e);
       this.guardarLoading = false;
     });
   }

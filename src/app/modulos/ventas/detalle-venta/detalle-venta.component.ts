@@ -8,7 +8,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { Cuota } from '@dto/cuota-dto';
+import { CuotaDTO } from '@dto/cuota-dto';
 import { CuotasService } from '@servicios/cuotas.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { Servicio } from '@dto/servicio-dto';
@@ -427,9 +427,9 @@ export class DetalleVentaComponent implements OnInit {
 
         servcuo.loadingCuotas = true;
         this.cuotasSrv.get(paramsCuotas).subscribe({
-          next: (resp) => {
+          next: (cuotas) => {
             const arrCuotas: ICuotaDetalle[] = [];
-            for (let c of resp.data) {
+            for (let c of cuotas) {
               arrCuotas.push({ cuota: c, enDetalle: this.existeCuotaEnDetalle(c.id) });
             }
             servcuo.cuotas = arrCuotas;
@@ -438,7 +438,7 @@ export class DetalleVentaComponent implements OnInit {
           error: (e) => {
             console.log(`Error al cargar las cuotas del servicio ${suscservcuo.servicioscuotas}`);
             console.log(e);
-            this.httpErrorHandler.handle(e);
+            this.httpErrorHandler.process(e);
             servcuo.loadingCuotas = false;
           }
         });
@@ -658,7 +658,7 @@ interface IServicioCuota {
 }
 
 interface ICuotaDetalle {
-  cuota: Cuota;
+  cuota: CuotaDTO;
   enDetalle: boolean;
 }
 

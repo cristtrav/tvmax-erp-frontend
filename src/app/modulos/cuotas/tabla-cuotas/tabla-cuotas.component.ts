@@ -1,13 +1,14 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
-import { Cuota } from './../../../dto/cuota-dto';
+import { CuotaDTO } from '@dto/cuota-dto';
 import { CuotasService } from './../../../servicios/cuotas.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '../../../util/extra';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-tabla-cuotas',
@@ -21,7 +22,7 @@ export class TablaCuotasComponent implements OnInit {
   @Input()
   idsuscripcion: number | null = null;
 
-  lstCuotas: Cuota[] = [];
+  lstCuotas: CuotaDTO[] = [];
   consultaCobros: { [param: number]: boolean } = {};
   pageSize: number = 10;
   pageIndex: number = 1;
@@ -46,24 +47,27 @@ export class TablaCuotasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //this.cargarCuotas();
   }
 
   private cargarCuotas(): void {
-    //console.log('Se cargan las cuotas');
     this.tableLoading = true;
-    this.cuotaSrv.get(this.getHttpParams()).subscribe((resp: ServerResponseList<Cuota>) => {
-      this.lstCuotas = resp.data;
-      resp.data.forEach(cuo => {
-        this.consultaCobros[Number(cuo.id)] = false;
-      });
-      this.totalRegisters = resp.queryRowCount;
-      this.tableLoading = false;
-    }, (e) => {
-      console.log('Error al cargar cuotas');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.tableLoading = false;
+    forkJoin({
+      cuotas: this.cuotaSrv.get(this.getHttpParams()),
+      total: this.cuotaSrv.getTotalRegistros(this.getHttpParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstCuotas = resp.cuotas;
+        resp.cuotas.forEach(cuo => {
+          this.consultaCobros[Number(cuo.id)] = false;
+        });
+        this.totalRegisters = resp.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar cuotas', e);
+        this.httpErrorHandler.process(e);
+        this.tableLoading = false;
+      }
     });
   }
 

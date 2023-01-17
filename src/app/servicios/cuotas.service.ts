@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Servicio } from './../dto/servicio-dto';
 import { AppSettings } from './../util/app-settings';
-import { Cuota } from './../dto/cuota-dto';
+import { CuotaDTO } from './../dto/cuota-dto';
 import { ServerResponseList } from '../dto/server-response-list.dto';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
 
@@ -25,19 +25,23 @@ export class CuotasService {
     return this.http.get<Servicio[]>(`${this.url}/servicios`, { params });
   }*/
 
-  get(filtros: HttpParams): Observable<ServerResponseList<Cuota>> {
-    return this.http.get<ServerResponseList<Cuota>>(this.url, AppSettings.getHttpOptionsAuthWithParams(filtros));
+  get(params: HttpParams): Observable<CuotaDTO[]> {
+    return this.http.get<CuotaDTO[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  post(c: Cuota): Observable<any>{
+  getTotalRegistros(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  post(c: CuotaDTO): Observable<any>{
     return this.http.post(`${this.url}`, c, AppSettings.getHttpOptionsAuth());
   }
 
-  getPorId(id: number): Observable<Cuota>{
-    return this.http.get<Cuota>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  getPorId(id: number): Observable<CuotaDTO>{
+    return this.http.get<CuotaDTO>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  put(id: number, c: Cuota): Observable<any>{
+  put(id: number, c: CuotaDTO): Observable<any>{
     return this.http.put(`${this.url}/${id}`, c, AppSettings.getHttpOptionsAuth());
   }
 
@@ -45,8 +49,12 @@ export class CuotasService {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  getCuotasPorSuscripcion(idsusc: number, queryParams: HttpParams): Observable<ServerResponseList<Cuota>>{
-    return this.http.get<ServerResponseList<Cuota>>(`${this.urlSusc}/${idsusc}/cuotas`, AppSettings.getHttpOptionsAuth());
+  getCuotasPorSuscripcion(idsusc: number, params: HttpParams): Observable<CuotaDTO[]>{
+    return this.http.get<CuotaDTO[]>(`${this.urlSusc}/${idsusc}/cuotas`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  countCuotasPorSuscripcion(idsusc: number, params: HttpParams): Observable<CuotaDTO[]>{
+    return this.http.get<CuotaDTO[]>(`${this.urlSusc}/${idsusc}/cuotas/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getCobroCuota(idcuota: number): Observable<CobroCuota>{
