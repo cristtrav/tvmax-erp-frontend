@@ -24,6 +24,7 @@ import { NzSpaceModule} from 'ng-zorro-antd/space';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
   declarations: [VistaServiciosComponent, DetalleServicioComponent],
@@ -50,7 +51,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzSpaceModule,
     NzBadgeModule,
     NzDrawerModule,
-    NzTypographyModule
+    NzTypographyModule,
+    NzTagModule
   ]
 })
 export class ServiciosModule { }

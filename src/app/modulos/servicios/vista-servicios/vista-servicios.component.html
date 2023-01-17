@@ -43,7 +43,7 @@
                         <th nzColumnKey="id" [nzSortOrder]="'ascend'" [nzSortFn]="true">Código</th>
                         <th nzColumnKey="descripcion" [nzSortFn]="true">Descripción</th>
                         <th nzColumnKey="grupo" [nzSortFn]="true">Grupo</th>
-                        <th nzColumnKey="suscribible" [nzSortFn]="true" nzAlign="center">Suscribible</th>
+                        <th nzColumnKey="suscribible" [nzSortFn]="true">Tipo</th>
                         <th nzColumnKey="precio" [nzSortFn]="true" nzAlign="center">Precio</th>
                         <th >Acciones</th>
                     </tr>
@@ -57,8 +57,9 @@
                                 {{ srv.grupo }}
                             </span>
                         </td>
-                        <td nzAlign="center">
-                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="srv.suscribible?'#00C853':'#f44336'" [nzType]="srv.suscribible?'check-circle':'close-circle'"></i>
+                        <td>
+                            <nz-tag *ngIf="srv.suscribible" [nzColor]="'success'">Suscribible</nz-tag>
+                            <nz-tag *ngIf="!srv.suscribible" [nzColor]="'error'">No suscribible</nz-tag>
                         </td>
                         <td nzAlign="right">{{ srv.precio | number }}</td>
                         <td nzAlign="center">
