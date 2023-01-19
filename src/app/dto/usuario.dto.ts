@@ -1,15 +1,14 @@
-export class Funcionario {
+export class Usuario {
     id: number | null = null;
     nombres: string | null = null;
     apellidos: string | null = null;
     razonsocial: string | null = null;
-    ci: string | null = null;
-    dvruc: number | null = null;
+    ci: string | null = null;    
     password: string | null = null;
-    activo: boolean = true;
+    accesosistema: boolean = true;
     email: string | null = null;
     telefono: string | null = null;
-    escobrador: boolean = false;
-    esusuario: boolean = false;
+    idrol: number | null = null;
+    rol: string | null = null;
     eliminado: boolean = false;
 }

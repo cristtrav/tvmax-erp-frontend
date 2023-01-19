@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { CobradoresService } from '@servicios/cobradores.service';
@@ -34,11 +34,11 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
   public fechaFinCobro: Date | null = null;
 
   public idcobrador: number | null = null;
-  public lstCobradores: Funcionario[] = [];
+  public lstCobradores: Usuario[] = [];
   public cargandoCobradores: boolean = false;
 
   public idusuario: number | null = null;
-  public lstUsuarios: Funcionario[] = [];
+  public lstUsuarios: Usuario[] = [];
   public cargandoUsuarios: boolean = false;
 
   public nodosGruposServicios: NzTreeNodeOptions[] = [];
@@ -111,7 +111,7 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     this.usuarioService.get(params).subscribe({
       next: (resp) => {
         this.cargandoUsuarios = false;
-        this.lstUsuarios = resp.data;
+        this.lstUsuarios = resp;
       },
       error: (e) => {
         console.log('Error al cargar usuarios de filtro de cobro');

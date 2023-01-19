@@ -26,7 +26,7 @@
                         <th [nzColumnKey]="'ci'" [nzSortFn]="true">C.I.</th>
                         <th [nzColumnKey]="'email'" [nzSortFn]="true">Email</th>
                         <th [nzColumnKey]="'telefono'" [nzSortFn]="true">Teléfono</th>
-                        <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
+                        <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Acceso</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -39,7 +39,7 @@
                         <td>{{ u.email }}</td>
                         <td>{{ u.telefono }}</td>
                         <td nzAlign="center">
-                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.activo?'#00C853':'#f44336'" [nzType]="u.activo?'check-circle':'close-circle'"></i>
+                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.accesosistema?'#00C853':'#f44336'" [nzType]="u.accesosistema?'check-circle':'close-circle'"></i>
                         </td>
                         <td>
                             <nz-space>

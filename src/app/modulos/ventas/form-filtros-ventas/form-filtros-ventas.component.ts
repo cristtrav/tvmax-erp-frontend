@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 import { CobradoresService } from '@servicios/cobradores.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -28,10 +28,10 @@ export class FormFiltrosVentasComponent implements OnInit {
   fechaInicioCobroFiltro: Date | null = null;
   fechaFinCobroFiltro: Date | null = null;
 
-  lstCobradoresFiltro: Funcionario[] = [];
+  lstCobradoresFiltro: Usuario[] = [];
   idCobradorFiltro: number | null = null;
 
-  lstUsuariosFiltro: Funcionario[] = [];
+  lstUsuariosFiltro: Usuario[] = [];
   idUsuarioCobroFiltro: number | null = null;
 
   filtroPagado: boolean = false;
@@ -171,8 +171,8 @@ export class FormFiltrosVentasComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+nombres');
     this.usuariosSrv.get(params).subscribe({
-      next: (resp) => {
-        this.lstUsuariosFiltro = resp.data;
+      next: (usuarios) => {
+        this.lstUsuariosFiltro = usuarios;
       },
       error: (e) => {
         console.log('Error al cargar usuarios del filtro');

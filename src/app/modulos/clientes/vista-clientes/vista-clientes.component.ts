@@ -8,7 +8,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { Extra } from '../../../util/extra';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -31,7 +31,7 @@ export class VistaClientesComponent implements OnInit {
   textoBusqueda: string = '';
   timerBusqueda: any;
 
-  lstCobradoresFiltro: Funcionario[] = [];
+  lstCobradoresFiltro: Usuario[] = [];
   cobradoresSeleccionadosFiltro: number[] = [];
 
   paramsFiltros: IParametroFiltro = {};

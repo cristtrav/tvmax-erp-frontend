@@ -4,7 +4,7 @@ import { UsuariosService } from './../../../servicios/usuarios.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 
 @Component({
   selector: 'app-detalle-usuario',
@@ -57,7 +57,7 @@ export class DetalleUsuarioComponent implements OnInit {
       this.form.get('ci')?.setValue(data.ci);
       this.form.get('email')?.setValue(data.email);
       this.form.get('telefono')?.setValue(data.telefono);
-      this.form.get('activo')?.setValue(data.activo);
+      this.form.get('activo')?.setValue(data.accesosistema);
       this.pwdRequired = false;
       this.form.get('password')?.setValidators([Validators.minLength(5)]);
       this.formLoading = false;
@@ -94,8 +94,8 @@ export class DetalleUsuarioComponent implements OnInit {
     }
   }
 
-  private getDto(): Funcionario {
-    const u: Funcionario = new Funcionario();
+  private getDto(): Usuario {
+    const u: Usuario = new Usuario();
     u.id = this.form.get('id')?.value;
     u.nombres = this.form.get('nombres')?.value;
     u.apellidos = this.form.get('apellidos')?.value;
@@ -103,7 +103,7 @@ export class DetalleUsuarioComponent implements OnInit {
     u.email = this.form.get('email')?.value;
     u.telefono = this.form.get('telefono')?.value;
     u.password = this.form.get('password')?.value;
-    u.activo = this.form.get('activo')?.value;
+    u.accesosistema = this.form.get('activo')?.value;
     return u;
   }
 
@@ -125,7 +125,7 @@ export class DetalleUsuarioComponent implements OnInit {
 
   private modificar(): void {
     this.guardarLoading = true;
-    const usu: Funcionario = this.getDto();
+    const usu: Usuario = this.getDto();
     this.usuarioSrv.put(+this.idusuario, usu).subscribe(() => {
       this.notif.create('success', 'Usuario guardado correctamente', '');
       this.guardarLoading = false;

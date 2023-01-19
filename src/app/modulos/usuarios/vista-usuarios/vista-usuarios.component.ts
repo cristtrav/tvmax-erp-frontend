@@ -4,7 +4,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { UsuariosService } from './../../../servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-usuarios',
@@ -13,7 +14,7 @@ import { Funcionario } from '@dto/funcionario.dto';
 })
 export class VistaUsuariosComponent implements OnInit {
 
-  lstUsuarios: Funcionario[] = [];
+  lstUsuarios: Usuario[] = [];
   pageSize: number = 10;
   pageIndex: number = 1;
   totalRegisters: number = 1;
@@ -32,7 +33,22 @@ export class VistaUsuariosComponent implements OnInit {
 
   private cargarDatos(): void {
     this.tableLoading = true;
-    this.usuariosSrv.get(this.getHttpQueryParams()).subscribe({
+    forkJoin({
+      usuarios: this.usuariosSrv.get(this.getHttpQueryParams()),
+      total: this.usuariosSrv.getTotal(this.getHttpQueryParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstUsuarios = resp.usuarios;
+        this.totalRegisters = resp.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar usuarios', e);
+        this.httpErrorHandler.process(e);
+        this.tableLoading = false;
+      }
+    })
+    /*this.usuariosSrv.get(this.getHttpQueryParams()).subscribe({
       next: (resp) => {
         this.lstUsuarios = resp.data;
         this.totalRegisters = resp.queryRowCount;
@@ -44,7 +60,7 @@ export class VistaUsuariosComponent implements OnInit {
         this.httpErrorHandler.handle(e);
         this.tableLoading = false;
       }
-    });
+    });*/
   }
 
   eliminar(id: number | null): void {

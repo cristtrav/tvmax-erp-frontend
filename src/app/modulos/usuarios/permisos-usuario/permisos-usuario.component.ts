@@ -9,7 +9,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UsuariosService } from '@servicios/usuarios.service';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 
 @Component({
   selector: 'app-permisos-usuario',
@@ -30,7 +30,7 @@ export class PermisosUsuarioComponent implements OnInit {
   guardandoPermisos: boolean = false;
   cargandoPermisos: boolean = false;
 
-  usuario: Funcionario | null = null;
+  usuario: Usuario | null = null;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -48,7 +48,7 @@ export class PermisosUsuarioComponent implements OnInit {
 
   cargarUsuario(): void{
     if(this.idusuario){
-      this.usuarioSrv.getPorId(Number(this.idusuario)).subscribe((data: Funcionario)=>{
+      this.usuarioSrv.getPorId(Number(this.idusuario)).subscribe((data: Usuario)=>{
         this.usuario = data;
       }, (e)=>{
         console.log('Error al cargar usuario');

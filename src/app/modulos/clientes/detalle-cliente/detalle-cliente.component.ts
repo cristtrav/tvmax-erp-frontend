@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ServerResponseList } from '../../../../app/dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -34,7 +34,7 @@ export class DetalleClienteComponent implements OnInit {
     email: [null, [Validators.maxLength(120), Validators.email]],
     idcobrador: [null, [Validators.required]],
   });
-  lstCobradores: Funcionario[] = [];
+  lstCobradores: Usuario[] = [];
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -70,7 +70,7 @@ export class DetalleClienteComponent implements OnInit {
   }
 
   private cargarCobradores(): void {
-    this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Funcionario>) => {
+    this.cobradoresSrv.get(this.getHttpQueryParamsCobradores()).subscribe((resp: ServerResponseList<Usuario>) => {
       this.lstCobradores = resp.data;
     }, (e) => {
       console.log('Error al cargar cobradores');

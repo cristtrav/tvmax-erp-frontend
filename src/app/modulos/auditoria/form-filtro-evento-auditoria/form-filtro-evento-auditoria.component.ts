@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
 import { AuditoriaService } from '@servicios/auditoria.service';
 import { UsuariosService } from '@servicios/usuarios.service';
@@ -20,7 +20,7 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
   @Output()
   cantFiltrosChange: EventEmitter<number> = new EventEmitter();
 
-  lstUsuarios: Funcionario[] = [];
+  lstUsuarios: Usuario[] = [];
   lstTablas: TablaAuditoria[] = [];
   idUsuarioSelec: number | null = null;
   idTablaAuditoriaSelec: number | null = null
@@ -49,8 +49,8 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('sort', '+nombres');
     this.usuariosSrv.get(params).subscribe({
-      next: (response) => {
-        this.lstUsuarios = response.data;
+      next: (usuarios) => {
+        this.lstUsuarios = usuarios;
       },
       error: (e) => {
         console.log('Error al cargar usuarios');

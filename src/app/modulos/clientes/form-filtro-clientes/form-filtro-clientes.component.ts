@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Funcionario } from '@dto/funcionario.dto';
+import { Usuario } from '@dto/usuario.dto';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { CobradoresService } from '@servicios/cobradores.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
@@ -20,7 +20,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
   @Output()
   cantFiltrosChange = new EventEmitter<number>();
 
-  lstCobradoresFiltro: Funcionario[] = [];
+  lstCobradoresFiltro: Usuario[] = [];
   cobradoresSeleccionadosFiltro: number[] = [];
 
   ubicacionesSelec: string[] = [];
@@ -53,7 +53,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+razonsocial');
-    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Funcionario>)=>{
+    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Usuario>)=>{
       this.lstCobradoresFiltro = resp.data;
     }, (e)=>{
       console.log('Error al cargar cobradores');
