@@ -11,4 +11,5 @@ export class Usuario {
     idrol: number | null = null;
     rol: string | null = null;
     eliminado: boolean = false;
+    sololectura: boolean = false;
 }

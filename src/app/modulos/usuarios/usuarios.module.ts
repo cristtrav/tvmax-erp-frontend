@@ -23,6 +23,7 @@ import { PermisosUsuarioComponent } from './permisos-usuario/permisos-usuario.co
 import { NzTreeModule} from 'ng-zorro-antd/tree';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 @NgModule({
   declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent],
@@ -47,7 +48,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzSpaceModule,
     NzTreeModule,
     NzTypographyModule,
-    NzTagModule    
+    NzTagModule,
+    NzDescriptionsModule    
   ]
 })
 export class UsuariosModule { }

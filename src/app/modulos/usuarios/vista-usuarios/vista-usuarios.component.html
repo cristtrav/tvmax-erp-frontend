@@ -20,44 +20,101 @@
             (nzQueryParams)="onTableParamsQueryChange($event)" nzShowPagination nzShowSizeChanger nzSize="small">
                 <thead>
                     <tr>
+                        <th nzWidth="60px"></th>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                         <th [nzColumnKey]="'nombres'" [nzSortFn]="true">Nombres</th>
                         <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">Apellidos</th>
-                        <th [nzColumnKey]="'ci'" [nzSortFn]="true">C.I.</th>
-                        <th [nzColumnKey]="'email'" [nzSortFn]="true">Email</th>
-                        <th [nzColumnKey]="'telefono'" [nzSortFn]="true">Teléfono</th>
+                        <th [nzColumnKey]="'ci'" [nzSortFn]="true">Nro. Documento</th>
+                        <th [nzColumnKey]="'rol'" [nzSortFn]="true">Rol</th>
                         <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Acceso</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let u of tbl.data">
-                        <td>{{ u.id }}</td>
-                        <td>{{ u.nombres }}</td>
-                        <td>{{ u.apellidos }}</td>
-                        <td>{{ u.ci | number}}</td>
-                        <td>{{ u.email }}</td>
-                        <td>{{ u.telefono }}</td>
-                        <td nzAlign="center">
-                            <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="u.accesosistema?'#00C853':'#f44336'" [nzType]="u.accesosistema?'check-circle':'close-circle'"></i>
-                        </td>
-                        <td>
-                            <nz-space>
-                                <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Permisos del usuario" nzType="default" [routerLink]="u.id+'/permisos'">
-                                    <i nz-icon nzType="key" nzTheme="outline"></i>
-                                </button>
-                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="u.id+''" nzTooltipTitle="Editar">
-                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
-                                </button>
-                                <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm 
-                                nzType="primary" nzTooltipTitle="Eliminar"
-                                nzPopconfirmTitle="¿Desea eliminr el Distrito?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                                (nzOnConfirm)="eliminar(u.id)" nzDanger>
-                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
-                                </button>
-                            </nz-space>
-                        </td>
-                    </tr>
+                    <ng-container *ngFor="let u of tbl.data">
+                        <tr>
+                            <td
+                                [nzExpand]="expandSet.has(u.id ? u.id : -1)"
+                                (nzExpandChange)="onExpandChange(u.id ? u.id : -1, $event)">
+                            </td>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.nombres }}</td>
+                            <td>
+                                {{ u.apellidos }}
+                                <span *ngIf="!u.apellidos" nz-typography nzType="secondary">(sin apellidos)</span>
+                            </td>
+                            <td>
+                                {{ u.ci | number}}
+                                <span *ngIf="u.ci == null" nz-typography nzType="secondary">(sin nro. doc.)</span>
+                            </td>
+                            <td>
+                                {{u.rol}}
+                            </td>
+                            <td nzAlign="center">
+                                <nz-tag *ngIf="u.accesosistema" nzColor="green">Sí</nz-tag>
+                                <nz-tag *ngIf="!u.accesosistema" nzColor="red">No</nz-tag>
+                            </td>
+                            <td>
+                                <div nz-row [nzGutter]="[8, 8]">
+                                    <div nz-col>
+                                        <button
+                                            nz-button
+                                            nz-tooltip
+                                            nzTooltipTitle="Permisos del usuario"
+                                            nzType="default"
+                                            [routerLink]="u.id+'/permisos'"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="key" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button
+                                            nz-button
+                                            nz-tooltip
+                                            nzType="primary"
+                                            [routerLink]="u.id+''"
+                                            nzTooltipTitle="Editar"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button nz-button
+                                            nz-tooltip
+                                            nz-popconfirm 
+                                            nzType="primary"
+                                            nzTooltipTitle="Eliminar"
+                                            nzPopconfirmTitle="¿Desea eliminr el Distrito?"
+                                            nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
+                                            (nzOnConfirm)="eliminar(u.id)"
+                                            nzDanger
+                                            [disabled]="u.sololectura">
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(u.id ? u.id : -1)">
+                            <nz-descriptions>
+                                <nz-descriptions-item [nzTitle]="titleEmail">
+                                    <ng-template #titleEmail>
+                                        <strong>Email</strong>
+                                    </ng-template>
+                                    <span *ngIf="u.email">{{ u.email }}</span>
+                                    <span *ngIf="!u.email" nz-typography nzType="secondary">(sin email)</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titleTelefono">
+                                    <ng-template #titleTelefono>
+                                        <strong>Teléfono</strong>
+                                    </ng-template>
+                                    <span *ngIf="u.telefono"> {{ u.telefono }}</span>
+                                    <span *ngIf="!u.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
+                        </tr>   
+
+                    </ng-container>
                 </tbody>
             </nz-table>
         </div>

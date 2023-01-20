@@ -20,6 +20,7 @@ export class VistaUsuariosComponent implements OnInit {
   totalRegisters: number = 1;
   tableLoading: boolean = false;
   sortStr: string | null = '+id';
+  expandSet = new Set<number>();
 
   constructor(
     private usuariosSrv: UsuariosService,
@@ -29,6 +30,11 @@ export class VistaUsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  onExpandChange(id: number, checked: boolean){
+    if(checked) this.expandSet.add(id);
+    else this.expandSet.delete(id);
   }
 
   private cargarDatos(): void {
@@ -48,19 +54,6 @@ export class VistaUsuariosComponent implements OnInit {
         this.tableLoading = false;
       }
     })
-    /*this.usuariosSrv.get(this.getHttpQueryParams()).subscribe({
-      next: (resp) => {
-        this.lstUsuarios = resp.data;
-        this.totalRegisters = resp.queryRowCount;
-        this.tableLoading = false;
-      },
-      error: (e) => {
-        console.log('Error al consultar usuarios');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.tableLoading = false;
-      }
-    });*/
   }
 
   eliminar(id: number | null): void {
@@ -72,7 +65,6 @@ export class VistaUsuariosComponent implements OnInit {
         console.log('Error al eliminar usuario');
         console.log(e);
         this.httpErrorHandler.handle(e);
-        //this.notif.create('error', 'Error al eliminar usuario', e.error);
       });
     }
   }
