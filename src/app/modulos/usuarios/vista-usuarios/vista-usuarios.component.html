@@ -11,10 +11,24 @@
     </div>
     <div class="module-container">
         <div class="module-content">
-            <a nz-button nzType="primary" routerLink="nuevo">
-                <i nz-icon nzType="plus"></i>
-                Nuevo
-            </a>
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <a nz-button nzType="primary" routerLink="nuevo">
+                        <i nz-icon nzType="plus"></i>
+                        Nuevo
+                    </a>
+                </div>
+                <div nz-col>
+                    <nz-input-group [nzSuffix]="suffixBusqueda">
+                        <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                        <ng-template #suffixBusqueda>
+                            <i nz-icon nzType="search" *ngIf="!textoBusqueda"></i>
+                            <i nz-icon nzType="close-circle" *ngIf="textoBusqueda" (click)="limpiarBusqueda()" style="cursor: pointer;"></i>
+                        </ng-template>
+                    </nz-input-group>
+                </div>
+            </div>
+            
             <nz-table #tbl [nzData]="lstUsuarios" [nzFrontPagination]="false" style="margin-top: 10px;"
             [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzLoading]="tableLoading" [nzTotal]="totalRegisters"
             (nzQueryParams)="onTableParamsQueryChange($event)" nzShowPagination nzShowSizeChanger nzSize="small">

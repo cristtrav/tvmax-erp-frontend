@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsuariosService } from './../../../servicios/usuarios.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ export class DetalleUsuarioComponent implements OnInit {
     id: new FormControl(null, [Validators.required]),
     nombres: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
     apellidos: new FormControl(null, [Validators.maxLength(80)]),
-    ci: new FormControl(null, [Validators.required, Validators.maxLength(10)]),
+    ci: new FormControl(null, [Validators.maxLength(10)]),
     email: new FormControl(null, [Validators.maxLength(120), Validators.email]),
     telefono: new FormControl(null, [Validators.maxLength(20)]),
     password: new FormControl(null, [Validators.minLength(5)]),
@@ -38,7 +38,6 @@ export class DetalleUsuarioComponent implements OnInit {
   accesoSistema: boolean = false;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private usuarioSrv: UsuariosService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
@@ -60,7 +59,7 @@ export class DetalleUsuarioComponent implements OnInit {
         this.idusuario
       );
     })
-    if (!Number.isNaN(Number(this.idusuario))) this.cargarDatos();
+    if (Number.isInteger(Number(this.idusuario))) this.cargarDatos();
   }
 
   private updateAcesoControlRequiredValidator(acceso: boolean) {
@@ -125,23 +124,12 @@ export class DetalleUsuarioComponent implements OnInit {
     })
   }
 
-  private validado(): boolean {
-    let val = true;
-    Object.keys(this.form.controls).forEach((key) => {
-      const ctrl = this.form.get(key);
-      if (ctrl !== null) {
-        ctrl.markAsDirty();
-        ctrl.updateValueAndValidity();
-        if (!ctrl.disabled) {
-          val = val && ctrl.valid;
-        }
-      }
-    });
-    return val;
-  }
-
   guardar(): void {
-    if (this.validado()) {
+    Object.keys(this.form.controls).forEach((ctrlName) => {
+      this.form.get(ctrlName)?.markAsDirty();
+      this.form.get(ctrlName)?.updateValueAndValidity();
+    });
+    if (this.form.valid) {
       if (this.idusuario === 'nuevo') {
         this.registrar();
       } else {
@@ -166,33 +154,33 @@ export class DetalleUsuarioComponent implements OnInit {
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.usuarioSrv.post(this.getDto()).subscribe(() => {
-      this.notif.create('success', 'Usuario guardado correctamente', '');
-      this.form.reset();
-      this.guardarLoading = false;
-      this.form.get('activo')?.setValue(false);
-    }, (e) => {
-      console.log('Error al registrar usuario');
-      console.log(e);
-      this.httpErrorHandler.handle(e);;
-      //this.notif.create('error', 'Error al guardar usuario', e.error);
-      this.guardarLoading = false;
+    this.usuarioSrv.post(this.getDto()).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Usuario registrado.');
+        this.form.reset();
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al registrar usuario', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
-    const usu: Usuario = this.getDto();
-    this.usuarioSrv.put(+this.idusuario, usu).subscribe(() => {
-      this.notif.create('success', 'Usuario guardado correctamente', '');
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al modificar usuario');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al guardar usuario', e.error);
-      this.guardarLoading = false;
-    });
+    this.usuarioSrv.put(Number.parseInt(this.idusuario), this.getDto()).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Usuario editado.');
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al modificar usuario', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
+    });    
   }
 
   public generarId() {

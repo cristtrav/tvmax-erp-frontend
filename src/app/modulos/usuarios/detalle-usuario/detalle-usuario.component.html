@@ -46,7 +46,7 @@
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Rol</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24">
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un Rol.">
                                 <nz-select nzPlaceHolder="Seleccionar..." nzShowSearch nzAllowClear formControlName="idrol">
                                     <nz-option *ngFor="let rol of listaRoles" [nzLabel]="rol.descripcion" [nzValue]="rol.id"></nz-option>
                                 </nz-select>

@@ -23,6 +23,8 @@ export class VistaUsuariosComponent implements OnInit {
   tableLoading: boolean = false;
   sortStr: string | null = '+id';
   expandSet = new Set<number>();
+  textoBusqueda: string = '';
+  timerBusqueda: any;
 
   constructor(
     private usuariosSrv: UsuariosService,
@@ -89,6 +91,7 @@ export class VistaUsuariosComponent implements OnInit {
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
     if (this.sortStr) params = params.append('sort', this.sortStr);
+    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     return params;
   }
 
@@ -96,6 +99,18 @@ export class VistaUsuariosComponent implements OnInit {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
     this.sortStr = Extra.buildSortString(params.sort);
+    this.cargarDatos();
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.cargarDatos();
+    }, 500);
+  }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
     this.cargarDatos();
   }
 
