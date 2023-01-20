@@ -39,4 +39,8 @@ export class UsuariosService {
   delete(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
+
+  getLastId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
+  }
 }

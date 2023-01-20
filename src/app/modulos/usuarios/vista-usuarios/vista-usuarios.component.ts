@@ -6,6 +6,8 @@ import { UsuariosService } from './../../../servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { Usuario } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Extra } from '@util/extra';
 
 @Component({
   selector: 'app-vista-usuarios',
@@ -25,15 +27,27 @@ export class VistaUsuariosComponent implements OnInit {
   constructor(
     private usuariosSrv: UsuariosService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
   }
 
-  onExpandChange(id: number, checked: boolean){
-    if(checked) this.expandSet.add(id);
+  confirmarEliminacion(usuario: Usuario) {
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el Usuario?',
+      nzContent: `«${usuario.id} - ${usuario.razonsocial}»`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.eliminar(usuario);
+      }
+    });
+  }
+
+  onExpandChange(id: number, checked: boolean) {
+    if (checked) this.expandSet.add(id);
     else this.expandSet.delete(id);
   }
 
@@ -56,42 +70,33 @@ export class VistaUsuariosComponent implements OnInit {
     })
   }
 
-  eliminar(id: number | null): void {
-    if (id) {
-      this.usuariosSrv.delete(id).subscribe(() => {
-        this.notif.create('success', 'Usuario eliminado correctamente', '');
+  eliminar(usuario: Usuario): void {
+    if (usuario.id) this.usuariosSrv.delete(usuario.id).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Usuario eliminado');
         this.cargarDatos();
-      }, (e) => {
-        console.log('Error al eliminar usuario');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
+      },
+      error: (e) => {
+        console.error('Error al eliminar usuario', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
+
   }
 
   getHttpQueryParams(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
-    if (this.sortStr) {
-      params = params.append('sort', this.sortStr);
-    }
+    if (this.sortStr) params = params.append('sort', this.sortStr);
     return params;
   }
 
   onTableParamsQueryChange(params: NzTableQueryParams) {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
-    this.sortStr = this.buildSortStr(params.sort);
+    this.sortStr = Extra.buildSortString(params.sort);
     this.cargarDatos();
-  }
-
-  buildSortStr(sort: { key: string, value: any }[]): string | null {
-    for (let s of sort) {
-      if (s.value === 'ascend') return `+${s.key}`;
-      if (s.value === 'descend') return `-${s.key}`;
-    }
-    return null;
   }
 
 }

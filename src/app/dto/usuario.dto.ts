@@ -1,4 +1,18 @@
 export class Usuario {
+    /*id: number;
+    nombres: string;
+    apellidos: string;
+    razonsocial: string;
+    ci: string;    
+    password: string;
+    accesosistema: boolean;
+    email: string;
+    telefono: string;
+    idrol: number;
+    rol: string;
+    eliminado?: boolean;
+    sololectura?: boolean;*/
+
     id: number | null = null;
     nombres: string | null = null;
     apellidos: string | null = null;

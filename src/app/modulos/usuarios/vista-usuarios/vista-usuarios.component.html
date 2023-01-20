@@ -26,7 +26,7 @@
                         <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">Apellidos</th>
                         <th [nzColumnKey]="'ci'" [nzSortFn]="true">Nro. Documento</th>
                         <th [nzColumnKey]="'rol'" [nzSortFn]="true">Rol</th>
-                        <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Acceso</th>
+                        <th [nzColumnKey]="'accesosistema'" [nzSortFn]="true" nzAlign="center">Acceso</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -81,12 +81,9 @@
                                     <div nz-col>
                                         <button nz-button
                                             nz-tooltip
-                                            nz-popconfirm 
                                             nzType="primary"
                                             nzTooltipTitle="Eliminar"
-                                            nzPopconfirmTitle="¿Desea eliminr el Distrito?"
-                                            nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                                            (nzOnConfirm)="eliminar(u.id)"
+                                            (click)="confirmarEliminacion(u)"
                                             nzDanger
                                             [disabled]="u.sololectura">
                                         <i nz-icon nzType="delete" nzTheme="outline"></i>

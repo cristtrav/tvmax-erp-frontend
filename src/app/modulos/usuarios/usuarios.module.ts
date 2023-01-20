@@ -24,6 +24,8 @@ import { NzTreeModule} from 'ng-zorro-antd/tree';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent],
@@ -49,7 +51,9 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     NzTreeModule,
     NzTypographyModule,
     NzTagModule,
-    NzDescriptionsModule    
+    NzDescriptionsModule,
+    NzSelectModule,
+    NzModalModule
   ]
 })
 export class UsuariosModule { }
