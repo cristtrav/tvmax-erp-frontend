@@ -223,7 +223,7 @@ export class DetalleVentaComponent implements OnInit {
     this.nroFacturaMax = t.nrofin ?? 9999999;
     this.formCabecera.get('nroFactura')?.clearValidators();
     this.formCabecera.get('nroFactura')?.addValidators([Validators.required, Validators.min(this.nroFacturaMin), Validators.max(this.nroFacturaMax)]);
-    this.formCabecera.get('nroFactura')?.setValue(t.ultnrousado ? Number(t.ultnrousado) + 1 : this.nroFacturaMin);
+    this.formCabecera.get('nroFactura')?.setValue(t.ultimonrousado ? Number(t.ultimonrousado) + 1 : this.nroFacturaMin);
   }
 
   actualizarControlNroFacturaSeleccionado() {
@@ -244,8 +244,8 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('activo', 'true');
     this.timbradoSrv.get(params).subscribe({
-      next: (resp) => {
-        this.lstTimbrados = resp.data;
+      next: (timbrados) => {
+        this.lstTimbrados = timbrados;
         this.actualizarControlNroFacturaSeleccionado();
       },
       error: (e) => {

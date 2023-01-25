@@ -21,12 +21,20 @@ export class TimbradosService {
     return this.http.post(this.url, t, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Timbrado>>{
-    return this.http.get<ServerResponseList<Timbrado>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Timbrado[]>{
+    return this.http.get<Timbrado[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getTotal(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: number): Observable<Timbrado> {
     return this.http.get<Timbrado>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getUltimoId(): Observable<number>{
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
   put(id: number, t: Timbrado): Observable<any>{

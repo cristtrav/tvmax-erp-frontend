@@ -34,13 +34,13 @@
                         <thead>
                             <tr>
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
-                                <th [nzColumnKey]="'timbrado'" [nzSortFn]="true">Timbrado</th>
+                                <th [nzColumnKey]="'nrotimbrado'" [nzSortFn]="true">Timbrado</th>
                                 <th [nzColumnKey]="'codestablecimiento'" [nzSortFn]="true">Prefijo</th>
                                 <th [nzColumnKey]="'nroinicio'" [nzSortFn]="true">Rango</th>
-                                <th [nzColumnKey]="'ultnrousado'" [nzSortFn]="true">Últ. núm usado</th>
+                                <th [nzColumnKey]="'ultimonrousado'" [nzSortFn]="true">Últ. núm usado</th>
                                 <th [nzColumnKey]="'fechainicio'" [nzSortFn]="true">Inicio vigencia</th>
                                 <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true">Vencimiento</th>
-                                <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Activo</th>
+                                <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -48,36 +48,40 @@
                             <tr *ngFor="let t of tabla.data">
                                 <td>{{ t.id }}</td>
                                 <td>{{ t.nrotimbrado?.toString()?.padStart(8, '0') }}</td>
-                                <td>{{ t.codestablecimiento?.toString()?.padStart(3, '0') }}-{{ t.codpuntoemision?.toString()?.padStart(3, '0') }}</td>
+                                <td>{{ t.prefijo }}</td>
                                 <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
-                                <td>{{ t.ultnrousado?t.ultnrousado.toString().padStart(7, '0'):'(Ninguno)' }}</td>
+                                <td>
+                                    <span *ngIf="t.ultimonrousado">{{ t.ultimonrousado.toString().padStart(7, '0') }}</span>
+                                    <span *ngIf="!t.ultimonrousado" nz-typography nzType="secondary">(ninguno)</span>
+                                </td>
                                 <td>{{ t.fechainicio | date: 'dd/MM/yyyy' }}</td>
-                                <td>{{ t.fechavencimiento | date:'dd/MM/yyyy' }}</td>
+                                <td>
+                                    <span *ngIf="t.fechavencimiento">{{ t.fechavencimiento | date:'dd/MM/yyyy' }}</span>
+                                    <span *ngIf="!t.fechavencimiento" nz-typography nzType="secondary">(ninguno)</span>
+                                </td>
                                 <td nzAlign="center">
-                                    <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="t.activo?'#00C853':'#f44336'" [nzType]="t.activo?'check-circle':'close-circle'"></i>
+                                    <nz-tag *ngIf="t.activo" nzColor="green">Activo</nz-tag>
+                                    <nz-tag *ngIf="!t.activo" nzColor="red">Inactivo</nz-tag>
                                 </td>
                                 <td>
-                                    <nz-space>
-                                        <button *nzSpaceItem nz-tooltip nz-button nzType="primary" nzTooltipTitle="Editar" [routerLink]="t.id?.toString()">
-                                            <i nz-icon nzType="edit" nzTheme="outline"></i>
-                                        </button>
-                                        <button 
-                                            *nzSpaceItem
-                                            nz-popconfirm
-                                            nzPopconfirmTitle="¿Desea eliminar el timbrado?"
-                                            nzPopconfirmPlacement="bottom"
+                                    <div nz-row [nzGutter]="[8, 8]">
+                                        <div nz-col>
+                                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Editar" [routerLink]="t.id?.toString()">
+                                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button 
                                             nzOkText="Eliminar"
-                                            (nzOnConfirm)="eliminar(t.id)" 
-                                            nz-tooltip 
+                                            (click)="confirmarEliminacion(t)" 
                                             nz-button 
                                             nzType="primary" 
-                                            nzDanger 
-                                            nzTooltipTitle="Eliminar">
+                                            nzDanger>
                                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                                         </button>
-                                    </nz-space>
+                                        </div>
+                                    </div>
                                 </td>
-                                
                             </tr>
                         </tbody>
                     </nz-table>

@@ -20,6 +20,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzSpaceModule,
     NzToolTipModule,
     NzSpinModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzTypographyModule,
+    NzTagModule,
+    NzModalModule
   ]
 })
 export class TimbradosModule { }

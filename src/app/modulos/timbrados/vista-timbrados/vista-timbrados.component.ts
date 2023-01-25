@@ -7,6 +7,8 @@ import { Extra } from '@util/extra';
 import { ServerResponseList } from '@dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { forkJoin } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-vista-timbrados',
@@ -26,7 +28,8 @@ export class VistaTimbradosComponent implements OnInit {
   constructor(
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
@@ -35,16 +38,20 @@ export class VistaTimbradosComponent implements OnInit {
 
   cargarDatos(){
     this.tableLoading = true;
-    this.timbradoSrv.get(this.getHttpParams()).subscribe((resp: ServerResponseList<Timbrado>)=>{
-      this.lstTimbrados = resp.data;
-      this.totalRegisters = resp.queryRowCount;
-      this.tableLoading = false;
-    },
-    (e)=>{
-      console.log('Error al cargar timbrado');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.tableLoading = false;
+    forkJoin({
+      timbrados: this.timbradoSrv.get(this.getHttpParams()),
+      total: this.timbradoSrv.getTotal(this.getHttpParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstTimbrados = resp.timbrados;
+        this.totalRegisters = resp.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar timbrados', e);
+        this.httpErrorHandler.process(e);
+        this.tableLoading = false;
+      }
     });
   }
 
@@ -66,18 +73,29 @@ export class VistaTimbradosComponent implements OnInit {
     this.cargarDatos();
   }
 
-  eliminar(id: number | null){
-    if(id){
-      this.timbradoSrv.delete(id).subscribe(()=>{
+  confirmarEliminacion(timbrado: Timbrado){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el Timbrado?',
+      nzContent: `«Cód: ${timbrado.id} | Nro. timbrado: ${timbrado.nrotimbrado} | Rango: ${timbrado.nroinicio} al ${timbrado.nrofin}»`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.eliminar(Number(timbrado.id));
+      }
+    })
+  }
+
+  eliminar(id: number){
+    this.timbradoSrv.delete(id).subscribe({
+      next: () => {
         this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado eliminado correctamente');
         this.cargarDatos();
-      }, (e)=>{
-        console.log('Error al eliminar timbrado');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
-    
+      },
+      error: (e) => {
+        console.error('Error al eliminar timbrado', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
 }
