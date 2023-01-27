@@ -1,7 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
-import { CobradoresService } from '@servicios/cobradores.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -39,7 +38,6 @@ export class FormFiltrosVentasComponent implements OnInit {
   filtroAnulado: boolean = false;
 
   constructor(
-    private cobradoresSrv: CobradoresService,
     private usuariosSrv: UsuariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
@@ -151,12 +149,13 @@ export class FormFiltrosVentasComponent implements OnInit {
   }
 
   cargarCobradoresFiltro() {
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
-    params = params.append('sort', '+razonsocial');
-    this.cobradoresSrv.get(params).subscribe({
-      next: (resp) => {
-        this.lstCobradoresFiltro = resp.data;
+    let params: HttpParams = new HttpParams()
+    .append('eliminado', 'false')
+    .append('sort', '+razonsocial')
+    .append('idrol', '3');
+    this.usuariosSrv.get(params).subscribe({
+      next: (usuarios) => {
+        this.lstCobradoresFiltro = usuarios;
       },
       error: (e) => {
         console.log('Error al cargar cobradores filtro');

@@ -343,14 +343,13 @@ export class DetalleVentaComponent implements OnInit {
     if (consulta.length > 0) params = params.append('search', consulta);
     this.loadingClientes = true;
     this.clienteSrv.get(params).subscribe({
-      next: (resp) => {
-        this.lstClientes = resp.data;
+      next: (clientes) => {
+        this.lstClientes = clientes;
         this.loadingClientes = false;
       },
       error: (e) => {
-        console.log('Error al buscar cliente');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.error('Error al buscar cliente', e);
+        this.httpErrorHandler.process(e);
         this.loadingClientes = false;
       }
     });
@@ -364,14 +363,13 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('offset', `${this.lstClientes.length}`);
     this.loadingMasClientes = true;
     this.clienteSrv.get(params).subscribe({
-      next: (resp) => {
-        this.lstClientes = [...this.lstClientes, ...resp.data];
+      next: (clientes) => {
+        this.lstClientes = [...this.lstClientes, ...clientes];
         this.loadingMasClientes = false;
       },
       error: (e) => {
-        console.log('Error al cargar mas clientes');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.error('Error al cargar mas clientes', e);
+        this.httpErrorHandler.process(e);
         this.loadingMasClientes = false;
       }
     });

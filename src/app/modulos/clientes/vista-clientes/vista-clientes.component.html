@@ -21,19 +21,14 @@
                 <div nz-col>
                     <nz-space>
                         <nz-input-group *nzSpaceItem [nzPrefixIcon]="'search'" [nzSuffix]="inputClearTpl">
-                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda"
+                                (ngModelChange)="buscar()">
                             <ng-template #inputClearTpl>
-                                <i
-                                  nz-icon
-                                  class="ant-input-clear-icon"
-                                  nzTheme="fill"
-                                  nzType="close-circle"
-                                  *ngIf="textoBusqueda"
-                                  (click)="limpiarBusqueda()"
-                                ></i>
-                              </ng-template>
+                                <i nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+                                    *ngIf="textoBusqueda" (click)="limpiarBusqueda()"></i>
+                            </ng-template>
                         </nz-input-group>
-                        
+
                         <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
                             <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros"
                                 (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
@@ -81,48 +76,64 @@
                             <td>{{ c.razonsocial }}</td>
                             <td nzAlign="right">
                                 <span *ngIf="c.ci">
-                                    {{ c.ci | number }}{{ c.ci!==null && c.dvruc!=null?' - ':'' }}{{ c.dvruc }}
+                                    <span>{{ c.ci | number }}</span>
+                                    <ng-container *ngIf="c.ci !=null && c.dvruc != null">
+                                        <span> - </span>
+                                        <span>{{ c.dvruc }}</span>
+                                    </ng-container>
                                 </span>
-                                <span *ngIf="!c.ci" nz-typography nzType="secondary">-</span>
+                                <span *ngIf="!c.ci" nz-typography nzType="secondary">(sin CI/RUC)</span>
                             </td>
                             <td>
                                 <span *ngIf="c.direccion" nz-tooltip
-                                    [nzTooltipTitle]="c.direccion+' (Cód. Domic.:'+c.iddomicilio+')'">
-                                    {{ c.direccion | slice:0-30 }}
+                                    [nzTooltipTitle]="c.direccion">
+                                    {{ c.direccion | slice:0:30 }}
                                     <span *ngIf="c.direccion.length>30">...</span>
                                 </span>
-                                <span *ngIf="!c.direccion" nz-typography nzType="secondary">
-                                    -
-                                </span>
+                                <span *ngIf="!c.direccion" nz-typography nzType="secondary">(ninguno)</span>
                             </td>
                             <td>
-                                <nz-tag nz-tooltip nzTooltipTitle="Conectados" [nzColor]="'green'">{{
-                                    c.cantconectados }} </nz-tag>
-                                <nz-tag nz-tooltip nzTooltipTitle="Desconectados" [nzColor]="'red'">{{
-                                    c.cantdesconectados }} </nz-tag>
+                                <div nz-row [nzGutter]="[0,8]">
+                                    <div nz-col>
+                                        <nz-tag nz-tooltip nzTooltipTitle="Conectados" [nzColor]="'green'">{{
+                                            c.cantconectados }} </nz-tag>
+                                    </div>
+                                    <div nz-col>
+                                        <nz-tag nz-tooltip nzTooltipTitle="Desconectados" [nzColor]="'red'">{{
+                                            c.cantdesconectados }} </nz-tag>
+                                    </div>
+                                </div>
                             </td>
                             <td>
-                                <nz-space>
-                                    <button *nzSpaceItem nz-tooltip nzTooltipTitle="Domicilios" nz-button
-                                        nzType="default" [routerLink]="[c.id, 'domicilios']">
-                                        <i nz-icon nzType="home" nzTheme="outline"></i>
-                                    </button>
-                                    <button *nzSpaceItem nz-tooltip nz-button nzType="default"
-                                        nzTooltipTitle="Suscripciones" [routerLink]="c.id+'/suscripciones'">
-                                        <i nz-icon nzType="carry-out" nzTheme="outline"></i>
-                                    </button>
-                                    <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
-                                        nzTooltipTitle="Editar">
-                                        <i nz-icon nzType="edit" nzTheme="outline"></i>
-                                    </button>
-                                    <button *nzSpaceItem nzType="primary" nz-button nz-tooltip nz-popconfirm
-                                        nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminr el Cliente?"
-                                        nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                                        (nzOnConfirm)="eliminar(c.id)" nzDanger>
-                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
-                                    </button>
-
-                                </nz-space>
+                                <div nz-row [nzGutter]="[8,8]">
+                                    <div nz-col>
+                                        <button nz-tooltip nzTooltipTitle="Domicilios" nz-button nzType="default"
+                                            [routerLink]="[c.id, 'domicilios']">
+                                            <i nz-icon nzType="home" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button nz-tooltip nz-button nzType="default" nzTooltipTitle="Suscripciones"
+                                            [routerLink]="c.id+'/suscripciones'">
+                                            <i nz-icon nzType="carry-out" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
+                                            nzTooltipTitle="Editar">
+                                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button
+                                            nzType="primary"
+                                            nz-button
+                                            (click)="confirmarEliminacion(c)"
+                                            nzDanger>
+                                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(c.id===null?-1:c.id)">
@@ -132,7 +143,7 @@
                                         <strong>Email</strong>
                                     </ng-template>
                                     <span [style]="!c.email?'color: gray':''">
-                                        {{ c.email?c.email:'(Sin email)'}}
+                                        {{ c.email?c.email:'(sin email)'}}
                                     </span>
                                 </nz-descriptions-item>
                                 <nz-descriptions-item [nzTitle]="titulotelef1">
@@ -140,7 +151,7 @@
                                         <strong>Teléfono princ.</strong>
                                     </ng-template>
                                     <span [style]="!c.telefono1?'color: gray':''">
-                                        {{c.telefono1?c.telefono1:'(Sinteléfono)' }}
+                                        {{c.telefono1?c.telefono1:'(sin teléfono)' }}
                                     </span>
                                 </nz-descriptions-item>
                                 <nz-descriptions-item [nzTitle]="titulotelef2">
@@ -148,7 +159,7 @@
                                         <strong>Teléfono sec.</strong>
                                     </ng-template>
                                     <span [style]="!c.telefono2?'color: gray':''">
-                                        {{c.telefono2?c.telefono2:'(Sinteléfono)' }}
+                                        {{c.telefono2?c.telefono2:'(sin teléfono)' }}
                                     </span>
                                 </nz-descriptions-item>
                                 <nz-descriptions-item [nzTitle]="titulocobrador">
@@ -164,7 +175,7 @@
                                     <span *ngIf="c.idbarrio" nz-tooltip [nzTooltipTitle]="'Código: '+c.idbarrio">
                                         {{c.barrio }}
                                     </span>
-                                    <span *ngIf="!c.idbarrio" style="color: gray;">(Sin barrio)</span>
+                                    <span *ngIf="!c.idbarrio" nz-typography nzType="secondary">(sin barrio)</span>
                                 </nz-descriptions-item>
                                 <nz-descriptions-item [nzTitle]="titulodist">
                                     <ng-template #titulodist>
@@ -173,7 +184,7 @@
                                     <span *ngIf="c.iddistrito" nz-tooltip [nzTooltipTitle]="'Código: '+c.iddistrito">
                                         {{ c.distrito }}
                                     </span>
-                                    <span *ngIf="!c.iddistrito" style="color: gray;">(Sin distrito)</span>
+                                    <span *ngIf="!c.iddistrito" nz-typography nzType="secondary">(Sin distrito)</span>
                                 </nz-descriptions-item>
                                 <nz-descriptions-item [nzTitle]="titulodep">
                                     <ng-template #titulodep>
@@ -181,7 +192,7 @@
                                     </ng-template>
                                     <span *ngIf="c.iddepartamento" nz-tooltip
                                         [nzTooltipTitle]="'Código: '+c.iddepartamento">{{ c.departamento }}</span>
-                                    <span *ngIf="!c.iddepartamento" style="color: gray;">(Sin departamento)</span>
+                                    <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin departamento)</span>
                                 </nz-descriptions-item>
                             </nz-descriptions>
                         </tr>

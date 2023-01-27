@@ -29,8 +29,8 @@ export class ClientesService {
     return this.http.put(`${this.url}/${id}`, c, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Cliente>> {
-    return this.http.get<ServerResponseList<Cliente>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Cliente[]> {
+    return this.http.get<Cliente[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   delete(id: number): Observable<any> {
@@ -41,16 +41,11 @@ export class ClientesService {
     return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
-  getTotal(): Observable<any>{
-    return this.http.get(`${this.url}/total`, AppSettings.getHttpOptionsAuth());
+  getTotal(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getSuscripcionesPorCliente(idcliente: number,params: HttpParams): Observable<ServerResponseList<Suscripcion>>{
     return this.http.get<ServerResponseList<Suscripcion>>(`${this.url}/${idcliente}/suscripciones`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
-}
-
-interface IFilter{
-  key: string,
-  value: string
 }

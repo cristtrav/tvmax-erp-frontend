@@ -1,11 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
-import { Grupo } from '@dto/grupo-dto';
-import { Servicio } from '@dto/servicio-dto';
-import { CobradoresService } from '@servicios/cobradores.service';
-import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
@@ -48,7 +44,6 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
-    private cobradorService: CobradoresService,
     private usuarioService: UsuariosService,
     private serviciosServicie: ServiciosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
@@ -71,11 +66,12 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
   private cargarCobradores() {
     const params: HttpParams = new HttpParams()
       .append('sort', '+razonsocial')
-      .append('eliminado', 'false');
+      .append('eliminado', 'false')
+      .append('idrol', '3');
     this.cargandoCobradores = true;
-    this.cobradorService.get(params).subscribe({
-      next: (resp) => {
-        this.lstCobradores = resp.data;
+    this.usuarioService.get(params).subscribe({
+      next: (usuarios) => {
+        this.lstCobradores = usuarios
         this.cargandoCobradores = false;
       },
       error: (e) => {

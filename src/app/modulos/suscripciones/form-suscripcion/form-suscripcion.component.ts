@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./form-suscripcion.component.scss']
 })
 export class FormSuscripcionComponent implements OnInit {
-  
+
   @Input()
   navigateOnSaveDest: string | null = null;
   @Input()
@@ -67,7 +67,7 @@ export class FormSuscripcionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.idcliente){
+    if (this.idcliente) {
       this.form.get('idcliente')?.setValue(`${this.idcliente}`);
       this.cargarDomicilios();
     }
@@ -198,7 +198,7 @@ export class FormSuscripcionComponent implements OnInit {
       this.guardarLoading = false;
       this.idsuscripcion = `${sus.id}`;
       this.idsuscripcionChange.emit(this.idsuscripcion);
-      this.router.navigate([sus.id], {relativeTo: this.aroute.parent});
+      this.router.navigate([sus.id], { relativeTo: this.aroute.parent });
     }, (e) => {
       console.log('Error al modificar suscripcion');
       console.log(e);
@@ -233,13 +233,14 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   cargarClientes(): void {
-    this.clientesSrv.get(this.getHttpQueryParamsCliente()).subscribe((resp: ServerResponseList<Cliente>) => {
-      this.lstClientes = resp.data;
-    }, (e) => {
-      console.log('Error al cargar clientes');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al cargar clientes', e.error);
+    this.clientesSrv.get(this.getHttpQueryParamsCliente()).subscribe({
+      next: (clientes) => {
+        this.lstClientes = clientes;
+      },
+      error: (e) => {
+        console.error('Error al cargar clientes',e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 
@@ -271,7 +272,7 @@ export class FormSuscripcionComponent implements OnInit {
     }
   }
 
-  getHttpQueryParamsCliente(): HttpParams{
+  getHttpQueryParamsCliente(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     params = params.append('sort', '+razonsocial');
     return params;

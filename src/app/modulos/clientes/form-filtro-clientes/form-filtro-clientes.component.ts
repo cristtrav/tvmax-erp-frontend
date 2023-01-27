@@ -1,11 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
-import { CobradoresService } from '@servicios/cobradores.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { UsuariosService } from '@servicios/usuarios.service';
 
 @Component({
   selector: 'app-form-filtro-clientes',
@@ -27,7 +26,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private cobradoresSrv: CobradoresService
+    private usuariosSrv: UsuariosService
   ) { }
 
   ngOnInit(): void {
@@ -50,15 +49,18 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
   }
 
   cargarCobradoresFiltro(){
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
-    params = params.append('sort', '+razonsocial');
-    this.cobradoresSrv.get(params).subscribe((resp: ServerResponseList<Usuario>)=>{
-      this.lstCobradoresFiltro = resp.data;
-    }, (e)=>{
-      console.log('Error al cargar cobradores');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    let params: HttpParams = new HttpParams()
+    .append('eliminado', 'false')
+    .append('sort', '+razonsocial')
+    .append('idrol', '3');
+    this.usuariosSrv.get(params).subscribe({
+      next: (usuarios) => {
+        this.lstCobradoresFiltro = usuarios;
+      },
+      error: (e) => {
+        console.error('Error al cargar cobradores', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

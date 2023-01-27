@@ -36,6 +36,7 @@ import { FormFiltroClientesComponent } from './form-filtro-clientes/form-filtro-
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent, FormFiltroClientesComponent],
@@ -67,7 +68,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzDrawerModule,
     NzDescriptionsModule,
     HelperComponentsModule,
-    NzTypographyModule
+    NzTypographyModule,
+    NzModalModule
   ]
 })
 export class ClientesModule { }

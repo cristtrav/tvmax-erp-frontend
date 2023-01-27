@@ -2,13 +2,14 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { Cliente } from './../../../dto/cliente-dto';
 import { ClientesService } from './../../../servicios/clientes.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { Extra } from '../../../util/extra';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { Usuario } from '@dto/usuario.dto';
+import { forkJoin } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -40,28 +41,44 @@ export class VistaClientesComponent implements OnInit {
     private cliSrv: ClientesService,
     private notif: NzNotificationService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   cargarDatos(): void {
     this.tablaLoading = true;
-    this.cliSrv.get(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<Cliente>) => {
-      this.lstClientes = resp.data;
-      this.total = resp.queryRowCount;
-      this.tablaLoading = false
-    }, (e) => {
-      console.log('Error al cargar clientes');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.tablaLoading = false;
+    forkJoin({
+      clientes: this.cliSrv.get(this.getHttpQueryParams()),
+      total: this.cliSrv.getTotal(this.getHttpQueryParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstClientes = resp.clientes;
+        this.total = resp.total;
+        this.tablaLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar clientes', e);
+        this.httpErrorHandler.process(e);
+        this.tablaLoading = false;
+      }
     });
   }
 
   eliminar(id: number | null): void {
-    if (id !== null) {
+    if(id) this.cliSrv.delete(id).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Cliente eliminado.')
+        this.cargarDatos();
+      },
+      error: (e) => {
+        console.error('Error al eliminar Cliente', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
+    /*if (id !== null) {
       this.cliSrv.delete(id).subscribe(() => {
         this.notif.create('success', 'Eliminado correctamente', '');
         this.cargarDatos();
@@ -69,9 +86,9 @@ export class VistaClientesComponent implements OnInit {
         console.log('Error al eliminar cliente');
         console.log(e);
         this.httpErrorHandler.handle(e);
-        //this.notif.create('error', 'Error al eliminar', e.error);
+        this.notif.create('error', 'Error al eliminar', e.error);
       });
-    }
+    }*/
   }
 
   onTableParamsChange(params: NzTableQueryParams): void{
@@ -124,6 +141,18 @@ export class VistaClientesComponent implements OnInit {
 
   procesarCantidadFiltros(c: number): void{
     this.cantFiltrosAplicados = c;
+  }
+
+  confirmarEliminacion(cliente: Cliente){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el Cliente?',
+      nzContent: `«${cliente.id} - ${cliente.razonsocial}»`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.eliminar(cliente.id);
+      }
+    });
   }
 
 }
