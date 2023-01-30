@@ -22,4 +22,5 @@ export class Suscripcion{
     monto: number| null = null;
     cuotaspendientes: number = 0;
     deuda: number = 0; 
+    eliminado: boolean | null = false;
 }

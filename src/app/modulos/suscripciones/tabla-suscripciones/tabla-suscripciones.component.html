@@ -17,7 +17,7 @@
     <tbody>
         <ng-container *ngFor="let s of tbl.data">
             <tr>
-                <td [nzExpand]="expandSet.has(s.id?s.id:-1)" (nzExpandChange)="onExpandChange(s.id?s.id:-1, $event)">
+                <td [nzExpand]="expandSet.has(s.id ?? -1)" (nzExpandChange)="onExpandChange(s.id ?? -1, $event)">
                 </td>
                 <td>{{ s.id }}</td>
                 <td *ngIf="mostrarCliente" nz-tooltip [nzTooltipTitle]="'Código: '+s.idcliente">{{ s.cliente }}</td>
@@ -39,24 +39,30 @@
                 </td>
                 <td nzAlign="right">{{ s.deuda | number }}</td>
                 <td>
-                    <nz-space>
-                        <button *nzSpaceItem nz-tooltip nz-button nzType="default" [routerLink]="s.id+'/cuotas'"
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <button nz-tooltip nz-button nzType="default" [routerLink]="s.id+'/cuotas'"
                             nzTooltipTitle="Cuotas">
                             <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
                         </button>
-                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar"
+                        </div>
+                        <div nz-col>
+                            <button nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar"
                             [routerLink]="s.id+''">
                             <i nz-icon nzType="edit" nzTheme="outline"></i>
                         </button>
-                        <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary"
-                            nzTooltipTitle="Eliminar" nzDanger nzPopconfirmTitle="¿Desea eliminar la Suscripción?"
-                            nzPopconfirmPlacement="bottom" nzOkText="Eliminar" (nzOnConfirm)="eliminar(s.id)">
+                        </div>
+                        <div nz-col>
+                            <button nz-button nz-tooltip nzType="primary"
+                            nzTooltipTitle="Eliminar" nzDanger
+                            nzOkText="Eliminar" (click)="confirmarEliminacion(s)">
                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                         </button>
-                    </nz-space>
+                        </div>
+                    </div>
                 </td>
             </tr>
-            <tr [nzExpand]="expandSet.has(s.id?s.id:-1)">
+            <tr [nzExpand]="expandSet.has(s.id ?? -1)">
                 <nz-descriptions nzSize="small">
                     <ng-template #titulodirec><strong>Dirección</strong></ng-template>
                     <nz-descriptions-item [nzTitle]="titulodirec">{{ s.direccion }}</nz-descriptions-item>

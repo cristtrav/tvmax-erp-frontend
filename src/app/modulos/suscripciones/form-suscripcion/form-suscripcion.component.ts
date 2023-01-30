@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { Domicilio } from './../../../dto/domicilio-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -35,15 +35,15 @@ export class FormSuscripcionComponent implements OnInit {
   @Input()
   mostrarCliente: boolean = false;
 
-  form: UntypedFormGroup = this.fb.group({
-    id: [null, [Validators.required]],
-    iddomicilio: [null, [Validators.required]],
-    idservicio: [null, [Validators.required]],
-    monto: [null, [Validators.required]],
-    estado: [null, Validators.required],
-    fechasuscripcion: [null, [Validators.required]],
-    fechacambioestado: [null, [Validators.required]],
-    idcliente: [null, [Validators.required]]
+  form: FormGroup = new FormGroup({
+    id: new FormControl(null, [Validators.required]),
+    iddomicilio: new FormControl(null, [Validators.required]),
+    idservicio: new FormControl(null, [Validators.required]),
+    monto: new FormControl(null, [Validators.required]),
+    estado: new FormControl(null, Validators.required),
+    fechasuscripcion: new FormControl(null, [Validators.required]),
+    fechacambioestado: new FormControl(null, [Validators.required]),
+    idcliente: new FormControl(null, [Validators.required])
   });
 
   lstClientes: Cliente[] = [];
@@ -55,7 +55,6 @@ export class FormSuscripcionComponent implements OnInit {
   idLoading: boolean = false;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private domiSrv: DomiciliosService,
     private notif: NzNotificationService,
     private serviciosSrv: ServiciosService,
@@ -89,10 +88,10 @@ export class FormSuscripcionComponent implements OnInit {
       this.form.get('monto')?.setValue(data.monto);
       this.form.get('estado')?.setValue(data.estado);
       if (data.fechasuscripcion) {
-        this.form.get('fechasuscripcion')?.setValue(new Date(`${data.fechasuscripcion}T00:00:00`));
+        this.form.get('fechasuscripcion')?.setValue(new Date(`${data.fechasuscripcion}`));
       }
       if (data.fechacambioestado) {
-        this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}T00:00:00`));
+        this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}`));
       }
       this.form.get('idcliente')?.setValue(data.idcliente);
       this.formLoading = false;
@@ -106,8 +105,8 @@ export class FormSuscripcionComponent implements OnInit {
 
   private cargarDomicilios(): void {
     var params: HttpParams = new HttpParams()
-    .append('idcliente', `${this.form.controls.idcliente.value}`)
-    .append('eliminado', 'false');
+      .append('idcliente', `${this.form.controls.idcliente.value}`)
+      .append('eliminado', 'false');
     this.domiSrv.get(params).subscribe({
       next: (domicilios) => {
         this.lstDomicilios = domicilios;
@@ -132,28 +131,14 @@ export class FormSuscripcionComponent implements OnInit {
     });
   }
 
-  private validado(): boolean {
-    let val = true;
-    Object.keys(this.form.controls).forEach((key) => {
-      const ctrl = this.form.get(key);
-      if (ctrl !== null) {
-        ctrl.markAsDirty();
-        ctrl.updateValueAndValidity();
-        if (!ctrl.disabled) {
-          val = val && ctrl.valid;
-        }
-      }
-    });
-    return val;
-  }
-
   guardar() {
-    if (this.validado()) {
-      if (this.idsuscripcion === 'nueva') {
-        this.registrar();
-      } else {
-        this.modificar();
-      }
+    Object.keys(this.form.controls).forEach(ctrlName => {
+      this.form.get(ctrlName)?.markAsDirty();
+      this.form.get(ctrlName)?.updateValueAndValidity();
+    });
+    if (this.form.valid) {
+      if (this.idsuscripcion === 'nueva') this.registrar();
+      else this.modificar();
     }
   }
 
@@ -178,24 +163,40 @@ export class FormSuscripcionComponent implements OnInit {
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.suscSrv.post(this.getDto()).subscribe(() => {
-      this.notif.create('success', 'Suscripción guardada correctamente', '');
-      this.form.reset();
-      this.form.get('conectado')?.setValue(true);
-      this.form.get('reconectado')?.setValue(false);
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al registrar suscripcion');
-      console.log(e);
-      this.notif.create('error', 'Error al guardar suscripción', e.error);
-      this.guardarLoading = false;
+    this.suscSrv.post(this.getDto()).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Suscripción guardada');
+        this.form.reset();
+        this.form.get('conectado')?.setValue(true);
+        this.form.get('reconectado')?.setValue(false);
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al registrar suscripcion', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
     const sus = this.getDto();
-    this.suscSrv.put(+this.idsuscripcion, sus).subscribe(() => {
+    this.suscSrv.put(Number(this.idsuscripcion), sus).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Suscripción editada.');
+        this.idsuscripcion = `${sus.id}`;
+        this.idsuscripcionChange.emit(this.idsuscripcion);
+        this.router.navigate(['../', sus.id], {relativeTo: this.aroute});
+        this.guardarLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al editar Suscripcion', e);
+        this.httpErrorHandler.process(e);
+        this.guardarLoading = false;
+      }
+    })
+    /*this.suscSrv.put(+this.idsuscripcion, sus).subscribe(() => {
       this.notif.create('success', 'Suscripción guardada correctamente', '');
       this.guardarLoading = false;
       this.idsuscripcion = `${sus.id}`;
@@ -206,7 +207,7 @@ export class FormSuscripcionComponent implements OnInit {
       console.log(e);
       this.notif.create('error', 'Error al guardar suscripción', e.error);
       this.guardarLoading = false;
-    });
+    });*/
   }
 
   onChangeServicio(idsrv: any): void {
@@ -240,7 +241,7 @@ export class FormSuscripcionComponent implements OnInit {
         this.lstClientes = clientes;
       },
       error: (e) => {
-        console.error('Error al cargar clientes',e);
+        console.error('Error al cargar clientes', e);
         this.httpErrorHandler.process(e);
       }
     });

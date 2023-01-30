@@ -45,7 +45,11 @@ export class ClientesService {
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getSuscripcionesPorCliente(idcliente: number,params: HttpParams): Observable<ServerResponseList<Suscripcion>>{
-    return this.http.get<ServerResponseList<Suscripcion>>(`${this.url}/${idcliente}/suscripciones`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getSuscripcionesPorCliente(idcliente: number, params: HttpParams): Observable<Suscripcion[]>{
+    return this.http.get<Suscripcion[]>(`${this.url}/${idcliente}/suscripciones`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getTotalSuscripcionesPorCliente(idcliente: number, params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/${idcliente}/suscripciones/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

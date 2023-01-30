@@ -23,6 +23,7 @@ import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/por
 import { Extra } from '@util/extra';
 import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
 import { SesionService } from '@servicios/sesion.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -451,11 +452,14 @@ export class DetalleVentaComponent implements OnInit {
       this.loadingSuscripcionesCli = true;
       let params: HttpParams = new HttpParams();
       params = params.append('eliminado', 'false');
-      this.clienteSrv.getSuscripcionesPorCliente(idcli, params).subscribe({
+      forkJoin({
+        suscripciones: this.clienteSrv.getSuscripcionesPorCliente(idcli, params),
+        total: this.clienteSrv.getTotalSuscripcionesPorCliente(idcli, params)
+      }).subscribe({
         next: (resp) => {
           const arrSusCuotas: ISuscripcionServicioCuota[] = [];
           let totalCuoutas: number = 0;
-          resp.data.forEach((s) => {
+          resp.suscripciones.forEach((s) => {
             totalCuoutas += Number(s.cuotaspendientes);
             arrSusCuotas.push({ suscripcion: s, servicioscuotas: [], loadingServicios: false, cuotasPendientes: s.cuotaspendientes });
           });
@@ -463,14 +467,14 @@ export class DetalleVentaComponent implements OnInit {
           this.lstSuscServCuotas = arrSusCuotas;
           this.loadingSuscripcionesCli = false;
           this.cargarServiciosCuotasPendientes();
+          this.loadingSuscripcionesCli = false;
         },
         error: (e) => {
-          console.log('Error al cargar suscripciones');
-          console.log(e);
-          this.httpErrorHandler.handle(e);
+          console.error('Error al cargar suscripciones por cliente', e);
+          this.httpErrorHandler.process(e);
           this.loadingSuscripcionesCli = false;
         }
-      });
+      })
     } else {
       this.lstSuscServCuotas = [];
       this.totalCuotasPendientes = 0;

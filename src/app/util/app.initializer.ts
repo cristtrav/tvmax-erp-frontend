@@ -5,9 +5,17 @@ export function appInitializer(sessionSrv: SesionService){
         const rtoken = localStorage.getItem('refreshToken');
         if(rtoken){
             //sessionSrv.refresh(rtoken).subscribe().add(resolve);
-            sessionSrv.refresh(rtoken).subscribe(() => resolve());
-        }else{
+            sessionSrv.refresh(rtoken).subscribe({
+                next: () => {
+                    console.log('Sesion refrescada');
+                },
+                error: (e) => {
+                    console.error('Error al refrescar sesion', e);
+                }
+            });
+        }/*else{
             resolve(null);
-        }
+        }*/
+        resolve();
     });
 }

@@ -1,13 +1,15 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { ServerResponseList } from '@dto/server-response-list.dto';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { forkJoin } from 'rxjs';
+import { formatNumber } from '@angular/common';
 
 @Component({
   selector: 'app-tabla-suscripciones',
@@ -75,44 +77,46 @@ export class TablaSuscripcionesComponent implements OnInit {
   srtOrderId: string | null = null;
 
   constructor(
+    @Inject(LOCALE_ID)
+    private locale: string,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private suscripSrv: SuscripcionesService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void { }
 
   private cargarDatos(): void {
     this.tableLoading = true;
-
-    this.suscripSrv.get(this.getHttpQueryParams()).subscribe(
-      {
-        next: (resp) => {
-          this.lstSuscripciones = resp.data;
-          this.total = resp.queryRowCount;
-          this.tableLoading = false;
-        },
-        error: (e) => {
-          console.log('Error al cargar suscripciones');
-          console.log(e);
-          this.httpErrorHandler.handle(e);
-          this.tableLoading = false;
-        }
+    forkJoin({
+      suscripciones: this.suscripSrv.get(this.getHttpQueryParams()),
+      total: this.suscripSrv.getTotal(this.getHttpQueryParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstSuscripciones = resp.suscripciones;
+        this.total = resp.total;
+        this.tableLoading = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar suscripciones', e);
+        this.httpErrorHandler.process(e);
+        this.tableLoading = false;
       }
-    );
+    });
   }
 
   eliminar(id: number | null): void {
-    if (id) {
-      this.suscripSrv.delete(id).subscribe(() => {
-        this.notif.create('success', 'Suscripción eliminada correctamente', '');
+    if(id) this.suscripSrv.delete(id).subscribe({
+      next: () => {
+        this.notif.create('success', '<strong>Éxito</strong>', 'Suscripción eliminada.');
         this.cargarDatos();
-      }, (e) => {
-        console.log('Error al eliminar suscripcion');
-        console.log(e);
-        this.httpErrorHandler.handle(e);;
-      });
-    }
+      },
+      error: (e) => {
+        console.error('Error al eliminar Suscripcion', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
   onTableParamsChange(params: NzTableQueryParams) {
@@ -135,6 +139,18 @@ export class TablaSuscripcionesComponent implements OnInit {
     params = params.appendAll(paramsObj);
     params = params.appendAll(this.paramsFiltros);
     return params;
+  }
+
+  confirmarEliminacion(suscripcion: Suscripcion){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar la suscripción?',
+      nzContent: `«${suscripcion.id} - ${suscripcion.servicio} (${formatNumber(Number(suscripcion.monto), this.locale)}Gs./mes)»`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.eliminar(suscripcion.id);
+      }
+    });
   }
 
 }

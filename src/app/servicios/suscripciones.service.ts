@@ -21,8 +21,8 @@ export class SuscripcionesService {
     return this.http.post(this.url, s, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Suscripcion>> {
-    return this.http.get<ServerResponseList<Suscripcion>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Suscripcion[]> {
+    return this.http.get<Suscripcion[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getPorId(id: number): Observable<Suscripcion> {
@@ -57,7 +57,7 @@ export class SuscripcionesService {
     return this.http.get<ServerResponseList<ResumenCantMonto>>(`${this.url}/resumen/departamentosdistritos`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  count(params: HttpParams): Observable<number>{
-    return this.http.get<number>(`${this.url}/count`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getTotal(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

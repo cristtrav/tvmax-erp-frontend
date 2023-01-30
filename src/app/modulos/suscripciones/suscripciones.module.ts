@@ -40,6 +40,7 @@ import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 import { ImpresionModule } from '../impresion/impresion.module';
 import { NgxPrintModule } from 'ngx-print';
 import { PortalModule } from '@angular/cdk/portal'
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -77,7 +78,8 @@ import { PortalModule } from '@angular/cdk/portal'
     EstadisticasModule,
     ImpresionModule,
     NgxPrintModule,
-    PortalModule
+    PortalModule,
+    NzModalModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })
