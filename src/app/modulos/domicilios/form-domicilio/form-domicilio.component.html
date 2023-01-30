@@ -7,8 +7,8 @@
                     <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;"></nz-input-number>
                 </nz-input-group>
                 <ng-template #btnCalcularId>
-                    <button nz-button nz-tooltip nzTooltipTitle="Consultar código disponible" (click)="consultarUltimoId()" [nzLoading]="calculateIdLoading" nzType="default" nzSearch>
-                        <i nz-icon nzTheme="outline" nzType="monitor"></i>
+                    <button nz-button nz-tooltip nzTooltipTitle="Generar código" (click)="consultarUltimoId()" [nzLoading]="getLastIdLoading" nzType="primary" nzSearch>
+                        <i nz-icon nzTheme="outline" nzType="sync"></i>
                     </button>
                 </ng-template>
             </nz-form-control>

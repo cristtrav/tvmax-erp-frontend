@@ -105,15 +105,17 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   private cargarDomicilios(): void {
-    const idcli = this.form.get('idcliente')?.value;
-    var par: HttpParams = new HttpParams().append('idcliente', `${idcli}`);
-    par = par.append('eliminado', 'false');
-    this.domiSrv.get(par).subscribe((resp: ServerResponseList<Domicilio>) => {
-      this.lstDomicilios = resp.data;
-    }, (e) => {
-      console.log('Error al cargar domicilios del cliente');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
+    var params: HttpParams = new HttpParams()
+    .append('idcliente', `${this.form.controls.idcliente.value}`)
+    .append('eliminado', 'false');
+    this.domiSrv.get(params).subscribe({
+      next: (domicilios) => {
+        this.lstDomicilios = domicilios;
+      },
+      error: (e) => {
+        console.error('Error al cargar domicilios', e);
+        this.httpErrorHandler.process(e);
+      }
     });
   }
 

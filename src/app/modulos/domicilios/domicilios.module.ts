@@ -20,6 +20,10 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 @NgModule({
   declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent],
@@ -41,7 +45,11 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzPopconfirmModule,
     NzSpinModule,
     NzToolTipModule,
-    NzSpaceModule
+    NzSpaceModule,
+    NzTagModule,
+    NzTypographyModule,
+    NzModalModule,
+    NzDescriptionsModule
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
 })

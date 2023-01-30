@@ -7,38 +7,63 @@
 nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
+            <th nzWidth="60px"></th>
             <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
             <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Dirección</th>
             <th [nzColumnKey]="'barrio'" [nzSortFn]="true">Barrio</th>
             <th [nzColumnKey]="'tipo'" [nzSortFn]="true">Tipo</th>
             <th [nzColumnKey]="'nromedidor'" [nzSortFn]="true">Medidor ANDE</th>
-            <th [nzColumnKey]="'principal'" [nzSortFn]="true">Principal</th>
+            <th [nzColumnKey]="'principal'" [nzSortFn]="true">Nivel</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let d of tbl.data">
-            <td>{{ d.id }}</td>
-            <td>{{ d.direccion }}</td>
-            <td>{{ d.barrio }} ({{d.distrito}}, {{d.departamento}})</td>
-            <td>
-                {{ d.tipo === 'PRO' ? 'Propio' : (d.tipo === 'ALQ' ? 'Alquiler' : 'Préstamo')}}
-            </td>
-            <td>{{ d.nromedidor }}</td>
-            <td>
-                <i nz-icon [nzTheme]="'twotone'" [nzTwotoneColor]="d.principal?'#00C853':'#f44336'" [nzType]="d.principal?'check-circle':'close-circle'"></i>
-            <td>
-                <nz-space>
-                    <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="[d.id]" nzTooltipTitle="Editar">
-                        <i nz-icon nzType="edit" nzTheme="outline"></i>
-                    </button>
-                    <button *nzSpaceItem nz-button nz-tooltip nz-popconfirm nzType="primary" nzTooltipTitle="Eliminar"
-                    nzPopconfirmTitle="¿Desea eliminr el Domicilio?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar" 
-                    (nzOnConfirm)="eliminar(d.id)" nzDanger>
-                        <i nz-icon nzType="delete" nzTheme="outline"></i>
-                    </button>
-                </nz-space>
-            </td>
-        </tr>
+        <ng-container *ngFor="let d of tbl.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(d.id ?? -1)" (nzExpandChange)="onExpandChange(d.id ?? -1, $event)"></td>
+                <td>{{ d.id }}</td>
+                <td>{{ d.direccion }}</td>
+                <td>{{ d.barrio }}</td>
+                <td>
+                    <span *ngIf="d.tipo === 'PRO'">Propio</span>
+                    <span *ngIf="d.tipo === 'ALQ'">Alquiler</span>
+                    <span *ngIf="d.tipo === 'PRE'">Préstamo</span>               
+                <td>{{ d.nromedidor }}</td>
+                <td>
+                    <nz-tag *ngIf="d.principal" nzColor="green">
+                        Principal
+                    </nz-tag>
+                    <nz-tag *ngIf="!d.principal" nzColor="default">
+                        <span nz-typography nzType="secondary">Secundario</span>
+                    </nz-tag>
+                <td>
+                    <nz-space>
+                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="[d.id]" nzTooltipTitle="Editar">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzOkText="Eliminar" 
+                        (click)="confirmarEliminacion(d)" nzDanger>
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+                    </nz-space>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(d.id ?? -1)">
+                <nz-descriptions>
+                    <nz-descriptions-item [nzTitle]="distritoTitle">
+                        <ng-template #distritoTitle>
+                            <strong>Distrito</strong>
+                        </ng-template>
+                        {{ d.distrito }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="departamentoTitle">
+                        <ng-template #departamentoTitle>
+                            <strong>Departamento</strong>
+                        </ng-template>
+                        {{ d.departamento }}
+                    </nz-descriptions-item>
+                </nz-descriptions>
+            </tr>
+        </ng-container>
     </tbody>
 </nz-table>
