@@ -39,8 +39,12 @@ export class ServiciosService {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsTextAuth())
   }
 
-  getServiciosPorCuotasDeSuscripcion(idsusc: number, params: HttpParams): Observable<ServerResponseList<Servicio>>{
-    return this.http.get<ServerResponseList<Servicio>>(`${this.urlSusc}/${idsusc}/cuotas/servicios`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getServiciosPorCuotasDeSuscripcion(idsusc: number, params: HttpParams): Observable<Servicio[]>{
+    return this.http.get<Servicio[]>(`${this.urlSusc}/${idsusc}/cuotas/servicios`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  countServiciosPorCuotasDeSuscripcion(idsusc: number, params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.urlSusc}/${idsusc}/cuotas/servicios/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getLastId(): Observable<number>{

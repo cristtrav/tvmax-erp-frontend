@@ -2,7 +2,6 @@ import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Inject
 import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Cliente } from '@dto/cliente-dto';
@@ -395,21 +394,22 @@ export class DetalleVentaComponent implements OnInit {
       paramsServicios = paramsServicios.append('pagado', 'false');
       sc.loadingServicios = true;
       if (sc.suscripcion.id) {
-        this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(sc.suscripcion.id, paramsServicios).subscribe((resp: ServerResponseList<Servicio>) => {
-          const arrSrvCuo: IServicioCuota[] = [];
-          resp.data.forEach((s: Servicio) => {
-            arrSrvCuo.push({ servicio: s, cuotas: [], loadingCuotas: false });
-          });
-          sc.servicioscuotas = arrSrvCuo;
-          sc.loadingServicios = false;
-          this.cargarCuotasPendientes();
-        }, (e) => {
-          console.log('Error al consultar servicios de cuotas pendientes');
-          console.log(e);
-          this.httpErrorHandler.handle(e);
-          sc.loadingServicios = false;
+        this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(sc.suscripcion.id, paramsServicios).subscribe({
+          next: (servicios) => {
+            const arrSrvCuo: IServicioCuota[] = [];
+            servicios.forEach((s: Servicio) => {
+              arrSrvCuo.push({ servicio: s, cuotas: [], loadingCuotas: false });
+            });
+            sc.servicioscuotas = arrSrvCuo;
+            sc.loadingServicios = false;
+            this.cargarCuotasPendientes();
+          },
+          error: (e) => {
+            console.error('Error al cargar servicios por cuotas y suscripcion', e);
+            this.httpErrorHandler.process(e);
+            sc.loadingServicios = false;
+          }
         });
-
       }
     });
   }
@@ -420,7 +420,7 @@ export class DetalleVentaComponent implements OnInit {
         let paramsCuotas: HttpParams = new HttpParams();
         paramsCuotas = paramsCuotas.append('eliminado', 'false');
         paramsCuotas = paramsCuotas.append('pagado', 'false');
-        paramsCuotas = paramsCuotas.append('sort', '-fecha_vencimiento');
+        paramsCuotas = paramsCuotas.append('sort', '-fechavencimiento');
         paramsCuotas = paramsCuotas.append('idsuscripcion', `${suscservcuo.suscripcion.id}`);
         paramsCuotas = paramsCuotas.append('idservicio', `${servcuo.servicio.id}`);
 

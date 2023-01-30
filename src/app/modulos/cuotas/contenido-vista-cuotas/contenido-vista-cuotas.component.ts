@@ -22,10 +22,7 @@ export class ContenidoVistaCuotasComponent implements OnInit {
   tabsLoading: boolean = false;
 
   constructor(
-    private cuotaSrv: CuotasService,
     private serviciosSrv: ServiciosService,
-    private notif: NzNotificationService,
-    private router: Router,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
@@ -36,15 +33,16 @@ export class ContenidoVistaCuotasComponent implements OnInit {
   private cargarServicios(): void{
     this.tabsLoading = true;
     if(this.idsuscripcion){
-      this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(this.idsuscripcion, this.getHttpParams()).subscribe((resp: ServerResponseList<Servicio>)=>{
-        this.lstServicios = resp.data;
-        this.tabsLoading = false;
-      }, (e)=>{
-        console.log('Error al cargar lista de servicios');
-        console.log(e);
-        //this.notif.create('error', 'Error al cargar lista de servicios', e.error);
-        this.httpErrorHandler.handle(e);
-        this.tabsLoading = false;
+      this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(this.idsuscripcion, this.getHttpParams()).subscribe({
+        next: (servicios) => {
+          this.lstServicios = servicios;
+          this.tabsLoading = false;
+        },
+        error: (e) => {
+          console.error('Error al cargar servicios por cuota y suscripcion', e);
+          this.httpErrorHandler.process(e);
+          this.tabsLoading = false;
+        }
       });
     }
   }
