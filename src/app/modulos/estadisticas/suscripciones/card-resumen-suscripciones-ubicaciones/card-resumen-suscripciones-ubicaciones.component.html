@@ -1,0 +1,51 @@
+<nz-card [nzTitle]="titulo" [nzExtra]="extraTitulo">
+    <ng-template #titulo>
+        <nz-button-group>
+            <button
+                nz-button
+                [nzType]="pestaniaActiva === 'barrios' ? 'primary' : 'default'"
+                (click)="setPestaniaActiva('barrios')">
+                Barrios
+            </button>
+            <button
+                nz-button
+                [nzType]="pestaniaActiva === 'distritos' ? 'primary' : 'default'"
+                (click)="setPestaniaActiva('distritos')">
+                Distritos
+            </button>
+            <button 
+                nz-button
+                [nzType]="pestaniaActiva === 'departamentos' ? 'primary' : 'default'"
+                (click)="setPestaniaActiva('departamentos')">
+                Departamentos
+            </button>
+        </nz-button-group>
+    </ng-template>
+    <ng-template #extraTitulo>
+        <button nz-button nzType="default" (click)="cargarDatos()">
+            <i nz-icon nzType="reload"></i>
+        </button>
+    </ng-template>
+
+    <app-tabla-resumen-suscripciones-departamentos
+        #tablaResumenDepartamentos
+        *ngIf="pestaniaActiva === 'departamentos'"
+        [paramsFiltros]="paramsFiltros"
+        [textoBusqueda]="textoBusqueda">
+    </app-tabla-resumen-suscripciones-departamentos>
+    
+    <app-tabla-resumen-suscripciones-distritos
+        #tablaResumenDistritos
+        *ngIf="pestaniaActiva === 'distritos'"
+        [paramsFiltros]="paramsFiltros"
+        [textoBusqueda]="textoBusqueda">
+    </app-tabla-resumen-suscripciones-distritos>
+
+    <app-tabla-resumen-suscripciones-barrios
+        #tablaResumenBarrios
+        *ngIf="pestaniaActiva === 'barrios'"
+        [paramsFiltros]="paramsFiltros"
+        [textoBusqueda]="textoBusqueda">
+    </app-tabla-resumen-suscripciones-barrios>
+    
+</nz-card>

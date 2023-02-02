@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { ResumenEstadosSuscripciones } from '@dto/resumen-estados-suscripciones.dto';
+import { ResumenGruposSuscripciones } from '@dto/resumen-grupos-suscripciones.dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -9,11 +9,11 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-card-resumen-estados',
-  templateUrl: './card-resumen-estados.component.html',
-  styleUrls: ['./card-resumen-estados.component.scss']
+  selector: 'app-tabla-resumen-suscripciones-grupos',
+  templateUrl: './tabla-resumen-suscripciones-grupos.component.html',
+  styleUrls: ['./tabla-resumen-suscripciones-grupos.component.scss']
 })
-export class CardResumenEstadosComponent implements OnInit {
+export class TablaResumenSuscripcionesGruposComponent implements OnInit {
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -39,20 +39,39 @@ export class CardResumenEstadosComponent implements OnInit {
   private _textoBusqueda: string = '';
   private timerBusqueda: any;
 
-  lstResumenEstados: ResumenEstadosSuscripciones[] = [];
-  tableLoading: boolean = false;
-  totalRegisters: number = 0;
+  lstResumenGrupos: ResumenGruposSuscripciones[] = [];
+  loadingDatos: boolean = false;
   pageSize: number = 10;
   pageIndex: number = 1;
-  sortStr: string | null = null;
+  totalRegisters: number = 0;
+  sortStr: string | null = '+grupo';
 
   constructor(
-    private suscripcionesSrv: SuscripcionesService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private suscripcionesSrv: SuscripcionesService
   ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  cargarDatos() {
+    this.loadingDatos = true;
+    forkJoin({
+      resumenGrupos: this.suscripcionesSrv.getResumenGrupos(this.getHttpQueryParams()),
+      total: this.suscripcionesSrv.getTotalResumenGrupos(this.getHttpQueryParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstResumenGrupos = resp.resumenGrupos;
+        this.totalRegisters = resp.total;
+        this.loadingDatos = false;
+      },
+      error: (e) => {
+        console.error('Error al cargar resumen por grupos de suscripciones', e);
+        this.httpErrorHandler.process(e);
+        this.loadingDatos = false;
+      }
+    })
   }
 
   private getHttpQueryParams(): HttpParams {
@@ -64,26 +83,6 @@ export class CardResumenEstadosComponent implements OnInit {
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`)
     return params;
   }
-
-  cargarDatos() {
-    this.tableLoading = true;
-    forkJoin({
-      resumenEstados: this.suscripcionesSrv.getResumenEstados(this.getHttpQueryParams()),
-      total: this.suscripcionesSrv.getTotalResumenEstados(this.getHttpQueryParams())
-    }).subscribe({
-      next: (resp) => {
-        this.lstResumenEstados = resp.resumenEstados;
-        this.totalRegisters = resp.total;
-        this.tableLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al cargar resumenes de estados de suscripciones', e);
-        this.httpErrorHandler.process(e);
-        this.tableLoading = false;
-      }
-    });
-  }
-
   onQueryParamsChange(params: NzTableQueryParams) {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;

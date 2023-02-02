@@ -76,7 +76,7 @@ export class LoginFormComponent implements OnInit {
     if (rtoken) {
       this.sesionSrv.refresh(rtoken).subscribe((data) => {
         localStorage.setItem('accessToken', data.accessToken);
-        this.router.navigateByUrl('/app/welcome');
+        this.router.navigateByUrl('/app/dashboard');
       }, (e) => {
         console.log('Error al actualizar sesion');
         console.log(e);

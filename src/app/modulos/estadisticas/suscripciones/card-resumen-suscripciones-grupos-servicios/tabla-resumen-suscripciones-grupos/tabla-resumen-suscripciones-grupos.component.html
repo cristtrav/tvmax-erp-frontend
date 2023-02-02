@@ -1,0 +1,30 @@
+<nz-table
+    #tabla 
+    nzSize="small"
+    [nzData]="lstResumenGrupos"
+    [nzLoading]="loadingDatos"
+    [nzFrontPagination]="false"
+    [nzTotal]="totalRegisters"
+    [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" 
+    [nzShowSizeChanger]="true"
+    [nzFooter]="pieTabla"
+    (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th [nzColumnKey]="'grupo'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Grupo</th>
+            <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Nro. suscripciones</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Deuda total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let resumen of tabla.data">
+            <td>{{ resumen.grupo }}</td>
+            <td>{{ resumen.cantidad | number }} suscripciones</td>
+            <td>Gs.{{ resumen.monto | number }}</td>
+        </tr>
+    </tbody>
+    <ng-template #pieTabla>
+        <strong>Total de registros: </strong>
+        <span>{{ totalRegisters | number }}</span>
+    </ng-template>
+</nz-table>

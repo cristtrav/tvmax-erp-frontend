@@ -7,11 +7,21 @@
             <i nz-icon nzType="reload" nzTheme="outline"></i>
         </button>
     </ng-template>
-    <nz-table #tablaResumenSuscCuoPend [nzData]="lstDatosResumen" [nzShowPagination]="false"
-        nzShowSizeChanger="false" nzSize="small" [nzLoading]="loadingDatos">
+    <nz-table
+        #tablaResumenSuscCuoPend
+        [nzData]="lstDatosResumen"
+        nzShowSizeChanger="true"
+        nzSize="small"
+        [nzLoading]="loadingDatos"
+        (nzQueryParams)="onQueryParamsChange($event)"
+        nzFrontPagination="false"
+        [nzPageIndex]="pageIndex"
+        [nzPageSize]="pageSize"
+        [nzFooter]="pieTabla"
+        [nzTotal]="totalRegisters">
         <thead>
             <tr>
-                <th>Cuotas pendientes</th>
+                <th [nzSortFn]="true" [nzColumnKey]="'cuotaspendientes'" [nzSortOrder]="'ascend'">Cuotas pendientes</th>
                 <th>No. suscripciones</th>
                 <th>Deuda total</th>
             </tr>
@@ -19,14 +29,17 @@
         <tbody>
             <tr *ngFor="let rcp of tablaResumenSuscCuoPend.data">
                 <td>
-                   <nz-tag *ngIf="rcp.referencia == 0" nzColor="green">{{ rcp.referencia }}</nz-tag>
-                   <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 1 && rcp.referencia <=3" nzColor="orange">{{ rcp.referencia }}</nz-tag>
-                   <nz-tag *ngIf="rcp.referencia && rcp.referencia >= 4 " nzColor="red">{{ rcp.referencia }}</nz-tag>
-                   {{ rcp.referencia == 1 ? 'cuota' : 'cuotas'}}
+                   <nz-tag *ngIf="rcp.nrocuotas == 0" nzColor="green">{{ rcp.nrocuotas }}</nz-tag>
+                   <nz-tag *ngIf="rcp.nrocuotas && rcp.nrocuotas >= 1 && rcp.nrocuotas <=3" nzColor="orange">{{ rcp.nrocuotas }}</nz-tag>
+                   <nz-tag *ngIf="rcp.nrocuotas && rcp.nrocuotas >= 4 " nzColor="red">{{ rcp.nrocuotas }}</nz-tag>
+                   {{ rcp.nrocuotas == 1 ? 'cuota' : 'cuotas'}}
                 </td>
                 <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
                 <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
             </tr>
         </tbody>
+        <ng-template #pieTabla>
+            <strong>Total registros: </strong>{{ totalRegisters | number }}
+        </ng-template>
     </nz-table>
 </nz-card>

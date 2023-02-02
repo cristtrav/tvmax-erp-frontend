@@ -1,0 +1,30 @@
+<nz-table
+    #tabla
+    nzSize="small"
+    [nzData]="lstResumenBarrios"
+    [nzFrontPagination]="false"
+    [nzTotal]="totalRegisters"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzLoading]="tableLoading"
+    [nzShowSizeChanger]="true"
+    [nzFooter]="pieTabla"
+    (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th [nzColumnKey]="'barrio'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Barrio</th>
+            <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Nro. suscripciones</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Deuda total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let resumentBarrio of tabla.data">
+            <td>{{ resumentBarrio.barrio }}</td>
+            <td>{{ resumentBarrio.cantidad | number }} suscripciones</td>
+            <td>Gs.{{ resumentBarrio.monto | number }}</td>
+        </tr>
+    </tbody>
+    <ng-template #pieTabla>
+        <strong>Total registros: </strong>{{ totalRegisters | number }}
+    </ng-template>
+</nz-table>

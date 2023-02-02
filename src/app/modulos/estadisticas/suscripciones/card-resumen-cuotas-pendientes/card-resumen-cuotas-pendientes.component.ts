@@ -1,11 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
+import { Component, Input, OnInit } from '@angular/core';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { EventEmitter } from '@angular/core';
+import { ResumenCuotasPendientesSuscripciones } from '@dto/resumen-cuotas-pendientes.dto';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { Extra } from '@util/extra';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-card-resumen-cuotas-pendientes',
@@ -23,8 +24,12 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
   };
   private _paramsFiltros: IParametroFiltro = {};
 
-  lstDatosResumen: ResumenCantMonto[] = [];
+  lstDatosResumen: ResumenCuotasPendientesSuscripciones[] = [];
   loadingDatos: boolean = false;
+  sortStr: string | null = '+cuotaspendientes'
+  pageIndex: number = 1;
+  pageSize: number = 10;
+  totalRegisters: number = 0;
 
   @Input()
   get textoBusqueda(): string { return this._textoBusqueda };
@@ -41,12 +46,6 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
   private _textoBusqueda: string = '';
   private timerBusqueda: any;
 
-  @Output()
-  totalSuscripcionesChange: EventEmitter<number> = new EventEmitter();
-
-  @Output()
-  totalDeudaChange: EventEmitter<number> = new EventEmitter();
-
   constructor(
     private suscripcionesSrv: SuscripcionesService,
     private httpErrorHandler: HttpErrorResponseHandlerService
@@ -59,33 +58,37 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
   private getHttpQueryParams(): HttpParams {
     let params: HttpParams = new HttpParams().appendAll(this.paramsFiltros);
     params = params.append('eliminado', 'false');
+    params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
+    params = params.append('limit', this.pageSize);
+    if(this.sortStr) params = params.append('sort', this.sortStr);
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     return params;
   }
 
   cargarDatos() {
     this.loadingDatos = true;
-    this.suscripcionesSrv.getResumenCuotasPendientes(this.getHttpQueryParams()).subscribe((resp: ServerResponseList<ResumenCantMonto>) => {
-      this.lstDatosResumen = resp.data;
-      this.loadingDatos = false;
-      this.calcularTotales();
-    }, (e) => {
-      console.log('Error al cargar resumen de cuotas pendientes');
-      console.log(e);
-      this.httpErrorHandler.handle(e, 'cargar resumen de cuotas pendientes');
-      this.loadingDatos = false;
+    forkJoin({
+      resumen: this.suscripcionesSrv.getResumenCuotasPendientes(this.getHttpQueryParams()),
+      total: this.suscripcionesSrv.getTotalResumenCuotasPendientes(this.getHttpQueryParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstDatosResumen = resp.resumen;
+        this.totalRegisters = resp.total;
+        this.loadingDatos = false;
+      },
+      error: (e) => {
+        console.log('Error al cargar resumen de cuotas pendientes', e);
+        this.httpErrorHandler.process(e);
+        this.loadingDatos = false;
+      }
     });
   }
 
-  private calcularTotales(){
-    let totalSusc: number = 0;
-    let totalDeuda: number = 0;
-    this.lstDatosResumen.forEach((r: ResumenCantMonto)=>{
-      if(r.cantidad) totalSusc += Number(r.cantidad);
-      if(r.monto) totalDeuda+= Number(r.monto);
-    });
-    this.totalSuscripcionesChange.emit(totalSusc);
-    this.totalDeudaChange.emit(totalDeuda);
+  onQueryParamsChange(params: NzTableQueryParams) {
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.cargarDatos();
   }
 
 }

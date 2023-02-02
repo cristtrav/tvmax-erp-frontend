@@ -8,25 +8,39 @@
         </button>
     </ng-template>
 
-    <nz-table #tablaResumenEstados [nzData]="lstResumenDatos" [nzShowPagination]="false"
-        nzShowSizeChanger="false" nzSize="small" [nzLoading]="loadingDatos">
+    <nz-table
+        #tablaResumenEstados
+        nzSize="small" 
+        [nzData]="lstResumenEstados"
+        [nzShowPagination]="false"
+        [nzShowSizeChanger]="false"
+        [nzFrontPagination]="false"
+        [nzTotal]="totalRegisters"
+        [nzPageSize]="pageSize"
+        [nzPageIndex]="pageIndex"
+        [nzLoading]="tableLoading"
+        [nzFooter]="pieTabla"
+        (nzQueryParams)="onQueryParamsChange($event)">
         <thead>
             <tr>
-                <th>Estado</th>
-                <th>No. suscripciones</th>
-                <th>Deuda total</th>
+                <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
+                <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">No. suscripciones</th>
+                <th [nzColumnKey]="'monto'" [nzSortFn]="true">Deuda total</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let rcp of tablaResumenEstados.data">
                 <td>
-                    <nz-tag *ngIf="rcp.referencia === 'C'" nzColor="green">Conectados</nz-tag>
-                    <nz-tag *ngIf="rcp.referencia === 'R'" nzColor="green">Reconectados</nz-tag>
-                    <nz-tag *ngIf="rcp.referencia === 'D'" nzColor="red">Desconectados</nz-tag>
+                    <nz-tag *ngIf="rcp.estado === 'C'" nzColor="green">Conectados</nz-tag>
+                    <nz-tag *ngIf="rcp.estado === 'R'" nzColor="green">Reconectados</nz-tag>
+                    <nz-tag *ngIf="rcp.estado === 'D'" nzColor="red">Desconectados</nz-tag>
                 </td>
                 <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
                 <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
             </tr>
         </tbody>
+        <ng-template #pieTabla>
+            <strong>Total registros: </strong>{{ totalRegisters | number }}
+        </ng-template>
     </nz-table>
 </nz-card>

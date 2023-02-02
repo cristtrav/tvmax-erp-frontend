@@ -16,14 +16,19 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { CardResumenCuotasPendientesComponent } from './suscripciones/card-resumen-cuotas-pendientes/card-resumen-cuotas-pendientes.component';
 import { CardResumenEstadosComponent } from './suscripciones/card-resumen-estados/card-resumen-estados.component';
-import { CardResumenSuscripcionesGruposServiciosComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { CardResumenSuscripcionesDepartDistritoComponent } from './suscripciones/card-resumen-suscripciones-depart-distrito/card-resumen-suscripciones-depart-distrito.component';
 import { VistaEstadisticasVentasComponent } from './ventas/vista-estadisticas-ventas/vista-estadisticas-ventas.component';
 import { ContenidoEstadisticasVentasComponent } from './ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
 import { CardResumenVentasGruposServiciosComponent } from './ventas/card-resumen-ventas-grupos-servicios/card-resumen-ventas-grupos-servicios.component';
 import { CardResumenVentasCobradoresComponent } from './ventas/card-resumen-ventas-cobradores/card-resumen-ventas-cobradores.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { CardResumenSuscripcionesGruposServiciosComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
+import { TablaResumenSuscripcionesGruposComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/tabla-resumen-suscripciones-grupos/tabla-resumen-suscripciones-grupos.component';
+import { TablaResumenSuscripcionesServiciosComponent } from './suscripciones/card-resumen-suscripciones-grupos-servicios/tabla-resumen-suscripciones-servicios/tabla-resumen-suscripciones-servicios.component';
+import { CardResumenSuscripcionesUbicacionesComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/card-resumen-suscripciones-ubicaciones.component';
+import { TablaResumenSuscripcionesDepartamentosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-departamentos/tabla-resumen-suscripciones-departamentos.component';
+import { TablaResumenSuscripcionesDistritosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-distritos/tabla-resumen-suscripciones-distritos.component';
+import { TablaResumenSuscripcionesBarriosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-barrios/tabla-resumen-suscripciones-barrios.component';
 
 @NgModule({
   declarations: [
@@ -32,11 +37,17 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     CardResumenCuotasPendientesComponent,
     CardResumenEstadosComponent,
     CardResumenSuscripcionesGruposServiciosComponent,
-    CardResumenSuscripcionesDepartDistritoComponent,
     VistaEstadisticasVentasComponent,
     ContenidoEstadisticasVentasComponent,
     CardResumenVentasGruposServiciosComponent,
-    CardResumenVentasCobradoresComponent
+    CardResumenVentasCobradoresComponent,
+    CardResumenSuscripcionesGruposServiciosComponent,
+    TablaResumenSuscripcionesGruposComponent,
+    TablaResumenSuscripcionesServiciosComponent,
+    CardResumenSuscripcionesUbicacionesComponent,
+    TablaResumenSuscripcionesDepartamentosComponent,
+    TablaResumenSuscripcionesDistritosComponent,
+    TablaResumenSuscripcionesBarriosComponent
   ],
   imports: [
     CommonModule,

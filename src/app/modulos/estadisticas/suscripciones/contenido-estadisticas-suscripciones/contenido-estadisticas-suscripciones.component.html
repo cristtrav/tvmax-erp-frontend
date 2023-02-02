@@ -1,19 +1,19 @@
 <div nz-row [nzGutter]="[16, 16]">
     <div nz-col nzSpan="6">
         <nz-card>
-            <nz-statistic nzTitle="Total" [nzValue]="totalSuscripciones"></nz-statistic>
+            <nz-statistic nzTitle="Total" [nzValue]="(totalSuscripciones | number)!"></nz-statistic>
         </nz-card>
     </div>
 
     <div nz-col nzSpan="6">
         <nz-card>
-            <nz-statistic nzTitle="Activas" [nzValue]="totalSuscActivos"></nz-statistic>
+            <nz-statistic nzTitle="Activas" [nzValue]="(totalSuscActivos | number)!"></nz-statistic>
         </nz-card>
     </div>
 
     <div nz-col nzSpan="6">
         <nz-card>
-            <nz-statistic nzTitle="Inactivas" [nzValue]="totalSuscInactivos"></nz-statistic>
+            <nz-statistic nzTitle="Desconectadas" [nzValue]="(totalSuscDesconectadas | number)!"></nz-statistic>
         </nz-card>
     </div>
     
@@ -25,27 +25,28 @@
     <div nz-col nzSpan="12">
         <app-card-resumen-cuotas-pendientes
             [paramsFiltros]="paramsFiltros"
-            [textoBusqueda]="textoBusqueda"
-            (totalDeudaChange)="totalDeuda = $event"
-            (totalSuscripcionesChange)="totalSuscripciones = $event">
+            [textoBusqueda]="textoBusqueda">
         </app-card-resumen-cuotas-pendientes>
     </div>
 
     <div nz-col nzSpan="12">
         <app-card-resumen-estados
         [paramsFiltros]="paramsFiltros"
-        [textoBusqueda]="textoBusqueda"
-        (totalActivosChange)="totalSuscActivos = $event"
-        (totalInactivosChange)="totalSuscInactivos = $event"
-        >
+        [textoBusqueda]="textoBusqueda">
     </app-card-resumen-estados>
     </div>
 
     <div nz-col nzSpan="12">
-        <app-card-resumen-suscripciones-grupos-servicios [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda"></app-card-resumen-suscripciones-grupos-servicios>
+        <app-card-resumen-suscripciones-grupos-servicios
+            [paramsFiltros]="paramsFiltros"
+            [textoBusqueda]="textoBusqueda">
+        </app-card-resumen-suscripciones-grupos-servicios>
     </div>
 
     <div nz-col nzSpan="12">
-        <app-card-resumen-suscripciones-depart-distrito [paramsFiltros]="paramsFiltros" [textoBusqueda]="textoBusqueda"></app-card-resumen-suscripciones-depart-distrito>
+        <app-card-resumen-suscripciones-ubicaciones
+            [paramsFiltros]="paramsFiltros"
+            [textoBusqueda]="textoBusqueda">
+        </app-card-resumen-suscripciones-ubicaciones>        
     </div>
 </div>
