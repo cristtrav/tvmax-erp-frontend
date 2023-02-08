@@ -8,6 +8,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tabla-ventas',
@@ -72,19 +73,21 @@ export class TablaVentasComponent implements OnInit {
 
   cargarVentas() {
     this.loadingVentas = true;
-    this.ventasSrv.get(this.getHttpParams()).subscribe({
+    forkJoin({
+      ventas: this.ventasSrv.get(this.getHttpParams()),
+      total: this.ventasSrv.getTotal(this.getHttpParams())
+    }).subscribe({
       next: (resp) => {
-        this.totalRegisters = resp.queryRowCount;
-        this.lstFacturasVenta = resp.data;
-        resp.data.forEach(v => {
+        this.lstFacturasVenta = resp.ventas;
+        this.totalRegisters = resp.total;
+        this.lstFacturasVenta.forEach(v => {
           if (v.id) this.loadingDetalleMap[v.id] = false;
         });
         this.loadingVentas = false;
       },
       error: (e) => {
-        console.log('Error al consultar ventas');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.error('Error al consultar ventas', e);
+        this.httpErrorHandler.process(e);
         this.loadingVentas = false;
       }
     });

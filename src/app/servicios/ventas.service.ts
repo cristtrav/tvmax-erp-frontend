@@ -23,8 +23,12 @@ export class VentasService {
     return this.http.post<number>(this.url, fv, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<ServerResponseList<Venta>>{
-    return this.http.get<ServerResponseList<Venta>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Venta[]>{
+    return this.http.get<Venta[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getTotal(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   anular(idventa: number): Observable<any>{

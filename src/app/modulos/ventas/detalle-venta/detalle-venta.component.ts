@@ -201,7 +201,7 @@ export class DetalleVentaComponent implements OnInit {
             this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
             this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
             this.lstDetallesVenta = fv.detalles;
-            if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(Date.parse(fv.fechafactura)));
+            if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(fv.fechafactura);
           },
           error: (er) => {
             console.log('Error al cargar cliente de la factura')
@@ -326,9 +326,8 @@ export class DetalleVentaComponent implements OnInit {
         this.notif.create('success', '<strong>Éxito</strong>', 'Se guardó la factura de venta correctamente.');
       },
       error: (e) => {
-        console.log('Error al registrar venta');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.error('Error al registrar venta', e);
+        this.httpErrorHandler.process(e);
         this.guardandoFactura = false;
       }
     });
@@ -559,9 +558,14 @@ export class DetalleVentaComponent implements OnInit {
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
     fv.pagado = true;
     fv.idcliente = this.formCabecera.get('idCliente')?.value;
+    //fv.fechafactura = this.formCabecera.get('fecha')?.value;
+    //fv.fechacobro = this.formCabecera.get('fecha')?.value;    
     const date: Date = this.formCabecera.get('fecha')?.value;
-    fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
-    fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');
+    const fechaSinHora: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    fv.fechacobro = fechaSinHora;
+    fv.fechafactura = fechaSinHora;
+    /*fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
+    fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');*/
     fv.idfuncionarioregistrocobro = this.sesionSrv.idusuario;
     if (this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
     fv.idfuncionarioregistrofactura = this.sesionSrv.idusuario;
