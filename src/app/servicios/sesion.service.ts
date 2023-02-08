@@ -10,8 +10,6 @@ import { AppSettings } from '../util/app-settings';
 })
 export class SesionService {
 
-  
-
   private url = `${AppSettings.urlAPI}/sesion`;
   private idusuarioBehavior: BehaviorSubject<number> = new BehaviorSubject(-1);
   private nombreBehavior: BehaviorSubject<string> = new BehaviorSubject('(Sin usuario)');

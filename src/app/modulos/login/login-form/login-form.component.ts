@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SesionService } from '../../../servicios/sesion.service';
 
@@ -16,86 +16,48 @@ export class LoginFormComponent implements OnInit {
   tituloMsg: string = 'Error al iniciar sesion';
   descripcionMsg: string = ''
 
-  form: UntypedFormGroup = this.fb.group({
-    ci: [null, [Validators.required]],
-    pwd: [null, [Validators.required]]
+  form: FormGroup = new FormGroup({
+    ci: new FormControl(null, [Validators.required]),
+    pwd: new FormControl(null, [Validators.required])
   });
 
   constructor(
-    private fb: UntypedFormBuilder,
     private sesionSrv: SesionService,
     private router: Router
   ) { }
 
-  ngOnInit(): void {
-    //this.comprobarSesion();
+  ngOnInit(): void {    
   }
 
   doLogin() {
-    if (this.validado()) {
+    Object.keys(this.form.controls).forEach(ctrlName => {
+      this.form.get(ctrlName)?.markAsDirty();
+      this.form.get(ctrlName)?.updateValueAndValidity();
+    })
+    if (this.form.valid) {
       this.loginLoading = true;
-      const ci = this.form.get('ci')?.value;
-      const pwd = this.form.get('pwd')?.value;
-      this.sesionSrv.login(ci, pwd).subscribe((data) => {
-        this.loginLoading = false;
-        this.router.navigate(['/app/dashboard']);
-      }, (e) => {
-        console.log('Error al iniciar sesión');
-        console.log(e);
-        this.loginLoading = false;
-        this.msgVisible = true;
-        if (e.status === 500) {
-          this.tituloMsg = 'Error al iniciar sesión';
-          this.descripcionMsg = e.error;
-        } else {
-          this.tituloMsg = 'Documento y/o contraseña incorrectos.';
-          this.descripcionMsg = '';
-        }
-      });
-    }
-
-  }
-
-  private validado(): boolean {
-    let val = true;
-    Object.keys(this.form.controls).forEach((key) => {
-      const ctrl = this.form.get(key);
-      if (ctrl !== null) {
-        ctrl.markAsDirty();
-        ctrl.updateValueAndValidity();
-        if (!ctrl.disabled) {
-          val = val && ctrl.valid;
-        }
-      }
-    });
-    return val;
-  }
-
-  private comprobarSesion(): void {
-    const rtoken = localStorage.getItem('refreshToken');
-    if (rtoken) {
-      this.sesionSrv.refresh(rtoken).subscribe((data) => {
-        localStorage.setItem('accessToken', data.accessToken);
-        this.router.navigateByUrl('/app/dashboard');
-      }, (e) => {
-        console.log('Error al actualizar sesion');
-        console.log(e);
-        switch (e.status) {
-          case 500:
-            this.tituloMsg = 'Error al actualizar sesión.'
+      const ci = this.form.controls.ci.value;
+      const pwd = this.form.controls.pwd.value;
+      this.sesionSrv.login(ci, pwd).subscribe({
+        next: () => {
+          this.loginLoading = false;
+          this.router.navigate(['/app', 'dashboard']);
+        },
+        error: (e) => {
+          this.loginLoading = false;
+          this.msgVisible = true;
+          console.log('Error al iniciar sesion', e);
+          if (e.status === 500) {
+            this.tituloMsg = 'Error al iniciar sesión';
             this.descripcionMsg = e.error;
-            this.msgVisible = true;
-            break;
-          case 401:
-          case 403:
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('accessToken');
-            break;
-          default:
-            break;
+          } else {
+            this.tituloMsg = 'Documento y/o contraseña incorrectos.';
+            this.descripcionMsg = '';
+          }
         }
       });
     }
+
   }
 
 }
