@@ -1,11 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { DetalleVentaCobro } from '@dto/detalle-venta-cobro.dto';
+import { CobroDetalleVenta } from '@dto/cobro-detalle-venta.dto';
+import { CobrosService } from '@servicios/cobros.service';
 import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tabla-detalle-ventas-cobros',
@@ -40,7 +42,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
   private _textoBusqueda: string = '';
   timerBusqueda: any;
 
-  public lstDetallesCobros: DetalleVentaCobro[] = [];
+  public lstDetallesCobros: CobroDetalleVenta[] = [];
   public cargandoDetalles: boolean = false;
   public pageSize: number = 10;
   public pageIndex: number = 1;
@@ -49,7 +51,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
   expandSet = new Set<number>();
 
   constructor(
-    private ventaSrv: VentasService,
+    private cobrosSrv: CobrosService,
     private httpErrorHanler: HttpErrorResponseHandlerService
   ) { }
 
@@ -67,7 +69,22 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
 
   cargarDetalleCobro(){    
     this.cargandoDetalles = true;
-    this.ventaSrv.getDetallesVentaCobros(this.getHttpParams()).subscribe({
+    forkJoin({
+      detallesCobros: this.cobrosSrv.getCobrosDetalles(this.getHttpParams()),
+      total: this.cobrosSrv.getTotalCobrosDetalles(this.getHttpParams())
+    }).subscribe({
+      next: (resp) => {
+        this.lstDetallesCobros = resp.detallesCobros;
+        this.totalRegisters = resp.total;
+        this.cargandoDetalles = false;
+      },
+      error: (e) => {
+        console.error('Error al consultar detalles de cobros', e);
+        this.httpErrorHanler.process(e);
+        this.cargandoDetalles = false;
+      }
+    })
+    /*this.ventaSrv.getDetallesVentaCobros(this.getHttpParams()).subscribe({
       next: (resp) => {
         this.cargandoDetalles = false;
         this.lstDetallesCobros = resp.data;
@@ -79,7 +96,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
         this.httpErrorHanler.handle(e,'cargar detalles de ventas');
         this.cargandoDetalles = false;
       }
-    });
+    });*/
   }
 
   onTableQueryParamsChange(tParams: NzTableQueryParams) {

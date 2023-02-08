@@ -19,7 +19,7 @@
             <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
             <th [nzColumnKey]="'grupo'" [nzSortFn]="true">Grupo</th>
             <th [nzColumnKey]="'monto'" [nzSortFn]="true">Monto</th>
-            <th [nzColumnKey]="'fecha_cobro'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Cobro</th>
+            <th [nzColumnKey]="'fechacobro'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Cobro</th>
             <th [nzColumnKey]="'facturacobro'" [nzSortFn]="true">Factura</th>
         </tr>
     </thead>
@@ -28,13 +28,16 @@
             <tr>
                 <td [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)" (nzExpandChange)="onExpandChange(detalle.iddetalleventa ?? 0, $event)"></td>
                 <!--<td>{{ detalle.ci | number }}</td>-->
-                <td>{{ detalle.cobrador }}</td>
+                <td>
+                    <span *ngIf="!detalle.cobrador" nz-typography nzType="secondary">(sin cobrador)</span>
+                    {{ detalle.cobrador }}
+                </td>
                 <td>{{ detalle.cliente }}</td>
                 <td>{{ detalle.servicio }}</td>
                 <td>{{ detalle.grupo }}</td>
                 <td nzAlign="right">Gs.{{ detalle.monto | number }}</td>
                 <td>
-                    <span *ngIf="!detalle.fechacobro" nz-typography nzType="secondary">-</span>
+                    <span *ngIf="!detalle.fechacobro" nz-typography nzType="secondary">(sin fecha)</span>
                     <span *ngIf="detalle.fechacobro">{{ detalle.fechacobro | date: 'dd/MM/yy' }}</span>
                 </td>
                 <td>

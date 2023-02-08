@@ -96,10 +96,10 @@ export class TablaVentasComponent implements OnInit {
   private cargarDetalleVenta(idventa: number): void{
     this.loadingDetalleMap[idventa] = true;
     this.ventasSrv.getDetallePorIdVenta(idventa).subscribe({
-      next: (resp) => {
+      next: (detalles) => {
         for(let v of this.lstFacturasVenta){
           if(v.id === idventa){
-            v.detalles = resp.data;
+            v.detalles = detalles;
             break;
           }
         }
