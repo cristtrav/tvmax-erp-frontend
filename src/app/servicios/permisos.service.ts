@@ -17,12 +17,12 @@ export class PermisosService {
     private http: HttpClient
   ) { }
 
-  getModulosFuncionalidades(params: HttpParams): Observable<ServerResponseList<Modulo>>{
-    return this.http.get<ServerResponseList<Modulo>>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  getModulosFuncionalidades(params: HttpParams): Observable<Modulo[]>{
+    return this.http.get<Modulo[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getPermisosUsuario(idusuario: number, params: HttpParams): Observable<ServerResponseList<Funcionalidad>> {
-    return this.http.get<ServerResponseList<Funcionalidad>>(`${this.url}/${idusuario}`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getPermisosUsuario(idusuario: number, params: HttpParams): Observable<Funcionalidad[]> {
+    return this.http.get<Funcionalidad[]>(`${this.url}/${idusuario}`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   putPermisosUsuario(idusuario: number, funcionalidades: number[]): Observable<any>{
