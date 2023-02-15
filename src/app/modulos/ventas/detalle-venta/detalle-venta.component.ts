@@ -566,9 +566,9 @@ export class DetalleVentaComponent implements OnInit {
     fv.fechafactura = fechaSinHora;
     /*fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
     fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');*/
-    fv.idfuncionarioregistrocobro = this.sesionSrv.idusuario;
+    fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
     if (this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
-    fv.idfuncionarioregistrofactura = this.sesionSrv.idusuario;
+    fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
     return fv;
   }
 

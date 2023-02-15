@@ -21,6 +21,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 registerLocaleData(es);
 
@@ -42,7 +43,8 @@ registerLocaleData(es);
     NzGridModule,
     NzDropDownModule,
     NzSpaceModule,
-    NzNotificationModule
+    NzNotificationModule,
+    NzModalModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: es_ES },

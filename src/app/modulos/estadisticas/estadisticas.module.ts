@@ -29,6 +29,8 @@ import { CardResumenSuscripcionesUbicacionesComponent } from './suscripciones/ca
 import { TablaResumenSuscripcionesDepartamentosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-departamentos/tabla-resumen-suscripciones-departamentos.component';
 import { TablaResumenSuscripcionesDistritosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-distritos/tabla-resumen-suscripciones-distritos.component';
 import { TablaResumenSuscripcionesBarriosComponent } from './suscripciones/card-resumen-suscripciones-ubicaciones/tabla-resumen-suscripciones-barrios/tabla-resumen-suscripciones-barrios.component';
+import { TablaResumenVentasGruposComponent } from './ventas/card-resumen-ventas-grupos-servicios/tabla-resumen-ventas-grupos/tabla-resumen-ventas-grupos.component';
+import { TablaResumenVentasServiciosComponent } from './ventas/card-resumen-ventas-grupos-servicios/tabla-resumen-ventas-servicios/tabla-resumen-ventas-servicios.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { TablaResumenSuscripcionesBarriosComponent } from './suscripciones/card-
     CardResumenSuscripcionesUbicacionesComponent,
     TablaResumenSuscripcionesDepartamentosComponent,
     TablaResumenSuscripcionesDistritosComponent,
-    TablaResumenSuscripcionesBarriosComponent
+    TablaResumenSuscripcionesBarriosComponent,
+    TablaResumenVentasGruposComponent,
+    TablaResumenVentasServiciosComponent
   ],
   imports: [
     CommonModule,

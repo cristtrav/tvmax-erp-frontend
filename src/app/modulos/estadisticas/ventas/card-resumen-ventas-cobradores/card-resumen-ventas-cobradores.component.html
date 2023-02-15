@@ -9,26 +9,39 @@
         </button>
     </ng-template>
 
-    <nz-table #tabla [nzData]="lstResumenDatos" [nzShowSizeChanger]="false" [nzShowPagination]="false"
-        [nzLoading]="loadingDatos" nzSize="small">
+    <nz-table
+        #tabla
+        nzSize="small"
+        [nzData]="lstResumenDatos"
+        [nzShowSizeChanger]="true"
+        [nzPageSize]="pageSize"
+        [nzPageIndex]="pageIndex"
+        [nzTotal]="totalRegisters"
+        [nzLoading]="loadingDatos" 
+        [nzFooter]="pieTabla"
+        [nzFrontPagination]="false"
+        (nzQueryParams)="onQueryParamsChange($event)">
         <thead>
             <tr>
-                <th>Cobrador</th>
-                <th>{{ tituloColumnaMonto }}</th>
+                <th [nzColumnKey]="'cobrador'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Cobrador</th>
+                <th [nzColumnKey]="'monto'" [nzSortFn]="true">{{ tituloColumnaMonto }}</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let ri of tabla.data">
                 <td>
-                    <span *ngIf="ri.referencia" nz-tooltip [nzTooltipTitle]="'Código: '+ri.idreferencia">
-                        {{ ri.referencia }}
+                    <span *ngIf="ri.idcobrador" nz-tooltip [nzTooltipTitle]="'Código: '+ri.idcobrador">
+                        {{ ri.cobrador }}
                     </span>
-                    <span *ngIf="!ri.referencia" style="color: gray;">(Sin cobrador)</span>
+                    <span *ngIf="!ri.idcobrador" nz-typography nzType="secondary">(Sin cobrador)</span>
                 </td>
                 <td [nzAlign]="'right'">
                     <span>Gs. {{ ri.monto | number }}</span>
                 </td>
             </tr>
         </tbody>
+        <ng-template #pieTabla>
+            <strong>Total de registros: </strong>{{ totalRegisters | number }}
+        </ng-template>
     </nz-table>
 </nz-card>

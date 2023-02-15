@@ -1,8 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
-import { ResumenCobradoresVentas } from '@dto/resumen-cobradores-ventas.dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
+import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -11,11 +9,11 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-card-resumen-ventas-cobradores',
-  templateUrl: './card-resumen-ventas-cobradores.component.html',
-  styleUrls: ['./card-resumen-ventas-cobradores.component.scss']
+  selector: 'app-tabla-resumen-ventas-grupos',
+  templateUrl: './tabla-resumen-ventas-grupos.component.html',
+  styleUrls: ['./tabla-resumen-ventas-grupos.component.scss']
 })
-export class CardResumenVentasCobradoresComponent implements OnInit {
+export class TablaResumenVentasGruposComponent implements OnInit {
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -41,18 +39,18 @@ export class CardResumenVentasCobradoresComponent implements OnInit {
   private _textoBusqueda: string = '';
   private timerBusqueda: any;
 
-  lstResumenDatos: ResumenCobradoresVentas[] = [];
-  loadingDatos: boolean = false;
-  tituloColumnaMonto = 'Total pagado';
-  
+  tituloColumnaMonto: string = 'Total pagado';
+  loadingResumen: boolean = false;
+  lstResumenGrupos: ResumenGruposVentas[] = [];
+
   totalRegisters: number = 0;
   pageSize: number = 10;
   pageIndex: number = 1;
-  sortStr: string | null = '+cobrador';
+  sortStr: string | null = '+grupo'; 
 
   constructor(
     private ventasSrv: VentasService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService 
   ) { }
 
   ngOnInit(): void {
@@ -72,29 +70,28 @@ export class CardResumenVentasCobradoresComponent implements OnInit {
     }
     let params: HttpParams = new HttpParams().appendAll(p);
     params = params.append('eliminado', 'false');
-    params = params.append('offset', (this.pageIndex - 1)* this.pageSize);
-    params = params.append('limit', this.pageSize)
+    params = params.append('offset', (this.pageIndex-1)*this.pageSize);
     if(this.sortStr) params = params.append('sort', this.sortStr);
+    params = params.append('limit', this.pageSize);
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     return params;
   }
 
-  cargarDatos() {
-    this.loadingDatos = true;
+  cargarDatos(){
+    this.loadingResumen = true;
     forkJoin({
-      resumenes: this.ventasSrv.getResumenCobradores(this.getHttpQueryParams()),
-      total: this.ventasSrv.getTotalResumenCobradores(this.getHttpQueryParams())
+      resumenes: this.ventasSrv.getResumenGrupos(this.getHttpQueryParams()),
+      total: this.ventasSrv.getTotalResumenGrupos(this.getHttpQueryParams())
     }).subscribe({
       next: (resp) => {
-        this.lstResumenDatos = resp.resumenes;
+        this.loadingResumen = false;
+        this.lstResumenGrupos = resp.resumenes;
         this.totalRegisters = resp.total;
-        this.loadingDatos = false;
       },
       error: (e) => {
-        console.log('Error al consultar resumen de ventas por cobradores');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.loadingDatos = false;
+        console.error('Error al cargar resumenes de ventas por grupo', e);
+        this.httpErrorHandler.process(e);
+        this.loadingResumen = false;
       }
     });
   }

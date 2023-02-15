@@ -163,8 +163,8 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
 
   private cargarMontoTotalPagado() {
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
+    let params: HttpParams = new HttpParams()
+    .append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (p['pagado'] == 'false' || p['anulado'] == 'true') {
@@ -175,14 +175,16 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       params = params.appendAll(p);
 
       this.loadingMontoPagado = true;
-      this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
-        this.montoTotalPagado = m;
-        this.loadingMontoPagado = false;
-      }, (e) => {
-        console.log('Error al cargar monto total pagado de facturas');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.loadingMontoPagado = false;
+      this.ventasSrv.getMontoTotal(params).subscribe({
+        next: (monto) => {
+          this.montoTotalPagado = monto;
+          this.loadingMontoPagado = false;
+        },
+        error: (e) => {
+          console.error('Error al cargar monto total de ventas', e);
+          this.httpErrorHandler.process(e);
+          this.loadingMontoPagado = false;
+        }
       });
     }
 
@@ -215,8 +217,8 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
   }
 
   private cargarMontoTotalPendiente() {
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
+    let params: HttpParams = new HttpParams()
+    .append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (p['anulado'] == 'true' || p['pagado'] == 'true') {
@@ -226,7 +228,19 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       p['pagado'] = 'false';
       params = params.appendAll(p);
       this.loadingMontoPendiente = true;
-      this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
+      this.ventasSrv.getMontoTotal(params).subscribe({
+        next: (monto) => {
+          this.montoTotalPendiente = monto;
+          this.loadingMontoPendiente = false;
+        },
+        error: (e) => {
+          console.log('Error al cargar monto pendiente', e);
+          this.httpErrorHandler.process(e);
+          this.loadingMontoPendiente = false;
+        }
+      })
+      /*this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
+        console.log('monto pendiente', m);
         this.montoTotalPendiente = m;
         this.loadingMontoPendiente = false;
       }, (e) => {
@@ -234,7 +248,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
         console.log(e);
         this.httpErrorHandler.handle(e);
         this.loadingMontoPendiente = false;
-      });
+      });*/
     }
 
   }

@@ -24,9 +24,9 @@ export class Venta {
     fechacobro: Date | null = null;
     idcobradorcomision: number | null = null;
     cobrador: string | null = null;
-    idfuncionarioregistrofactura: number | null = null;
-    funcionarioregistrofactura: string | null = null;
-    idfuncionarioregistrocobro: number | null = null;
-    funcionarioregistrocobro: string | null = null;
+    idusuarioregistrofactura: number | null = null;
+    usuarioregistrofactura: string | null = null;
+    idusuarioregistrocobro: number | null = null;
+    usuarioregistrocobro: string | null = null;
     detalles: DetalleVenta [] = [];
 }

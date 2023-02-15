@@ -1,0 +1,28 @@
+<nz-table
+    #tabla
+    nzSize="small"
+    [nzData]="lstResumenGrupos"
+    [nzShowSizeChanger]="true"
+    [nzTotal]="totalRegisters"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzFrontPagination]="false"
+    [nzLoading]="loadingResumen"
+    [nzFooter]="pieTabla"
+    (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th [nzColumnKey]="'grupo'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Grupo</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true">{{ tituloColumnaMonto }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let resumen of tabla.data">
+            <td>{{ resumen.grupo }}</td>
+            <td nzAlign="right">Gs.{{ resumen.monto | number }}</td>
+        </tr>
+    </tbody>
+    <ng-template #pieTabla>
+        <strong>Total de registros: </strong>{{ totalRegisters | number }}
+    </ng-template>
+</nz-table>

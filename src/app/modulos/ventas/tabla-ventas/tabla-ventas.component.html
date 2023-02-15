@@ -61,7 +61,7 @@
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulousuarioreg">
                         <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
-                        {{ fv.funcionarioregistrocobro }}
+                        {{ fv.usuarioregistrocobro }}
                     </nz-descriptions-item>
                 </nz-descriptions>
                 <nz-table #tablaDetalle [nzLoading]="loadingDetalleMap[fv.id?fv.id:0]" [nzData]="fv.detalles"
