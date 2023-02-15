@@ -4,7 +4,6 @@ import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '@util/extra';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { forkJoin } from 'rxjs';

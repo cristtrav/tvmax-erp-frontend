@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ServiciosService } from './../../../servicios/servicios.service';
@@ -7,7 +7,6 @@ import { CuotaDTO } from 'src/app/dto/cuota-dto';
 import { CuotasService } from './../../../servicios/cuotas.service';
 import { Extra } from './../../../util/extra';
 import { HttpParams } from '@angular/common/http';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { HttpErrorResponseHandlerService } from './../../../util/http-error-response-handler.service';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Suscripcion } from '@dto/suscripcion-dto';

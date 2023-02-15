@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ServerResponseList } from '../dto/server-response-list.dto';
 import { Usuario } from '@dto/usuario.dto';
 
 @Injectable({

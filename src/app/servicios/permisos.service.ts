@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { Modulo } from '@dto/modulo-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 

@@ -1,7 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Venta } from '@dto/venta.dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';

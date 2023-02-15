@@ -3,7 +3,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { BarriosService } from '@servicios/barrios.service';
 import { DepartamentosService } from '@servicios/departamentos.service';
 import { DistritosService } from '@servicios/distritos.service';

@@ -8,7 +8,6 @@ import { BarriosService } from './../../../servicios/barrios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-barrio',

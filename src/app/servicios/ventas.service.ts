@@ -2,8 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { Venta } from '@dto/venta.dto';
-import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';

@@ -5,7 +5,6 @@ import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
 import { Grupo } from '@dto/grupo-dto';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { BarriosService } from '@servicios/barrios.service';

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Timbrado } from '../dto/timbrado.dto';
 import { AppSettings } from './../util/app-settings';
 import { HttpClient } from '@angular/common/http';
-import { ServerResponseList } from '@dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'

@@ -3,7 +3,6 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Domicilio } from '../dto/domicilio-dto';
 import { Observable } from 'rxjs';
-import { ServerResponseList } from '../dto/server-response-list.dto'; 
 
 @Injectable({
   providedIn: 'root'

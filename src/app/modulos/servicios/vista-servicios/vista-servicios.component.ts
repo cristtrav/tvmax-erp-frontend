@@ -4,11 +4,9 @@ import { ServiciosService } from 'src/app/servicios/servicios.service';
 import { Servicio } from './../../../dto/servicio-dto';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 import { HttpParams } from '@angular/common/http';
 import { GruposService } from '@servicios/grupos.service';
-import { Grupo } from '@dto/grupo-dto';
-import { forkJoin, timer } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-servicios',

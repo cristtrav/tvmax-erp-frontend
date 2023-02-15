@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Servicio } from './../dto/servicio-dto';
 import { AppSettings } from './../util/app-settings';
-import { ServerResponseList } from '../dto/server-response-list.dto';
 
 @Injectable({
   providedIn: 'root'

@@ -8,7 +8,6 @@ import { ServiciosService } from './../../../servicios/servicios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { HttpParams } from '@angular/common/http';
-import { ServerResponseList } from '../../../dto/server-response-list.dto';
 
 @Component({
   selector: 'app-detalle-servicio',
