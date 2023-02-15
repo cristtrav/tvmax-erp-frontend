@@ -64,8 +64,8 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('sort', '+descripcion');
     this.auditoriaSrv.getTablas(params).subscribe({
-      next: (response) => {
-        this.lstTablas = response.data
+      next: (tablas) => {
+        this.lstTablas = tablas;
       },
       error: (e) => {
         console.log('Error al cargar tablas de auditoria')

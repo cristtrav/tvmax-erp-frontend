@@ -82,7 +82,7 @@
                     <ng-container *ngFor="let ea of tabla.data">
                         <tr>
                             <td>{{ ea.id }}</td>
-                            <td>{{ ea.fechahora | date: 'dd/MM/yy HH:mm:ss' }}</td>
+                            <td>{{ ea.fechahora | date: 'dd/MMM/yy HH:mm:ss' }}</td>
                             <td>
                                 <span nz-tooltip [nzTooltipTitle]="'Código: '+ea.idusuario">
                                     {{ ea.nombresusuario }} {{ ea.apellidosusuario }}
@@ -114,7 +114,7 @@
                     </ng-container>
                 </tbody>
                 <ng-template #footer>
-                    <strong>Total:</strong> {{ totalRegistros }}
+                    <strong>Total de registros:</strong> {{ totalRegistros | number }}
                 </ng-template>
             </nz-table>
         </div>

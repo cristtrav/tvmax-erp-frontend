@@ -10,7 +10,7 @@
         </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." [(ngModel)]="idUsuarioSelec" (ngModelChange)="onParamsFiltroChange()"
             style="width: 100%;">
-            <nz-option *ngFor="let u of lstUsuarios" [nzValue]="u.id" [nzLabel]="u.nombres+' '+u.apellidos"></nz-option>
+            <nz-option *ngFor="let u of lstUsuarios" [nzValue]="u.id" [nzLabel]="u.nombres+' '+(u.apellidos ?? '')"></nz-option>
         </nz-select>
     </div>
 
