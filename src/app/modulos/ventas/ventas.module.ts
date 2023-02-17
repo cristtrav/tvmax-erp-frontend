@@ -38,13 +38,17 @@ import { FormFiltrosVentasComponent } from './form-filtros-ventas/form-filtros-v
 import { TablaVentasComponent } from './tabla-ventas/tabla-ventas.component';
 import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { CuotasPendientesComponent } from './detalle-venta/cuotas-pendientes/cuotas-pendientes.component';
+import { ServiciosComponent } from './detalle-venta/servicios/servicios.component';
 
 @NgModule({
   declarations: [
     VistaVentasComponent,
     DetalleVentaComponent,
     FormFiltrosVentasComponent,
-    TablaVentasComponent
+    TablaVentasComponent,
+    CuotasPendientesComponent,
+    ServiciosComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,65 @@
+<nz-alert *ngIf="!idcliente" nzShowIcon nzType="warning" nzMessage="Ningún cliente seleccionado" style="margin-bottom: 10px;"></nz-alert>
+<nz-spin [nzSpinning]="loadingServicios">
+    <nz-collapse nzAccordion>
+        <nz-collapse-panel *ngIf="lstGrupos.length === 0" nzHeader="Sin servicios"
+            [nzDisabled]="true"></nz-collapse-panel>
+        <nz-collapse-panel *ngFor="let grupo of lstGrupos; let isFirst = first" [nzHeader]="grupo.descripcion ?? ''"
+            [nzActive]="isFirst">
+            <nz-table #tabla nzSize="small" [nzData]="mapGruposServicios.get(grupo.id ?? -1) ?? []"
+                [nzShowPagination]="false">
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th nzAlign="center">Monto</th>
+                        <th nzAlign="center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let servicio of tabla.data">
+                        <td>{{ servicio.descripcion }}</td>
+                        <td nzAlign="right">Gs.{{ servicio.precio | number }}</td>
+                        <td nzAlign="center">
+                            <button
+                                nz-button
+                                nzType="primary"
+                                nz-dropdown
+                                [nzDropdownMenu]="menuSuscripciones"
+                                nzTrigger="click"
+                                [disabled]="idcliente == null">
+                                <i nz-icon nzType="plus"></i>
+                            </button>
+                            <nz-dropdown-menu #menuSuscripciones="nzDropdownMenu">
+                                <ul nz-menu>
+                                    <li *ngIf="lstSuscripciones.length === 0" nz-menu-item nzDisabled="true">
+                                        Ningún cliente seleccionado
+                                    </li>
+                                    <li *ngFor="let suscripcion of lstSuscripciones" nz-menu-item (click)="agregarServicioEnDetalle(servicio, suscripcion)">
+                                        <div nz-row [nzGutter]="[8,8]">
+                                            <div nz-col>
+                                                <span nz-typography nzType="secondary">{{ suscripcion.id }}</span>
+                                            </div>
+                                            <div nz-col>
+                                                <span>
+                                                    <strong>{{ suscripcion.servicio }}</strong>
+                                                </span>
+                                            </div>
+                                            <div nz-col>
+                                                <nz-tag *ngIf="suscripcion.estado === 'C'"
+                                                    nzColor="green">Conectado</nz-tag>
+                                                <nz-tag *ngIf="suscripcion.estado === 'R'"
+                                                    nzColor="green">Reconectado</nz-tag>
+                                                <nz-tag *ngIf="suscripcion.estado === 'D'"
+                                                    nzColor="red">Desconectado</nz-tag>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-collapse-panel>
+    </nz-collapse>
+</nz-spin>

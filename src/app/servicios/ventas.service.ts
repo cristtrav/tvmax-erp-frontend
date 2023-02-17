@@ -83,8 +83,9 @@ export class VentasService {
     return this.http.get<number>(`${this.url}/resumen/monto`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getDetallePorIdVenta(idventa: number): Observable<DetalleVenta[]> {
-    return this.http.get<DetalleVenta[]>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
+  getDetallePorIdVenta(idventa: number, params?: HttpParams): Observable<DetalleVenta[]> {
+    if(params) return this.http.get<DetalleVenta[]>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuthWithParams(params));
+    else return this.http.get<DetalleVenta[]>(`${this.url}/${idventa}/detalles`, AppSettings.getHttpOptionsAuth());
   }
 
   getTotalDetallesPorIdVenta(idventa: number): Observable<number> {

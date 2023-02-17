@@ -3,25 +3,23 @@ import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
-import { CuotasService } from '@servicios/cuotas.service';
-import { ServiciosService } from '@servicios/servicios.service';
 import { Servicio } from '@dto/servicio-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { formatDate } from '@angular/common';
 import { Venta } from '@dto/venta.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Grupo } from '@dto/grupo-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import { Extra } from '@util/extra';
 import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
 import { SesionService } from '@servicios/sesion.service';
+import { CuotasPendientesComponent } from './cuotas-pendientes/cuotas-pendientes.component';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -34,20 +32,23 @@ export class DetalleVentaComponent implements OnInit {
   @ViewChild("iframe") iframe!: ElementRef; // target host to render the printable
   private portalHost!: PortalOutlet;
 
+  @ViewChild('cuotasPendientes')
+  cuotasPendientesComp!: CuotasPendientesComponent;
+
   idventa: string = 'nueva'
   lstTimbrados: Timbrado[] = [];
   lstClientes: Cliente[] = [];
-  lstSuscServCuotas: ISuscripcionServicioCuota[] = [];
   lstDetallesVenta: DetalleVenta[] = [];
-  lstGruposServicios: IGrupoServicio[] = [];
+  dvRuc: string | null = null;
 
-  clienteSeleccionado: Cliente | null = null;
+  //clienteSeleccionado: Cliente | null = null;
 
-  formCabecera: UntypedFormGroup = this.formBuilder.group({
-    nroFactura: [null, [Validators.required]],
-    idTimbrado: [null, [Validators.required]],
-    fecha: [new Date(), Validators.required],
-    idCliente: [null, [Validators.required]]
+  formCabecera: FormGroup = new FormGroup({
+    nroFactura: new FormControl(null, [Validators.required]),
+    idTimbrado: new FormControl(null, [Validators.required]),
+    fecha: new FormControl(new Date(), Validators.required),
+    idCliente: new FormControl(null, [Validators.required]),
+    ci: new FormControl(null)
   });
 
   errorTipNroFactura: string = 'hola mundo ';
@@ -63,7 +64,7 @@ export class DetalleVentaComponent implements OnInit {
 
   loadingClientes: boolean = false;
   loadingMasClientes: boolean = false;
-  loadingSuscripcionesCli: boolean = false;
+  loadingCantidadCuotas: boolean = false;
   guardandoFactura: boolean = false;
 
   lastSearchStrCli: string = '';
@@ -71,13 +72,12 @@ export class DetalleVentaComponent implements OnInit {
   modalCuotasVisible: boolean = false;
   modalServiciosVisible: boolean = false;
 
+  mapCuotaEnDetalle: Map<number, boolean> = new Map();
+
   constructor(
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private formBuilder: UntypedFormBuilder,
     private clienteSrv: ClientesService,
-    private cuotasSrv: CuotasService,
-    private serviciosSrv: ServiciosService,
     private ventasSrv: VentasService,
     private router: Router,
     private aroute: ActivatedRoute,
@@ -90,8 +90,7 @@ export class DetalleVentaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const idv = this.aroute.snapshot.paramMap.get('idventa');
-    if (idv) this.idventa = idv;
+    this.idventa = this.aroute.snapshot.paramMap.get('idventa') ?? 'nueva';
     this.cargarTimbrados();
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
       this.guardarUltimoTimbradoSeleccionado(this.sesionSrv.idusuario, value);
@@ -115,107 +114,93 @@ export class DetalleVentaComponent implements OnInit {
       this.actualizarValidacionTimbrado();
     });
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
-      this.lstSuscServCuotas = [];
-      this.totalCuotasPendientes = 0;
-      this.lstDetallesVenta = [];
-      this.cargarSuscripcionesCliente();
-      this.calcularTotalFactura();
-      if (value !== null) {
-        this.cargarClienteSeleccionado(value);
+      const cliente = this.lstClientes.find(cliente => cliente.id == value);
+      if (this.idventa === 'nueva') this.lstDetallesVenta = [];
+
+      if (value) this.calcularTotalCuotasPendientes(value)
+      else this.totalCuotasPendientes = 0;
+
+      if (value && !cliente) this.agregarClienteALista(value);
+      if (cliente) {
+        this.formCabecera.controls.ci.setValue(cliente.ci);
+        this.dvRuc = cliente.dvruc != null ? `${cliente.dvruc}` : null;
       } else {
-        this.clienteSeleccionado = null;
+        this.formCabecera.controls.ci.setValue(null);
+        this.dvRuc = null;
       }
+      this.calcularTotalFactura();
     });
-    this.cargarServicios();
+
     if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
-    const idtimbradoPreferencia: number | null = this.getUltimoTimbradoSeleccionado(this.sesionSrv.idusuario);
-    if (idtimbradoPreferencia) {
-      this.formCabecera.get('idTimbrado')?.setValue(idtimbradoPreferencia);
-    }
+
+    this.formCabecera.get('idTimbrado')?.setValue(this.getUltimoTimbradoSeleccionado(this.sesionSrv.idusuario));
+
   }
 
-  private getUltimoTimbradoSeleccionado(idfuncionario: number): number | null {
-    let idtimbrado: number | null = null;
-    if (typeof (Storage) !== 'undefined') {
-      const clave: string = 'preferencias-detalle-venta';
-      const preferenciasStr: string | null = localStorage.getItem(clave);
-      let preferencias: any = preferenciasStr ? JSON.parse(preferenciasStr) : null;
+  private getUltimoTimbradoSeleccionado(idusuario: number): number | null {
 
-      if (preferencias) {
-        for (let pref of preferencias) {
-          if (pref.idfuncionario === idfuncionario) {
-            idtimbrado = pref.idUltimoTimbradoSeleccionado;
-            break;
-          }
-        }
-      }
-    }
-    return idtimbrado;
+    if (typeof (Storage) === 'undefined') return null
+    const preferenciasStr: string = localStorage.getItem('preferencias-detalle-venta') ?? '[]';
+
+    let preferencias: { idusuario: number, idUltimoTimbradoSeleccionado: number }[] = JSON.parse(preferenciasStr);
+    const pref = preferencias.find(preferencia => preferencia.idusuario == idusuario);
+    if (pref) return Number(pref.idUltimoTimbradoSeleccionado);
+    else return null;
   }
 
-  private guardarUltimoTimbradoSeleccionado(idfuncionario: number, idtimbrado: number | null) {
-    if (typeof (Storage) !== 'undefined') {
-      const clave: string = 'preferencias-detalle-venta';
-      const preferenciasStr: string | null = localStorage.getItem(clave);
-      let preferencias: any = preferenciasStr ? JSON.parse(preferenciasStr) : null;
-      if (!preferencias) {
-        preferencias = [
-          {
-            'idfuncionario': idfuncionario,
-          }
-        ]
-      }
-      for (let pref of preferencias) {
-        if (pref.idfuncionario === idfuncionario) {
-          pref.idUltimoTimbradoSeleccionado = idtimbrado;
-          break;
-        }
-      }
-      localStorage.setItem(clave, JSON.stringify(preferencias));
-    }
+  private guardarUltimoTimbradoSeleccionado(idusuario: number, idtimbrado: number | null) {
+    if (typeof (Storage) === 'undefined') return;
+
+    const clave: string = 'preferencias-detalle-venta';
+    let preferencias: {
+      idusuario: number,
+      idUltimoTimbradoSeleccionado: number
+    }[] = JSON.parse(localStorage.getItem('preferencias-detalle-venta') ?? '[]');
+
+    preferencias = preferencias.filter(pref => pref.idusuario != idusuario);
+    if (idtimbrado) preferencias.push({ idusuario: idusuario, idUltimoTimbradoSeleccionado: idtimbrado });
+
+    localStorage.setItem(clave, JSON.stringify(preferencias));
   }
 
-  private cargarClienteSeleccionado(id: number) {
-    this.clienteSrv.getPorId(id).subscribe({
-      next: (c) => {
-        this.clienteSeleccionado = c;
+  private agregarClienteALista(idcliente: number) {
+    this.loadingClientes = true;
+    this.clienteSrv.getPorId(idcliente).subscribe({
+      next: (cliente) => {
+        this.lstClientes.push(cliente);
+        this.loadingClientes = false;
       },
       error: (e) => {
-        console.log('Error al cargar clente seleccionado');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'cargar datos del cliente seleccionado');
+        console.error('Error al cargar clente seleccionado', e);
+        this.httpErrorHandler.process(e);
+        this.loadingClientes = false;
       }
     })
   }
 
   private cargarDatosVenta(idventa: number) {
-    this.ventasSrv.getPorId(idventa).subscribe({
-      next: (fv) => {
-        if (fv.idcliente) this.clienteSrv.getPorId(fv.idcliente).subscribe({
-          next: (cli) => {
-            this.lstClientes = [cli];
-            this.formCabecera.get('idCliente')?.setValue(fv.idcliente);
-            this.totalFactura = fv.total;
-            this.totalIva5 = fv.totaliva5;
-            this.totalIva10 = fv.totaliva10;
-            this.formCabecera.get('idTimbrado')?.setValue(fv.idtimbrado);
-            this.formCabecera.get('nroFactura')?.setValue(fv.nrofactura);
-            this.lstDetallesVenta = fv.detalles;
-            if (fv.fechafactura) this.formCabecera.get('fecha')?.setValue(fv.fechafactura);
-          },
-          error: (er) => {
-            console.log('Error al cargar cliente de la factura')
-            console.log(er);
-            this.httpErrorHandler.handle(er);
-          }
-        });
+    const paramsDetalle = new HttpParams().append('eliminado', 'false');
+    forkJoin({
+      venta: this.ventasSrv.getPorId(idventa),
+      detalles: this.ventasSrv.getDetallePorIdVenta(idventa, paramsDetalle)
+    }).subscribe({
+      next: (resp) => {
+        this.formCabecera.get('idCliente')?.setValue(resp.venta.idcliente);
+        this.dvRuc = resp.venta.dvruc != null ? `${resp.venta.dvruc}` : null;
+        this.formCabecera.get('ci')?.setValue(resp.venta.ci);
+        this.totalFactura = resp.venta.total;
+        this.totalIva5 = resp.venta.totaliva5;
+        this.totalIva10 = resp.venta.totaliva10;
+        this.formCabecera.get('idTimbrado')?.setValue(resp.venta.idtimbrado);
+        this.formCabecera.get('nroFactura')?.setValue(resp.venta.nrofactura);
+        this.lstDetallesVenta = resp.detalles;
+        if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(resp.venta.fechafactura);
       },
       error: (e) => {
-        console.log('Error al cargar venta por id')
-        console.log(e);
+        console.error('Error al cargar venta por id', e)
         this.httpErrorHandler.handle(e);
       }
-    });
+    })
   }
 
   actualizarControlNroFactura(t: Timbrado) {
@@ -227,16 +212,10 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   actualizarControlNroFacturaSeleccionado() {
-    if (this.formCabecera.get('idTimbrado')?.value) {
-      const idtimb: number = this.formCabecera.get('idTimbrado')?.value;
-      for (let t of this.lstTimbrados) {
-        if (t.id === idtimb) {
-          this.actualizarControlNroFactura(t);
-          break;
-        }
-      }
-    }
-
+    if (!this.formCabecera.controls.idTimbrado.value) return;
+    const timbrado = this.lstTimbrados.find(timbrado => timbrado.id == this.formCabecera.controls.idTimbrado.value);
+    if (!timbrado) return;
+    this.actualizarControlNroFactura(timbrado);
   }
 
   private cargarTimbrados() {
@@ -290,26 +269,12 @@ export class DetalleVentaComponent implements OnInit {
     }
   }
 
-  private validado(): boolean {
-    let val = true;
-    this.actualizarValidacionTimbrado();
-    Object.keys(this.formCabecera.controls).forEach((key) => {
-      const ctrl = this.formCabecera.get(key);
-      if (ctrl !== null) {
-        if (!ctrl.disabled) {
-          if (!ctrl.valid) {
-            ctrl.markAsDirty();
-            ctrl.updateValueAndValidity();
-          }
-          val = val && ctrl.valid;
-        }
-      }
-    });
-    return val;
-  }
-
   guardar() {
-    if (this.validado()) {
+    Object.keys(this.formCabecera).forEach(ctrlName => {
+      this.formCabecera.get(ctrlName)?.markAsDirty();
+      this.formCabecera.get(ctrlName)?.updateValueAndValidity();
+    })
+    if (this.formCabecera.valid) {
       if (this.idventa === 'nueva') this.registrar();
       else this.notif.create('error', 'Error', 'La funcion todavia no esta implementada bro');
     }
@@ -322,8 +287,8 @@ export class DetalleVentaComponent implements OnInit {
         this.guardandoFactura = false;
         this.idventa = `${idgenerado}`;
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
-        this.cargarSuscripcionesCliente();
-        this.notif.create('success', '<strong>Éxito</strong>', 'Se guardó la factura de venta correctamente.');
+        this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
+        this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
@@ -339,7 +304,7 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('limit', '20');
     params = params.append('offset', '0');
-    if (consulta.length > 0) params = params.append('search', consulta);
+    if (consulta) params = params.append('search', consulta);
     this.loadingClientes = true;
     this.clienteSrv.get(params).subscribe({
       next: (clientes) => {
@@ -382,156 +347,36 @@ export class DetalleVentaComponent implements OnInit {
     this.modalCuotasVisible = false;
   }
 
-  despuesDeOcultarModalCuotas() {
-    this.lstSuscServCuotas = [];
-  }
-
-  cargarServiciosCuotasPendientes() {
-    this.lstSuscServCuotas.forEach((sc: ISuscripcionServicioCuota) => {
-      let paramsServicios: HttpParams = new HttpParams();
-      paramsServicios = paramsServicios.append('eliminado', 'false');
-      paramsServicios = paramsServicios.append('pagado', 'false');
-      sc.loadingServicios = true;
-      if (sc.suscripcion.id) {
-        this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(sc.suscripcion.id, paramsServicios).subscribe({
-          next: (servicios) => {
-            const arrSrvCuo: IServicioCuota[] = [];
-            servicios.forEach((s: Servicio) => {
-              arrSrvCuo.push({ servicio: s, cuotas: [], loadingCuotas: false });
-            });
-            sc.servicioscuotas = arrSrvCuo;
-            sc.loadingServicios = false;
-            this.cargarCuotasPendientes();
-          },
-          error: (e) => {
-            console.error('Error al cargar servicios por cuotas y suscripcion', e);
-            this.httpErrorHandler.process(e);
-            sc.loadingServicios = false;
-          }
-        });
-      }
-    });
-  }
-
-  cargarCuotasPendientes() {
-    this.lstSuscServCuotas.forEach((suscservcuo: ISuscripcionServicioCuota) => {
-      suscservcuo.servicioscuotas.forEach((servcuo: IServicioCuota) => {
-        let paramsCuotas: HttpParams = new HttpParams();
-        paramsCuotas = paramsCuotas.append('eliminado', 'false');
-        paramsCuotas = paramsCuotas.append('pagado', 'false');
-        paramsCuotas = paramsCuotas.append('sort', '-fechavencimiento');
-        paramsCuotas = paramsCuotas.append('idsuscripcion', `${suscservcuo.suscripcion.id}`);
-        paramsCuotas = paramsCuotas.append('idservicio', `${servcuo.servicio.id}`);
-
-        servcuo.loadingCuotas = true;
-        this.cuotasSrv.get(paramsCuotas).subscribe({
-          next: (cuotas) => {
-            const arrCuotas: ICuotaDetalle[] = [];
-            for (let c of cuotas) {
-              arrCuotas.push({ cuota: c, enDetalle: this.existeCuotaEnDetalle(c.id) });
-            }
-            servcuo.cuotas = arrCuotas;
-            servcuo.loadingCuotas = false;
-          },
-          error: (e) => {
-            console.log(`Error al cargar las cuotas del servicio ${suscservcuo.servicioscuotas}`);
-            console.log(e);
-            this.httpErrorHandler.process(e);
-            servcuo.loadingCuotas = false;
-          }
-        });
-      });
-    });
-
-  }
-
-  cargarSuscripcionesCliente() {
-    const idcli: number = this.formCabecera.get('idCliente')?.value;
-    if (idcli) {
-      this.loadingSuscripcionesCli = true;
-      let params: HttpParams = new HttpParams();
-      params = params.append('eliminado', 'false');
-      forkJoin({
-        suscripciones: this.clienteSrv.getSuscripcionesPorCliente(idcli, params),
-        total: this.clienteSrv.getTotalSuscripcionesPorCliente(idcli, params)
-      }).subscribe({
-        next: (resp) => {
-          const arrSusCuotas: ISuscripcionServicioCuota[] = [];
-          let totalCuoutas: number = 0;
-          resp.suscripciones.forEach((s) => {
-            totalCuoutas += Number(s.cuotaspendientes);
-            arrSusCuotas.push({ suscripcion: s, servicioscuotas: [], loadingServicios: false, cuotasPendientes: s.cuotaspendientes });
-          });
-          this.totalCuotasPendientes = totalCuoutas;
-          this.lstSuscServCuotas = arrSusCuotas;
-          this.loadingSuscripcionesCli = false;
-          this.cargarServiciosCuotasPendientes();
-          this.loadingSuscripcionesCli = false;
-        },
-        error: (e) => {
-          console.error('Error al cargar suscripciones por cliente', e);
-          this.httpErrorHandler.process(e);
-          this.loadingSuscripcionesCli = false;
-        }
-      })
-    } else {
-      this.lstSuscServCuotas = [];
-      this.totalCuotasPendientes = 0;
-    }
-  }
-
-  agregarCuotaDetalle(c: ICuotaDetalle) {
+  agregarCuotaDetalle(cuota: CuotaDTO) {
     const dfv: DetalleVenta = new DetalleVenta();
     dfv.cantidad = 1;
-    dfv.monto = c.cuota.monto;
+    dfv.monto = cuota.monto;
     dfv.subtotal = dfv.monto * dfv.cantidad;
-    dfv.porcentajeiva = Number(c.cuota.porcentajeiva);
-    dfv.idsuscripcion = c.cuota.idsuscripcion;
-    dfv.idservicio = c.cuota.idservicio;
-    dfv.idcuota = c.cuota.id;
-    const vencStr: string = c.cuota.fechavencimiento ? formatDate(c.cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
-    dfv.descripcion = `CUOTA ${vencStr} | ${c.cuota.servicio} [${c.cuota.idsuscripcion}]`.toUpperCase();
+    dfv.porcentajeiva = Number(cuota.porcentajeiva);
+    dfv.idsuscripcion = cuota.idsuscripcion;
+    dfv.idservicio = cuota.idservicio;
+    dfv.idcuota = cuota.id;
+    const vencStr: string = cuota.fechavencimiento ? formatDate(cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
+    dfv.descripcion = `CUOTA ${vencStr} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();
     const arrDFV: DetalleVenta[] = this.lstDetallesVenta.slice();
     arrDFV.push(dfv);
     this.lstDetallesVenta = arrDFV;
-    c.enDetalle = true;
+    this.mapCuotaEnDetalle.set(cuota.id ?? -1, true);
     this.calcularTotalFactura();
   }
 
-  quitarCuotaDetalle(c: ICuotaDetalle) {
-    for (let i = 0; i < this.lstDetallesVenta.length; i++) {
-      if (this.lstDetallesVenta[i].idcuota === c.cuota.id) {
-        c.enDetalle = false;
-        this.quitarDetalleFactura(i);
-        break;
-      }
-    }
-  }
-
-  existeCuotaEnDetalle(idcuota: number | null): boolean {
-    if (idcuota) for (let dfv of this.lstDetallesVenta) {
-      if (dfv.idcuota === idcuota) return true;
-    }
-    return false;
+  quitarCuotaDetalle(cuota: CuotaDTO) {
+    const index = this.lstDetallesVenta.findIndex(detalle => detalle.idcuota == cuota.id);
+    if (index) this.quitarDetalleFactura(index);
+    this.mapCuotaEnDetalle.set(cuota.id ?? -1, false);
   }
 
   quitarDetalleFactura(indice: number) {
-    const idcuota: number = this.lstDetallesVenta[indice].idcuota ?? 0;
+    const idcuota = this.lstDetallesVenta[indice].idcuota;
+    if (idcuota) this.mapCuotaEnDetalle.set(idcuota, false);
     const arrDfv: DetalleVenta[] = this.lstDetallesVenta.slice();
     arrDfv.splice(indice, 1);
     this.lstDetallesVenta = arrDfv;
-    if (idcuota !== null) {
-      for (let s of this.lstSuscServCuotas) {
-        for (let srv of s.servicioscuotas) {
-          for (let c of srv.cuotas) {
-            if (c.cuota.id === idcuota) {
-              c.enDetalle = false;
-              break;
-            }
-          }
-        }
-      }
-    }
     this.calcularTotalFactura();
   }
 
@@ -558,55 +403,25 @@ export class DetalleVentaComponent implements OnInit {
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
     fv.pagado = true;
     fv.idcliente = this.formCabecera.get('idCliente')?.value;
-    //fv.fechafactura = this.formCabecera.get('fecha')?.value;
-    //fv.fechacobro = this.formCabecera.get('fecha')?.value;    
     const date: Date = this.formCabecera.get('fecha')?.value;
     const fechaSinHora: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     fv.fechacobro = fechaSinHora;
     fv.fechafactura = fechaSinHora;
-    /*fv.fechafactura = formatDate(date, 'yyyy/MM/dd', 'es-PY');
-    fv.fechacobro = formatDate(date, 'yyyy/MM/dd', 'es-PY');*/
     fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
-    if (this.clienteSeleccionado?.idcobrador) fv.idcobradorcomision = this.clienteSeleccionado?.idcobrador;
+    const cliente = this.lstClientes.find(cliente => cliente.id == this.formCabecera.controls.idCliente.value);
+    fv.idcobradorcomision = cliente?.idcobrador ?? null;
+    //if (cliente && cliente.idcobrador) fv.idcobradorcomision = cliente.idcobrador;
     fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
     return fv;
   }
 
   limpiar() {
+    this.mapCuotaEnDetalle.clear();
     this.cargarTimbrados();
     this.formCabecera.controls['idCliente']?.reset();
     this.router.navigate(['../', 'nueva'], { relativeTo: this.aroute });
     this.idventa = 'nueva';
     this.calcularTotalFactura();
-  }
-
-  cargarServicios() {
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
-    params = params.append('suscribible', 'false');
-    this.serviciosSrv.getServicios(params).subscribe({
-      next: (servicios) => {
-        const lstgs: IGrupoServicio[] = [];
-        for (let s of servicios) {
-          let existe: boolean = false;
-          for (let gs of lstgs) {
-            if (s.idgrupo === gs.grupo.id) {
-              existe = true;
-              gs.servicios.push(s);
-            }
-          }
-          if (!existe) {
-            lstgs.push({ grupo: { id: s.idgrupo, descripcion: s.grupo }, servicios: [s] });
-          }
-        }
-        this.lstGruposServicios = lstgs;
-      },
-      error: (e) => {
-        console.log('Error al cargar servicios');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      }
-    });
   }
 
   agregarServicioDetalle(srv: Servicio, susc: Suscripcion) {
@@ -648,27 +463,46 @@ export class DetalleVentaComponent implements OnInit {
     };
     Extra.agregarCssImpresion(iframe.contentWindow);
   }
-}
 
-interface ISuscripcionServicioCuota {
-  suscripcion: Suscripcion;
-  servicioscuotas: IServicioCuota[];
-  loadingServicios: boolean;
-  cuotasPendientes: number;
-}
+  calcularTotalCuotasPendientes(idcliente: number) {
+    this.loadingCantidadCuotas = true;
+    let params = new HttpParams()
+      .append('eliminado', 'false');
+    this.clienteSrv.getSuscripcionesPorCliente(idcliente, params).subscribe({
+      next: (suscripciones) => {
+        let totalPendiente = 0
+        suscripciones.forEach(suscripcion => totalPendiente += Number(suscripcion.cuotaspendientes));
+        this.totalCuotasPendientes = totalPendiente;
+        this.loadingCantidadCuotas = false;
+      },
+      error: (e) => {
+        console.error('Error al consultar suscripciones por cliente', e);
+        this.loadingCantidadCuotas = false;
+      }
+    })
+  }
 
-interface IServicioCuota {
-  servicio: Servicio;
-  cuotas: ICuotaDetalle[];
-  loadingCuotas: boolean;
-}
-
-interface ICuotaDetalle {
-  cuota: CuotaDTO;
-  enDetalle: boolean;
-}
-
-interface IGrupoServicio {
-  grupo: Grupo;
-  servicios: Servicio[];
+  buscarClientePorCi(event: any) {
+    const ci = this.formCabecera.controls.ci.value;
+    if (ci) {
+      const params = new HttpParams()
+        .append('eliminado', 'false')
+        .append('ci', ci);
+      this.clienteSrv.get(params).subscribe({
+        next: (clientes) => {
+          if (clientes.length === 0) {
+            this.notif.create('warning', 'No encontrado', `No se encontró ningun cliente con CI: ${ci}`);
+            event.target.select();
+          } else {
+            if (!this.lstClientes.find(cliente => cliente.ci == ci)) this.lstClientes.push(clientes[0]);
+            this.formCabecera.controls.idCliente.setValue(clientes[0].id);
+          }
+        },
+        error: (e) => {
+          console.log('Error al buscar cliente por ci', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
+    }
+  }
 }
