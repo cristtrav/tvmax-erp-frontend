@@ -385,7 +385,7 @@ export class DetalleVentaComponent implements OnInit {
     this.totalIva5 = 0;
     this.totalIva10 = 0;
     for (let dfv of this.lstDetallesVenta) {
-      this.totalFactura += dfv.subtotal ?? 0;
+      this.totalFactura += Number(dfv.subtotal) ?? 0;
       if (Number(dfv.porcentajeiva) === 5 && dfv.subtotal !== null) {
         this.totalIva5 += Math.round((dfv.subtotal * 5) / 105);
       }
@@ -421,6 +421,7 @@ export class DetalleVentaComponent implements OnInit {
     this.formCabecera.controls['idCliente']?.reset();
     this.router.navigate(['../', 'nueva'], { relativeTo: this.aroute });
     this.idventa = 'nueva';
+    this.lstDetallesVenta = [];
     this.calcularTotalFactura();
   }
 
