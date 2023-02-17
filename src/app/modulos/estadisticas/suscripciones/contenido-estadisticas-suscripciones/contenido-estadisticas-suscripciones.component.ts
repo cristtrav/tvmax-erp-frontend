@@ -52,10 +52,10 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
   cargarDatos() {
     this.suscripcionesSrv.getResumenGeneral(this.getHttpQueryParams()).subscribe({
       next: (resumen) => {
-        this.totalSuscripciones = resumen.cantidadTotal;
-        this.totalSuscActivos = resumen.cantidadActivos;
-        this.totalSuscDesconectadas = resumen.cantidadDesconectados;
-        this.totalDeuda = resumen.monto;
+        this.totalSuscripciones = resumen.cantidadTotal ?? 0;
+        this.totalSuscActivos = resumen.cantidadActivos ?? 0;
+        this.totalSuscDesconectadas = resumen.cantidadDesconectados ?? 0;
+        this.totalDeuda = resumen.monto ?? 0;
       },
       error: (e) => {
         console.error('Error al cargar resumen general de suscripciones', e);
