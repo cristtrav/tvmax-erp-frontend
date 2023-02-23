@@ -10,4 +10,5 @@ export class Timbrado {
     fechavencimiento: string | null = null;
     ultimonrousado: number | null = null;
     activo: boolean | null = true;
+    idformatofactura: number | null = null;
 }

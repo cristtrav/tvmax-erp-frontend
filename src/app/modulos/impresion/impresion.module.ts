@@ -10,6 +10,10 @@ import { CabeceraReporteComponent } from './cabecera-reporte/cabecera-reporte.co
 import { FiltrosReporteComponent } from './filtros-reporte/filtros-reporte.component';
 import { ReporteVentasComponent } from './reporte-ventas/reporte-ventas.component';
 import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
+import { FacturaPreimpresaVentaComponent } from './factura-preimpresa-venta/factura-preimpresa-venta.component';
+import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
+import { NumeroALetrasPipe } from '@util/pipes/numero-a-letras.pipe';
+import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
 
 
 @NgModule({
@@ -20,16 +24,20 @@ import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
     CabeceraReporteComponent,
     FiltrosReporteComponent,
     ReporteVentasComponent,
-    TablaReporteComponent
+    TablaReporteComponent,
+    FacturaPreimpresaVentaComponent
   ],
   imports: [
     CommonModule,
     NzGridModule,
     NzDescriptionsModule,
-    NzSpaceModule
+    NzSpaceModule,
+    PaddingZerosPipe,
+    NumeroALetrasPipe,
+    StringToNumberPipe
   ],
   exports: [
-    ReporteSuscripcionesComponent
+    ReporteSuscripcionesComponent, FacturaPreimpresaVentaComponent
   ],
   providers: []
 })

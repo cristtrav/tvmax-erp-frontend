@@ -1,0 +1,440 @@
+<nz-collapse nzAccordion>
+    <nz-collapse-panel nzHeader="Factura">
+        <div nz-form>
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Tamaño letra</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="px" nzAddOnBeforeIcon="font-size">
+                        <nz-input-number [nzMax]="15" [nzMin]="7" [nzStep]="0.5" style="width: 100%"
+                            [(ngModel)]="parametros.tamanioLetra" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Ancho</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="25" [nzMin]="10" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoFactura" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Margen
+                    superior</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzStep]="0.05" [nzMax]="10" [nzMin]="0"
+                            [(ngModel)]="parametros.margenSuperior" (ngModelChange)="emitirCambios()"></nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Margen
+                    izquierdo</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzStep]="0.05" [nzMax]="10" [nzMin]="0"
+                            [(ngModel)]="parametros.margenIzquierdo"
+                            (ngModelChange)="emitirCambios()"></nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Margen
+                    derecho</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzStep]="0.05" [nzMax]="10" [nzMin]="0" [(ngModel)]="parametros.margenDerecho"
+                            (ngModelChange)="emitirCambios()"></nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Margen
+                    inferior</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzStep]="0.05" [nzMax]="10" [nzMin]="0"
+                            [(ngModel)]="parametros.margenInferior" (ngModelChange)="emitirCambios()"></nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Secciones">
+        <div nz-form>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Encabezado</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="8" [nzMin]="1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoSeccionCabecera" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Cliente</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="8" [nzMin]="1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoSeccionCliente" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Detalles</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="15" [nzMin]="5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoSeccionDetalle" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+        </div>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel nzHeader="Sección cliente">
+        <div nz-form>
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta
+                    «Fecha...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaFecha" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Valor
+                    «Fecha...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoValorFecha" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta
+                    «Condicion...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaCondicion" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta
+                    «Contado»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaContado" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    «X» Contado</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoValorContado" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta
+                    «Crédito»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaCredito" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    Etiqueta «Nombre...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaNombre" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    Etiqueta «R.U.C...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaRuc" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    Etiqueta «Dirección...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaDireccion" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    Valor «Dirección...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="20" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoValorDireccion" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">
+                    Etiqueta «Tel.:»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="10" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaTelefono" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </nz-collapse-panel>
+
+    <nz-collapse-panel nzHeader="Tabla detalles - Items">
+        <div nz-form>
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Encabezado</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoCabeceraTabla" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Filas</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoFilaItem" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Cantidad</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="8" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoColumnaCantidad" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Descripción</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="15" [nzMin]="2" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoColumnaDescripcion" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Precio
+                    unitario</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoColumnaPrecio" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Exentas</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoColumnaExento" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">5%</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.5" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoColumnaCinco" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Tabla detalles - Pie">
+        <div nz-form>
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Subtotal</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoFilaSubtotal" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Total</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoFilaTotal" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Liquidación IVA</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-height">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.altoFilaLiquidacionIva" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta «Total...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaTotalPagar" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta «Liquidación...»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaLiquidacionIva" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta «5%»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaLiquidacion5" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Valor 5%</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoValorLiquidacion5" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta «10%»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaLiquidacion10" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Valor 10%</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoValorLiquidacion10" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formLabelWidth">Etiqueta «Total IVA»</nz-form-label>
+                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="formControlWidth">
+                    <nz-input-number-group nzAddOnAfter="cm" nzAddOnBeforeIcon="column-width">
+                        <nz-input-number [nzMax]="5" [nzMin]="0.1" [nzStep]="0.05" style="width: 100%"
+                            [(ngModel)]="parametros.anchoEtiquetaTotalIva" (ngModelChange)="emitirCambios()">
+                        </nz-input-number>
+                    </nz-input-number-group>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </nz-collapse-panel>
+</nz-collapse>

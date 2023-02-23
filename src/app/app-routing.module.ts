@@ -22,7 +22,8 @@ const routes: Routes = [
       { path: 'timbrados', loadChildren: () => import ('./modulos/timbrados/timbrados.module').then(m => m.TimbradosModule) },
       { path: 'auditoria', loadChildren: () => import('./modulos/auditoria/auditoria.module').then(m => m.AuditoriaModule) },
       { path: 'cobros', loadChildren: () => import('./modulos/cobros/cobros.module').then(m => m.CobrosModule)},
-      { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule)}
+      { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule)},
+      { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule)}
     ]
   },
 

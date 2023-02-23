@@ -7,6 +7,10 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
+import { FormatoFacturaA } from '../../impresion/factura-preimpresa-venta/formato-factura-a';
+import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
+import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-detalle-timbrado',
@@ -26,6 +30,8 @@ export class DetalleTimbradoComponent implements OnInit {
   formLoading: boolean = false;
   lastidLoading: boolean = false;
 
+  lstFormatos: FormatoFacturaDTO[] = [];
+
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
     codEstablecimiento: new FormControl(null, [Validators.required, Validators.max(999), Validators.min(1)]),
@@ -36,7 +42,8 @@ export class DetalleTimbradoComponent implements OnInit {
     ultNroUsado: new FormControl(null, [Validators.max(9999999)]),
     vencimiento: new FormControl(null, null),
     iniciovigencia: new FormControl(null, [Validators.required]),
-    activo: new FormControl(true, [Validators.required])
+    activo: new FormControl(true, [Validators.required]),
+    idformato: new FormControl()
   });
 
   constructor(
@@ -44,7 +51,8 @@ export class DetalleTimbradoComponent implements OnInit {
     private timbradosSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
-    private aroute: ActivatedRoute    
+    private aroute: ActivatedRoute,
+    private formatosFacturasSrv: FormatosFacturasService    
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +84,20 @@ export class DetalleTimbradoComponent implements OnInit {
         this.form.get('ultNroUsado')?.setValidators([Validators.max(nroFin ?? 9999999)]);
       }
     });
+    this.cargarFormatos();
+  }
+
+  cargarFormatos(){
+    const params = new HttpParams().append('eliminado', 'false');
+    this.formatosFacturasSrv.get(params).subscribe({
+      next: (formatos) =>{
+        this.lstFormatos = formatos;
+      },
+      error: (e) => {
+        console.error('Error al cargar formatos de de factura', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   cargarDatos() {
@@ -93,6 +115,7 @@ export class DetalleTimbradoComponent implements OnInit {
         if(timbrado.fechavencimiento)
           this.form.controls.vencimiento.setValue(new Date(`${timbrado.fechavencimiento}T00:00:00`));
         this.form.controls.activo.setValue(timbrado.activo);
+        this.form.controls.idformato.setValue(timbrado.idformatofactura);
         this.formLoading = false;
       },
       error: (e) => {
@@ -174,6 +197,7 @@ export class DetalleTimbradoComponent implements OnInit {
       t.fechavencimiento = formatDate(this.form.controls.vencimiento.value, 'yyyy-MM-dd', this.locale);
     t.fechainicio = formatDate(this.form.controls.iniciovigencia.value, 'yyyy-MM-dd', this.locale);
     t.activo = this.form.get('activo')?.value;
+    t.idformatofactura = this.form.get('idformato')?.value;
     return t;
   }
 

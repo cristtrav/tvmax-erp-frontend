@@ -1,0 +1,252 @@
+$cantidad-width: 1.2cm;
+$descripcion-width: 9.1cm;
+$precio-width: 1.6cm;
+$exento-width: 1.7cm;
+$cinco-width: 2.1cm;
+
+
+* {
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    //print-color-adjust: exact !important;
+}
+
+.fondoBlanco {
+    background-color: white;
+}
+
+.bordes{
+    border: 1px solid black;
+}
+
+.grilla td{
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.grilla th{
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.seccion {
+    border-radius: 2mm;
+}
+
+.cabecera-tabla-detalle {
+    text-align: center;
+}
+
+#factura {
+    width: 18cm;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto;
+    //grid-template-rows: 3.1cm 2.2cm 8.1cm;
+    row-gap: 1mm;
+    margin-top: 4mm;
+    margin-left: 2cm;
+    margin-bottom: 5cm;
+    //border: 1px solid blueviolet;
+}
+
+#cabecera {
+    height: 3.1cm;
+    display: grid;
+    grid-template-columns: 11.5cm auto;
+    column-gap: 1mm;
+}
+
+#cliente {
+    height: 2.2cm;
+    //padding: 1mm;
+    padding-left: 1mm;
+    padding-right: 1mm;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto auto;
+}
+
+#cliente .fila1-cliente{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    align-items: center;
+    
+}
+
+#cliente .fila1-cliente .seccion-condicion {
+    display: flex;
+}
+
+#cliente .fila1-cliente .seccion-fecha{
+    display: flex;
+}
+
+#cliente .fila1-cliente .seccion-fecha-condicion{
+    display: flex;
+}
+
+#cliente .fila2-cliente{
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
+
+#cliente .fila2-cliente .seccion-nombre{
+    display: flex;
+}
+
+#cliente .fila3-cliente{
+    display: flex;
+    align-items: center;
+}
+
+#cliente .fila4-cliente{
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#cliente .fila4-cliente .seccion-direccion{
+    display: flex;
+}
+
+#cliente .fila4-cliente .seccion-telefono{
+    display: flex;
+}
+
+#detalles {
+    border: 1px solid green;
+    border-radius: 2mm;
+    /*display: grid;
+    align-content: flex-start;
+    grid-template-columns: auto;
+    grid-template-rows: 5.8cm auto;*/
+}
+
+#tabla-detalles {
+    width: 100%;
+    height: 8.1cm;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 2mm;
+}
+
+#tabla-detalles th {
+    text-align: center;
+    height: 0.75cm;
+}
+
+#tabla-detalles td {
+    padding-right: 1mm;
+    padding-left: 1mm;
+}
+
+#tabla-detalles tfoot tr:last-of-type td {
+    border-bottom-width: 0;
+}
+
+#tabla-detalles tr td:first-of-type {
+    border-left-width: 0;
+}
+
+#tabla-detalles th:first-of-type {
+    border-left-width: 0;
+}
+
+#tabla-detalles th:last-of-type {
+    border-right-width: 0;
+}
+
+#tabl-detalles tfoot td:last-of-type {
+    border-bottom-width: 0;
+}
+
+#tabla-detalles thead .cantidad {
+    width: $cantidad-width;
+}
+
+#tabla-detalles thead .descripcion {
+    width: $descripcion-width;
+}
+
+#tabla-detalles thead .precio {
+    width: $precio-width;
+    font-size: smaller;
+}
+
+#tabla-detalles thead .exento {
+    width: $exento-width;
+    font-size: smaller;
+}
+
+#tabla-detalles thead .cinco {
+    width: $cinco-width;
+}
+
+.subtotal-row {
+    height: 0.6cm;
+}
+
+.total-row {
+    height: 1.1cm;
+}
+
+.liquidacion-iva-row {
+    height: 0.65cm;
+}
+
+.liquidacion-iva-div{
+    width: 100%;
+    display: flex;
+}
+
+.total-a-pagar-div{
+    width: 100%;
+    display: flex;
+    /*grid-template-columns: 2.5cm auto;
+    grid-template-rows: auto;*/
+}
+
+.total-a-pagar-text {
+    width: 2.5cm;
+}
+
+.liquidacio-iva-text {
+    border: 1px solid black;
+    width: 2.9cm;
+}
+
+.cinco-porciento-text{
+    width: 0.6cm;
+}
+
+.monto-5-text{
+    width: 2.85cm;
+}
+
+.diez-porciento-text{
+    width: 0.7cm;
+}
+
+monto-10-text{
+    width: 3cm;
+}
+
+.total-iva-text{
+    width: 1.3cm;
+}
+
+#empresa {}
+
+#timbrado {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 1mm;
+}
+

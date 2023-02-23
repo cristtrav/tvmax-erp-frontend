@@ -23,6 +23,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzPopconfirmModule,
     NzTypographyModule,
     NzTagModule,
-    NzModalModule
+    NzModalModule,
+    NzSelectModule
   ]
 })
 export class TimbradosModule { }

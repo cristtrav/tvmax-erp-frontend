@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Timbrado } from '../dto/timbrado.dto';
 import { AppSettings } from './../util/app-settings';
 import { HttpClient } from '@angular/common/http';
+import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,9 @@ export class TimbradosService {
 
   delete(id: number): Observable<any>{
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getFormatoPorTimbrado(idtimbrado: number): Observable<FormatoFacturaDTO>{
+    return this.http.get<FormatoFacturaDTO>(`${this.url}/${idtimbrado}/formatoimpresion`, AppSettings.getHttpOptionsAuth());
   }
 }

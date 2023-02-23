@@ -1,0 +1,301 @@
+
+<div id="factura" 
+    [ngStyle]="{
+        'width.cm': parametros.anchoFactura,
+        'margin-top.cm': parametros.margenSuperior,
+    'margin-bottom.cm': parametros.margenInferior,
+    'margin-left.cm': parametros.margenIzquierdo,
+    'margin-right.cm': parametros.margenDerecho
+    }">
+    <div id="cabecera" [ngStyle]="{'max-height.cm':parametros.altoSeccionCabecera, 'height.cm': parametros.altoSeccionCabecera}">
+        <div id="empresa" class="seccion" [ngClass]="{'bordes': parametros.mostrarBordes}">
+
+        </div>
+        <div id="timbrado" class="seccion" [ngClass]="{'bordes': parametros.mostrarBordes}">
+            <span id="nrofactura" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                {{ venta.nrofactura | paddingZeros: 7 }}
+            </span>
+        </div>
+
+    </div>
+    <div id="cliente" class="seccion" [ngStyle]="{'max-height.cm': parametros.altoSeccionCliente, 'height.cm': parametros.altoSeccionCliente}"
+        [ngClass]="{'bordes': parametros.mostrarBordes}">
+        <div class="fila1-cliente">
+            <div class="seccion-fecha-condicion">
+                <div class="seccion-fecha">
+                    <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoEtiquetaFecha
+                    }">
+                        <ng-container *ngIf="parametros.mostrarEtiquetas">
+                            FECHA DE EMISION:
+                        </ng-container>
+                    </div>
+                    <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoValorFecha
+                    }">
+                        {{ venta.fechafactura | date: 'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                <div class="seccion-condicion">
+                    <div [ngStyle]="{
+                        'font-size.px': parametros.tamanioLetra,
+                        'width.cm': parametros.anchoEtiquetaCondicion
+                    }">
+                        <ng-container *ngIf="parametros.mostrarEtiquetas">CONDICION DE VENTA:</ng-container>
+                    </div>
+                    <div [ngStyle]="{
+                        'font-size.px': parametros.tamanioLetra,
+                        'width.cm': parametros.anchoEtiquetaContado
+                    }">
+                        <ng-container *ngIf="parametros.mostrarEtiquetas">CONTADO</ng-container>
+                    </div>
+                    <div [ngStyle]="{
+                        'font-size.px': parametros.tamanioLetra,
+                        'width.cm': parametros.anchoValorContado
+                    }">
+                        X
+                    </div>
+                    <div [ngStyle]="{
+                        'font-size.px': parametros.tamanioLetra,
+                        'width.cm': parametros.anchoEtiquetaCredito
+                    }">
+                        <ng-container *ngIf="parametros.mostrarEtiquetas">CREDITO</ng-container>
+                    </div>
+                    <div [ngStyle]="{
+                        'font-size.px': parametros.tamanioLetra,
+                        'width.cm': parametros.anchoValorCredito
+                    }">
+                        <ng-container *ngIf="parametros.mostrarEtiquetas">X</ng-container>
+                    </div>
+                </div>
+            </div>
+            
+            <div [ngStyle]="{'font-size.px': parametros.tamanioLetra, 'text-align': 'right'}">
+                {{ venta.idcobradorcomision }}
+            </div>
+        </div>
+        <div class="fila2-cliente">
+            <div class="seccion-nombre">
+                <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoEtiquetaNombre
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">
+                        NOMBRE O RAZON SOCIAL:
+                    </ng-container>
+                </div>
+                <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                    {{ venta.cliente }}
+                </div>
+            </div>
+
+            <div [ngStyle]="{
+                'font-size.px': parametros.tamanioLetra,
+                'text-align': 'right'
+            }">
+                {{ venta.cobrador }}
+            </div>
+        </div>
+        <div class="fila3-cliente">
+            <div [ngStyle]="{
+                'font-size.px': parametros.tamanioLetra,
+                'width.cm': parametros.anchoEtiquetaRuc
+            }">
+                <ng-container *ngIf="parametros.mostrarEtiquetas">
+                    R.U.C. / C.I. N°:
+                </ng-container>
+            </div>
+            <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                {{ venta.ci | number }}<span *ngIf="venta.dvruc"> - {{ venta.dvruc }}</span>
+            </div>
+        </div>
+        <div class="fila4-cliente">
+            <div class="seccion-direccion">
+                <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoEtiquetaDireccion
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">DIRECCION:</ng-container>
+                </div>
+                <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoValorDireccion
+                }">
+                    {{ direccionCliente }}
+                </div>
+            </div>
+            <div class="seccion-telefono">
+                <div [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoEtiquetaTelefono
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">TEL.:</ng-container>
+                </div>
+                <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                    {{ telefonoCliente }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <table id="tabla-detalles" [ngClass]="{'bordes': parametros.mostrarBordes, 'grilla': parametros.mostrarGrilla}"
+        [ngStyle]="{'max-height.cm': parametros.altoSeccionDetalle, 'height.cm': parametros.altoSeccionDetalle}">
+        <thead>
+            <tr [ngStyle]="{'height.cm': parametros.altoCabeceraTabla}">
+                <th class="cantidad" [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoColumnaCantidad
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">Cant.</ng-container>
+                </th>
+                <th class="descripcion" [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoColumnaDescripcion
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">DESCRPCIÓN</ng-container>
+                </th>
+                <th class="precio" [ngStyle]="{
+                    'font-size.px': (parametros.tamanioLetra - 1),
+                    'width.cm': parametros.anchoColumnaPrecio
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">PRECIO UNITARIO</ng-container>
+                </th>
+                <th class="exento" [ngStyle]="{
+                    'font-size.px': (parametros.tamanioLetra - 1),
+                    'width.cm': parametros.anchoColumnaExento
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">VALOR DE VTA. EXENTAS</ng-container>
+                </th>
+                <th class="cinco" [ngStyle]="{
+                    'font-size.px': parametros.tamanioLetra,
+                    'width.cm': parametros.anchoColumnaCinco
+                }">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">
+                        5%
+                    </ng-container>
+                </th>
+                <th class="diez" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                    <ng-container *ngIf="parametros.mostrarEtiquetas">
+                        10%
+                    </ng-container>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let detalle of detalles" [ngStyle]="{'height.cm': parametros.altoFilaItem}">
+                <td [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                    1
+                </td>
+                <td [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                    {{ detalle.descripcion }}
+                </td>
+                <td [ngStyle]="{'font-size.px': parametros.tamanioLetra, 'text-align': 'right'}">
+                    {{ detalle.monto | number }}
+                </td>
+                <td [ngStyle]="{'text-align': 'right'}">
+                    <span *ngIf="detalle.porcentajeiva == 0" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                        {{ detalle.subtotal | number }}
+                    </span>
+                </td>
+                <td [ngStyle]="{'text-align': 'right'}">
+                    <span *ngIf="detalle.porcentajeiva == 5" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                        {{ detalle.subtotal | number }}
+                    </span>
+                </td>
+                <td [ngStyle]="{'text-align': 'right'}">
+                    <span *ngIf="detalle.porcentajeiva == 10" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                        {{ detalle.subtotal | number }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr [ngStyle]="{'height.cm': parametros.altoFilaSubtotal}">
+                <td colspan="3">
+                    <span *ngIf="parametros.mostrarEtiquetas" [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                        SUB - TOTAL:
+                    </span>
+                </td>
+                <td style="text-align: right;">{{ venta.totalexentoiva | number }}</td>
+                <td style="text-align: right;">{{ venta.totalgravadoiva5 | number }}</td>
+                <td style="text-align: right;">{{ venta.totalgravadoiva10 | number }}</td>
+            </tr>
+            <tr [ngStyle]="{'height.cm': parametros.altoFilaTotal}">
+                <td colspan="4">
+                    <div class="total-a-pagar-div">
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoEtiquetaTotalPagar
+                        }">
+                            <ng-container *ngIf="parametros.mostrarEtiquetas">TOTAL A PAGAR:</ng-container>
+                        </div>
+                        <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                            {{ venta.total | numeroALetras }}
+                        </div>
+                    </div>
+
+                </td>
+                <td colspan="2" [ngStyle]="{'font-size.px': parametros.tamanioLetra, 'text-align': 'right'}">
+                    {{ venta.total | number }}
+                </td>
+            </tr>
+            <tr [ngStyle]="{'height.cm': parametros.altoFilaLiquidacionIva}">
+                <td colspan="6">
+                    <div class="liquidacion-iva-div">
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoEtiquetaLiquidacionIva
+                        }">
+                            <ng-container *ngIf="parametros.mostrarEtiquetas">
+                                LIQUIDACION DEL IVA:
+                            </ng-container>
+                        </div>
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoEtiquetaLiquidacion5
+                        }">
+                            <ng-container *ngIf="parametros.mostrarEtiquetas">
+                                5%:
+                            </ng-container>
+                        </div>
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoValorLiquidacion5
+                        }">
+                            {{ venta.totaliva5| number }}
+                        </div>
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoEtiquetaLiquidacion10
+                        }">
+                            <ng-container *ngIf="parametros.mostrarEtiquetas">10%:</ng-container>
+                        </div>
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoValorLiquidacion10
+                        }">
+                            {{ venta.totaliva10 | number }}
+                        </div>
+                        <div [ngStyle]="{
+                            'font-size.px': parametros.tamanioLetra,
+                            'width.cm': parametros.anchoEtiquetaTotalIva
+                        }">
+                            <ng-container *ngIf="parametros.mostrarEtiquetas">
+                                TOTAL IVA:
+                            </ng-container>
+                        </div>
+                        <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
+                            {{ ((venta.totaliva10 | stringToNumber) + (venta.totaliva5 | stringToNumber)) | number }}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

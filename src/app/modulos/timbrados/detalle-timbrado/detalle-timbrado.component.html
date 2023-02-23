@@ -27,7 +27,8 @@
                                             formControlName="id">
                                         </nz-input-number>
                                         <ng-template #btnGenerarId>
-                                            <button nz-button nzType="primary" [nzLoading]="lastidLoading" (click)="generarId()">
+                                            <button nz-button nzType="primary" [nzLoading]="lastidLoading"
+                                                (click)="generarId()">
                                                 <i nz-icon nzType="sync"></i>
                                             </button>
                                         </ng-template>
@@ -129,11 +130,27 @@
                         </nz-form-item>
 
                         <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24">
+                                Formato de impresión
+                            </nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24">
+                                <nz-select nzPlaceHolder="Seleccionar..." formControlName="idformato" nzAllowClear>
+                                    <nz-option
+                                        *ngFor="let formato of lstFormatos"
+                                        [nzValue]="formato.id"
+                                        [nzLabel]="formato.descripcion+' | Preimpreso | '+formato.plantilla">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
                             <span nz-col [nzSm]="7" [nzXs]="24"></span>
                             <nz-form-control [nzSm]="15" [nzXs]="24">
                                 <label nz-checkbox formControlName="activo">Activo</label>
                             </nz-form-control>
                         </nz-form-item>
+
                         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                             <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                                 <i nz-icon nzType="save"></i>

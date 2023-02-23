@@ -1,9 +1,9 @@
-import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Suscripcion } from '@dto/suscripcion-dto';
@@ -15,12 +15,10 @@ import { Venta } from '@dto/venta.dto';
 import { VentasService } from '@servicios/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { PortalOutlet, DomPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
-import { Extra } from '@util/extra';
-import { FacturaVentaComponent } from '../../impresion/factura-venta/factura-venta.component';
 import { SesionService } from '@servicios/sesion.service';
 import { CuotasPendientesComponent } from './cuotas-pendientes/cuotas-pendientes.component';
 import { forkJoin } from 'rxjs';
+import { ImpresionService } from '@servicios/impresion.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -29,8 +27,7 @@ import { forkJoin } from 'rxjs';
 })
 export class DetalleVentaComponent implements OnInit {
 
-  @ViewChild("iframe") iframe!: ElementRef; // target host to render the printable
-  private portalHost!: PortalOutlet;
+  @ViewChild('iframe') iframe!: ElementRef<HTMLIFrameElement>;
 
   @ViewChild('cuotasPendientes')
   cuotasPendientesComp!: CuotasPendientesComponent;
@@ -40,8 +37,6 @@ export class DetalleVentaComponent implements OnInit {
   lstClientes: Cliente[] = [];
   lstDetallesVenta: DetalleVenta[] = [];
   dvRuc: string | null = null;
-
-  //clienteSeleccionado: Cliente | null = null;
 
   formCabecera: FormGroup = new FormGroup({
     nroFactura: new FormControl(null, [Validators.required]),
@@ -82,11 +77,9 @@ export class DetalleVentaComponent implements OnInit {
     private router: Router,
     private aroute: ActivatedRoute,
     private notif: NzNotificationService,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector,
-    private appRef: ApplicationRef,
     private viewContainerRef: ViewContainerRef,
-    private sesionSrv: SesionService
+    private sesionSrv: SesionService,
+    private impresionSrv: ImpresionService
   ) { }
 
   ngOnInit(): void {
@@ -441,28 +434,7 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   imprimir(): void {
-    const iframe = this.iframe.nativeElement;
-    iframe.contentDocument.title = "TVMax ERP";
-    this.portalHost = new DomPortalOutlet(
-      iframe.contentDocument.body,
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector
-    );
-    const portal = new ComponentPortal(FacturaVentaComponent, this.viewContainerRef);
-    const attachObj = this.portalHost.attach(portal);
-    attachObj.instance.cargarFactura(this.idventa);
-    let timer: any;
-    attachObj.instance.dataLoaded.subscribe(() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        iframe.contentWindow.print();
-      }, 250);
-    });
-    iframe.contentWindow.onafterprint = () => {
-      iframe.contentDocument.body.innerHTML = "";
-    };
-    Extra.agregarCssImpresion(iframe.contentWindow);
+    this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef);
   }
 
   calcularTotalCuotasPendientes(idcliente: number) {
