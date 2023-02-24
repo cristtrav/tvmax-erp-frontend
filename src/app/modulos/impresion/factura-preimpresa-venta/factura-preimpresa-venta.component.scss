@@ -4,16 +4,20 @@ $precio-width: 1.6cm;
 $exento-width: 1.7cm;
 $cinco-width: 2.1cm;
 
-@media screen {
+/*@media screen {
     * {
         visibility: hidden;
     }
-}
+}*/
 
 @media print {
     * {
         visibility: visible;
     }
+}
+
+.oculto{
+    visibility: hidden;
 }
 
 * {
@@ -250,8 +254,6 @@ monto-10-text{
 .total-iva-text{
     width: 1.3cm;
 }
-
-#empresa {}
 
 #timbrado {
     display: flex;

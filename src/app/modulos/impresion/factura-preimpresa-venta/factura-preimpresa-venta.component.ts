@@ -31,6 +31,8 @@ export class FacturaPreimpresaVentaComponent implements OnInit {
   direccionCliente: string | null = null;
   @Input()
   telefonoCliente: string | null = null;
+  @Input()
+  ocultarEnPantalla: boolean = true;
 
   dataLoaded = new EventEmitter<boolean>();
 

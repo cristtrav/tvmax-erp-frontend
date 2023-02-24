@@ -6,7 +6,8 @@
     'margin-bottom.cm': parametros.margenInferior,
     'margin-left.cm': parametros.margenIzquierdo,
     'margin-right.cm': parametros.margenDerecho
-    }">
+    }"
+    [ngClass]="{'oculto': ocultarEnPantalla}">
     <div id="cabecera" [ngStyle]="{'max-height.cm':parametros.altoSeccionCabecera, 'height.cm': parametros.altoSeccionCabecera}">
         <div id="empresa" class="seccion" [ngClass]="{'bordes': parametros.mostrarBordes}">
 
