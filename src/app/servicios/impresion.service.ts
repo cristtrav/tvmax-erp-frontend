@@ -1,17 +1,16 @@
-import { ComponentPortal, ComponentType, DomPortalOutlet, PortalOutlet } from '@angular/cdk/portal';
 import { HttpParams } from '@angular/common/http';
-import { ApplicationRef, ComponentFactoryResolver, ElementRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
+import { ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
-import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { BehaviorSubject, EMPTY, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of, switchMap } from 'rxjs';
 import { FacturaPreimpresaVentaComponent } from '../modulos/impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
 import { FormatoFacturaA } from '../modulos/impresion/factura-preimpresa-venta/formato-factura-a';
 import { ReporteSuscripcionesComponent } from '../modulos/impresion/reporte-suscripciones/reporte-suscripciones.component';
+import { ReporteVentasComponent } from '../modulos/impresion/reporte-ventas/reporte-ventas.component';
 import { ClientesService } from './clientes.service';
 import { TimbradosService } from './timbrados.service';
 import { VentasService } from './ventas.service';
@@ -20,8 +19,6 @@ import { VentasService } from './ventas.service';
   providedIn: 'root'
 })
 export class ImpresionService {
-
-
 
   constructor(
     private ventasSrv: VentasService,
@@ -32,12 +29,12 @@ export class ImpresionService {
 
   imprimirReporteSuscripciones(
     iframe: ElementRef<HTMLIFrameElement>,
-    paramsFiltros: IParametroFiltro | null,
+    paramsFiltros: IParametroFiltro,
     viewContainerRef: ViewContainerRef
   ): Observable<boolean> {
     const loading = new BehaviorSubject<boolean>(true);
     const reporteComponent = viewContainerRef.createComponent(ReporteSuscripcionesComponent);
-    reporteComponent.instance.cargarDatos(paramsFiltros ?? {}).subscribe({
+    reporteComponent.instance.cargarDatos(paramsFiltros).subscribe({
       next: () => {
         loading.next(false);
         const iframeNative = iframe.nativeElement;
@@ -51,59 +48,35 @@ export class ImpresionService {
           reporteComponent.destroy();
         }
       },
-      error: (e) => {
-        loading.next(false);
-      }
+      error: () => { loading.next(false) }
     });
     return loading.asObservable();
   }
 
-  imprimirReporte(
-    component: ComponentType<any>,
-    iframeNative: ElementRef,
-    componentFactoryResolver: ComponentFactoryResolver,
-    appRef: ApplicationRef,
-    injector: Injector,
-    viewContainerRef: ViewContainerRef,
-    paramsFiltro: IParametroFiltro | null
-  ): Observable<any> {
-    let portalHost: PortalOutlet | null = null;
-    const iframe = iframeNative.nativeElement;
-    iframe.contentDocument.title = "TVMax ERP";
-    portalHost = new DomPortalOutlet(
-      iframe.contentDocument.body,
-      componentFactoryResolver,
-      appRef,
-      injector
-    );
-
-    const portal = new ComponentPortal(
-      component,
-      viewContainerRef
-    );
-    const attachObj = portalHost.attach(portal);
-    if (paramsFiltro) attachObj.instance.paramsFiltros = { ...paramsFiltro };
-    let timer: any;
-    const obsPrint: Observable<any> = attachObj.instance.dataLoaded.pipe(
-      tap({
-        next: () => {
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            iframe.contentWindow.print();
-          }, 250);
-        },
-        error: (e) => {
-          console.log('Error al imprimir');
-          console.log(e);
+  imprimirReporteVentas(
+    iframe: ElementRef<HTMLIFrameElement>,
+    paramsFiltros: IParametroFiltro,
+    viewContainerRef: ViewContainerRef
+  ): Observable<boolean>{
+    const loading = new BehaviorSubject<boolean>(true);
+    const reporteComponent = viewContainerRef.createComponent(ReporteVentasComponent);
+    reporteComponent.instance.cargarDatos(paramsFiltros).subscribe({
+      next: () => {
+        loading.next(false);
+        const iframeNative = iframe.nativeElement;
+        if(!iframeNative.contentDocument || !iframeNative.contentWindow) return;
+        iframeNative.contentDocument.title = "Reporte Ventas";     
+        iframeNative.contentDocument.body.appendChild(reporteComponent.location.nativeElement);
+        setTimeout(() => {
+          iframeNative.contentWindow?.print();
+        }, 250);
+        iframeNative.contentWindow.onafterprint = () => {
+          reporteComponent.destroy();
         }
-      })
-    );
-    attachObj.instance.cargarDatos();
-    iframe.contentWindow.onafterprint = () => {
-      iframe.contentDocument.body.innerHTML = "";
-    };
-    Extra.agregarCssImpresion(iframe.contentWindow);
-    return obsPrint;
+      },
+      error: () => { loading.next(false) }
+    });
+    return loading.asObservable();
   }
 
   imprimirFacturaPreimpresa(

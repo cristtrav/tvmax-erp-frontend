@@ -8,19 +8,19 @@
     </div>
     <div nz-col nzSpan="24">
         <div>Registros</div>
-        <app-tabla-reporte>
-            <ng-container reporte-header>
+        <table class="tabla-reporte">
+            <thead>
                 <tr>
-                    <th>CI/RUC</th>
-                    <th>Cliente</th>
-                    <th>Factura</th>
-                    <th>Fecha</th>
+                    <th style="text-align: left;">CI/RUC</th>
+                    <th style="text-align: left;">Cliente</th>
+                    <th style="text-align: left;">Factura</th>
+                    <th style="text-align: left;">Fecha</th>
                     <th>Estado</th>
                     <th>Monto (Gs.)</th>
                 </tr>
-            </ng-container>
+            </thead>
 
-            <ng-container reporte-body>
+            <tbody>
                 <ng-container *ngFor="let venta of lstVentas">
                     <tr>
                         <td>
@@ -28,9 +28,9 @@
                         </td>
                         <td>{{ venta.cliente }}</td>
 
-                        <td style="text-align: center;">{{ venta.prefijofactura }}-{{
+                        <td style="text-align: left;">{{ venta.prefijofactura }}-{{
                             venta.nrofactura?.toString()?.padStart(7, '0') }}</td>
-                        <td style="text-align: center;">{{ venta.fechafactura | date: 'dd/MM/yy' }}</td>
+                        <td style="text-align: left;">{{ venta.fechafactura | date: 'dd/MM/yy' }}</td>
                         <td style="text-align: center;">
                             <span *ngIf="venta.anulado">ANUL</span>
                             <span *ngIf="!venta.anulado">{{ venta.pagado?'PAG':'PEND' }}</span>
@@ -38,8 +38,8 @@
                         <td style="text-align: right;">{{ venta.total | number }}</td>
                     </tr>
                 </ng-container>
-            </ng-container>
-            <ng-container reporte-footer>
+            </tbody>
+            <tfoot>
                 <tr>
                     <td colSpan="6">
                         <strong>Total de registros: </strong>{{ cantRegistros | number }}
@@ -50,7 +50,7 @@
                         <strong>Monto total: </strong>Gs.{{ montoTotal | number }}
                     </td>
                 </tr>
-            </ng-container>
-        </app-tabla-reporte>
+            </tfoot>
+        </table>
     </div>
 </div>

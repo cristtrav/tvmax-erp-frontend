@@ -1,66 +1,11 @@
-$tamanioLetra: 10px;
-$borderSyle: 1px solid black;
 $colorAlternoFila: #ececec;
 
-* {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: $tamanioLetra;
-}
-
-.gray-background-printable{
-    background-color: #F5F5F5;
-    print-color-adjust: exact !important;
-}
-
-.tabla-reporte{
-    //border: $borderSyle;
-    border-collapse: separate;
-    border-spacing: 0;
-    //border-radius: 3px;
-    width: 100%;
-    print-color-adjust: exact !important;
-}
-
-.tabla-reporte th, td {
-    page-break-after: auto;
-}
-
-.tabla-reporte th:first-of-type{
-    border-left: $borderSyle;
-}
-
-.tabla-reporte th:last-of-type{
-    border-right: $borderSyle;
-}
-
-.tabla-reporte td:first-of-type{
-    border-left: $borderSyle;
-}
-
-.tabla-reporte td:last-of-type{
-    border-right: $borderSyle;
-}
-
-.tabla-reporte thead tr:last-of-type th {
-    border-bottom: $borderSyle;
-}
-
-.tabla-reporte thead tr:first-of-type th {
-    border-top: $borderSyle;
-}
-
-.tabla-reporte tfoot tr:first-of-type td {
-    border-top: $borderSyle;
-}
-
-.tabla-reporte tfoot tr:last-of-type td {
-    border-bottom: $borderSyle;
-}
-
 .tabla-reporte tbody tr:nth-child(4n) {
+    print-color-adjust: exact !important;
     background-color: $colorAlternoFila;
 }
 
 .tabla-reporte tbody tr:nth-child(4n-1) {
-   background-color: $colorAlternoFila;
+    print-color-adjust: exact !important;
+    background-color: $colorAlternoFila;
 }

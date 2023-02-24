@@ -1,8 +1,7 @@
-import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImpresionService } from '@servicios/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { ReporteVentasComponent } from '../../impresion/reporte-ventas/reporte-ventas.component';
 
 @Component({
   selector: 'app-vista-ventas',
@@ -11,7 +10,7 @@ import { ReporteVentasComponent } from '../../impresion/reporte-ventas/reporte-v
 })
 export class VistaVentasComponent implements OnInit {
 
-  @ViewChild("iframe") iframe!: ElementRef;
+  @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>;
   vista: 'registros' |'estadisticas' = 'registros';
 
   textoBusqueda: string = '';
@@ -26,9 +25,6 @@ export class VistaVentasComponent implements OnInit {
   constructor(
     private aroute: ActivatedRoute,
     private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector,
-    private appRef: ApplicationRef,
     private viewConteinerRef: ViewContainerRef,
     private impresionSrv: ImpresionService
   ) { }
@@ -48,7 +44,9 @@ export class VistaVentasComponent implements OnInit {
   }
 
   imprimir(): void {
-    this.loadingImpresion = true;
+    this.impresionSrv.imprimirReporteVentas(this.iframe, this.paramsFiltros, this.viewConteinerRef)
+    .subscribe(loading => this.loadingImpresion = loading);
+    /*this.loadingImpresion = true;
     this.impresionSrv.imprimirReporte(
       ReporteVentasComponent,
       this.iframe,
@@ -64,7 +62,7 @@ export class VistaVentasComponent implements OnInit {
       error: () => {
         this.loadingImpresion = false;
       }
-    });
+    });*/
   }
 
 }

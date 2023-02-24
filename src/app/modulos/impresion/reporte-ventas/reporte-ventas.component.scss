@@ -1,0 +1,17 @@
+@media screen {
+    * {
+        visibility: hidden;
+    }
+}
+
+@media print {
+    * {
+        visibility: visible;
+    }
+}
+
+$colorAlternoFila: #ececec;
+
+.tabla-reporte tbody tr:nth-child(even){
+    background-color: $colorAlternoFila;
+}

@@ -21,7 +21,7 @@ import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
 @Component({
   selector: 'app-reporte-suscripciones',
   templateUrl: './reporte-suscripciones.component.html',
-  styleUrls: ['./reporte-suscripciones.component.scss'],
+  styleUrls: ['./reporte-suscripciones.component.scss', './../estilos-tabla-reportes.scss'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ReporteSuscripcionesComponent implements OnInit {
@@ -54,7 +54,6 @@ export class ReporteSuscripcionesComponent implements OnInit {
   }
 
   cargarDatos(paramsFiltros: IParametroFiltro): Observable<any> {
-    console.log(paramsFiltros);
     this.paramsFiltros = paramsFiltros;
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
