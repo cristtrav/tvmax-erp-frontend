@@ -4,11 +4,21 @@ $precio-width: 1.6cm;
 $exento-width: 1.7cm;
 $cinco-width: 2.1cm;
 
+@media screen {
+    * {
+        visibility: hidden;
+    }
+}
+
+@media print {
+    * {
+        visibility: visible;
+    }
+}
 
 * {
     font-size: 10px;
     font-family: Arial, Helvetica, sans-serif;
-    //print-color-adjust: exact !important;
 }
 
 .fondoBlanco {

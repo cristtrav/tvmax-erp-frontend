@@ -1,6 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Cliente } from '@dto/cliente-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
+import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
@@ -8,7 +10,7 @@ import { TimbradosService } from '@servicios/timbrados.service';
 import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
+import { catchError, EMPTY, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { FormatoFacturaA } from './formato-factura-a';
 
 @Component({
@@ -33,10 +35,10 @@ export class FacturaPreimpresaVentaComponent implements OnInit {
   dataLoaded = new EventEmitter<boolean>();
 
   constructor(
-    /*private ventasSrv: VentasService,
-    private clienteSrv: ClientesService,
+    private ventasSrv: VentasService,
+    private clientesSrv: ClientesService,
     private timbradosSrv: TimbradosService,
-    private httpErrorHandler: HttpErrorResponseHandlerService*/
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
@@ -89,5 +91,41 @@ export class FacturaPreimpresaVentaComponent implements OnInit {
       }
     })
   }*/
+
+  cargarDatos(idventa: number): Observable<{
+    venta: Venta,
+    detalles: DetalleVenta[],
+    formatoFactura: FormatoFacturaDTO | null,
+    cliente: Cliente | null
+  }> {
+    const detallesParams = new HttpParams().append('eliminado', 'false');
+
+    return forkJoin({
+      venta: this.ventasSrv.getPorId(idventa),
+      detalles: this.ventasSrv.getDetallePorIdVenta(idventa, detallesParams)
+    }).pipe(
+      switchMap(resp => forkJoin({
+        venta: of(resp.venta),
+        detalles: of(resp.detalles),
+        formatoFactura: resp.venta.idtimbrado ? this.timbradosSrv.getFormatoPorTimbrado(resp.venta.idtimbrado) : EMPTY,
+        cliente: resp.venta.idcliente ? this.clientesSrv.getPorId(resp.venta.idcliente) : EMPTY
+      })),
+      tap(resp => {
+        this.venta = resp.venta;
+        this.detalles = resp.detalles;
+        if(resp.cliente?.direccion) this.direccionCliente = resp.cliente.direccion;
+        if(resp.formatoFactura) this.parametros = resp.formatoFactura.parametros;
+        
+        this.parametros.mostrarBordes = false;
+        this.parametros.mostrarGrilla = false;
+        this.parametros.mostrarEtiquetas = false;
+      }),
+      catchError(e => {
+        console.error('Error imprimir factura', e);
+        this.httpErrorHandler.process(e);
+        return of(e);
+      })
+    );
+  }
 
 }

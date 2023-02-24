@@ -166,7 +166,7 @@
                                 </nz-form-item>
                                 <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
                                     <div *ngIf="idventa !== 'nueva'" nz-col>
-                                        <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()">
+                                        <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion">
                                             <i nz-icon nzType="printer"></i>
                                             Imprimir
                                         </button>

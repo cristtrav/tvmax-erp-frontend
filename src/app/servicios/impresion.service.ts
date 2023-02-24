@@ -83,8 +83,28 @@ export class ImpresionService {
     idventa: number,
     iframe: ElementRef<HTMLIFrameElement>,
     viewContainerRef: ViewContainerRef
-  ) {
-    this.cargarFacturaImpresion(idventa).subscribe({
+  ): Observable<boolean> {
+    const loading = new BehaviorSubject(true);
+    const facturaComponent = viewContainerRef.createComponent(FacturaPreimpresaVentaComponent);
+    facturaComponent.instance.cargarDatos(idventa).subscribe({
+      next: () => {
+        loading.next(false);
+        const iframeNative = iframe.nativeElement;
+        if (!iframeNative.contentWindow || !iframeNative.contentDocument) return;
+        iframeNative.contentDocument.title = 'Factura Venta';
+        iframeNative.contentDocument.body.appendChild(facturaComponent.location.nativeElement);
+        
+        setTimeout(() => {
+          iframeNative.contentWindow?.print();
+        }, 250);
+
+        iframeNative.contentWindow.onafterprint = () => {
+          facturaComponent.destroy();
+        }
+      },
+      error: () => { loading.next(false) }
+    })
+    /*this.cargarFacturaImpresion(idventa).subscribe({
       next: (data) => {
         const iframeNative = iframe.nativeElement;
         if (!iframeNative.contentWindow || !iframeNative.contentDocument) return;
@@ -115,11 +135,11 @@ export class ImpresionService {
         console.error('Error imprimir factura', e);
         this.httpErrorHandler.process(e);
       }
-    });
-
+    });*/
+    return loading.asObservable();
   }
 
-  private cargarFacturaImpresion(idventa: number): Observable<{
+  /*private cargarFacturaImpresion(idventa: number): Observable<{
     venta: Venta,
     detalles: DetalleVenta[],
     formatoFactura: FormatoFacturaDTO | null,
@@ -138,6 +158,6 @@ export class ImpresionService {
         cliente: resp.venta.idcliente ? this.clientesSrv.getPorId(resp.venta.idcliente) : EMPTY
       }))
     )
-  }
+  }*/
 
 }

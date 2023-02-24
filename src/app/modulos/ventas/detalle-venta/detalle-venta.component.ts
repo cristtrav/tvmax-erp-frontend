@@ -68,6 +68,7 @@ export class DetalleVentaComponent implements OnInit {
   modalServiciosVisible: boolean = false;
 
   mapCuotaEnDetalle: Map<number, boolean> = new Map();
+  loadingImpresion: boolean = false;
 
   constructor(
     private timbradoSrv: TimbradosService,
@@ -434,7 +435,8 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   imprimir(): void {
-    this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef);
+    this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef)
+    .subscribe((loading) => this.loadingImpresion = loading);
   }
 
   calcularTotalCuotasPendientes(idcliente: number) {
