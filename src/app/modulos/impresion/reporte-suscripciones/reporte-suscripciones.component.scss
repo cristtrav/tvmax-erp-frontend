@@ -1,5 +1,17 @@
 $colorAlternoFila: #ececec;
 
+@media screen {
+    * {
+        display: hidden;
+    }
+}
+
+@media print {
+    * {
+        display: visible;
+    }
+}
+
 .tabla-reporte tbody tr:nth-child(4n) {
     print-color-adjust: exact !important;
     background-color: $colorAlternoFila;
