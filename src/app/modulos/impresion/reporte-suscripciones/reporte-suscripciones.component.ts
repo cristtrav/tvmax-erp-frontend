@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
@@ -16,12 +16,13 @@ import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { forkJoin, Observable } from 'rxjs';
+import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-reporte-suscripciones',
   templateUrl: './reporte-suscripciones.component.html',
-  styleUrls: ['./reporte-suscripciones.component.scss']
+  styleUrls: ['./reporte-suscripciones.component.scss'],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ReporteSuscripcionesComponent implements OnInit {
 
@@ -33,18 +34,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
   departamentos: Departamento[] = [];
 
   totalDeuda: number = 0;
-
-  @Input()
-  get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
-  set paramsFiltros(p: IParametroFiltro) {
-    const oldParams: string = JSON.stringify(this._paramsFiltros);
-    this._paramsFiltros = { ...p };
-    if (oldParams !== JSON.stringify(p)) this.cargarDatos();
-  };
-  private _paramsFiltros: IParametroFiltro = {};
-
-  @Output()
-  dataLoaded: EventEmitter<boolean> = new EventEmitter();
+  private paramsFiltros: IParametroFiltro = {};
 
   suscripciones: Suscripcion[] = [];
   lstFiltrosReporte: IFiltroReporte[] = [];
@@ -63,7 +53,9 @@ export class ReporteSuscripcionesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  cargarDatos() {
+  cargarDatos(paramsFiltros: IParametroFiltro): Observable<any> {
+    console.log(paramsFiltros);
+    this.paramsFiltros = paramsFiltros;
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('sort', '+cliente');
@@ -81,40 +73,39 @@ export class ReporteSuscripcionesComponent implements OnInit {
     if (Array.isArray(this.paramsFiltros['iddepartamento']))
       observables.departamento = this.cargarDepartamentosReporte(this.paramsFiltros['iddepartamento']);
 
-    forkJoin(observables).subscribe({
-      next: (resp) => {
-        if (resp.departamento) this.departamentos = resp.departamento.data;
-        if (resp.distrito) this.distritos = resp.distrito.data;
-        if (resp.barrio) this.barrios = resp.barrio.data;
-        if (resp.grupo) this.grupos = resp.grupo.data
-        if (resp.servicio) this.servicios = resp.servicio.data;
+    return forkJoin(observables).pipe(
+      tap(resp => {
+        if (resp.departamento) this.departamentos = resp.departamento;
+        if (resp.distrito) this.distritos = resp.distrito;
+        if (resp.barrio) this.barrios = resp.barrio;
+        if (resp.grupo) this.grupos = resp.grupo;
+        if (resp.servicio) this.servicios = resp.servicio;
 
-        this.lstFiltrosReporte = [];
-        this.suscripciones = resp.suscripciones.data;
+        const filtros: IFiltroReporte[] = [];
+        this.suscripciones = resp.suscripciones;
         this.totalDeuda = 0;
         this.suscripciones.forEach((s) => {
           this.totalDeuda += Number(s.deuda);
         });
-        this.lstFiltrosReporte.push(this.getEstadoFiltroReporte());
-        this.lstFiltrosReporte.push(this.getFechaSuscFiltroReporte());
-        this.lstFiltrosReporte.push(this.getGrupoServicioFiltroReporte(resp.grupo?.data, resp.servicio?.data));
-        this.lstFiltrosReporte.push(
+        filtros.push(this.getEstadoFiltroReporte());
+        filtros.push(this.getFechaSuscFiltroReporte());
+        filtros.push(this.getGrupoServicioFiltroReporte(resp.grupo, resp.servicio));
+        filtros.push(
           this.getDepartDistBarrioFiltroReporte(
-            resp.departamento?.data,
-            resp.distrito?.data,
-            resp.barrio?.data
+            resp.departamento,
+            resp.distrito,
+            resp.barrio
           )
         );
-        this.lstFiltrosReporte.push(this.getNroCuotasPendFiltroReporte());
-        this.dataLoaded.emit(true);
-      },
-      error: (e) => {
-        console.log('Error al cargar datos para reporte');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      }
-    });
-    this.suscripcionesSrv.get(params);
+        filtros.push(this.getNroCuotasPendFiltroReporte());
+        this.lstFiltrosReporte = filtros;
+      }),
+      catchError(e => {
+        console.error('Error al cargar reporte de suscripciones', e);
+        this.httpErrorHandler.process(e);
+        return of(e);
+      })
+    );
   };
 
   private cargarDepartamentosReporte(id: string[] | number[]): Observable<Departamento[]> {

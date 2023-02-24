@@ -1,6 +1,6 @@
-import { ComponentPortal, ComponentType, DomPortalOutlet, PortalOutlet, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType, DomPortalOutlet, PortalOutlet } from '@angular/cdk/portal';
 import { HttpParams } from '@angular/common/http';
-import { ApplicationRef, ComponentFactoryResolver, ComponentRef, ElementRef, Injectable, Injector, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, ElementRef, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
@@ -8,9 +8,10 @@ import { Venta } from '@dto/venta.dto';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { EMPTY, forkJoin, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { FacturaPreimpresaVentaComponent } from '../modulos/impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
 import { FormatoFacturaA } from '../modulos/impresion/factura-preimpresa-venta/formato-factura-a';
+import { ReporteSuscripcionesComponent } from '../modulos/impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { ClientesService } from './clientes.service';
 import { TimbradosService } from './timbrados.service';
 import { VentasService } from './ventas.service';
@@ -20,12 +21,42 @@ import { VentasService } from './ventas.service';
 })
 export class ImpresionService {
 
+
+
   constructor(
     private ventasSrv: VentasService,
     private timbradosSrv: TimbradosService,
     private clientesSrv: ClientesService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
+
+  imprimirReporteSuscripciones(
+    iframe: ElementRef<HTMLIFrameElement>,
+    paramsFiltros: IParametroFiltro | null,
+    viewContainerRef: ViewContainerRef
+  ): Observable<boolean> {
+    const loading = new BehaviorSubject<boolean>(true);
+    const reporteComponent = viewContainerRef.createComponent(ReporteSuscripcionesComponent);
+    reporteComponent.instance.cargarDatos(paramsFiltros ?? {}).subscribe({
+      next: () => {
+        loading.next(false);
+        const iframeNative = iframe.nativeElement;
+        if (!iframeNative.contentDocument || !iframeNative.contentWindow) return;
+        iframeNative.contentDocument.title = 'Reporte Suscripciones';
+        iframeNative.contentDocument.body.appendChild(reporteComponent.location.nativeElement);
+        setTimeout(() => {
+          iframeNative.contentWindow?.print();
+        }, 250);
+        iframeNative.contentWindow.onafterprint = () => {
+          reporteComponent.destroy();
+        }
+      },
+      error: (e) => {
+        loading.next(false);
+      }
+    });
+    return loading.asObservable();
+  }
 
   imprimirReporte(
     component: ComponentType<any>,
@@ -80,11 +111,6 @@ export class ImpresionService {
     iframe: ElementRef<HTMLIFrameElement>,
     viewContainerRef: ViewContainerRef
   ) {
-    //const iframeNative = iframe.nativeElement;
-    //if (!iframeNative.contentWindow || !iframeNative.contentDocument) return;
-    
-
-
     this.cargarFacturaImpresion(idventa).subscribe({
       next: (data) => {
         const iframeNative = iframe.nativeElement;
@@ -97,11 +123,11 @@ export class ImpresionService {
         facturaComponent.instance.detalles = data.detalles;
         if (data.cliente?.direccion) facturaComponent.instance.direccionCliente = data.cliente?.direccion;
         if (data.formatoFactura) facturaComponent.instance.parametros = <FormatoFacturaA>(<unknown>data.formatoFactura.parametros);
-        
+
         facturaComponent.instance.parametros.mostrarEtiquetas = true;
         facturaComponent.instance.parametros.mostrarGrilla = true;
         facturaComponent.instance.parametros.mostrarBordes = true;
-        
+
         iframeNative.contentDocument.body.appendChild(facturaComponent.location.nativeElement);
         setTimeout(() => {
           iframeNative.contentWindow?.print();
@@ -117,7 +143,7 @@ export class ImpresionService {
         this.httpErrorHandler.process(e);
       }
     });
-    
+
   }
 
   private cargarFacturaImpresion(idventa: number): Observable<{

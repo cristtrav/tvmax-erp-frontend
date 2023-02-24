@@ -1,20 +1,24 @@
-* {
-    font-size: x-small;
-}
+$altoCabecera: 70px;
+
 .gray-background-printable{
     background-color: #F5F5F5;
     print-color-adjust: exact !important;
 }
 
-.description-content{
-    font-size: x-small;
+.contenedor{
+    border: 1px solid black;
+    padding: 5px;
+    //align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.descriptions-title{
-    font-size: x-small;
+.titulo{
+    font-size: 18px;
     font-weight: bold;
 }
 
-.tabla-filtros td{
-    text-align: center;
+.logo{
+    height: $altoCabecera;
 }

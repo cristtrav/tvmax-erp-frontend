@@ -1,4 +1,11 @@
+$tamanioLetra: 10px;
+$borderSyle: 1px solid black;
+
 $color-background: #F5F5F5;
+
+*{
+    font-size: $tamanioLetra;
+}
 
 .gray-background-printable {
     background-color: $color-background;
@@ -6,11 +13,20 @@ $color-background: #F5F5F5;
 }
 
 .tabla-reporte {
-    print-color-adjust: exact !important;
+    //print-color-adjust: exact !important;
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
-    font-size: x-small;
+    border: $borderSyle;
+    border-radius: 3px;    
+}
+
+.tabla-reporte thead tr:last-of-type th {
+    border-bottom: $borderSyle;
+}
+
+.tabla-reporte tfoot tr:first-of-type td {
+    border-top: $borderSyle;
 }
 
 .tabla-reporte th,td {

@@ -1,13 +1,9 @@
-<div class="gray-background-printable">
-    <div nz-row>
-        <div *ngFor="let filtro of lstFiltrosReporte" nz-col nzSpan="12">
-            <nz-space>
-                <span *nzSpaceItem class="descriptions-title">{{ filtro.titulo }}:</span>
-                <span *nzSpaceItem class="descriptions-content">
-                    <div *ngIf="filtro.contenido">{{ filtro.contenido }}</div>
-                    <div *ngFor="let con of filtro.contenidos">{{ con }}</div>
-                </span>
-            </nz-space>
+<div class="contenedor">
+    <div *ngFor="let filtro of lstFiltrosReporte" class="item-filtro">
+        <div class="descriptions-title">{{ filtro.titulo }}:</div>
+        <div class="descriptions-content">
+            <div *ngIf="filtro.contenido">{{ filtro.contenido }}</div>
+            <div *ngFor="let con of filtro.contenidos">{{ con }}</div>
         </div>
     </div>
 </div>

@@ -11,10 +11,9 @@ import { ImpresionService } from '@servicios/impresion.service';
   templateUrl: './vista-suscripciones.component.html',
   styleUrls: ['./vista-suscripciones.component.scss']
 })
-export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
+export class VistaSuscripcionesComponent implements OnInit {
 
-  @ViewChild("iframe") iframe!: ElementRef; // target host to render the printable
-  private portalHost!: PortalOutlet;
+  @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>; // target host to render the printable
 
   vista: string = 'registros';
   cantFiltrosAplicados: number = 0;
@@ -27,20 +26,13 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
   constructor(
     private aroute: ActivatedRoute, 
     private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private injector: Injector,
-    private appRef: ApplicationRef,
     private viewContainerRef: ViewContainerRef,
-    private impresionSrv: ImpresionService
+    public impresionSrv: ImpresionService
   ) { }
 
   ngOnInit(): void {
     const v: string | null = this.aroute.snapshot.queryParamMap.get('vista');
     this.cambiarVista(v === null ? 'registros' : v);
-  }
-
-  ngOnDestroy(): void {
-    if (this.portalHost) this.portalHost.detach();
   }
 
   cambiarVista(v: string) {
@@ -53,46 +45,8 @@ export class VistaSuscripcionesComponent implements OnInit, OnDestroy {
   }
 
   public printWithSrv(): void {
-    this.loadingDatosReporte = true;
-    this.impresionSrv.imprimirReporte(
-      ReporteSuscripcionesComponent,
-      this.iframe,
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector,
-      this.viewContainerRef,
-      this.paramsFiltro
-    ).subscribe(() => {
-      this.loadingDatosReporte = false;
-    });
+    this.impresionSrv.imprimirReporteSuscripciones(this.iframe, this.paramsFiltro, this.viewContainerRef)
+    .subscribe(loading => this.loadingDatosReporte = loading);
   }
-
-  /*printMainContent(): void {
-    this.loadingDatosReporte = true;
-    const iframe = this.iframe.nativeElement;
-    iframe.contentDocument.title = "TVMax ERP";
-    this.portalHost = new DomPortalOutlet(
-      iframe.contentDocument.body,
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector
-    );
-    const portal = new ComponentPortal(ReporteSuscripcionesComponent, this.viewContainerRef);
-    const attachObj = this.portalHost.attach(portal);
-    attachObj.instance.paramsFiltros = { ...this.paramsFiltro };
-    let timer: any;
-    attachObj.instance.dataLoaded.subscribe(() => {
-      this.loadingDatosReporte = false;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        iframe.contentWindow.print();
-      }, 250);
-    })
-    attachObj.instance.cargarDatos();
-    iframe.contentWindow.onafterprint = () => {
-      iframe.contentDocument.body.innerHTML = "";
-    };
-    Extra.agregarCssImpresion(iframe.contentWindow);
-  }*/
 
 }

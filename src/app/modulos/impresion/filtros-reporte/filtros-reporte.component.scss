@@ -1,20 +1,36 @@
+$tamanioLetra: 10px;
 * {
-    font-size: x-small;
+    font-size: $tamanioLetra;
 }
 .gray-background-printable{
     background-color: #F5F5F5;
     print-color-adjust: exact !important;
 }
 
+.contenedor{
+    print-color-adjust: exact !important;
+    border: 1px solid black;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    column-gap: 10px;
+}
+
 .description-content{
-    font-size: x-small;
+    font-size: $tamanioLetra;
 }
 
 .descriptions-title{
-    font-size: x-small;
+    font-size: $tamanioLetra;
     font-weight: bold;
 }
 
 .tabla-filtros td{
     text-align: center;
+}
+
+.item-filtro{
+    display: flex;
+    column-gap: 5px;
 }
