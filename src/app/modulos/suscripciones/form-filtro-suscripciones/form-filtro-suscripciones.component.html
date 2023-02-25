@@ -1,6 +1,6 @@
 <ng-template #moreTagPlaceholer let-selectedList>{{ selectedList.length }} más</ng-template>
-<nz-space nzDirection="vertical" style="width: 100%;">
-    <div *nzSpaceItem>
+<div nz-row [nzGutter]="[16, 16]">
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="fechaInicioFiltro !== null || fechaFinFiltro !== null" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtros de fecha de suscripción"
@@ -17,7 +17,7 @@
             nzPlaceHolder="Fecha hasta" style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
         </nz-date-picker>
     </div>
-    <div *nzSpaceItem>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="gruposServiciosFiltro.length !== 0" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtros de grupo / servicio"
@@ -30,7 +30,7 @@
         <app-grupo-servicio-treeselect [(value)]="gruposServiciosFiltro" (valueChange)="filtrar()">
         </app-grupo-servicio-treeselect>
     </div>
-    <div *nzSpaceItem>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="ubicacionesFiltro.length !== 0" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtros de ubicación" (click)="limpiarFiltrosUbicacion()">
@@ -41,7 +41,7 @@
         </nz-badge>
         <app-lugar-treeselect [(value)]="ubicacionesFiltro" (valueChange)="filtrar()"></app-lugar-treeselect>
     </div>
-    <div *nzSpaceItem>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="filtroConectado || filtroReconectado || filtroDesconectado" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtros de estado" (click)="limpiarFiltrosEstados()">
@@ -54,7 +54,7 @@
         <label nz-checkbox [(ngModel)]="filtroReconectado" (ngModelChange)="filtrar()">Reconectado</label><br>
         <label nz-checkbox [(ngModel)]="filtroDesconectado" (ngModelChange)="filtrar()">Desconectado</label>
     </div>
-    <div *nzSpaceItem>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="rangoCuotasPendFiltro[0] !== 0 || rangoCuotasPendFiltro[1] !== 13" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtro de cuotas pendientes"
@@ -69,4 +69,4 @@
             [nzTipFormatter]="formatterTooltipRangoCuotas">
         </nz-slider>
     </div>
-</nz-space>
+</div>

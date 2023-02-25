@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
@@ -8,6 +8,7 @@ import { DepartamentosService } from '@servicios/departamentos.service';
 import { DistritosService } from '@servicios/distritos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 @Component({
   selector: 'app-lugar-treeselect',
@@ -16,13 +17,16 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 })
 export class LugarTreeselectComponent implements OnInit {
 
+  @ViewChild(NzTreeSelectComponent)
+  private treeSelectUbicaciones!: NzTreeSelectComponent
+
   @Output()
   valueChange = new EventEmitter<string[]>();
   @Input()
   value: string[] = [];
 
   ubicacionesFiltroNodos: NzTreeNodeOptions[] = [];
-
+  public virtualHeight: string | null = null;
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -76,6 +80,7 @@ export class LugarTreeselectComponent implements OnInit {
               nodesDistrito.push(nodeDistrito);
             });
             node.addChildren(nodesDistrito);
+            this.calculateVirtualHeight();
           },
           error: (e) => {
             console.error('Error al cargar distritos', e);
@@ -100,6 +105,7 @@ export class LugarTreeselectComponent implements OnInit {
               nodesBarrios.push(nodeBarrio);
             });
             node.addChildren(nodesBarrios);
+            this.calculateVirtualHeight();
           },
           error: (e) => {
             console.error('Error al cargar barrios', e);
@@ -108,10 +114,19 @@ export class LugarTreeselectComponent implements OnInit {
         });
       }
     }
+    this.calculateVirtualHeight();
   }
 
   onValueChange() {
     this.valueChange.emit(this.value);
+  }
+
+  calculateVirtualHeight() {
+    let cantNodosVisibles: number = this.ubicacionesFiltroNodos.length;
+    for (let treeNode of this.treeSelectUbicaciones.getExpandedNodeList()) {
+      cantNodosVisibles += treeNode.getChildren().length;
+    }
+    this.virtualHeight = cantNodosVisibles > 11 ? '300px' : null;
   }
 
 }

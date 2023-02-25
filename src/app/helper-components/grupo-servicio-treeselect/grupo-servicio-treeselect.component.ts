@@ -1,11 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
+import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
 @Component({
   selector: 'app-grupo-servicio-treeselect',
@@ -14,12 +15,16 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 })
 export class GrupoServicioTreeselectComponent implements OnInit {
 
+  @ViewChild(NzTreeSelectComponent)
+  private treeSelectGrupoServicio!: NzTreeSelectComponent
+
   @Output()
   valueChange = new EventEmitter<string[]>();
 
   @Input()
   value: string[] = [];
   gruposServiciosFiltroNodos: NzTreeNodeOptions[] = [];
+  public virtualHeight: string | null = null;
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -61,6 +66,7 @@ export class GrupoServicioTreeselectComponent implements OnInit {
     if (node && node.getChildren().length === 0 && node.isExpanded) {
       this.cargarServiciosEnNodo(node);
     }
+    this.calculateVirtualHeight();
   }
 
   private cargarServiciosEnNodo(node: NzTreeNodeOptions) {
@@ -81,16 +87,26 @@ export class GrupoServicioTreeselectComponent implements OnInit {
           serviciosNodo.push(datosNodo);
         });
         node.addChildren(serviciosNodo);
+        this.calculateVirtualHeight();
       },
       error: (e) => {
         console.log('Error al cargar servicios', e);
         this.httpErrorHandler.process(e);
       }
     });
+    
   }
 
   onValueChange() {
     this.valueChange.emit(this.value);
+  }
+
+  calculateVirtualHeight() {
+    let cantNodosVisibles: number = this.gruposServiciosFiltroNodos.length;
+    for (let treeNode of this.treeSelectGrupoServicio.getExpandedNodeList()) {
+      cantNodosVisibles += treeNode.getChildren().length;
+    }
+    this.virtualHeight = cantNodosVisibles > 11 ? '300px' : null;
   }
 
 }
