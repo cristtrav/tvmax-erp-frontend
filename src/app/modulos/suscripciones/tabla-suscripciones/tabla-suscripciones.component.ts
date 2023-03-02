@@ -54,9 +54,6 @@ export class TablaSuscripcionesComponent implements OnInit {
   }
   _textoBusqueda: string = '';
 
-  @Input()
-  tableStyles: { [name: string]: string } = {};
-
   lstSuscripciones: Suscripcion[] = [];
   tableLoading: boolean = false;
   pageIndex: number = 1;
