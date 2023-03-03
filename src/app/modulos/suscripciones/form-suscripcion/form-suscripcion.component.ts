@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { Domicilio } from './../../../dto/domicilio-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,6 +13,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -27,10 +28,8 @@ export class FormSuscripcionComponent implements OnInit {
   idsuscripcion = 'nueva';
   @Output()
   idsuscripcionChange = new EventEmitter<string>();
-
   @Input()
   idcliente: number | null = null;
-
   @Input()
   mostrarCliente: boolean = false;
 
@@ -46,12 +45,15 @@ export class FormSuscripcionComponent implements OnInit {
   });
 
   lstClientes: Cliente[] = [];
+
   lstDomicilios: Domicilio[] = [];
   lstServicios: Servicio[] = [];
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   labelFechaCambio = '';
   idLoading: boolean = false;
+  clienteLoading: boolean = false;
+  textoBusquedaCliente: string = '';
 
   constructor(
     private domiSrv: DomiciliosService,
@@ -72,33 +74,48 @@ export class FormSuscripcionComponent implements OnInit {
     this.cargarServicios();
     if (this.idsuscripcion !== 'nueva') {
       this.cargarDatos();
-    } /*else {
-      this.cargarUltimoId();
-    }*/
-    this.cargarClientes();
+    }
+    this.form.controls.idcliente.valueChanges.subscribe((value) => {
+      this.onChangeCliente(value);
+    });
+    this.form.controls.idservicio.valueChanges.subscribe(value => {
+      this.onChangeServicio(value);
+    });
+  }
+
+  private cargarClienteActual(idcliente: number) {
+    console.log('cargar cliente actual', idcliente);
+    this.clientesSrv.getPorId(idcliente).subscribe({
+      next: (cliente) => {
+        this.lstClientes.unshift(cliente);
+      },
+      error: (e) => {
+        console.error('Error al cargar cliente por id', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   private cargarDatos(): void {
     this.formLoading = true;
-    this.suscSrv.getPorId(+this.idsuscripcion).subscribe((data) => {
-      this.form.get('id')?.setValue(data.id);
-      this.form.get('iddomicilio')?.setValue(data.iddomicilio);
-      this.form.get('idservicio')?.setValue(data.idservicio);
-      this.form.get('monto')?.setValue(data.monto);
-      this.form.get('estado')?.setValue(data.estado);
-      if (data.fechasuscripcion) {
-        this.form.get('fechasuscripcion')?.setValue(new Date(`${data.fechasuscripcion}`));
+    this.suscSrv.getPorId(Number(this.idsuscripcion)).subscribe({
+      next: (suscripcion) => {
+        this.formLoading = false;
+        this.form.get('id')?.setValue(suscripcion.id);
+        this.form.get('iddomicilio')?.setValue(suscripcion.iddomicilio);
+        this.form.get('idservicio')?.setValue(suscripcion.idservicio);
+        this.form.get('monto')?.setValue(suscripcion.monto);
+        this.form.get('estado')?.setValue(suscripcion.estado);
+        if (suscripcion.fechasuscripcion) this.form.get('fechasuscripcion')?.setValue(new Date(`${suscripcion.fechasuscripcion}`));
+        if (suscripcion.fechacambioestado) this.form.get('fechacambioestado')?.setValue(new Date(`${suscripcion.fechacambioestado}`));
+        this.form.get('idcliente')?.setValue(suscripcion.idcliente);
+        if (suscripcion.idcliente) this.cargarClienteActual(suscripcion.idcliente);
+      },
+      error: (e) => {
+        this.formLoading = false;
+        console.error('Error al cargar suscripcion', e);
+        this.httpErrorHandler.process(e);
       }
-      if (data.fechacambioestado) {
-        this.form.get('fechacambioestado')?.setValue(new Date(`${data.fechacambioestado}`));
-      }
-      this.form.get('idcliente')?.setValue(data.idcliente);
-      this.formLoading = false;
-    }, (e) => {
-      console.log('Error al cargar datos de la suscripcion');
-      console.log(e);
-      this.notif.create('error', 'Error al cargar datos de suscripción', e.error);
-      this.formLoading = false;
     });
   }
 
@@ -186,7 +203,7 @@ export class FormSuscripcionComponent implements OnInit {
         this.notif.create('success', '<strong>Éxito</strong>', 'Suscripción editada.');
         this.idsuscripcion = `${sus.id}`;
         this.idsuscripcionChange.emit(this.idsuscripcion);
-        this.router.navigate(['../', sus.id], {relativeTo: this.aroute});
+        this.router.navigate(['../', sus.id], { relativeTo: this.aroute });
         this.guardarLoading = false;
       },
       error: (e) => {
@@ -194,30 +211,12 @@ export class FormSuscripcionComponent implements OnInit {
         this.httpErrorHandler.process(e);
         this.guardarLoading = false;
       }
-    })
-    /*this.suscSrv.put(+this.idsuscripcion, sus).subscribe(() => {
-      this.notif.create('success', 'Suscripción guardada correctamente', '');
-      this.guardarLoading = false;
-      this.idsuscripcion = `${sus.id}`;
-      this.idsuscripcionChange.emit(this.idsuscripcion);
-      this.router.navigate([sus.id], { relativeTo: this.aroute.parent });
-    }, (e) => {
-      console.log('Error al modificar suscripcion');
-      console.log(e);
-      this.notif.create('error', 'Error al guardar suscripción', e.error);
-      this.guardarLoading = false;
-    });*/
+    });
   }
 
-  onChangeServicio(idsrv: any): void {
-    if (idsrv) {
-      for (let s of this.lstServicios) {
-        if (s.id === +idsrv) {
-          this.form.get('monto')?.setValue(s.precio);
-          break;
-        }
-      }
-    }
+  onChangeServicio(idservicio: number): void {
+    const servicio = this.lstServicios.find(servicio => servicio.id == idservicio);
+    if(servicio) this.form.controls.monto.setValue(servicio.precio);
   }
 
   cargarUltimoId(): void {
@@ -230,20 +229,42 @@ export class FormSuscripcionComponent implements OnInit {
       console.log(e);
       this.httpErrorHandler.handle(e);
       this.idLoading = false;
-      //this.notif.create('error', 'Error al consultar código de suscripción', e.error);
     });
   }
 
+  buscarClientes(search: string) {
+    this.textoBusquedaCliente = search;
+    this.cargarClientes();
+  }
+
   cargarClientes(): void {
-    this.clientesSrv.get(this.getHttpQueryParamsCliente()).subscribe({
-      next: (clientes) => {
-        this.lstClientes = clientes;
-      },
-      error: (e) => {
-        console.error('Error al cargar clientes', e);
-        this.httpErrorHandler.process(e);
-      }
-    });
+    this.clienteLoading = true;
+    this.clientesSrv.get(this.getHttpQueryParamsCliente())
+      .pipe(
+        finalize(() => this.clienteLoading = false)
+      )
+      .subscribe({
+        next: clientes => this.lstClientes = clientes,
+        error: (e) => {
+          console.error('Error al cargar clientes', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
+  }
+
+  cargarMasClientes() {
+    this.clienteLoading = true;
+    const params = this.getHttpQueryParamsCliente().append('offset', this.lstClientes.length);
+    this.clientesSrv.get(params).pipe(
+      finalize(() => this.clienteLoading = false)
+    )
+      .subscribe({
+        next: clientes => this.lstClientes = this.lstClientes.concat(clientes),
+        error: (e) => {
+          console.error('Error al cargar mas clientes', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   seleccionEstado(e: string | null): void {
@@ -264,7 +285,7 @@ export class FormSuscripcionComponent implements OnInit {
     }
   }
 
-  onChangeCliente(e: any | null): void {
+  private onChangeCliente(e: any | null): void {
     this.idcliente = e;
     if (e) {
       this.cargarDomicilios();
@@ -275,8 +296,12 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   getHttpQueryParamsCliente(): HttpParams {
-    var params: HttpParams = new HttpParams().append('eliminado', 'false');
-    params = params.append('sort', '+razonsocial');
+    let params: HttpParams = new HttpParams()
+      .append('eliminado', 'false')
+      .append('sort', '+razonsocial')
+      .append('limit', '10');
+    if (this.textoBusquedaCliente) params = params.append('search', this.textoBusquedaCliente);
+
     return params;
   }
 }
