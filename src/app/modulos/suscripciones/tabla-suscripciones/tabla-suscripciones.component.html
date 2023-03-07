@@ -22,7 +22,10 @@
                 <td>{{ s.id }}</td>
                 <td *ngIf="mostrarCliente" nz-tooltip [nzTooltipTitle]="'Código: '+s.idcliente">{{ s.cliente }}</td>
                 <td nz-tooltip [nzTooltipTitle]="'Código: '+s.idservicio">{{ s.servicio }}</td>
-                <td nzAlign="right">{{ s.monto | number }}</td>
+                <td nzAlign="right">
+                    <nz-tag *ngIf="s.gentileza" nzColor="geekblue">Gentileza</nz-tag>
+                    <span *ngIf="!s.gentileza">Gs.{{ s.monto | number }}</span>
+                </td>
                 <td>
                     <nz-tag [nzColor]="s.estado==='D'?'red':'green'">
                         <span *ngIf="s.estado === 'R'">Reconectado</span>
@@ -37,7 +40,7 @@
                         s.cuotaspendientes | number }}</nz-tag>
                     <nz-tag *ngIf="s.cuotaspendientes >= 4" [nzColor]="'red'">{{ s.cuotaspendientes | number }}</nz-tag>
                 </td>
-                <td nzAlign="right">{{ s.deuda | number }}</td>
+                <td nzAlign="right">Gs.{{ s.deuda | number }}</td>
                 <td>
                     <div nz-row [nzGutter]="[8,8]">
                         <div nz-col>
@@ -75,6 +78,11 @@
                     <nz-descriptions-item [nzTitle]="titulodist">{{ s.distrito }}</nz-descriptions-item>
                     <ng-template #titulodepa><strong>Departamento</strong></ng-template>
                     <nz-descriptions-item [nzTitle]="titulodepa">{{ s.departamento }}</nz-descriptions-item>
+                    <ng-template #titulogentileza><strong>Tipo de suscripción</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulogentileza">
+                        <span *ngIf="s.gentileza">Gentileza</span>
+                        <span *ngIf="!s.gentileza">Normal</span>
+                    </nz-descriptions-item>
                 </nz-descriptions>
             </tr>
         </ng-container>

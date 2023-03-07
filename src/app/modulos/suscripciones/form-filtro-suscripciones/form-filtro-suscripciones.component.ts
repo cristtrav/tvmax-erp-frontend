@@ -36,6 +36,8 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   };
 
   timerFiltroCuotasPend: any;
+  filtroGentileza: boolean = false;
+  filtroNormal: boolean = false;
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -84,6 +86,8 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     if(this.rangoCuotasPendFiltro[0] !== 0 || this.rangoCuotasPendFiltro[1] !== 13){
       cant ++;
     }
+    if(this.filtroNormal) cant++;
+    if(this.filtroGentileza) cant++;
     return cant;
   }
 
@@ -105,6 +109,12 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
 
   limpiarFiltrosUbicacion() {
     this.ubicacionesFiltro = [];
+    this.filtrar();
+  }
+
+  limpiarFiltroTipoSuscripcion(){
+    this.filtroNormal = false;
+    this.filtroGentileza = false;
     this.filtrar();
   }
 
@@ -166,6 +176,11 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
       params['cuotaspendientesdesde'] = this.rangoCuotasPendFiltro[0];
       if(this.rangoCuotasPendFiltro[1] !== 13) params['cuotaspendienteshasta'] = this.rangoCuotasPendFiltro[1];
     }
+
+    if(this.filtroNormal != this.filtroGentileza){
+      params['gentileza'] = this.filtroGentileza;
+    }
+
     return params;
   }
 }

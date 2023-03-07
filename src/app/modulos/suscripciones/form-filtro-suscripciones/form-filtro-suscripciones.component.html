@@ -49,10 +49,24 @@
                 </a>
                 Estado
             </h3>
-        </nz-badge><br>
-        <label nz-checkbox [(ngModel)]="filtroConectado" (ngModelChange)="filtrar()">Conectado</label><br>
-        <label nz-checkbox [(ngModel)]="filtroReconectado" (ngModelChange)="filtrar()">Reconectado</label><br>
-        <label nz-checkbox [(ngModel)]="filtroDesconectado" (ngModelChange)="filtrar()">Desconectado</label>
+        </nz-badge>
+        <ul style="padding: 0; margin: 0; list-style-type: none;">
+            <li><label nz-checkbox [(ngModel)]="filtroConectado" (ngModelChange)="filtrar()">Conectado</label></li>
+            <li><label nz-checkbox [(ngModel)]="filtroReconectado" (ngModelChange)="filtrar()">Reconectado</label></li>
+            <li><label nz-checkbox [(ngModel)]="filtroDesconectado" (ngModelChange)="filtrar()">Desconectado</label></li>
+        </ul>
+    </div>
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="filtroNormal || filtroGentileza" nzDot>
+            <h3>
+                <a (click)="limpiarFiltroTipoSuscripcion()"><i nz-icon nzType="clear"></i></a>
+                Tipo de suscripción
+            </h3>
+        </nz-badge>
+        <ul style="padding: 0; margin: 0; list-style-type: none;">
+            <li><label nz-checkbox [(ngModel)]="filtroNormal" (ngModelChange)="filtrar()">Normal</label></li>
+            <li><label nz-checkbox [(ngModel)]="filtroGentileza" (ngModelChange)="filtrar()">Gentileza</label></li>
+        </ul>
     </div>
     <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="rangoCuotasPendFiltro[0] !== 0 || rangoCuotasPendFiltro[1] !== 13" nzDot>

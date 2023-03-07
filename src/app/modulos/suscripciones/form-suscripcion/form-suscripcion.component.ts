@@ -41,7 +41,8 @@ export class FormSuscripcionComponent implements OnInit {
     estado: new FormControl(null, Validators.required),
     fechasuscripcion: new FormControl(null, [Validators.required]),
     fechacambioestado: new FormControl(null, [Validators.required]),
-    idcliente: new FormControl(null, [Validators.required])
+    idcliente: new FormControl(null, [Validators.required]),
+    gentileza: new FormControl(false, [Validators.required])
   });
 
   lstClientes: Cliente[] = [];
@@ -81,6 +82,12 @@ export class FormSuscripcionComponent implements OnInit {
     this.form.controls.idservicio.valueChanges.subscribe(value => {
       this.onChangeServicio(value);
     });
+    this.form.controls.gentileza.valueChanges.subscribe(value => {
+      //const idservicio = this.form.controls.idservicio.value;
+      if(value) this.form.controls.monto.setValue(0);
+      //if(!value && idservicio)
+      //  this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+    })
   }
 
   private cargarClienteActual(idcliente: number) {
@@ -100,6 +107,7 @@ export class FormSuscripcionComponent implements OnInit {
     this.formLoading = true;
     this.suscSrv.getPorId(Number(this.idsuscripcion)).subscribe({
       next: (suscripcion) => {
+        console.log(suscripcion);
         this.formLoading = false;
         this.form.get('id')?.setValue(suscripcion.id);
         this.form.get('iddomicilio')?.setValue(suscripcion.iddomicilio);
@@ -110,6 +118,7 @@ export class FormSuscripcionComponent implements OnInit {
         if (suscripcion.fechacambioestado) this.form.get('fechacambioestado')?.setValue(new Date(`${suscripcion.fechacambioestado}`));
         this.form.get('idcliente')?.setValue(suscripcion.idcliente);
         if (suscripcion.idcliente) this.cargarClienteActual(suscripcion.idcliente);
+        this.form.get('gentileza')?.setValue(suscripcion.gentileza);
       },
       error: (e) => {
         this.formLoading = false;
@@ -174,6 +183,7 @@ export class FormSuscripcionComponent implements OnInit {
     if (fce) {
       s.fechacambioestado = Extra.dateToString(fce);
     }
+    s.gentileza = this.form.get('gentileza')?.value;
     return s;
   }
 
