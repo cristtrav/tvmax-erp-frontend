@@ -12,9 +12,9 @@ $tamanioLetra: 10px;
     border: 1px solid black;
     padding: 5px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    column-gap: 10px;
+    column-gap: 15px;
 }
 
 .description-content{

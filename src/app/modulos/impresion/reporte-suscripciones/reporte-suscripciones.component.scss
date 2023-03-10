@@ -2,13 +2,13 @@ $colorAlternoFila: #ececec;
 
 @media screen {
     * {
-        display: hidden;
+        visibility: hidden;
     }
 }
 
 @media print {
     * {
-        display: visible;
+        visibility: visible;
     }
 }
 

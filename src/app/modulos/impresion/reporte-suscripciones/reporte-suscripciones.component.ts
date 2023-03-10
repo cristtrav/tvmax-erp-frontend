@@ -7,12 +7,14 @@ import { Distrito } from '@dto/distrito-dto';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
+import { Usuario } from '@dto/usuario.dto';
 import { BarriosService } from '@servicios/barrios.service';
 import { DepartamentosService } from '@servicios/departamentos.service';
 import { DistritosService } from '@servicios/distritos.service';
 import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -48,6 +50,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     private barriosSrv: BarriosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     @Inject(LOCALE_ID) private locale: string,
+    private usuariosSrv: UsuariosService
   ) { }
 
   ngOnInit(): void {
@@ -71,6 +74,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
       observables.distrito = this.cargarDistritosReporte(this.paramsFiltros['iddistrito']);
     if (Array.isArray(this.paramsFiltros['iddepartamento']))
       observables.departamento = this.cargarDepartamentosReporte(this.paramsFiltros['iddepartamento']);
+    if (this.paramsFiltros['idcobrador']) observables.cobrador = this.cargarCobrador(Number(this.paramsFiltros['idcobrador']));
 
     return forkJoin(observables).pipe(
       tap(resp => {
@@ -97,6 +101,8 @@ export class ReporteSuscripcionesComponent implements OnInit {
           )
         );
         filtros.push(this.getNroCuotasPendFiltroReporte());
+        filtros.push(this.getCobradorFiltroReporte(resp.cobrador));
+        filtros.push(this.getTipoSuscripcionFiltroReporte());
         this.lstFiltrosReporte = filtros;
       }),
       catchError(e => {
@@ -132,6 +138,10 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.serviciosSrv.getServicios(params);
   }
 
+  private cargarCobrador(idusuario: number): Observable<Usuario> {
+    return this.usuariosSrv.getPorId(idusuario);
+  }
+
   estadoArrayConverter(): string[] {
     if (Array.isArray(this.paramsFiltros['estado'])) {
       return this.paramsFiltros['estado'].map((e: string) => {
@@ -143,6 +153,24 @@ export class ReporteSuscripcionesComponent implements OnInit {
     } else {
       return [];
     }
+  }
+
+  private getCobradorFiltroReporte(cobrador: Usuario | null): IFiltroReporte {
+    const titulo = 'Cobrador';
+    let contenido = '*';
+    if (cobrador != null) {
+      contenido = `${cobrador.nombres}`;
+      if (cobrador.apellidos) contenido += ` ${cobrador.apellidos}`;
+    }
+    return { titulo, contenido };
+  }
+
+  private getTipoSuscripcionFiltroReporte(): IFiltroReporte {
+    const gentileza = this.paramsFiltros['gentileza'];
+    const titulo = 'Tipo de Suscripción';
+    let contenido = '*';
+    if (gentileza != null) contenido = `${gentileza ? 'Gentileza' : 'Normal'}`;
+    return { titulo, contenido };
   }
 
   private getEstadoFiltroReporte(): IFiltroReporte {
@@ -206,8 +234,8 @@ export class ReporteSuscripcionesComponent implements OnInit {
 
   private getNroCuotasPendFiltroReporte(): IFiltroReporte {
     const titulo: string = 'Nro. Cuotas';
-    const desde: string = this.paramsFiltros['cuotaspendientesdesde'] ? `${this.paramsFiltros['cuotaspendientesdesde']}` : '*'
-    const hasta: string = this.paramsFiltros['cuotaspendienteshasta'] ? `${this.paramsFiltros['cuotaspendienteshasta']}` : '*'
+    const desde: string = this.paramsFiltros['cuotaspendientesdesde'] != null ? `${this.paramsFiltros['cuotaspendientesdesde']}` : '*'
+    const hasta: string = this.paramsFiltros['cuotaspendienteshasta'] != null ? `${this.paramsFiltros['cuotaspendienteshasta']}` : '*'
     return { titulo, contenido: `desde ${desde} hasta ${hasta}` };
   }
 
