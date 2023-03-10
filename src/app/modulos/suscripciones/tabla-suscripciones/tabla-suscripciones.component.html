@@ -85,6 +85,11 @@
                     </nz-descriptions-item>
                     <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
                     <nz-descriptions-item [nzTitle]="titulocobrador">{{ s.cobrador }}</nz-descriptions-item>
+                    <ng-template #tituloobservacion><strong>Observación</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="tituloobservacion">
+                        <span *ngIf="!s.observacion" nz-typography nzType="secondary">(ninguna)</span>
+                        {{ s.observacion }}
+                    </nz-descriptions-item>
                 </nz-descriptions>
             </tr>
         </ng-container>

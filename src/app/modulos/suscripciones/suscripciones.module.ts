@@ -41,6 +41,7 @@ import { ImpresionModule } from '../impresion/impresion.module';
 import { NgxPrintModule } from 'ngx-print';
 import { PortalModule } from '@angular/cdk/portal'
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -79,7 +80,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     ImpresionModule,
     NgxPrintModule,
     PortalModule,
-    NzModalModule
+    NzModalModule,
+    NzTypographyModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

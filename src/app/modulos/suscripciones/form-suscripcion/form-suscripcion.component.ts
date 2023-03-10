@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { Domicilio } from './../../../dto/domicilio-dto';
@@ -14,6 +14,7 @@ import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -42,7 +43,8 @@ export class FormSuscripcionComponent implements OnInit {
     fechasuscripcion: new FormControl(null, [Validators.required]),
     fechacambioestado: new FormControl(null, [Validators.required]),
     idcliente: new FormControl(null, [Validators.required]),
-    gentileza: new FormControl(false, [Validators.required])
+    gentileza: new FormControl(false, [Validators.required]),
+    observacion: new FormControl(null, [Validators.maxLength(100)]),
   });
 
   lstClientes: Cliente[] = [];
@@ -64,7 +66,9 @@ export class FormSuscripcionComponent implements OnInit {
     private clientesSrv: ClientesService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private router: Router,
-    private aroute: ActivatedRoute
+    private aroute: ActivatedRoute,
+    @Inject(LOCALE_ID)
+    private locale: string
   ) { }
 
   ngOnInit(): void {
@@ -119,6 +123,7 @@ export class FormSuscripcionComponent implements OnInit {
         this.form.get('idcliente')?.setValue(suscripcion.idcliente);
         if (suscripcion.idcliente) this.cargarClienteActual(suscripcion.idcliente);
         this.form.get('gentileza')?.setValue(suscripcion.gentileza);
+        this.form.get('observacion')?.setValue(suscripcion.observacion);
       },
       error: (e) => {
         this.formLoading = false;
@@ -175,15 +180,17 @@ export class FormSuscripcionComponent implements OnInit {
     s.iddomicilio = this.form.get('iddomicilio')?.value;
     s.idcliente = this.form.get('idcliente')?.value;
     s.estado = this.form.get('estado')?.value;
+    
     const fs: Date = this.form.get('fechasuscripcion')?.value;
-    if (fs) {
-      s.fechasuscripcion = Extra.dateToString(fs);
-    }
+    //if (fs) s.fechasuscripcion = Extra.dateToString(fs);
+    if (fs) s.fechasuscripcion = formatDate(fs, 'yyyy-MM-dd', this.locale);
+    
     const fce: Date = this.form.get('fechacambioestado')?.value;
-    if (fce) {
-      s.fechacambioestado = Extra.dateToString(fce);
-    }
+    if (fce) s.fechacambioestado = formatDate(fce, 'yyyy-MM-dd', this.locale);
+    //if (fce) s.fechacambioestado = Extra.dateToString(fce)
+    
     s.gentileza = this.form.get('gentileza')?.value;
+    s.observacion = this.form.get('observacion')?.value;
     return s;
   }
 

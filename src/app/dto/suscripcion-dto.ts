@@ -26,4 +26,5 @@ export class Suscripcion{
     gentileza: boolean | null = false;
     idcobrador: number | null = null;
     cobrador: string | null = null;
+    observacion: string | null = null;
 }
