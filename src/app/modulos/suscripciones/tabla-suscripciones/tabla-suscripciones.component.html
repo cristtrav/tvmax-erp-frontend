@@ -83,6 +83,8 @@
                         <span *ngIf="s.gentileza">Gentileza</span>
                         <span *ngIf="!s.gentileza">Normal</span>
                     </nz-descriptions-item>
+                    <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
+                    <nz-descriptions-item [nzTitle]="titulocobrador">{{ s.cobrador }}</nz-descriptions-item>
                 </nz-descriptions>
             </tr>
         </ng-container>

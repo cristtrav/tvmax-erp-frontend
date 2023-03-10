@@ -1,5 +1,8 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Usuario } from '@dto/usuario.dto';
+import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -38,12 +41,31 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   timerFiltroCuotasPend: any;
   filtroGentileza: boolean = false;
   filtroNormal: boolean = false;
+  lstCobradores: Usuario[] = [];
+  idcobrador: number | null = null;
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
+    private usuariosSrv: UsuariosService
   ) {}
 
   ngOnInit(): void {
+    this.cargarCobradores();
+  }
+
+  cargarCobradores(){
+    const params = new HttpParams()
+    .append('eliminado', 'false')
+    .append('idrol', '3');
+    this.usuariosSrv.get(params).subscribe({
+      next: (cobradores) => {
+        this.lstCobradores = cobradores;
+      },
+      error: (e) => {
+        console.error('Error al cargar cobradores', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   limpiarFiltrosEstados(){
@@ -88,6 +110,7 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     }
     if(this.filtroNormal) cant++;
     if(this.filtroGentileza) cant++;
+    if(this.idcobrador) cant++;
     return cant;
   }
 
@@ -115,6 +138,11 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   limpiarFiltroTipoSuscripcion(){
     this.filtroNormal = false;
     this.filtroGentileza = false;
+    this.filtrar();
+  }
+
+  limpiarFiltroCobrador(){
+    this.idcobrador = null;
     this.filtrar();
   }
 
@@ -180,6 +208,8 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     if(this.filtroNormal != this.filtroGentileza){
       params['gentileza'] = this.filtroGentileza;
     }
+
+    if(this.idcobrador) params['idcobrador'] = this.idcobrador;
 
     return params;
   }

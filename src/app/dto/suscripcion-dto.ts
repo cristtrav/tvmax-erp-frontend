@@ -24,4 +24,6 @@ export class Suscripcion{
     deuda: number = 0; 
     eliminado: boolean | null = false;
     gentileza: boolean | null = false;
+    idcobrador: number | null = null;
+    cobrador: string | null = null;
 }

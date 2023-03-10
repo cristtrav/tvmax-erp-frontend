@@ -1,6 +1,19 @@
 <ng-template #moreTagPlaceholer let-selectedList>{{ selectedList.length }} más</ng-template>
 <div nz-row [nzGutter]="[16, 16]">
     <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idcobrador != null" nzDot>
+            <h3>
+                <a>
+                    <i nz-icon nzType="clear" (click)="limpiarFiltroCobrador()"></i>
+                </a>
+                Cobrador
+            </h3>
+        </nz-badge>
+        <nz-select [nzPlaceHolder]="'Seleccionar...'" [(ngModel)]="idcobrador" (ngModelChange)="filtrar()" style="width: 100%;" nzAllowClear>
+            <nz-option *ngFor="let cobrador of lstCobradores" [nzLabel]="cobrador.nombres+' '+(cobrador.apellidos ?? '')" [nzValue]="cobrador.id"></nz-option>
+        </nz-select>
+    </div>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="fechaInicioFiltro !== null || fechaFinFiltro !== null" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtros de fecha de suscripción"
