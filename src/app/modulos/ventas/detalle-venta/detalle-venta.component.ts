@@ -54,7 +54,10 @@ export class DetalleVentaComponent implements OnInit {
 
   totalFactura: number = 0;
   totalIva5: number = 0;
+  totalGravado5: number = 0;
   totalIva10: number = 0;
+  totalGravado10: number = 0;
+  totalExento: number = 0;
   totalCuotasPendientes: number = 0;
 
   loadingClientes: boolean = false;
@@ -188,7 +191,8 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.get('idTimbrado')?.setValue(resp.venta.idtimbrado);
         this.formCabecera.get('nroFactura')?.setValue(resp.venta.nrofactura);
         this.lstDetallesVenta = resp.detalles;
-        if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(resp.venta.fechafactura);
+        console.log(resp.venta.fechafactura);
+        if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
       },
       error: (e) => {
         console.error('Error al cargar venta por id', e)
@@ -270,7 +274,7 @@ export class DetalleVentaComponent implements OnInit {
     })
     if (this.formCabecera.valid) {
       if (this.idventa === 'nueva') this.registrar();
-      else this.notif.create('error', 'Error', 'La funcion todavia no esta implementada bro');
+      else this.editar();
     }
   }
 
@@ -283,9 +287,27 @@ export class DetalleVentaComponent implements OnInit {
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
         this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
+        this.cargarDatosVenta(idgenerado);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
+        this.httpErrorHandler.process(e);
+        this.guardandoFactura = false;
+      }
+    });
+  }
+
+  private editar(){
+    this.guardandoFactura = true;
+    this.ventasSrv.put(this.getDtoFacturaVenta()).subscribe({
+      next: () => {
+        this.guardandoFactura = false;
+        this.notif.create('success', '<strong>Éxito</strong>', 'Venta editada');
+        this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
+        this.cargarDatosVenta(Number(this.idventa));
+      },
+      error: (e) => {
+        console.error('Error al editar venta', e);
         this.httpErrorHandler.process(e);
         this.guardandoFactura = false;
       }
@@ -350,6 +372,7 @@ export class DetalleVentaComponent implements OnInit {
     dfv.idsuscripcion = cuota.idsuscripcion;
     dfv.idservicio = cuota.idservicio;
     dfv.idcuota = cuota.id;
+    dfv.montoiva = (dfv.subtotal * dfv.porcentajeiva) / (100 + dfv.porcentajeiva);
     const vencStr: string = cuota.fechavencimiento ? formatDate(cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
     dfv.descripcion = `CUOTA ${vencStr} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();
     const arrDFV: DetalleVenta[] = this.lstDetallesVenta.slice();
@@ -378,20 +401,34 @@ export class DetalleVentaComponent implements OnInit {
     this.totalFactura = 0;
     this.totalIva5 = 0;
     this.totalIva10 = 0;
+    this.totalGravado10 = 0;
+    this.totalGravado5 = 0;
+    this.totalExento = 0;
     for (let dfv of this.lstDetallesVenta) {
       this.totalFactura += Number(dfv.subtotal) ?? 0;
-      if (Number(dfv.porcentajeiva) === 5 && dfv.subtotal !== null) {
+      if (Number(dfv.porcentajeiva) === 5 && dfv.subtotal != null) {
         this.totalIva5 += Math.round((dfv.subtotal * 5) / 105);
+        this.totalGravado5 += Number(dfv.subtotal);
       }
-      if (Number(dfv.porcentajeiva) === 10 && dfv.subtotal !== null) {
+      if (Number(dfv.porcentajeiva) === 10 && dfv.subtotal != null) {
         this.totalIva10 += Math.round((dfv.subtotal * 10) / 110);
+        this.totalGravado10 += Number(dfv.subtotal);
+      }
+      if (Number(dfv.porcentajeiva) === 0 && dfv.subtotal != null){
+        this.totalExento += Number(dfv.subtotal);
       }
     }
   }
 
   getDtoFacturaVenta(): Venta {
     const fv: Venta = new Venta();
+    if(this.idventa != 'nueva') fv.id = Number(this.idventa);
     fv.total = this.totalFactura;
+    fv.totaliva10 = this.totalIva10;
+    fv.totaliva5 = this.totalIva5;
+    fv.totalgravadoiva10 = this.totalGravado10;
+    fv.totalgravadoiva5 = this.totalGravado5;
+    fv.totalexentoiva = this.totalExento;
     fv.detalles = this.lstDetallesVenta;
     fv.idtimbrado = this.formCabecera.get('idTimbrado')?.value;
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
@@ -406,6 +443,7 @@ export class DetalleVentaComponent implements OnInit {
     fv.idcobradorcomision = cliente?.idcobrador ?? null;
     //if (cliente && cliente.idcobrador) fv.idcobradorcomision = cliente.idcobrador;
     fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
+    console.log(fv);
     return fv;
   }
 

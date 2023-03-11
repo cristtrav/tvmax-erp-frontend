@@ -23,6 +23,10 @@ export class VentasService {
     return this.http.post<number>(this.url, fv, AppSettings.getHttpOptionsAuth());
   }
 
+  put(fv: Venta): Observable<any> {
+    return this.http.put(this.url, fv, AppSettings.getHttpOptionsAuth());
+  }
+
   get(params: HttpParams): Observable<Venta[]> {
     return this.http.get<Venta[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }

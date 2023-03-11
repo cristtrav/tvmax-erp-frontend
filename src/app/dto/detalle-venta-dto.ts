@@ -10,4 +10,5 @@ export class DetalleVenta {
     descripcion: string | null = null;
     idsuscripcion: number | null = null;
     eliminado: boolean | null = null;
+    montoiva: number | null = null;
 }
