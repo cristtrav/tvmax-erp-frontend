@@ -89,12 +89,12 @@
                             <th nzAlign="center">Monto</th>
                         </tr>
                     </thead>
-    <tbody>
-        <tr *ngFor="let dfv of tablaDetalle.data">
-            <td>{{ dfv.descripcion }}</td>
-            <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
-        </tr>
-    </tbody>
+        <tbody>
+            <tr *ngFor="let dfv of tablaDetalle.data">
+                <td>{{ dfv.descripcion }}</td>
+                <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
+            </tr>
+        </tbody>
 </nz-table>
 </tr>
 </ng-container>
