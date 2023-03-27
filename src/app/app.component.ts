@@ -14,7 +14,7 @@ export class AppComponent implements OnInit{
   textoAvatar='';
 
   constructor(
-    private sesionSrv: SesionService,
+    public sesionSrv: SesionService,
     private notif: NzNotificationService,
     private router: Router
   ){

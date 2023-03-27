@@ -15,72 +15,78 @@
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Clientes" nzIcon="user">
+      <li nz-submenu nzTitle="Clientes" nzIcon="user" 
+        *ngIf="sesionSrv.permisos.has(184) || sesionSrv.permisos.has(165)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(184)">
             <a routerLink="clientes">Clientes</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(165)">
             <a routerLink="suscripciones">Suscripciones</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Facturación" nzIcon="file-done">
+      <li nz-submenu nzTitle="Facturación" nzIcon="file-done" 
+      *ngIf="sesionSrv.permisos.has(266) || sesionSrv.permisos.has(244) || sesionSrv.permisos.has(361)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(266)">
             <a routerLink="ventas">Ventas</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(244)">
             <a routerLink="timbrados">Timbrados</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(361)">
             <a routerLink="cobros">Cobros</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Funcionarios" nzIcon="team">
+      <li nz-submenu nzTitle="Funcionarios" nzIcon="team"
+      *ngIf="sesionSrv.permisos.has(144) || sesionSrv.permisos.has(124)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(144)">
             <a routerLink="roles">Roles</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(124)">
             <a routerLink="usuarios">Usuarios</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Lugares" nzIcon="global">
+      <li nz-submenu nzTitle="Lugares" nzIcon="global"
+      *ngIf="sesionSrv.permisos.has(44) || sesionSrv.permisos.has(64) || sesionSrv.permisos.has(84)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(44)">
             <a routerLink="departamentos">Departamentos</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(64)">
             <a routerLink="distritos">Distritos</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(84)">
             <a routerLink="barrios">Barrios</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Servicios" nzIcon="shopping">
+      <li nz-submenu nzTitle="Servicios" nzIcon="shopping"
+      *ngIf="sesionSrv.permisos.has(5) || sesionSrv.permisos.has(24)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(5)">
             <a routerLink="grupos">Grupos</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(24)">
             <a routerLink="servicios">Servicios</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Impresión" nzIcon="printer">
+      <li nz-submenu nzTitle="Impresión" nzIcon="printer"
+      *ngIf="sesionSrv.permisos.has(344)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(344)">
             <a routerLink="formatosfacturas">Formatos Facturas</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Auditoría" nzIcon="audit">
+      <li nz-submenu nzTitle="Auditoría" nzIcon="audit" *ngIf="sesionSrv.permisos.has(321)">
         <ul>
-          <li nz-menu-item nzMatchRouter>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(321)">
             <a routerLink="auditoria">Eventos</a>
           </li>
         </ul>
