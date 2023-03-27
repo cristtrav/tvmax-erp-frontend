@@ -1,9 +1,11 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export class AppSettings{
   public static get urlAPI(): string {
-    const hostname = window.location.hostname;
-    return `http://${hostname}:3000/api`;
+    if(environment.production) return `${location.protocol}//${location.hostname}:${location.port}/api`;
+    else return `http://localhost:3000/api`;
+    
   }
 
   public static get httpOptionsPost(): Object {
