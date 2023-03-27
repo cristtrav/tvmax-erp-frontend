@@ -66,21 +66,6 @@ export class SesionService {
           return (<ISession>resp.session);
         })
       );
-    /*return this.http.post<ISession>(`${this.url}/login`, { ci: ci, password: pwd }, AppSettings.httpOptionsPostJson)
-      .pipe(
-        mergeMap(sess=> {
-          return sess;
-        }),
-        map((session: any) => {
-          const atoken = session.accessToken;
-          const rtoken = session.refreshToken;
-          this.nombreBehavior.next(session.nombreUsuario);
-          localStorage.setItem('accessToken', atoken);
-          localStorage.setItem('refreshToken', rtoken);
-          this.actualizarDatosUsuario(atoken);
-          this.refreshTokenTimer(atoken);
-          return session;
-      }));*/
   }
 
   refresh(token: string): Observable<IRefreshSession> {

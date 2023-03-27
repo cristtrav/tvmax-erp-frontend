@@ -40,7 +40,6 @@ import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { CuotasPendientesComponent } from './detalle-venta/cuotas-pendientes/cuotas-pendientes.component';
 import { ServiciosComponent } from './detalle-venta/servicios/servicios.component';
-import { ImpresionService } from '@servicios/impresion.service';
 
 @NgModule({
   declarations: [
@@ -87,6 +86,7 @@ import { ImpresionService } from '@servicios/impresion.service';
     NzTabsModule,
     EstadisticasModule,
     NzDescriptionsModule
-  ]
+  ],
+  exports: [DetalleVentaComponent]
 })
 export class VentasModule { }

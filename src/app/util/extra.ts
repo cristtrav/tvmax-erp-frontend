@@ -1,5 +1,8 @@
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from "@angular/router";
 import { DetalleVenta } from "@dto/detalle-venta-dto";
 import { Venta } from "@dto/venta.dto";
+import { SesionService } from "@servicios/sesion.service";
 
 export class Extra {
     public static dateToString(d: Date): string {
@@ -113,7 +116,7 @@ export class Extra {
         detalle1.idservicio = 9;
         detalle1.idsuscripcion = 100000;
         detalles.push(detalle1);
-    
+
         const detalle2 = new DetalleVenta();
         detalle2.id = 601;
         detalle2.descripcion = "(108654) INTERNET 50MB | CUOTA ENE/2023"
@@ -127,5 +130,12 @@ export class Extra {
         detalle2.idsuscripcion = 100000;
         detalles.push(detalle2);
         return detalles;
+    }
+
+    public static getCanEnterModuleFn = (idfuncionalidad: number) => {
+        return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
+            if (inject(SesionService).permisos.has(idfuncionalidad)) return true;
+            else return inject(Router).createUrlTree(['app', 'dashboard']);
+        }
     }
 }

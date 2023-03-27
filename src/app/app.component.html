@@ -27,10 +27,13 @@
         </ul>
       </li>
       <li nz-submenu nzTitle="Facturación" nzIcon="file-done" 
-      *ngIf="sesionSrv.permisos.has(266) || sesionSrv.permisos.has(244) || sesionSrv.permisos.has(361)">
+      *ngIf="sesionSrv.permisos.has(266) || sesionSrv.permisos.has(244) || sesionSrv.permisos.has(361) || sesionSrv.permisos.has(380)">
         <ul>
           <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(266)">
             <a routerLink="ventas">Ventas</a>
+          </li>
+          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(380)">
+            <a routerLink="pos">POS</a>
           </li>
           <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(244)">
             <a routerLink="timbrados">Timbrados</a>
