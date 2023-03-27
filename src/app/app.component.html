@@ -76,8 +76,7 @@
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Impresión" nzIcon="printer"
-      *ngIf="sesionSrv.permisos.has(344)">
+      <li nz-submenu nzTitle="Impresión" nzIcon="printer" *ngIf="sesionSrv.permisos.has(344)">
         <ul>
           <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(344)">
             <a routerLink="formatosfacturas">Formatos Facturas</a>
