@@ -57,7 +57,7 @@
                             nz-icon nzType="clear" nzTheme="outline"></i></a> Registrado por</h3>
                 <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear [(ngModel)]="idUsuarioCobroFiltro"
                     (ngModelChange)="filtrar()" style="width: 100%;">
-                    <nz-option *ngFor="let usu of lstUsuariosFiltro" [nzLabel]="usu.nombres+' '+usu.apellidos"
+                    <nz-option *ngFor="let usu of lstUsuariosFiltro" [nzLabel]="usu.razonsocial"
                         [nzValue]="usu.id"></nz-option>
                 </nz-select>
             </div>
