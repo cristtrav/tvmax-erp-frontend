@@ -42,4 +42,8 @@ export class UsuariosService {
   getLastId(): Observable<number>{
     return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
+
+  changePassword(idusuario: number, oldPass: string, newPass: string): Observable<any>{
+    return this.http.post(`${this.url}/${idusuario}/password`, {oldPass, newPass}, AppSettings.getHttpOptionsAuth());
+  }
 }

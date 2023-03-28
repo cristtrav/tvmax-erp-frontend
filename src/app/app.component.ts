@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { FormCambioPasswordComponent } from './modulos/usuarios/form-cambio-password/form-cambio-password.component';
 import { SesionService } from './servicios/sesion.service';
 
 @Component({
@@ -9,9 +10,15 @@ import { SesionService } from './servicios/sesion.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+
+  @ViewChild(FormCambioPasswordComponent)
+  formCambioPasswordComp!: FormCambioPasswordComponent; 
+
   isCollapsed = false;
   nombreUsuario: string = '';
   textoAvatar='';
+  isCambiarPassModalVisible: boolean = false;
+  guardarLoading: boolean = false;
 
   constructor(
     public sesionSrv: SesionService,

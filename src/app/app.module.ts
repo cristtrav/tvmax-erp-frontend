@@ -22,6 +22,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { UsuariosModule } from './modulos/usuarios/usuarios.module';
 
 registerLocaleData(es);
 
@@ -44,7 +45,8 @@ registerLocaleData(es);
     NzDropDownModule,
     NzSpaceModule,
     NzNotificationModule,
-    NzModalModule
+    NzModalModule,
+    UsuariosModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: es_ES },

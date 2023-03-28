@@ -109,9 +109,12 @@
               [nzDropdownMenu]="menu" style="margin-right: 8px; background-color: #87d068;"></nz-avatar>
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
-            <ul nz-menu nzSelectable>
+            <ul nz-menu>
               <li style="margin: 6px 12px 6px 12px"><strong>{{nombreUsuario}}</strong></li>
               <li nz-menu-divider></li>
+              <li nz-menu-item (click)="isCambiarPassModalVisible = true">
+                <span><i nz-icon nzType="key"></i> Cambiar Contraseña</span>
+              </li>
               <li nz-menu-item (click)="doLogout()">
                 <span><i nz-icon nzType="logout"></i> Cerrar Sesión</span>
               </li>
@@ -125,3 +128,14 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
+<nz-modal
+  [nzContent]="formCambioPass"
+  [nzTitle]="'Cambiar Contraseña'"
+  [(nzVisible)]="isCambiarPassModalVisible"
+  (nzOnCancel)="isCambiarPassModalVisible = false"
+  (nzOnOk)="formCambioPasswordComp.guardar()"
+  [nzOkLoading]="guardarLoading">
+  <ng-template #formCambioPass>
+    <app-form-cambio-password (guardado)="isCambiarPassModalVisible = false" (guardarLoading)="guardarLoading = $event"></app-form-cambio-password>
+  </ng-template>
+</nz-modal>
