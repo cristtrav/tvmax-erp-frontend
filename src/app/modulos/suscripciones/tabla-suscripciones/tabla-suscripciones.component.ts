@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Extra } from '@util/extra';
@@ -22,6 +22,8 @@ export class TablaSuscripcionesComponent implements OnInit {
   idcliente: number | null = null;
   @Input()
   mostrarCliente: boolean = false;
+  @Output()
+  tableLoadingChange = new EventEmitter<boolean>();
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -84,8 +86,9 @@ export class TablaSuscripcionesComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  private cargarDatos(): void {
+  cargarDatos(): void {
     this.tableLoading = true;
+    this.tableLoadingChange.emit(true);
     forkJoin({
       suscripciones: this.suscripSrv.get(this.getHttpQueryParams()),
       total: this.suscripSrv.getTotal(this.getHttpQueryParams())
@@ -94,11 +97,13 @@ export class TablaSuscripcionesComponent implements OnInit {
         this.lstSuscripciones = resp.suscripciones;
         this.total = resp.total;
         this.tableLoading = false;
+        this.tableLoadingChange.emit(false);
       },
       error: (e) => {
         console.error('Error al cargar suscripciones', e);
         this.httpErrorHandler.process(e);
         this.tableLoading = false;
+        this.tableLoadingChange.emit(false);
       }
     });
   }

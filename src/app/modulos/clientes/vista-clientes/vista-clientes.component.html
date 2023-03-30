@@ -13,10 +13,20 @@
         <div class="module-content">
             <div nz-row>
                 <div nz-col nzFlex="auto">
-                    <a nz-button nzType="primary" routerLink="nuevo">
-                        <i nz-icon nzType="plus"></i>
-                        Nuevo
-                    </a>
+                    <div nz-row [nzGutter]="[8, 8]">
+                        <div nz-col>
+                            <a nz-button nzType="primary" routerLink="nuevo">
+                                <i nz-icon nzType="plus"></i>
+                                Nuevo
+                            </a>
+                        </div>
+                        <div nz-col>
+                            <button nz-button nzType="default" (click)="cargarDatos()">
+                                <i nz-icon nzType="reload"></i>
+                                Recargar
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div nz-col>
                     <nz-space>
@@ -85,8 +95,7 @@
                                 <span *ngIf="!c.ci" nz-typography nzType="secondary">(sin CI/RUC)</span>
                             </td>
                             <td>
-                                <span *ngIf="c.direccion" nz-tooltip
-                                    [nzTooltipTitle]="c.direccion">
+                                <span *ngIf="c.direccion" nz-tooltip [nzTooltipTitle]="c.direccion">
                                     {{ c.direccion | slice:0:30 }}
                                     <span *ngIf="c.direccion.length>30">...</span>
                                 </span>
@@ -125,11 +134,7 @@
                                         </button>
                                     </div>
                                     <div nz-col>
-                                        <button
-                                            nzType="primary"
-                                            nz-button
-                                            (click)="confirmarEliminacion(c)"
-                                            nzDanger>
+                                        <button nzType="primary" nz-button (click)="confirmarEliminacion(c)" nzDanger>
                                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                                         </button>
                                     </div>
@@ -192,7 +197,8 @@
                                     </ng-template>
                                     <span *ngIf="c.iddepartamento" nz-tooltip
                                         [nzTooltipTitle]="'Código: '+c.iddepartamento">{{ c.departamento }}</span>
-                                    <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin departamento)</span>
+                                    <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin
+                                        departamento)</span>
                                 </nz-descriptions-item>
                             </nz-descriptions>
                         </tr>

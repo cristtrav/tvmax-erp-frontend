@@ -23,7 +23,7 @@ export class CardResumenSuscripcionesUbicacionesComponent implements OnInit {
   @Input()
   textoBusqueda: string = '';
 
-  pestaniaActiva: 'departamentos' | 'distritos' | 'barrios' = 'departamentos';
+  pestaniaActiva: 'departamentos' | 'distritos' | 'barrios' = 'barrios';
 
   constructor() { }
 

@@ -47,6 +47,12 @@
                                             </button>
                                         </div>
                                         <div nz-col>
+                                            <button nz-button nzType="default" (click)="recargar()">
+                                                <i nz-icon nzType="reload"></i>
+                                                Recargar
+                                            </button>
+                                        </div>
+                                        <div nz-col>
                                             <button nz-button nzType="default" [nzLoading]="loadingDatosReporte"
                                                 (click)="printWithSrv()">
                                                 <i nz-icon nzType="printer"></i>
@@ -82,7 +88,7 @@
                         </div>
                         <div nz-col nzSpan="24" *ngIf="vista==='registros'">
                             <app-tabla-suscripciones [mostrarCliente]="true" [textoBusqueda]="textoBusqueda"
-                                [paramsFiltros]="paramsFiltro">
+                                [paramsFiltros]="paramsFiltro" (tableLoadingChange)="dataLoading = $event">
                             </app-tabla-suscripciones>
                         </div>
                     </div>

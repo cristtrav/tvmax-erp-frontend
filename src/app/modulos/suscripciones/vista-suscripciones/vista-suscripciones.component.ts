@@ -4,6 +4,8 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { PortalOutlet } from "@angular/cdk/portal";
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { ImpresionService } from '@servicios/impresion.service';
+import { TablaSuscripcionesComponent } from '../tabla-suscripciones/tabla-suscripciones.component';
+import { ContenidoEstadisticasSuscripcionesComponent } from '../../estadisticas/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
 
 
 @Component({
@@ -14,6 +16,10 @@ import { ImpresionService } from '@servicios/impresion.service';
 export class VistaSuscripcionesComponent implements OnInit {
 
   @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>; // target host to render the printable
+  @ViewChild(TablaSuscripcionesComponent)
+  tablaSuscripcionesComp!: TablaSuscripcionesComponent;
+  @ViewChild(ContenidoEstadisticasSuscripcionesComponent)
+  estadisticasSuscripcionesComp!: ContenidoEstadisticasSuscripcionesComponent;
 
   vista: string = 'registros';
   cantFiltrosAplicados: number = 0;
@@ -22,6 +28,7 @@ export class VistaSuscripcionesComponent implements OnInit {
   paramsFiltro: IParametroFiltro = {};
   loadingDatosReporte: boolean = false;
   componenteReporteRendered: boolean = false;
+  dataLoading: boolean = false;
 
   constructor(
     private aroute: ActivatedRoute, 
@@ -47,6 +54,11 @@ export class VistaSuscripcionesComponent implements OnInit {
   public printWithSrv(): void {
     this.impresionSrv.imprimirReporteSuscripciones(this.iframe, this.paramsFiltro, this.viewContainerRef)
     .subscribe(loading => this.loadingDatosReporte = loading);
+  }
+
+  recargar(){
+    if(this.tablaSuscripcionesComp) this.tablaSuscripcionesComp.cargarDatos();
+    this.estadisticasSuscripcionesComp?.recargar();
   }
 
 }

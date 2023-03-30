@@ -1,8 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { CardResumenCuotasPendientesComponent } from '../card-resumen-cuotas-pendientes/card-resumen-cuotas-pendientes.component';
+import { CardResumenEstadosComponent } from '../card-resumen-estados/card-resumen-estados.component';
+import { CardResumenSuscripcionesGruposServiciosComponent } from '../card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
+import { CardResumenSuscripcionesUbicacionesComponent } from '../card-resumen-suscripciones-ubicaciones/card-resumen-suscripciones-ubicaciones.component';
 
 @Component({
   selector: 'app-contenido-estadisticas-suscripciones',
@@ -10,6 +14,18 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
   styleUrls: ['./contenido-estadisticas-suscripciones.component.scss']
 })
 export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
+
+  @ViewChild(CardResumenCuotasPendientesComponent)
+  cardResumenCuotasComp!: CardResumenCuotasPendientesComponent;
+
+  @ViewChild(CardResumenEstadosComponent)
+  cardResumenEstados!: CardResumenEstadosComponent;
+
+  @ViewChild(CardResumenSuscripcionesGruposServiciosComponent)
+  cardResumenGruposServComp!: CardResumenSuscripcionesGruposServiciosComponent;
+
+  @ViewChild(CardResumenSuscripcionesUbicacionesComponent)
+  cardResumenUbicacionesComp!: CardResumenSuscripcionesUbicacionesComponent;
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -70,6 +86,14 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
     .append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     return params;
+  }
+
+  recargar(){
+    this.cargarDatos();
+    this.cardResumenCuotasComp?.cargarDatos();
+    this.cardResumenEstados?.cargarDatos();
+    this.cardResumenGruposServComp?.cargarDatos();
+    this.cardResumenUbicacionesComp?.cargarDatos();
   }
 
 }
