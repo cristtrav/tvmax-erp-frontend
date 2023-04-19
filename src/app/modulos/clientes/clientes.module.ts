@@ -37,6 +37,7 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @NgModule({
   declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent, FormFiltroClientesComponent],
@@ -69,7 +70,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzDescriptionsModule,
     HelperComponentsModule,
     NzTypographyModule,
-    NzModalModule
+    NzModalModule,
+    NzDropDownModule
   ]
 })
 export class ClientesModule { }

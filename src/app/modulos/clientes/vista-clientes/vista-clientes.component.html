@@ -116,17 +116,33 @@
                             <td>
                                 <div nz-row [nzGutter]="[8,8]">
                                     <div nz-col>
-                                        <button nz-tooltip nzTooltipTitle="Domicilios" nz-button nzType="default"
-                                            [routerLink]="[c.id, 'domicilios']">
-                                            <i nz-icon nzType="home" nzTheme="outline"></i>
+                                        <button nz-button nzType="default" nz-dropdown [nzDropdownMenu]="menuOpciones">
+                                            <i nz-icon nzType="more" nzTheme="outline"></i>
                                         </button>
                                     </div>
-                                    <div nz-col>
-                                        <button nz-tooltip nz-button nzType="default" nzTooltipTitle="Suscripciones"
-                                            [routerLink]="c.id+'/suscripciones'">
-                                            <i nz-icon nzType="carry-out" nzTheme="outline"></i>
-                                        </button>
-                                    </div>
+                                    <nz-dropdown-menu #menuOpciones="nzDropdownMenu">
+                                        <ul nz-menu>
+                                            <li nz-menu-item [routerLink]="[c.id, 'domicilios']">
+                                                <nz-space>
+                                                    <i *nzSpaceItem nz-icon nzType="home" nzTheme="outline"></i>
+                                                    <span *nzSpaceItem>Domicilios</span>
+                                                </nz-space>
+                                            </li>
+                                            <li nz-menu-item [routerLink]="[c.id, 'suscripciones']">
+                                                <nz-space>
+                                                    <i *nzSpaceItem nz-icon nzType="carry-out" nzTheme="outline"></i>
+                                                    <span *nzSpaceItem>Suscripciones</span>
+                                                </nz-space>
+                                                
+                                            </li>
+                                            <li nz-menu-item>
+                                                <nz-space>
+                                                    <i *nzSpaceItem nz-icon nzType="credit-card" nzTheme="outline"></i>
+                                                    <span *nzSpaceItem>Pagos</span>
+                                                </nz-space>
+                                            </li>
+                                        </ul>
+                                    </nz-dropdown-menu>                                    
                                     <div nz-col>
                                         <button nz-button nz-tooltip nzType="primary" [routerLink]="c.id+''"
                                             nzTooltipTitle="Editar">
