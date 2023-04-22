@@ -13,60 +13,77 @@
     <thead>
         <tr>
             <th nzWidth="60px"></th>
-            <!--<th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>-->
-            <th>Cobrador</th>
+            <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
             <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
-            <th [nzColumnKey]="'servicio'" [nzSortFn]="true">Servicio</th>
-            <th [nzColumnKey]="'grupo'" [nzSortFn]="true">Grupo</th>
-            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Monto</th>
-            <th [nzColumnKey]="'fechacobro'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Cobro</th>
             <th [nzColumnKey]="'facturacobro'" [nzSortFn]="true">Factura</th>
+            <th [nzColumnKey]="'fechafactura'" [nzSortFn]="true"  [nzSortOrder]="'descend'">F. Factura</th>
+            <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
+            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Monto</th>
+            <th>Estado</th>
+            <th [nzColumnKey]="'fechacobro'" [nzSortFn]="true">F. Cobro</th>
+            
         </tr>
     </thead>
     <tbody>
         <ng-container *ngFor="let detalle of tabla.data">
             <tr>
                 <td [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)" (nzExpandChange)="onExpandChange(detalle.iddetalleventa ?? 0, $event)"></td>
-                <!--<td>{{ detalle.ci | number }}</td>-->
                 <td>
-                    <span *ngIf="!detalle.cobrador" nz-typography nzType="secondary">(sin cobrador)</span>
-                    {{ detalle.cobrador }}
+                    <span *ngIf="detalle.ci == null" nz-typography nzType="secondary">(sin CI/RUC)</span>
+                    <span *ngIf="detalle.ci != null">{{ detalle.ci | number }}</span>
+                    <span *ngIf="detalle.dvruc != null">-{{ detalle.dvruc }}</span>
                 </td>
                 <td>{{ detalle.cliente }}</td>
-                <td>{{ detalle.servicio }}</td>
-                <td>{{ detalle.grupo }}</td>
+                <td>
+                    <span *ngIf="!detalle.facturacobro" nz-typography nzType="secondary">(sin factura)</span>
+                    <span *ngIf="detalle.facturacobro">{{ detalle.facturacobro }}</span>
+                </td>
+                <td>{{ detalle.fechafactura | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ detalle.descripcion }}</td>
                 <td nzAlign="right">Gs.{{ detalle.monto | number }}</td>
+                <td>
+                    <nz-tag *ngIf="detalle.anulado" nzColor="red">Anulado</nz-tag>
+                    <nz-tag *ngIf="detalle.pagado && !detalle.anulado" nzColor="green">Pagado</nz-tag>
+                    <nz-tag *ngIf="!detalle.pagado && !detalle.anulado" nzColor="orange">Pendiente</nz-tag>
+                </td>
                 <td>
                     <span *ngIf="!detalle.fechacobro" nz-typography nzType="secondary">(sin fecha)</span>
                     <span *ngIf="detalle.fechacobro">{{ detalle.fechacobro | date: 'dd/MM/yy' }}</span>
                 </td>
-                <td>
-                    <span *ngIf="!detalle.facturacobro" nz-typography nzType="secondary">-</span>
-                    <span *ngIf="detalle.facturacobro">{{ detalle.facturacobro }}</span>
-                </td>
             </tr>
             <tr [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)">
                 <nz-descriptions>
+                    <nz-descriptions-item [nzTitle]="tituloidventa">
+                        <ng-template #tituloidventa>
+                            <strong>Cód. Venta</strong>
+                        </ng-template>
+                        {{ detalle.idventa }}
+                    </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="tituloiddetalle">
                         <ng-template #tituloiddetalle>
-                            <strong>Código de detalle</strong>
+                            <strong>Cód. Detalle</strong>
                         </ng-template>
                         {{ detalle.iddetalleventa }}
                     </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="tituloruc">
-                        <ng-template #tituloruc>
-                            <strong>CI/RUC Cliente</strong>
+                    <nz-descriptions-item [nzTitle]="tituloidsuscripcion">
+                        <ng-template #tituloidsuscripcion>
+                            <strong>Cód. Suscripción</strong>
                         </ng-template>
-                        <span *ngIf="detalle.ci && detalle.dvruc">{{ detalle.ci | number }}-{{ detalle.dvruc }}</span>
-                        <span *ngIf="detalle.ci && !detalle.dvruc">{{ detalle.ci | number }}</span>
-                        <span *ngIf="!detalle.ci" nz-typography nzType="secondary">-</span>
+                        {{ detalle.idsuscripcion }}
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulocobrador">
+                        <ng-template #titulocobrador>
+                            <strong>Cobrador</strong>
+                        </ng-template>
+                        <span *ngIf="detalle.cobrador">{{ detalle.cobrador }}</span>
+                        <span *ngIf="!detalle.cobrador" nz-typography nzType="secondary">-</span>
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulousuario">
                         <ng-template #titulousuario>
                             <strong>Cobro registrado por</strong>
                         </ng-template>
-                        <span *ngIf="detalle.usuario">{{ detalle.usuario }}</span>
-                        <span *ngIf="!detalle.usuario" nz-typography nzType="secondary">-</span>
+                        <span *ngIf="detalle.usuarioregistrocobro">{{ detalle.usuarioregistrocobro }}</span>
+                        <span *ngIf="!detalle.usuarioregistrocobro" nz-typography nzType="secondary">-</span>
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulovencimiento">
                         <ng-template #titulovencimiento>
@@ -74,6 +91,12 @@
                         </ng-template>
                             <span *ngIf="detalle.fechavencimiento">{{ detalle.fechavencimiento | date: 'dd/MM/yy' }}</span>
                             <span *ngIf="!detalle.fechavencimiento" nz-typography nzType="secondary">-</span>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulogruposervicio">
+                        <ng-template #titulogruposervicio>
+                            <strong>Grupo/Servicio</strong>
+                        </ng-template>
+                        {{ detalle.grupo }} / {{detalle.servicio}}
                     </nz-descriptions-item>
                 </nz-descriptions>
             </tr>

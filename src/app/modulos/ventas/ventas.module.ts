@@ -40,6 +40,7 @@ import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { CuotasPendientesComponent } from './detalle-venta/cuotas-pendientes/cuotas-pendientes.component';
 import { ServiciosComponent } from './detalle-venta/servicios/servicios.component';
+import { CobrosModule } from '../cobros/cobros.module';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { ServiciosComponent } from './detalle-venta/servicios/servicios.componen
     NzCheckboxModule,
     NzTabsModule,
     EstadisticasModule,
-    NzDescriptionsModule
+    NzDescriptionsModule,
+    CobrosModule
   ],
   exports: [DetalleVentaComponent]
 })

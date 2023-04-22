@@ -21,7 +21,7 @@ const routes: Routes = [
       { path: 'ventas', loadChildren: () => import ('./modulos/ventas/ventas.module').then(m => m.VentasModule), canActivate: [Extra.getCanEnterModuleFn(266)]},
       { path: 'timbrados', loadChildren: () => import ('./modulos/timbrados/timbrados.module').then(m => m.TimbradosModule), canActivate: [Extra.getCanEnterModuleFn(244)] },
       { path: 'auditoria', loadChildren: () => import('./modulos/auditoria/auditoria.module').then(m => m.AuditoriaModule), canActivate: [Extra.getCanEnterModuleFn(321)] },
-      { path: 'cobros', loadChildren: () => import('./modulos/cobros/cobros.module').then(m => m.CobrosModule), canActivate: [Extra.getCanEnterModuleFn(361)]},
+      //{ path: 'cobros', loadChildren: () => import('./modulos/cobros/cobros.module').then(m => m.CobrosModule), canActivate: [Extra.getCanEnterModuleFn(361)]},
       { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule), canActivate: [Extra.getCanEnterModuleFn(144)]},
       { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule), canActivate: [Extra.getCanEnterModuleFn(344)]},
       { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)}

@@ -14,6 +14,7 @@ import { FacturaPreimpresaVentaComponent } from './factura-preimpresa-venta/fact
 import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
 import { NumeroALetrasPipe } from '@util/pipes/numero-a-letras.pipe';
 import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
+import { ReporteCobrosComponent } from './reporte-cobros/reporte-cobros.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
     FiltrosReporteComponent,
     ReporteVentasComponent,
     TablaReporteComponent,
-    FacturaPreimpresaVentaComponent
+    FacturaPreimpresaVentaComponent,
+    ReporteCobrosComponent
   ],
   imports: [
     CommonModule,

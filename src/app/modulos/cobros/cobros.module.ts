@@ -50,6 +50,7 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
     NzToolTipModule,
     NzSelectModule,
     NzTreeSelectModule
-  ]
+  ],
+  exports: [TablaDetalleVentasCobrosComponent]
 })
 export class CobrosModule { }

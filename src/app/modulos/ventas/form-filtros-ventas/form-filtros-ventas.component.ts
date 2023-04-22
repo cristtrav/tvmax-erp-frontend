@@ -196,7 +196,7 @@ export class FormFiltrosVentasComponent implements OnInit {
       if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
     }
     if (this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
-    if (this.idUsuarioCobroFiltro) params['idfuncionarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
+    if (this.idUsuarioCobroFiltro) params['idusuarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
     if (this.fechaInicioCobroFiltro) {
       const fechaIniCobroStr: string = `${this.fechaInicioCobroFiltro.getFullYear()}-${(this.fechaInicioCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioCobroFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechainiciocobro'] = fechaIniCobroStr;

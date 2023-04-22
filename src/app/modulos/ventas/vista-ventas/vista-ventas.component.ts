@@ -11,7 +11,7 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 export class VistaVentasComponent implements OnInit {
 
   @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>;
-  vista: 'registros' |'estadisticas' = 'registros';
+  vista: 'facturas' | 'detalles' |'estadisticas' = 'facturas';
 
   textoBusqueda: string = '';
   cantFiltrosAplicados: number = 0;
@@ -31,11 +31,11 @@ export class VistaVentasComponent implements OnInit {
 
   ngOnInit(): void {
     const v: string | null = this.aroute.snapshot.queryParamMap.get('vista');
-    this.cambiarVista(v === null ? 'registros' : v);
+    this.cambiarVista(v === 'facturas' || v === 'detalles' || v === 'estadisticas' ? v : 'facturas');
   }
 
-  cambiarVista(v: string) {
-    this.vista = (v !== 'registros' && v !== 'estadisticas') ? 'registros' : v;
+  cambiarVista(v: 'facturas' | 'detalles' | 'estadisticas') {
+    this.vista = v;
     this.router.navigate([], {
       relativeTo: this.aroute,
       queryParams: { vista: this.vista },
@@ -45,24 +45,7 @@ export class VistaVentasComponent implements OnInit {
 
   imprimir(): void {
     this.impresionSrv.imprimirReporteVentas(this.iframe, this.paramsFiltros, this.viewConteinerRef)
-    .subscribe(loading => this.loadingImpresion = loading);
-    /*this.loadingImpresion = true;
-    this.impresionSrv.imprimirReporte(
-      ReporteVentasComponent,
-      this.iframe,
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector,
-      this.viewConteinerRef,
-      this.paramsFiltros
-    ).subscribe({
-      next: () => {
-        this.loadingImpresion = false;
-      },
-      error: () => {
-        this.loadingImpresion = false;
-      }
-    });*/
+    .subscribe(loading => this.loadingImpresion = loading);    
   }
 
 }

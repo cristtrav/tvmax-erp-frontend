@@ -1,6 +1,9 @@
 export class CobroDetalleVenta{
     iddetalleventa: number | null = null;
+    idventa: number | null = null;
+    idsuscripcion: number | null = null;
     monto: number | null = null;
+    descripcion: string | null = null;
     idservicio: number | null = null;
     servicio: string | null = null;
     idgrupo: number | null = null;
@@ -15,8 +18,8 @@ export class CobroDetalleVenta{
     anulado: boolean | null = null;
     fechacobro: Date | null = null;
     facturacobro: string | null = null;
-    idcobrador: number | null = null;
+    idcobradorcomision: number | null = null;
     cobrador: string | null = null;
-    idusuario: number | null = null;
-    usuario: string | null = null;
+    idusuarioregistrocobro: number | null = null;
+    usuarioregistrocobro: string | null = null;
 }

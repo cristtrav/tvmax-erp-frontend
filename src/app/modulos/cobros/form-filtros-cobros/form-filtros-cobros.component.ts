@@ -161,7 +161,7 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
     if (this.fechaInicioCobro) params['fechainiciocobro'] = formatDate(this.fechaInicioCobro, 'yyyy-MM-dd', this.locale);
     if (this.fechaFinCobro) params['fechafincobro'] = formatDate(this.fechaFinCobro, 'yyyy-MM-dd', this.locale);
     if (this.idcobrador) params['idcobradorcomision'] = this.idcobrador;
-    if (this.idusuario) params['idfuncionarioregistrocobro'] = this.idusuario;
+    if (this.idusuario) params['idusuario'] = this.idusuario;
 
     const idgrupos: number[] = this.idgruposIdservicios
       .filter(key => !key.includes('-'))

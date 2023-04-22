@@ -21,9 +21,13 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
     return this._paramsFiltros;
   }
   set paramsFiltros(p: IParametroFiltro) {
+    let tmpParams = {...p};
+    delete tmpParams.sort;
+    delete tmpParams.offset;
+    delete tmpParams.limit;
     const oldParams: string = JSON.stringify(this._paramsFiltros);
-    this._paramsFiltros = p;
-    if (oldParams !== JSON.stringify(p)) this.cargarDetalleCobro();
+    this._paramsFiltros = tmpParams;
+    if (oldParams !== JSON.stringify(tmpParams)) this.cargarDetalleCobro();
   }
   _paramsFiltros: IParametroFiltro = {};
 
@@ -47,7 +51,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
   public pageSize: number = 10;
   public pageIndex: number = 1;
   public totalRegisters: number = 0;
-  public sortStr: string | null = '+fecha_factura';
+  public sortStr: string | null = '+fechafactura';
   expandSet = new Set<number>();
 
   constructor(
@@ -108,8 +112,8 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
 
   getHttpParams(): HttpParams{
     let params: HttpParams = new HttpParams().append('eliminado', 'false');
-    params = params.append('anulado','false');
-    params = params.append('pagado', 'true');
+    /*params = params.append('anulado','false');
+    params = params.append('pagado', 'true');*/
     if (this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
