@@ -1,10 +1,12 @@
 <div nz-row [nzGutter]="[8, 8]">
     <div nz-col>
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha de factura" (click)="limpiarFiltroFechas()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a> Fecha factura
-        </h3>
+        <nz-badge [nzShowDot]="fechaInicioFiltro != null || fechaFinFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha de factura" (click)="limpiarFiltroFechas()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Fecha factura
+            </h3>
+        </nz-badge>
         <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledStartDate"
             nzPlaceHolder="Fecha desde" style="width: 100%;" nzFormat="dd/MM/yyyy">
         </nz-date-picker>
@@ -13,11 +15,13 @@
         </nz-date-picker>
     </div>
     <div nz-col>
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de estados" (click)="limpiarFiltroEstados()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a> Estado
-        </h3>
+        <nz-badge [nzShowDot]="filtroAnulado || filtroPagado || filtroPendiente" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de estados" (click)="limpiarFiltroEstados()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Estado
+            </h3>
+        </nz-badge>
         <div nz-row>
             <nz-col nzSpan="24">
                 <label nz-checkbox [(ngModel)]="filtroAnulado" (ngModelChange)="filtrar()">Anulado</label>
@@ -33,11 +37,13 @@
         </div>
     </div>
     <div nz-col nzSpan="24">
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de fechas" (click)="limpiarFiltrosFechasCobro()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a> Fecha cobro
-        </h3>
+        <nz-badge [nzShowDot]="fechaInicioCobroFiltro != null || fechaFinCobroFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fechas" (click)="limpiarFiltrosFechasCobro()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Fecha cobro
+            </h3>
+        </nz-badge>
         <nz-date-picker [(ngModel)]="fechaInicioCobroFiltro" (ngModelChange)="filtrar()"
             [nzDisabledDate]="disabledStartDateCobro" nzPlaceHolder="Fecha desde" style="width: 100%;"
             nzFormat="dd/MM/yyyy">
@@ -48,23 +54,27 @@
         </nz-date-picker>
     </div>
     <div nz-col nzSpan="24">
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de usuario" (click)="limpiarFiltroUsuarioCobro()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a> Cobro registrado por
-        </h3>
+        <nz-badge [nzShowDot]="idUsuarioCobroFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de usuario" (click)="limpiarFiltroUsuarioCobro()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Cobro registrado por
+            </h3>
+        </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear [(ngModel)]="idUsuarioCobroFiltro"
             (ngModelChange)="filtrar()" style="width: 100%;" nzShowSearch>
             <nz-option *ngFor="let usu of lstUsuariosFiltro" [nzLabel]="usu.razonsocial" [nzValue]="usu.id"></nz-option>
         </nz-select>
     </div>
     <div nz-col nzSpan="24">
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de cobrador" (click)="limpiarFiltroCobrador()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a>
-            Cobrador
-        </h3>
+        <nz-badge [nzShowDot]="idCobradorFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de cobrador" (click)="limpiarFiltroCobrador()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Cobrador
+            </h3>
+        </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear [(ngModel)]="idCobradorFiltro"
             (ngModelChange)="filtrar()" style="width: 100%;" nzShowSearch>
             <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial"
@@ -72,12 +82,15 @@
         </nz-select>
     </div>
     <div nz-col nzSpan="24" *ngIf="mostrarFiltroGrupoServicio">
-        <h3>
-            <a nz-tooltip nzTooltipTitle="Limpiar filtro de Grupo/Servicio" (click)="limpiarFiltroGrupoServicio()">
-                <i nz-icon nzType="clear" nzTheme="outline"></i>
-            </a>
-            Grupo/Servicio
-        </h3>
-        <app-grupo-servicio-treeselect [(value)]="grupoServicioFiltro" (valueChange)="filtrar()"></app-grupo-servicio-treeselect>
+        <nz-badge [nzShowDot]="grupoServicioFiltro.length > 0" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de Grupo/Servicio" (click)="limpiarFiltroGrupoServicio()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a>
+                Grupo/Servicio
+            </h3>
+        </nz-badge>
+        <app-grupo-servicio-treeselect [(value)]="grupoServicioFiltro"
+            (valueChange)="filtrar()"></app-grupo-servicio-treeselect>
     </div>
 </div>
