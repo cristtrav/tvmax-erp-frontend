@@ -14,16 +14,17 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { Observable, catchError, forkJoin, of, tap } from 'rxjs';
 
 @Component({
-  selector: 'app-reporte-cobros',
-  templateUrl: './reporte-cobros.component.html',
-  styleUrls: ['./reporte-cobros.component.scss', '../estilos-tabla-reportes.scss'],
+  selector: 'app-reporte-detalles-ventas',
+  templateUrl: './reporte-detalles-ventas.component.html',
+  styleUrls: ['./reporte-detalles-ventas.component.scss', '../estilos-tabla-reportes.scss'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
-export class ReporteCobrosComponent implements OnInit {
+export class ReporteDetallesVentasComponent implements OnInit {
 
   lstFiltrosReporte: IFiltroReporte[] = [];
-  lstCobros: CobroDetalleVenta[] = [];
+  lstDetallesVentas: CobroDetalleVenta[] = [];
   cobradorFiltro: Usuario | null = null;
+  montoTotal: number = 0;
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
@@ -39,15 +40,17 @@ export class ReporteCobrosComponent implements OnInit {
   cargarDatos(params: IParametroFiltro): Observable<any>{
     let httpParams = new HttpParams();
     httpParams = httpParams.appendAll(params);
-    console.log(params);
-    this.lstFiltrosReporte.push(this.getFiltroFecha(params));
+    this.lstFiltrosReporte.push(this.getFiltroFechaCobro(params));
+    this.lstFiltrosReporte.push(this.getFiltroFechaVenta(params));
+    this.lstFiltrosReporte.push(this.getEstadoFiltroReporte(params));
+    this.lstFiltrosReporte.push(this.getFiltroBusqueda(params));
     const consultas: {[name: string]: Observable<any>} = {
-      cobros: this.cobrosSrv.getCobrosDetalles(httpParams)
+      detalles: this.cobrosSrv.getCobrosDetalles(httpParams)
     }
     if(params['idcobradorcomision'] != null)
       consultas.cobrador = this.usuariosSrv.getPorId(Number(params['idcobradorcomision']));
-    if(params['idusuario'] != null)
-      consultas.usuario = this.usuariosSrv.getPorId(Number(params['idusuario']));
+    if(params['idusuarioregistrocobro'] != null)
+      consultas.usuario = this.usuariosSrv.getPorId(Number(params['idusuarioregistrocobro']));
     if(params['idgrupo'] != null && Array.isArray(params['idgrupo'])){
       let grupoParams = new HttpParams();
       for(let idgrp of params['idgrupo']) grupoParams = grupoParams.append('id', idgrp);      
@@ -61,10 +64,14 @@ export class ReporteCobrosComponent implements OnInit {
       
     return forkJoin(consultas).pipe(
       tap(resp => {
-        this.lstCobros = resp.cobros;
+        this.lstDetallesVentas = resp.detalles;
         this.lstFiltrosReporte.push(this.getFiltroCobrador(resp.cobrador));
         this.lstFiltrosReporte.push(this.getFiltroUsuario(resp.usuario));        
         this.lstFiltrosReporte.push(this.getFiltrosGrupos(resp.grupos, resp.servicios));
+        
+        let montoTotal = 0;
+        this.lstDetallesVentas.forEach(dv => montoTotal += Number(dv.monto));
+        this.montoTotal = montoTotal;
       }),
       catchError(e => {
         console.error('Error al cargar cobros', e);
@@ -82,7 +89,7 @@ export class ReporteCobrosComponent implements OnInit {
 
   private getFiltroUsuario(usuario: Usuario | null): IFiltroReporte{
     return {
-      titulo: 'Registrado por',
+      titulo: 'Cobro registrado por',
       contenido: usuario != null ? `${usuario.razonsocial}` : '*'
     }
   }
@@ -100,14 +107,45 @@ export class ReporteCobrosComponent implements OnInit {
     return filtro;
   }
 
-  private getFiltroFecha(params: IParametroFiltro): IFiltroReporte{
+  private getFiltroFechaCobro(params: IParametroFiltro): IFiltroReporte{
     let desde = '*';
     let hasta = '*';
     if(params['fechainiciocobro'] != null) desde = formatDate(params['fechainiciocobro'].toString(), 'dd/MM/yyyy', this.locale)
     if(params['fechafincobro'] != null) hasta = formatDate(params['fechafincobro'].toString(), 'dd/MM/yyyy', this.locale);
     return {
-      titulo: 'Fecha de cobro',
+      titulo: 'Fecha cobro',
       contenido: `desde ${desde} hasta ${hasta}`
+    }
+  }
+
+  private getFiltroFechaVenta(params: IParametroFiltro): IFiltroReporte{
+    let desde = '*';
+    let hasta = '*';
+    if(params['fechainiciofactura'] != null) desde = formatDate(params['fechainiciofactura'].toString(), 'dd/MM/yyyy', this.locale)
+    if(params['fechafinfactura'] != null) hasta = formatDate(params['fechafinfactura'].toString(), 'dd/MM/yyyy', this.locale);
+    return {
+      titulo: 'Fecha factura',
+      contenido: `desde ${desde} hasta ${hasta}`
+    }
+  }
+
+  private getEstadoFiltroReporte(params: IParametroFiltro): IFiltroReporte {
+    const titulo: string = 'Estado'
+    let contenido: string = '*';
+    if (params['anulado'] === 'true') {
+      contenido = 'Anulado';
+    } else {
+      if (params['pagado'] !== null && params['pagado'] !== undefined) {
+        contenido = `${params['pagado'] ? 'Pagado' : 'Pendiente'}`;
+      }
+    }
+    return { titulo, contenido };
+  }
+
+  private getFiltroBusqueda(params: IParametroFiltro): IFiltroReporte{
+    return{
+      titulo: 'Búsqueda',
+      contenido: params['search'] ? `"${params['search']}"` : '-'
     }
   }
 

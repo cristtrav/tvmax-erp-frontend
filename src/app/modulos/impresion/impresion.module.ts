@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReporteSuscripcionesComponent } from './reporte-suscripciones/reporte-suscripciones.component';
 import { ReporteSuscripcionesResumenComponent } from './reporte-suscripciones-resumen/reporte-suscripciones-resumen.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
@@ -14,7 +14,7 @@ import { FacturaPreimpresaVentaComponent } from './factura-preimpresa-venta/fact
 import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
 import { NumeroALetrasPipe } from '@util/pipes/numero-a-letras.pipe';
 import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
-import { ReporteCobrosComponent } from './reporte-cobros/reporte-cobros.component';
+import { ReporteDetallesVentasComponent } from './reporte-detalles-ventas/reporte-detalles-ventas.component';
 
 
 @NgModule({
@@ -27,7 +27,7 @@ import { ReporteCobrosComponent } from './reporte-cobros/reporte-cobros.componen
     ReporteVentasComponent,
     TablaReporteComponent,
     FacturaPreimpresaVentaComponent,
-    ReporteCobrosComponent
+    ReporteDetallesVentasComponent
   ],
   imports: [
     CommonModule,

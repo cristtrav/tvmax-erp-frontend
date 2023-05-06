@@ -29,7 +29,7 @@ export class VistaCobrosComponent implements OnInit {
   }
 
   public imprimir(){    
-    this.impresionSrv.imprimirReporteCobros(this.iframe, this.paramsFiltros, this.viewContainerRef)
+    this.impresionSrv.imprimirReporteDetallesVentas(this.iframe, this.paramsFiltros, this.viewContainerRef)
     .subscribe( loading => this.loadingImpresion = loading);
   }
 

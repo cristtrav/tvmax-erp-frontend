@@ -11,7 +11,7 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 export class VistaVentasComponent implements OnInit {
 
   @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>;
-  vista: 'facturas' | 'detalles' |'estadisticas' = 'facturas';
+  vista: 'facturas' | 'detalles' | 'estadisticas' = 'facturas';
 
   textoBusqueda: string = '';
   cantFiltrosAplicados: number = 0;
@@ -44,8 +44,18 @@ export class VistaVentasComponent implements OnInit {
   }
 
   imprimir(): void {
-    this.impresionSrv.imprimirReporteVentas(this.iframe, this.paramsFiltros, this.viewConteinerRef)
-    .subscribe(loading => this.loadingImpresion = loading);    
+    if (this.vista === 'detalles') {
+      this.impresionSrv.imprimirReporteDetallesVentas(
+        this.iframe,
+        {...this.paramsFiltros, search: this.textoBusqueda},
+        this.viewConteinerRef)
+    } else {
+      this.impresionSrv.imprimirReporteVentas(
+        this.iframe,
+        {...this.paramsFiltros, search: this.textoBusqueda},
+        this.viewConteinerRef)
+        .subscribe(loading => this.loadingImpresion = loading);
+    }
   }
 
 }

@@ -8,7 +8,7 @@ import { ReporteVentasComponent } from '../modulos/impresion/reporte-ventas/repo
 import { ClientesService } from './clientes.service';
 import { TimbradosService } from './timbrados.service';
 import { VentasService } from './ventas.service';
-import { ReporteCobrosComponent } from '../modulos/impresion/reporte-cobros/reporte-cobros.component';
+import { ReporteDetallesVentasComponent } from '../modulos/impresion/reporte-detalles-ventas/reporte-detalles-ventas.component';
 
 @Injectable({
   providedIn: 'root'
@@ -102,28 +102,28 @@ export class ImpresionService {
     return loading.asObservable();
   }
 
-  imprimirReporteCobros(
+  imprimirReporteDetallesVentas(
     iframe: ElementRef<HTMLIFrameElement>,
     paramsFiltros: IParametroFiltro,
     viewContainerRef: ViewContainerRef
   ): Observable<boolean>{
     const loading = new BehaviorSubject<boolean>(true);
     const iframeNative = iframe.nativeElement;
-    const reporteCobrosComponent = viewContainerRef.createComponent(ReporteCobrosComponent);
+    const reporteCobrosComponent = viewContainerRef.createComponent(ReporteDetallesVentasComponent);
     reporteCobrosComponent.instance.cargarDatos(paramsFiltros).subscribe({
       next: () => {
         loading.next(false);
         if(!iframeNative.contentWindow || !iframeNative.contentDocument) return;
-        iframeNative.contentDocument.title = 'Reporte de Cobros';
+        iframeNative.contentDocument.title = 'Reporte Detalles Ventas';
         iframeNative.contentDocument.body.appendChild(reporteCobrosComponent.location.nativeElement);
 
-        /*setTimeout(() => {
+        setTimeout(() => {
           iframeNative.contentWindow?.print();
-        }, 250);*/
+        }, 250);
 
-        /*iframeNative.contentWindow.onafterprint = () => {
+        iframeNative.contentWindow.onafterprint = () => {
           reporteCobrosComponent.destroy();
-        }*/
+        }
       },
       error: e => loading.next(false)
     })

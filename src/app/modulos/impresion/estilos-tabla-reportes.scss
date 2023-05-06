@@ -13,6 +13,8 @@ $borderSyle: 1px solid black;
 }
 
 .tabla-reporte th, td {
+    padding-left: 3px;
+    padding-right: 3px;
     page-break-after: auto;
 }
 

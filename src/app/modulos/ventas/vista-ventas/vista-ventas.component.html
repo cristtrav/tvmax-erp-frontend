@@ -76,7 +76,7 @@
             <nz-drawer [nzContent]="formFiltro" nzTitle="Filtros" [nzVisible]="drawerFiltrosVisible" [nzClosable]="true"
                 (nzOnClose)="drawerFiltrosVisible = !drawerFiltrosVisible">
                 <ng-template #formFiltro>
-                    <app-form-filtros-ventas (paramsFiltrosChange)="paramsFiltros = $event" (cantFiltrosChange)="cantFiltrosAplicados = $event">
+                    <app-form-filtros-ventas (paramsFiltrosChange)="paramsFiltros = $event" (cantFiltrosChange)="cantFiltrosAplicados = $event" [mostrarFiltroGrupoServicio]="vista === 'detalles'">
                     </app-form-filtros-ventas>
                 </ng-template>
             </nz-drawer>
@@ -86,9 +86,10 @@
                 [paramsFiltros]="paramsFiltros"
                 [textoBusqueda]="textoBusqueda">
             </app-tabla-ventas>
-            <app-tabla-detalle-ventas-cobros
+            <app-tabla-detalle-ventas-cobros 
                 *ngIf="vista === 'detalles'"
-                [paramsFiltros]="paramsFiltros">
+                [paramsFiltros]="paramsFiltros"
+                [textoBusqueda]="textoBusqueda">
             </app-tabla-detalle-ventas-cobros>
         </div>
         <div *ngIf="vista === 'estadisticas'" style="margin-top: 16px">
@@ -96,4 +97,4 @@
         </div>
     </div>
 </div>
-<iframe #iframe style="visibility: hidden;"></iframe>
+<iframe #iframe style="visibility: hidden; display: none;"></iframe>

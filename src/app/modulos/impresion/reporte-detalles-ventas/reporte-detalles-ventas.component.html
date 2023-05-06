@@ -1,0 +1,53 @@
+<div nz-row [nzGutter]="[0, 16]">
+    <div nz-col nzSpan="24">
+        <app-cabecera-reporte titulo="Detalles de Ventas (Facturas)"></app-cabecera-reporte>
+    </div>
+    <div nz-col nzSpan="24">
+        <div>Filtros</div>
+        <app-filtros-reporte [lstFiltrosReporte]="lstFiltrosReporte"></app-filtros-reporte>
+    </div>
+    <div nz-col nzSpan="24">
+        <div>Registros</div>
+        <table class="tabla-reporte">
+            <thead>
+                <tr>
+                    <th>CI/RUC</th>
+                    <th>Cliente</th>
+                    <th>Concepto</th>
+                    <th>F. Pago</th>
+                    <th>Factura</th>
+                    <th>Monto (Gs.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let detalle of lstDetallesVentas">
+                    <td>
+                        <span *ngIf="detalle.ci == null">-</span>
+                        <span *ngIf="detalle.ci != null">{{detalle.ci | number}}</span>
+                        <span *ngIf="detalle.dvruc != null">-{{ detalle.dvruc }}</span>
+                    </td>
+                    <td>{{ detalle.cliente }}</td>
+                    <td>{{ detalle.descripcion }}</td>
+                    <td style="text-align: center;">
+                        <span *ngIf="detalle.fechacobro != null">{{ detalle.fechacobro | date: 'dd/MM/yyyy' }}</span>
+                        <span *ngIf="detalle.fechacobro == null">-</span>
+                    </td>
+                    <td style="text-align: center;">{{ detalle.facturacobro }}</td>
+                    <td style="text-align: right;">{{ detalle.monto | number }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <strong>Total de Registros:</strong> {{ lstDetallesVentas.length }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <strong>Monto Total:</strong> Gs.{{ montoTotal | number }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

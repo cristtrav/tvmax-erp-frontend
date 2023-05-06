@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -18,8 +18,16 @@ export class FormFiltrosVentasComponent implements OnInit {
   @Output()
   cantFiltrosChange = new EventEmitter<number>();
 
-  cantFiltrosFacturas: number = 0;
-  cantFiltrosCobros: number = 0;
+  @Input()
+  set mostrarFiltroGrupoServicio(mostrar: boolean){
+    this._mostrarFiltroGrupoServicio = mostrar;
+    if(!mostrar) this.grupoServicioFiltro = [];
+    this.cantFiltrosChange.emit(this.getCantidadFiltros());
+  }
+  get mostrarFiltroGrupoServicio(): boolean{
+    return this._mostrarFiltroGrupoServicio;
+  }
+  private _mostrarFiltroGrupoServicio: boolean = false;
 
   fechaInicioFiltro: Date | null = null;
   fechaFinFiltro: Date | null = null;
@@ -36,6 +44,8 @@ export class FormFiltrosVentasComponent implements OnInit {
   filtroPagado: boolean = false;
   filtroPendiente: boolean = false;
   filtroAnulado: boolean = false;
+
+  grupoServicioFiltro: string[] = [];
 
   constructor(
     private usuariosSrv: UsuariosService,
@@ -80,14 +90,12 @@ export class FormFiltrosVentasComponent implements OnInit {
   };
 
   filtrar() {
-    if(this.filtroAnulado){
+    if (this.filtroAnulado) {
       this.filtroPagado = false;
       this.filtroPendiente = false;
     }
     this.cantFiltrosChange.emit(this.getCantidadFiltros());
     this.paramsFiltrosChange.emit(this.getParams());
-    this.cantFiltrosCobros = this.getCantidadFiltrosCobros();
-    this.cantFiltrosFacturas = this.getCantidadFiltrosFacturas();
   }
 
   limpiarFiltroFechas() {
@@ -97,26 +105,18 @@ export class FormFiltrosVentasComponent implements OnInit {
   }
 
   getCantidadFiltros(): number {
-    return this.getCantidadFiltrosCobros() + this.getCantidadFiltrosFacturas();
-  }
-
-  getCantidadFiltrosCobros(): number {
-    let cantCobro: number = 0;
-    if (this.idCobradorFiltro) cantCobro++;
-    if (this.idUsuarioCobroFiltro) cantCobro++;
-    if (this.fechaInicioCobroFiltro) cantCobro++;
-    if (this.fechaFinCobroFiltro) cantCobro++;
-    return cantCobro;
-  }
-
-  getCantidadFiltrosFacturas(): number {
-    let cantFactura: number = 0;
-    if (this.fechaInicioFiltro) cantFactura++;
-    if (this.fechaFinFiltro) cantFactura++;
-    if (this.filtroPagado) cantFactura++;
-    if (this.filtroPendiente) cantFactura++;
-    if (this.filtroAnulado) cantFactura++;
-    return cantFactura;
+    let cant: number = 0;
+    if (this.idCobradorFiltro) cant++;
+    if (this.idUsuarioCobroFiltro) cant++;
+    if (this.fechaInicioCobroFiltro) cant++;
+    if (this.fechaFinCobroFiltro) cant++;
+    if (this.fechaInicioFiltro) cant++;
+    if (this.fechaFinFiltro) cant++;
+    if (this.filtroPagado) cant++;
+    if (this.filtroPendiente) cant++;
+    if (this.filtroAnulado) cant++;
+    if (this.grupoServicioFiltro.length > 0) cant++;
+    return cant;    
   }
 
   limpiarFiltroEstados() {
@@ -148,11 +148,16 @@ export class FormFiltrosVentasComponent implements OnInit {
     this.filtrar();
   }
 
+  limpiarFiltroGrupoServicio(){
+    this.grupoServicioFiltro = [];
+    this.filtrar();
+  }
+
   cargarCobradoresFiltro() {
     let params: HttpParams = new HttpParams()
-    .append('eliminado', 'false')
-    .append('sort', '+razonsocial')
-    .append('idrol', '3');
+      .append('eliminado', 'false')
+      .append('sort', '+razonsocial')
+      .append('idrol', '3');
     this.usuariosSrv.get(params).subscribe({
       next: (usuarios) => {
         this.lstCobradoresFiltro = usuarios;
@@ -192,7 +197,7 @@ export class FormFiltrosVentasComponent implements OnInit {
       params['fechafinfactura'] = fechaFinStr;
     }
     params['anulado'] = `${this.filtroAnulado}`;
-    if(!this.filtroAnulado){
+    if (!this.filtroAnulado) {
       if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
     }
     if (this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
@@ -204,6 +209,14 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (this.fechaFinCobroFiltro) {
       const fechaFinCobroStr: string = `${this.fechaFinCobroFiltro.getFullYear()}-${(this.fechaFinCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinCobroFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechafincobro'] = fechaFinCobroStr;
+    }
+    if (this.grupoServicioFiltro.length > 0) {
+      const filtrosServicios: number[] = this.grupoServicioFiltro.filter(gs => gs.includes('ser')).map(servicio => Number(servicio.split('-')[1]));
+      const filtrosGrupos: number[] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
+      if(filtrosServicios.length > 0)
+        params['idservicio'] = this.grupoServicioFiltro.filter(gs => gs.includes('ser')).map(servicio => Number(servicio.split('-')[1]));
+      if(filtrosGrupos.length > 0)
+        params['idgrupo'] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
     }
     return params;
   }
