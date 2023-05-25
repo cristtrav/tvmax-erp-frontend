@@ -13,8 +13,8 @@
     <thead>
         <tr>
             <th nzWidth="60px"></th>
-            <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
-            <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
+            <th *ngIf="mostrarColumnaCliente" [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
+            <th *ngIf="mostrarColumnaCliente" [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
             <th [nzColumnKey]="'facturacobro'" [nzSortFn]="true">Factura</th>
             <th [nzColumnKey]="'fechafactura'" [nzSortFn]="true"  [nzSortOrder]="'descend'">F. Factura</th>
             <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
@@ -28,12 +28,12 @@
         <ng-container *ngFor="let detalle of tabla.data">
             <tr>
                 <td [nzExpand]="expandSet.has(detalle.iddetalleventa ?? 0)" (nzExpandChange)="onExpandChange(detalle.iddetalleventa ?? 0, $event)"></td>
-                <td>
+                <td *ngIf="mostrarColumnaCliente">
                     <span *ngIf="detalle.ci == null" nz-typography nzType="secondary">(sin CI/RUC)</span>
                     <span *ngIf="detalle.ci != null">{{ detalle.ci | number }}</span>
                     <span *ngIf="detalle.dvruc != null">-{{ detalle.dvruc }}</span>
                 </td>
-                <td>{{ detalle.cliente }}</td>
+                <td *ngIf="mostrarColumnaCliente">{{ detalle.cliente }}</td>
                 <td>
                     <span *ngIf="!detalle.facturacobro" nz-typography nzType="secondary">(sin factura)</span>
                     <span *ngIf="detalle.facturacobro">{{ detalle.facturacobro }}</span>
@@ -103,7 +103,7 @@
         </ng-container>
     </tbody>
     <ng-template #pietabla>
-        <strong>Totales: </strong>
+        <strong>Total: </strong>
         <span>{{ totalRegisters | number }} registros</span>
     </ng-template>
 </nz-table>

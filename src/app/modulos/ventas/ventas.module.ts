@@ -91,6 +91,6 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
     CobrosModule,
     HelperComponentsModule
   ],
-  exports: [DetalleVentaComponent]
+  exports: [DetalleVentaComponent, FormFiltrosVentasComponent]
 })
 export class VentasModule { }

@@ -2,7 +2,6 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { CobroDetalleVenta } from '@dto/cobro-detalle-venta.dto';
 import { CobrosService } from '@servicios/cobros.service';
-import { VentasService } from '@servicios/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -15,6 +14,13 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./tabla-detalle-ventas-cobros.component.scss']
 })
 export class TablaDetalleVentasCobrosComponent implements OnInit {
+
+  @Input()
+  idcliente: number | null = null;
+  @Input()
+  idsuscripcion: number | null = null;
+  @Input()
+  mostrarColumnaCliente: boolean = true;
 
   @Input()
   get paramsFiltros(): IParametroFiltro {
@@ -87,20 +93,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
         this.httpErrorHanler.process(e);
         this.cargandoDetalles = false;
       }
-    })
-    /*this.ventaSrv.getDetallesVentaCobros(this.getHttpParams()).subscribe({
-      next: (resp) => {
-        this.cargandoDetalles = false;
-        this.lstDetallesCobros = resp.data;
-        this.totalRegisters = resp.queryRowCount;
-      },
-      error: (e) => {
-        console.log('Error al consultar detalle venta cobros');
-        console.log(e);
-        this.httpErrorHanler.handle(e,'cargar detalles de ventas');
-        this.cargandoDetalles = false;
-      }
-    });*/
+    });
   }
 
   onTableQueryParamsChange(tParams: NzTableQueryParams) {
@@ -112,12 +105,13 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
 
   getHttpParams(): HttpParams{
     let params: HttpParams = new HttpParams().append('eliminado', 'false');
-    /*params = params.append('anulado','false');
-    params = params.append('pagado', 'true');*/
+    if(this.paramsFiltros.anulado == null) params = params.append('anulado','false');
     if (this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
     params = params.appendAll(this.paramsFiltros);
+    if(this.idcliente != null) params = params.append('idcliente', `${this.idcliente}`);
+    if(this.idsuscripcion != null) params = params.append('idsuscripcion', `${this.idsuscripcion}`);
     if (this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     return params;
   }

@@ -10,6 +10,7 @@ export class CobroDetalleVenta{
     grupo: string | null = null;
     fechavencimiento: Date | null = null;
     idcuota: number | null = null;
+    idcliente: number | null = null;
     cliente: string | null = null;
     ci: number | null = null;
     dvruc: number | null = null;

@@ -8,11 +8,13 @@ import { SuscripcionesClienteComponent } from './suscripciones-cliente/suscripci
 import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
 import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
 import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
+import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
 
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
   { path: ':idcliente', component: DetalleClienteComponent },
   { path: ':idcliente/domicilios', component: DomiciliosClienteComponent },
+  { path: ':idcliente/pagos', component: PagosClienteComponent},
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent},
   { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent },
   { path: ':idcliente/suscripciones/:idsuscripcion', component: DetalleSuscripcionClienteComponent },

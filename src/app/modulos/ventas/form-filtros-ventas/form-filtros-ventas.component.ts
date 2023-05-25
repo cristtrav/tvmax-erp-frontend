@@ -217,7 +217,7 @@ export class FormFiltrosVentasComponent implements OnInit {
         params['idservicio'] = this.grupoServicioFiltro.filter(gs => gs.includes('ser')).map(servicio => Number(servicio.split('-')[1]));
       if(filtrosGrupos.length > 0)
         params['idgrupo'] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
-    }
+    }    
     return params;
   }
 

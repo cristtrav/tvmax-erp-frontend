@@ -38,40 +38,47 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
+import { CobrosModule } from "../cobros/cobros.module";
+import { VentasModule } from '../ventas/ventas.module';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 @NgModule({
-  declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent, FormFiltroClientesComponent],
-  imports: [
-    CommonModule,
-    ClientesRoutingModule,
-    IconsProviderModule,
-    NzButtonModule,
-    NzGridModule,
-    NzTableModule,
-    NzFormModule,
-    NzInputModule,
-    NzInputNumberModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NzPopconfirmModule,
-    NzDividerModule,
-    NzSelectModule,
-    NzBreadCrumbModule,
-    NzNotificationModule,
-    NzSpaceModule,
-    DomiciliosModule,
-    NzToolTipModule,
-    NzTagModule,
-    SuscripcionesModule,
-    CuotasModule,
-    NzSpinModule,
-    NzBadgeModule,
-    NzDrawerModule,
-    NzDescriptionsModule,
-    HelperComponentsModule,
-    NzTypographyModule,
-    NzModalModule,
-    NzDropDownModule
-  ]
+    declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent, FormFiltroClientesComponent, PagosClienteComponent],
+    imports: [
+        CommonModule,
+        ClientesRoutingModule,
+        IconsProviderModule,
+        NzButtonModule,
+        NzGridModule,
+        NzTableModule,
+        NzFormModule,
+        NzInputModule,
+        NzInputNumberModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NzPopconfirmModule,
+        NzDividerModule,
+        NzSelectModule,
+        NzBreadCrumbModule,
+        NzNotificationModule,
+        NzSpaceModule,
+        DomiciliosModule,
+        NzToolTipModule,
+        NzTagModule,
+        SuscripcionesModule,
+        CuotasModule,
+        NzSpinModule,
+        NzBadgeModule,
+        NzDrawerModule,
+        NzDescriptionsModule,
+        HelperComponentsModule,
+        NzTypographyModule,
+        NzModalModule,
+        NzDropDownModule,
+        CobrosModule,
+        VentasModule,
+        NzTabsModule
+    ]
 })
 export class ClientesModule { }

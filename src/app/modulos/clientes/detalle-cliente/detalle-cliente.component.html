@@ -107,6 +107,14 @@
                             <nz-space>
                                 <span *nzSpaceItem>
                                     <span *ngIf="idcliente!=='nuevo'">
+                                        <a nz-button routerLink="pagos">
+                                            <i nz-icon nzType="credit-card" nzTheme="outline"></i>
+                                            Pagos
+                                        </a>
+                                    </span>
+                                </span>
+                                <span *nzSpaceItem>
+                                    <span *ngIf="idcliente!=='nuevo'">
                                         <a nz-button routerLink="suscripciones">
                                             <i nz-icon nzType="carry-out"></i>
                                             Suscripciones
