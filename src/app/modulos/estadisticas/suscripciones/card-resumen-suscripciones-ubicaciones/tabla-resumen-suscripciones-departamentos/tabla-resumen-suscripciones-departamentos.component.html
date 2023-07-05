@@ -14,14 +14,12 @@
         <tr>
             <th [nzColumnKey]="'departamento'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Departamento</th>
             <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Nro. suscripciones</th>
-            <th [nzColumnKey]="'monto'" [nzSortFn]="true">Deuda total</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let resumentDepartamento of tabla.data">
             <td>{{ resumentDepartamento.departamento }}</td>
             <td>{{ resumentDepartamento.cantidad | number }} suscripciones</td>
-            <td>Gs.{{ resumentDepartamento.monto | number }}</td>
         </tr>
     </tbody>
     <ng-template #pieTabla>

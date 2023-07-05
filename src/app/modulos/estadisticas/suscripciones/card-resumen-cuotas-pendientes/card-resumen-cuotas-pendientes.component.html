@@ -23,7 +23,6 @@
             <tr>
                 <th [nzSortFn]="true" [nzColumnKey]="'cuotaspendientes'" [nzSortOrder]="'ascend'">Cuotas pendientes</th>
                 <th>No. suscripciones</th>
-                <th>Deuda total</th>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +34,6 @@
                    {{ rcp.nrocuotas == 1 ? 'cuota' : 'cuotas'}}
                 </td>
                 <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
-                <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
             </tr>
         </tbody>
         <ng-template #pieTabla>

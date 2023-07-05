@@ -25,7 +25,6 @@
             <tr>
                 <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
                 <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">No. suscripciones</th>
-                <th [nzColumnKey]="'monto'" [nzSortFn]="true">Deuda total</th>
             </tr>
         </thead>
         <tbody>
@@ -36,7 +35,6 @@
                     <nz-tag *ngIf="rcp.estado === 'D'" nzColor="red">Desconectados</nz-tag>
                 </td>
                 <td>{{ rcp.cantidad }} {{ rcp.cantidad == 1 ? 'suscripción' : 'suscripciones' }}</td>
-                <td nzAlign="right">Gs.{{ rcp.monto| number }}</td>
             </tr>
         </tbody>
         <ng-template #pieTabla>

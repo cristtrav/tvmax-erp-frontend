@@ -10,7 +10,6 @@
             <th nzAlign="center" [nzColumnKey]="'monto'" [nzSortFn]="true">Monto/mes</th>
             <th [nzColumnKey]="'estado'" [nzSortFn]="true">Estado</th>
             <th [nzColumnKey]="'cuotaspendientes'" [nzSortFn]="true">Cuotas P.</th>
-            <th [nzColumnKey]="'deuda'" [nzSortFn]="true" nzAlign="right">Deuda</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -40,7 +39,6 @@
                         s.cuotaspendientes | number }}</nz-tag>
                     <nz-tag *ngIf="s.cuotaspendientes >= 4" [nzColor]="'red'">{{ s.cuotaspendientes | number }}</nz-tag>
                 </td>
-                <td nzAlign="right">Gs.{{ s.deuda | number }}</td>
                 <td>
                     <div nz-row [nzGutter]="[8,8]">
                         <div nz-col>

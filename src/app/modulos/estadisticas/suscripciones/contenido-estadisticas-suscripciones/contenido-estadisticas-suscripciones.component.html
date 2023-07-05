@@ -1,27 +1,22 @@
 <div nz-row [nzGutter]="[16, 16]">
-    <div nz-col nzSpan="6">
+    <div nz-col nzSpan="8">
         <nz-card>
             <nz-statistic nzTitle="Total" [nzValue]="(totalSuscripciones | number)!"></nz-statistic>
         </nz-card>
     </div>
 
-    <div nz-col nzSpan="6">
+    <div nz-col nzSpan="8">
         <nz-card>
             <nz-statistic nzTitle="Activas" [nzValue]="(totalSuscActivos | number)!"></nz-statistic>
         </nz-card>
     </div>
 
-    <div nz-col nzSpan="6">
+    <div nz-col nzSpan="8">
         <nz-card>
             <nz-statistic nzTitle="Desconectadas" [nzValue]="(totalSuscDesconectadas | number)!"></nz-statistic>
         </nz-card>
     </div>
-    
-    <div nz-col nzSpan="6">
-        <nz-card>
-            <nz-statistic nzTitle="Deuda total" [nzValue]="'Gs.'+(totalDeuda | number)!"></nz-statistic>
-        </nz-card>
-    </div>
+
     <div nz-col nzSpan="12">
         <app-card-resumen-cuotas-pendientes
             [paramsFiltros]="paramsFiltros"
