@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { VistaUsuariosComponent } from './vista-usuarios/vista-usuarios.component';
 import { DetalleUsuarioComponent } from './detalle-usuario/detalle-usuario.component';
@@ -56,7 +55,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzDescriptionsModule,
     NzSelectModule,
     NzModalModule,
-    NzAlertModule
+    NzAlertModule    
   ],
   exports: [FormCambioPasswordComponent]
 })

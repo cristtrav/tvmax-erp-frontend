@@ -4,4 +4,5 @@ export class Funcionalidad {
     descripcion: string | null = null;
     idmodulo: number | null = null;
     modulo: string | null = null;
+    dependencias: Funcionalidad[] | null = [];
 }

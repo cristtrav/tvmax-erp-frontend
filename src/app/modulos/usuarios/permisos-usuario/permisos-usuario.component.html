@@ -32,17 +32,28 @@
         <div nz-row nzJustify="center" nzAlign="top">
             <div nz-col class="module-content" [nzXXl]="8" [nzXl]="12" [nzLg]="16" [nzMd]="18" [nzSm]="22" [nzXs]="24">
                 <nz-spin [nzSpinning]="cargandoPermisos">
-                    <nz-tree #nzTreeComponent [nzData]="nodosVistaPermisos" [nzCheckedKeys]="defaultCheckedKeys"
-                        [nzExpandedKeys]="defaultExpandedKeys" [nzSelectedKeys]="defaultSelectedKeys"
-                        [nzTreeTemplate]="treenode" nzCheckable></nz-tree>
+                    <nz-tree
+                        #nzTreeComponent 
+                        [nzData]="nodosVistaPermisos"
+                        [nzCheckedKeys]="defaultCheckedKeys"
+                        [nzExpandedKeys]="defaultExpandedKeys"
+                        [nzSelectedKeys]="defaultSelectedKeys"
+                        [nzTreeTemplate]="treenode"
+                        (nzCheckBoxChange)="onNzCheckBoxChange($event)"
+                        nzCheckable>
+                    </nz-tree>
                 </nz-spin>
 
                 <ng-template #treenode let-node let-origin="origin">
                     <i *ngIf="node.key.includes('mod')" nz-icon nzType="build" nzTheme="outline"></i>
                     <i *ngIf="node.key.includes('fun')" nz-icon nzType="tool" nzTheme="outline"></i>
                     {{ node.title }}
+                    <i *ngIf="mapRequeridoPor.has(origin.id)" nz-icon nzTheme="twotone" nzType="exclamation-circle" [nzTwotoneColor]="'#FFB300'"
+                        nz-tooltip [nzTooltipTitle]="'Requerido por: '+ mapNombresRequeridos.get(origin.id) ">
+                    </i>
                     <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon
-                        nzType="info-circle" nzTheme="outline" [nzTheme]="'twotone'"></i>
+                        nzType="question-circle" nzTheme="outline" [nzTheme]="'twotone'">
+                    </i>
                 </ng-template>
                 <div nz-row>
                     <div nz-col nzSpan="24" style="text-align: right;">
