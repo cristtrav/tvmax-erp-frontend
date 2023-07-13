@@ -16,7 +16,7 @@
         </ul>
       </li>
       <ng-container *ngFor="let submenu of mainMenu">
-        <li *ngIf="subMenuVisible(submenu.children)" nz-submenu [nzOpen]="submenu.isOpened" [nzTitle]="submenu.title" [nzIcon]="submenu.icon">
+        <li *ngIf="subMenuVisible(submenu.children)" nz-submenu [nzTitle]="submenu.title" [nzIcon]="submenu.icon">
           <ul>
             <ng-container *ngFor="let menu of submenu.children">
               <li *ngIf="sesionSrv.permisos.has(menu.id)" nz-menu-item nzMatchRouter style="display: flex; justify-content: space-between;">

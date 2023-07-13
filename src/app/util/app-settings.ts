@@ -9,8 +9,7 @@ export class AppSettings {
     {
       id: 1,
       title: 'Clientes',
-      icon: 'user',
-      isOpened: false,
+      icon: 'user',      
       children: [
         {
           id: 184,
@@ -28,7 +27,6 @@ export class AppSettings {
       id: 2,
       title: 'Facturación',
       icon: 'file-done',
-      isOpened: false,
       children: [
         {
           id: 266,
@@ -51,7 +49,6 @@ export class AppSettings {
       id: 3,
       title: 'Funcionarios',
       icon: 'team',
-      isOpened: false,
       children: [
         {
           id: 124,
@@ -69,7 +66,6 @@ export class AppSettings {
       id: 4,
       title: 'Lugares',
       icon: 'global',
-      isOpened: false,
       children: [
         {
           id: 44,
@@ -92,7 +88,6 @@ export class AppSettings {
       id: 5,
       title: 'Servicios',
       icon: 'shopping',
-      isOpened: false,
       children: [
         {
           id: 5,
@@ -110,7 +105,6 @@ export class AppSettings {
       id: 6,
       title: 'Ajustes de impresión',
       icon: 'printer',
-      isOpened: false,
       children: [
         {
           id: 344,
@@ -123,7 +117,6 @@ export class AppSettings {
       id: 7,
       title: 'Auditoría',
       icon: 'audit',
-      isOpened: false,
       children: [
         {
           id: 321,

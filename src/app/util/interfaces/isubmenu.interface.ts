@@ -4,6 +4,5 @@ export interface ISubmenu{
     id: number;
     title: string;
     icon: string;
-    isOpened: boolean;
     children: IMenuButton[];
 }
