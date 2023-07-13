@@ -23,6 +23,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { UsuariosModule } from './modulos/usuarios/usuarios.module';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 registerLocaleData(es);
 
@@ -46,7 +48,9 @@ registerLocaleData(es);
     NzSpaceModule,
     NzNotificationModule,
     NzModalModule,
-    UsuariosModule
+    UsuariosModule,
+    NzButtonModule,
+    NzToolTipModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: es_ES },

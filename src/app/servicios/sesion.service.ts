@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AppSettings } from '../util/app-settings';
+import { IPreferenciaDashboard } from '@util/interfaces/ipreferencia-dashboard';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,9 @@ export class SesionService {
   public idusuarioObs: Observable<number> = this.idusuarioBehavior.asObservable();
   public nombreObs: Observable<string> = this.nombreBehavior.asObservable();
 
+  private menuFavsBehabiorSubj: BehaviorSubject<number[]> = new BehaviorSubject(new Array<number>());
+  public readonly menuFavsObs: Observable<number[]> = this.menuFavsBehabiorSubj.asObservable();
+
   private refreshTokenTimeout: any;
   private checkServerTimeout: any;
   serverOnline: boolean = true;
@@ -28,7 +32,10 @@ export class SesionService {
     private http: HttpClient,
     private modal: NzModalService,
     private router: Router
-  ) { }
+  ) { 
+    const atoken = localStorage.getItem('accessToken');
+    if(atoken) this.loadMenuFavs(this.getIdUsuario(atoken));
+  }
 
 
   public get idusuario(): number {
@@ -44,6 +51,26 @@ export class SesionService {
     return this.http.get<Funcionalidad[]>(`${this.url}/permisos/${idusuario}`, { params });
   }
 
+  private loadMenuFavs(idusuario: number){
+    const preferenciasDashboard: IPreferenciaDashboard[] = JSON.parse(localStorage.getItem('preferencias-dashboard') ?? '[]');
+    const preferencia = preferenciasDashboard.find(pref => pref.idusuario == idusuario);
+    this.menuFavsBehabiorSubj.next(preferencia?.favoritosMenu ?? []);
+  }
+
+  switchMenuFav(idbutton: number){
+    let currentFavsArray = [...this.menuFavsBehabiorSubj.getValue()];
+    if(!currentFavsArray.includes(idbutton)) currentFavsArray.push(idbutton);
+    else currentFavsArray.splice(currentFavsArray.indexOf(idbutton), 1);
+
+    const preferenciasDashboard: IPreferenciaDashboard[] = JSON.parse(localStorage.getItem('preferencias-dashboard') ?? '[]');
+    const preferencia = preferenciasDashboard.find(prefe => prefe.idusuario == this.idusuario) ?? { idusuario: this.idusuario, favoritosMenu: []}
+    preferencia.favoritosMenu = currentFavsArray;
+    const preferenciasAlmacenar = preferenciasDashboard.filter(pref => pref.idusuario != this.idusuario);
+    preferenciasAlmacenar.push(preferencia);
+    localStorage.setItem('preferencias-dashboard', JSON.stringify(preferenciasAlmacenar));
+    this.menuFavsBehabiorSubj.next(currentFavsArray);
+  }
+
   login(ci: string, pwd: string): Observable<ISession> {
     return this.http.post<ISession>(`${this.url}/login`, { ci: ci, password: pwd }, AppSettings.httpOptionsPostJson)
       .pipe(
@@ -52,7 +79,6 @@ export class SesionService {
           session: of(ses)
         })),
         map(resp => {
-          console.log(resp.permisos);
           for(let permiso of resp.permisos){
             this.permisos.add(permiso.id ?? -1);
           }
@@ -63,6 +89,7 @@ export class SesionService {
           localStorage.setItem('refreshToken', rtoken);
           this.actualizarDatosUsuario(atoken);
           this.refreshTokenTimer(atoken);
+          this.loadMenuFavs(this.getIdUsuario(atoken));
           return (<ISession>resp.session);
         })
       );
@@ -84,6 +111,7 @@ export class SesionService {
           this.nombreBehavior.next(resp.session.nombreUsuario);
           this.actualizarDatosUsuario(resp.session.accessToken);
           this.refreshTokenTimer(resp.session.accessToken);
+          this.loadMenuFavs(this.getIdUsuario(resp.session.accessToken));
           return (<IRefreshSession>resp.session);
         }), catchError(err => {
           if (err.status === 401 || err.status === 403) {
@@ -105,6 +133,7 @@ export class SesionService {
           localStorage.removeItem('refreshToken');
           this.idusuarioBehavior.next(-1);
           this.nombreBehavior.next('(Sin usuario)');
+          this.menuFavsBehabiorSubj.next(new Array());
           return res;
         }));
   }

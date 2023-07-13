@@ -8,91 +8,38 @@
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard" >
+      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
         <ul>
           <li nz-menu-item nzMatchRouter>
             <a routerLink="dashboard">Inicio</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzTitle="Clientes" nzIcon="user" 
-        *ngIf="sesionSrv.permisos.has(184) || sesionSrv.permisos.has(165)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(184)">
-            <a routerLink="clientes">Clientes</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(165)">
-            <a routerLink="suscripciones">Suscripciones</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Facturación" nzIcon="file-done" 
-      *ngIf="sesionSrv.permisos.has(266) || sesionSrv.permisos.has(244) || sesionSrv.permisos.has(361) || sesionSrv.permisos.has(380)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(266)">
-            <a routerLink="ventas">Ventas</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(380)">
-            <a routerLink="pos">POS</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(244)">
-            <a routerLink="timbrados">Timbrados</a>
-          </li>
-          <!--<li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(361)">
-            <a routerLink="cobros">Cobros</a>
-          </li>-->
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Funcionarios" nzIcon="team"
-      *ngIf="sesionSrv.permisos.has(144) || sesionSrv.permisos.has(124)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(144)">
-            <a routerLink="roles">Roles</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(124)">
-            <a routerLink="usuarios">Usuarios</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Lugares" nzIcon="global"
-      *ngIf="sesionSrv.permisos.has(44) || sesionSrv.permisos.has(64) || sesionSrv.permisos.has(84)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(44)">
-            <a routerLink="departamentos">Departamentos</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(64)">
-            <a routerLink="distritos">Distritos</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(84)">
-            <a routerLink="barrios">Barrios</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Servicios" nzIcon="shopping"
-      *ngIf="sesionSrv.permisos.has(5) || sesionSrv.permisos.has(24)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(5)">
-            <a routerLink="grupos">Grupos</a>
-          </li>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(24)">
-            <a routerLink="servicios">Servicios</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Impresión" nzIcon="printer" *ngIf="sesionSrv.permisos.has(344)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(344)">
-            <a routerLink="formatosfacturas">Formatos Facturas</a>
-          </li>
-        </ul>
-      </li>
-      <li nz-submenu nzTitle="Auditoría" nzIcon="audit" *ngIf="sesionSrv.permisos.has(321)">
-        <ul>
-          <li nz-menu-item nzMatchRouter *ngIf="sesionSrv.permisos.has(321)">
-            <a routerLink="auditoria">Eventos</a>
-          </li>
-        </ul>
-      </li>
+      <ng-container *ngFor="let submenu of mainMenu">
+        <li *ngIf="subMenuVisible(submenu.children)" nz-submenu [nzOpen]="submenu.isOpened" [nzTitle]="submenu.title" [nzIcon]="submenu.icon">
+          <ul>
+            <ng-container *ngFor="let menu of submenu.children">
+              <li *ngIf="sesionSrv.permisos.has(menu.id)" nz-menu-item nzMatchRouter style="display: flex; justify-content: space-between;">
+                <a [routerLink]="menu.routerLink">{{ menu.name }}</a>
+                <button nz-button nzType="link" (click)="sesionSrv.switchMenuFav(menu.id)">
+                  <i *ngIf="!(sesionSrv.menuFavsObs| async)?.includes(menu.id)" 
+                    nz-icon nzType="star" 
+                    nzTheme="outline"
+                    nz-tooltip
+                    nzTooltipTitle="Agregar a favoritos">
+                  </i>
+                  <i *ngIf="(sesionSrv.menuFavsObs | async)?.includes(menu.id)"
+                  nz-icon nzType="star"
+                  nzTheme="fill"
+                  nz-tooltip
+                  nzTooltipTitle="Quitar de favoritos">
+                </i>
+                </button>
+              </li>
+            </ng-container>
+          </ul>
+        </li>
+      </ng-container>
     </ul>
   </nz-sider>
   <nz-layout>
@@ -105,8 +52,8 @@
         </div>
         <div nz-col>
           <a>
-            <nz-avatar nz-dropdown [nzText]="textoAvatar"
-              [nzDropdownMenu]="menu" style="margin-right: 8px; background-color: #87d068;"></nz-avatar>
+            <nz-avatar nz-dropdown [nzText]="textoAvatar" [nzDropdownMenu]="menu"
+              style="margin-right: 8px; background-color: #87d068;"></nz-avatar>
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
@@ -128,14 +75,11 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
-<nz-modal
-  [nzContent]="formCambioPass"
-  [nzTitle]="'Cambiar Contraseña'"
-  [(nzVisible)]="isCambiarPassModalVisible"
-  (nzOnCancel)="isCambiarPassModalVisible = false"
-  (nzOnOk)="formCambioPasswordComp.guardar()"
+<nz-modal [nzContent]="formCambioPass" [nzTitle]="'Cambiar Contraseña'" [(nzVisible)]="isCambiarPassModalVisible"
+  (nzOnCancel)="isCambiarPassModalVisible = false" (nzOnOk)="formCambioPasswordComp.guardar()"
   [nzOkLoading]="guardarLoading">
   <ng-template #formCambioPass>
-    <app-form-cambio-password (guardado)="isCambiarPassModalVisible = false" (guardarLoading)="guardarLoading = $event"></app-form-cambio-password>
+    <app-form-cambio-password (guardado)="isCambiarPassModalVisible = false"
+      (guardarLoading)="guardarLoading = $event"></app-form-cambio-password>
   </ng-template>
 </nz-modal>
