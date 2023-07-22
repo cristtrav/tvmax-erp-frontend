@@ -21,4 +21,12 @@ export class VistaDashboardComponent implements OnInit {
     this.sesionSrv.nombreObs.subscribe(value => this.nombreUsuario = value);
   }
 
+  isFavMessageVisible(idFuncionalidadFavs: number[] | null) : boolean{
+    if(idFuncionalidadFavs == null) return true;
+    for(let idfav of idFuncionalidadFavs){
+      if(this.sesionSrv.permisos.has(idfav)) return false;
+    }
+  return true;
+  }
+
 }

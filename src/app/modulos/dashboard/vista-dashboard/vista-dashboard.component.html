@@ -28,21 +28,23 @@
                     </div>
                     <div nz-col nzSpan="24">
                         <div nz-row [nzGutter]="[8, 8]">
-                            <div nz-col *ngIf="(sesionSrv.menuFavsObs | async)?.length == 0">
+                            <div nz-col *ngIf="isFavMessageVisible((sesionSrv.menuFavsObs | async))">
                                 <nz-card>
                                     Agregue favoritos con el icono <i nz-icon nzType="star" nzTheme="twotone"></i> en los menús.
                                 </nz-card>
                             </div>
-                            <div nz-col *ngFor="let idboton of sesionSrv.menuFavsObs | async">
-                                <nz-card *ngIf="sesionSrv.permisos.has(idboton)" [routerLink]="mapButton.get(idboton)?.routerLink ?? '/app/dashboard'" nzHoverable>
-                                    <nz-card-meta [nzTitle]="mapButton.get(idboton)?.name ?? '(Sin título)'"
-                                        [nzDescription]="mapSubmenu.get(idboton)?.title ?? '(Sin Módulo)'" [nzAvatar]="iconoModulo">
-                                    </nz-card-meta>
-                                </nz-card>
-                                <ng-template #iconoModulo>
-                                    <nz-avatar [nzIcon]="mapSubmenu.get(idboton)?.icon ?? 'build'"></nz-avatar>
-                                </ng-template>
-                            </div>
+                            <ng-container *ngFor="let idboton of sesionSrv.menuFavsObs | async">
+                                <div nz-col *ngIf="sesionSrv.permisos.has(idboton)">
+                                    <nz-card  [routerLink]="mapButton.get(idboton)?.routerLink ?? '/app/dashboard'" nzHoverable>
+                                        <nz-card-meta [nzTitle]="mapButton.get(idboton)?.name ?? '(Sin título)'"
+                                            [nzDescription]="mapSubmenu.get(idboton)?.title ?? '(Sin Módulo)'" [nzAvatar]="iconoModulo">
+                                        </nz-card-meta>
+                                    </nz-card>
+                                    <ng-template #iconoModulo>
+                                        <nz-avatar [nzIcon]="mapSubmenu.get(idboton)?.icon ?? 'build'"></nz-avatar>
+                                    </ng-template>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
