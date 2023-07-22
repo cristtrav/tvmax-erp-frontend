@@ -48,7 +48,7 @@
                     <i *ngIf="node.key.includes('mod')" nz-icon nzType="build" nzTheme="outline"></i>
                     <i *ngIf="node.key.includes('fun')" nz-icon nzType="tool" nzTheme="outline"></i>
                     {{ node.title }}
-                    <i *ngIf="mapRequeridoPor.has(origin.id)" nz-icon nzTheme="twotone" nzType="exclamation-circle" [nzTwotoneColor]="'#FFB300'"
+                    <i *ngIf="mapRequeridoPor.has(origin.id) && node.level == 1" nz-icon nzTheme="twotone" nzType="exclamation-circle" [nzTwotoneColor]="'#FFB300'"
                         nz-tooltip [nzTooltipTitle]="'Requerido por: '+ mapNombresRequeridos.get(origin.id) ">
                     </i>
                     <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon
