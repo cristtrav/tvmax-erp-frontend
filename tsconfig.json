@@ -14,7 +14,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "lib": [
       "es2018",
@@ -24,16 +24,17 @@
       "@dto/*": [
         "./src/app/dto/*"
       ],
-      "@util/*":[
+      "@util/*": [
         "./src/app/util/*"
       ],
       "@servicios/*": [
         "./src/app/servicios/*"
       ],
-      "@helper-componets/*":[
+      "@helper-componets/*": [
         "./src/app/helper-components/*"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
