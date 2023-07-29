@@ -13,7 +13,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NgxCurrencyModule } from 'ngx-currency';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
@@ -35,8 +34,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     ReactiveFormsModule,
     NzInputNumberModule,
     NzInputModule,
-    NzNotificationModule,
-    NgxCurrencyModule,
+    NzNotificationModule,    
     NzTableModule,
     NzDividerModule,
     NzPopconfirmModule,
