@@ -21,7 +21,6 @@
     "@angular/platform-browser-dynamic": "^16.1.7",
     "@angular/router": "^16.1.7",
     "ng-zorro-antd": "^16.1.0",
-    "ngx-print": "^1.2.1",
     "numero-a-letras": "^1.0.6",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

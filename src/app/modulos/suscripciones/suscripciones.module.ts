@@ -38,7 +38,6 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { TablaSuscripcionesComponent } from './tabla-suscripciones/tabla-suscripciones.component';
 import { EstadisticasModule } from '../estadisticas/estadisticas.module';
 import { ImpresionModule } from '../impresion/impresion.module';
-import { NgxPrintModule } from 'ngx-print';
 import { PortalModule } from '@angular/cdk/portal'
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
@@ -77,8 +76,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     HelperComponentsModule,
     NzTabsModule,
     EstadisticasModule,
-    ImpresionModule,
-    NgxPrintModule,
+    ImpresionModule,    
     PortalModule,
     NzModalModule,
     NzTypographyModule
