@@ -23,10 +23,10 @@ export class ContenidoVistaCuotasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarServicios();
+    this.cargarDatos();
   }
 
-  private cargarServicios(): void{
+  cargarDatos(): void{
     this.tabsLoading = true;
     if(this.idsuscripcion){
       this.serviciosSrv.getServiciosPorCuotasDeSuscripcion(this.idsuscripcion, this.getHttpParams()).subscribe({
