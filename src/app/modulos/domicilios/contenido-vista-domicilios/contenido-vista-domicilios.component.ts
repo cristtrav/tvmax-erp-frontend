@@ -44,7 +44,7 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
     else this.expandSet.delete(id);
   }
 
-  private cargarDatos(): void {
+  cargarDatos(): void {
     this.tableLoading = true;
     forkJoin({
       domicilios: this.domiSrv.get(this.getHttpQueryParams()),

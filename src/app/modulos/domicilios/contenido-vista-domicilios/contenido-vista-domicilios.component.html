@@ -1,7 +1,22 @@
-<a nz-button nzType="primary" routerLink="nuevo">
-    <i nz-icon nzType="plus"></i>
-    Nuevo
-</a>
+<div nz-row>
+    <div nz-col nzFlex="auto">
+        <div nz-row [nzGutter]="[8, 8]">
+            <div nz-col>
+                <button nz-button nzType="primary" routerLink="nuevo">
+                    <i nz-icon nzType="plus"></i>
+                    Nuevo
+                </button>
+            </div>
+            <div nz-col>
+                <button nz-button nzType="default" (click)="cargarDatos()">
+                    <i nz-icon nzType="reload" nzTheme="outline"></i>
+                    Recargar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <nz-table #tbl [nzData]="lstDomicilios" style="margin-top: 10px;" nzSize="small" [nzFrontPagination]="false"
 [nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
 nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($event)">
