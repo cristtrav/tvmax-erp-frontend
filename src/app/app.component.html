@@ -3,8 +3,8 @@
     [nzTrigger]="null">
     <div class="sidebar-logo">
       <a [routerLink]="'/app/dashboard'">
-        <img src="/assets/img/favicon-transparente.png" alt="logo">
-        <h1>TVMax ERP</h1>
+        <img *ngIf="!isCollapsed" src="/assets/img/logo-tvmax-ERP-dark-baground.svg" alt="logo">
+        <img *ngIf="isCollapsed" src="/assets/img/logo-MAX.svg" alt="logo">        
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
