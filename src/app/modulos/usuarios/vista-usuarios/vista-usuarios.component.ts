@@ -53,7 +53,7 @@ export class VistaUsuariosComponent implements OnInit {
     else this.expandSet.delete(id);
   }
 
-  private cargarDatos(): void {
+  cargarDatos(): void {
     this.tableLoading = true;
     forkJoin({
       usuarios: this.usuariosSrv.get(this.getHttpQueryParams()),
