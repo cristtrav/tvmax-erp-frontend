@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { TablaSuscripcionesComponent } from '../tabla-suscripciones/tabla-suscripciones.component';
 
 @Component({
   selector: 'app-contenido-vista-suscripciones',
@@ -7,6 +8,9 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
   styleUrls: ['./contenido-vista-suscripciones.component.scss']
 })
 export class ContenidoVistaSuscripcionesComponent implements OnInit {
+
+  @ViewChild(TablaSuscripcionesComponent)
+  tablaSuscrpcionesComp!: TablaSuscripcionesComponent
 
   @Input()
   idcliente: number | null = null;
