@@ -22,12 +22,19 @@
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
                                 <nz-input-group style="width: 50%;" nzSearch [nzAddOnAfter]="bntConsultarId">
                                     <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading">
-                                    </nz-input-number>
+                                    </nz-input-number> 
                                 </nz-input-group>
                             </nz-form-control>
                             <ng-template #bntConsultarId>
-                                <button nz-button nz-tooltip nzTooltipTitle="Consultar código disponible" [nzLoading]="lastIdLoading" (click)="cargarId()" nzSearch>
-                                    <i nz-icon nzType="monitor" nzTheme="outline"></i>
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    nz-tooltip
+                                    nzTooltipTitle="Generar código"
+                                    [nzLoading]="lastIdLoading"
+                                    (click)="cargarId()" 
+                                    nzSearch>
+                                    <i nz-icon nzType="sync" nzTheme="outline"></i>
                                 </button>
                             </ng-template>
                         </nz-form-item>
