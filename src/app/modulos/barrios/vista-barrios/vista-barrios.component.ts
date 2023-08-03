@@ -36,7 +36,7 @@ export class VistaBarriosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   cargarDatos(): void {
