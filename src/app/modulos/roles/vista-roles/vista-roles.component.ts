@@ -33,7 +33,7 @@ export class VistaRolesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarRoles();
+    //this.cargarRoles();
   }
 
   private cargarRoles(){
