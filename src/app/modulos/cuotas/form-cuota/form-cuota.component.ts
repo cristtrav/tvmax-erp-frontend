@@ -51,7 +51,7 @@ export class FormCuotaComponent implements OnInit {
     this.cargarGruposServicios();
     if (this.idcuota && this.idcuota !== 'nueva') this.cargarDatos();
     this.form.get('idservicio')?.valueChanges.subscribe((value: number[]) => {
-
+      console.log(value);
       if (value.length > 0) {
         const idservicio = value[value.length - 1];
         this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
@@ -167,7 +167,8 @@ export class FormCuotaComponent implements OnInit {
       }))
     ).subscribe({
       next: (resp) => {
-        this.form.get('idservicio')?.setValue([resp.servicio.idgrupo, resp.servicio.id]);
+        if(resp.servicio.suscribible) this.form.get('idservicio')?.setValue([resp.servicio.id]);
+        else this.form.get('idservicio')?.setValue([resp.servicio.idgrupo ,resp.servicio.id]);
         this.form.get('fechavencimiento')?.setValue(resp.cuota.fechavencimiento);
         this.form.get('monto')?.setValue(resp.cuota.monto);
         this.form.get('nrocuota')?.setValue(resp.cuota.nrocuota);
