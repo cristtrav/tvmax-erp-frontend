@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
 import { VistaClientesComponent } from './../../modulos/clientes/vista-clientes/vista-clientes.component';
 import { DetalleClienteComponent } from './../../modulos/clientes/detalle-cliente/detalle-cliente.component';
 import { DomiciliosClienteComponent } from './domicilios-cliente/domicilios-cliente.component';
@@ -9,10 +9,26 @@ import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-client
 import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
 import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
+import { SesionService } from '@servicios/sesion.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+const formClientesGuardFn: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(185)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al formulario de Clientes'
+    );
+    return false;
+  }else return true;
+}
 
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
-  { path: ':idcliente', component: DetalleClienteComponent },
+  { path: ':idcliente', component: DetalleClienteComponent, canActivate: [formClientesGuardFn] },
   { path: ':idcliente/domicilios', component: DomiciliosClienteComponent },
   { path: ':idcliente/pagos', component: PagosClienteComponent},
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent},
