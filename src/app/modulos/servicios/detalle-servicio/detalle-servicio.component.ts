@@ -157,7 +157,7 @@ export class DetalleServicioComponent implements OnInit {
       error: (e) => {
         console.log('Error al consultar ultimo ID de servicios');
         console.log(e);
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
         this.lastIdLoading = false;
       }
     });
