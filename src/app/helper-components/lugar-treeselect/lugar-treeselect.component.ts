@@ -56,7 +56,7 @@ export class LugarTreeselectComponent implements OnInit {
     }, (e) => {
       console.log('Error al cargar deparatamentos filtro');
       console.log(e);
-      this.httpErrorHandler.handle(e);
+      this.httpErrorHandler.process(e);
     });
   }
 
