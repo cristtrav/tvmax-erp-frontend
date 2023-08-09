@@ -20,10 +20,24 @@ const guardFn: CanActivateFn = (
   }else return true;
 }
 
+const formPermisosGuardFn: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(283)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al formulario de Permisos'
+    );
+    return false;
+  }else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaUsuariosComponent },
   { path: ':idusuario', component: DetalleUsuarioComponent, canActivate: [guardFn]},
-  { path: ':idusuario/permisos', component: PermisosUsuarioComponent }
+  { path: ':idusuario/permisos', component: PermisosUsuarioComponent, canActivate: [formPermisosGuardFn] }
 ];
 
 @NgModule({
