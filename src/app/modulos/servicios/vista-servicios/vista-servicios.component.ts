@@ -36,7 +36,7 @@ export class VistaServiciosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarServicios();
+    //this.cargarServicios();
     this.cargarGruposFiltro();
   }
 
