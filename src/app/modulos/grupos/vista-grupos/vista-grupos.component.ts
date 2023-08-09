@@ -30,7 +30,7 @@ export class VistaGruposComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   private cargarDatos() {
