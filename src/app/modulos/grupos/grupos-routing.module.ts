@@ -13,7 +13,7 @@ const guardFn: CanActivateFn = (
     inject(NzNotificationService).create(
       'warning',
       '<strong>No autorizado</strong>',
-      'El usuario no tiene permisos para acceder al formulario'
+      'El usuario no tiene permisos para acceder al formulario de Grupos'
     );
     return false;
   } else return true;
