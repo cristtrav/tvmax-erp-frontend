@@ -61,6 +61,7 @@ export class DetalleClienteComponent implements OnInit {
       error: (e) => {
         console.error('Error al cargar ultimo ID de Clientes', e);
         this.httpErrorHandler.process(e);
+        this.lastIdLoading = false;
       }
     });
   }
