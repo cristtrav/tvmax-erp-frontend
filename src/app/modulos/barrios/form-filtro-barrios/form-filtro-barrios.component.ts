@@ -1,4 +1,4 @@
-import { HttpParams, HttpParamsOptions } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
@@ -71,7 +71,7 @@ export class FormFiltroBarriosComponent implements OnInit {
       error: (e) => {
         console.log('Error al cargar distritos');
         console.log(e);
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
         this.loadingDistritos = false;
       }
     });
