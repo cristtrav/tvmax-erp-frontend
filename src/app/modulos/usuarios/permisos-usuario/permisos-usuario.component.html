@@ -45,15 +45,25 @@
                 </nz-spin>
 
                 <ng-template #treenode let-node let-origin="origin">
-                    <i *ngIf="node.key.includes('mod')" nz-icon nzType="build" nzTheme="outline"></i>
-                    <i *ngIf="node.key.includes('fun')" nz-icon nzType="tool" nzTheme="outline"></i>
-                    {{ node.title }}
-                    <i *ngIf="mapRequeridoPor.has(origin.id) && node.level == 1" nz-icon nzTheme="twotone" nzType="exclamation-circle" [nzTwotoneColor]="'#FFB300'"
-                        nz-tooltip [nzTooltipTitle]="'Requerido por: '+ mapNombresRequeridos.get(origin.id) ">
-                    </i>
-                    <i *ngIf="origin.descripcion" nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon
-                        nzType="question-circle" nzTheme="outline" [nzTheme]="'twotone'">
-                    </i>
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <i *ngIf="node.key.includes('mod')" nz-icon nzType="build" nzTheme="outline"></i>
+                            <i *ngIf="node.key.includes('fun')" nz-icon nzType="tool" nzTheme="outline"></i>
+                        </div>
+                        <div nz-col>
+                            {{ node.title }}
+                        </div>
+                        <div *ngIf="mapRequeridoPor.has(origin.id) && node.level == 1" nz-col>
+                            <i  nz-icon nzTheme="twotone" nzType="exclamation-circle" [nzTwotoneColor]="'#FFB300'"
+                                nz-tooltip [nzTooltipTitle]="'Requerido por: '+ mapNombresRequeridos.get(origin.id) ">
+                            </i>
+                        </div>
+                        <div *ngIf="origin.descripcion" nz-col>
+                            <i nz-tooltip [nzTooltipTitle]="origin.descripcion" nz-icon
+                                nzType="question-circle" nzTheme="outline" [nzTheme]="'twotone'">
+                            </i>
+                        </div>
+                    </div>
                 </ng-template>
                 <div nz-row>
                     <div nz-col nzSpan="24" style="text-align: right;">
