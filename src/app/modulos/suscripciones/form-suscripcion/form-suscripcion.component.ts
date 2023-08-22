@@ -1,20 +1,20 @@
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DomiciliosService } from './../../../servicios/domicilios.service';
-import { Domicilio } from './../../../dto/domicilio-dto';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Servicio } from './../../../dto/servicio-dto';
-import { ServiciosService } from './../../../servicios/servicios.service';
-import { SuscripcionesService } from './../../../servicios/suscripciones.service';
-import { Suscripcion } from 'src/app/dto/suscripcion-dto';
-import { Extra } from './../../../util/extra';
-import { Cliente } from './../../../dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
-import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs';
-import { formatDate } from '@angular/common';
+import { formatDate } from "@angular/common";
+import { HttpParams } from "@angular/common/http";
+import { Component, OnInit, Input, Output, Inject, LOCALE_ID, EventEmitter } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Cliente } from "@dto/cliente-dto";
+import { Domicilio } from "@dto/domicilio-dto";
+import { Servicio } from "@dto/servicio-dto";
+import { Suscripcion } from "@dto/suscripcion-dto";
+import { ClientesService } from "@servicios/clientes.service";
+import { DomiciliosService } from "@servicios/domicilios.service";
+import { ServiciosService } from "@servicios/servicios.service";
+import { SuscripcionesService } from "@servicios/suscripciones.service";
+import { HttpErrorResponseHandlerService } from "@util/http-error-response-handler.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { finalize } from "rxjs";
+
 
 @Component({
   selector: 'app-form-suscripcion',
@@ -238,14 +238,16 @@ export class FormSuscripcionComponent implements OnInit {
 
   cargarUltimoId(): void {
     this.idLoading = true;
-    this.suscSrv.getUltimoId().subscribe((data) => {
-      this.form.get('id')?.setValue(data ? +data + 1 : 1);
-      this.idLoading = false;
-    }, (e) => {
-      console.log('Error al consultar el ultimo código de suscripción');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.idLoading = false;
+    this.suscSrv.getUltimoId().subscribe({
+      next: (data) => {
+        this.form.get('id')?.setValue(data ? +data + 1 : 1);
+        this.idLoading = false;
+      },
+      error: (e) => {
+        console.log('Error al consultar ultimo código de suscripción', e);
+        this.httpErrorHandler.process(e);
+        this.idLoading = false;
+      }
     });
   }
 
