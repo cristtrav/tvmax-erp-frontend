@@ -129,7 +129,7 @@ export class TablaCuotasComponent implements OnInit {
         }
         this.consultaCobros[idcuota] = false;
         if (e.status !== 404) {
-          this.httpErrorHandler.handle(e, 'consultar cobro');
+          this.httpErrorHandler.process(e);
           console.log('Error al consultar cobro de cuota');
           console.log(e);
         }
