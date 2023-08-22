@@ -36,11 +36,25 @@ const formCuotaGuardFn: CanActivateFn = (
   }else return true;
 }
 
+const moduloCuotaGuardFn: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(225)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al módulo Cuotas'
+    );
+    return false;
+  }else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaSuscripcionesComponent},
   { path: 'reporte', component: ReporteSuscripcionesComponent},
   { path: ':idsuscripcion', component: DetalleSuscripcionComponent, canActivate: [formSuscGuardFn] },
-  { path: ':idsuscripcion/cuotas', component: CuotasSuscripcionesComponent },
+  { path: ':idsuscripcion/cuotas', component: CuotasSuscripcionesComponent, canActivate: [moduloCuotaGuardFn] },
   { path: ':idsuscripcion/cuotas/:idcuota', component: DetalleCuotasSuscripcionesComponent, canActivate: [formCuotaGuardFn]},
   
 ];
