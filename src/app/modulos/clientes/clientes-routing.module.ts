@@ -40,10 +40,24 @@ const formDomiGuardFn: CanActivateFn = (
   }else return true;
 }
 
+const domicilioGuardFn: CanActivateFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(206)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al módulo Domicilios'
+    );
+    return false;
+  }else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
   { path: ':idcliente', component: DetalleClienteComponent, canActivate: [formClientesGuardFn] },
-  { path: ':idcliente/domicilios', component: DomiciliosClienteComponent },
+  { path: ':idcliente/domicilios', component: DomiciliosClienteComponent, canActivate: [domicilioGuardFn] },
   { path: ':idcliente/pagos', component: PagosClienteComponent},
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent, canActivate: [formDomiGuardFn]},
   { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent },
