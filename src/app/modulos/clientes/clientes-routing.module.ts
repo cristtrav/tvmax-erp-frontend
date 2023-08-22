@@ -54,13 +54,27 @@ const domicilioGuardFn: CanActivateFn = (
   }else return true;
 }
 
+const suscripcionGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(165)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al módulo Suscripciones'
+    );
+    return false;
+  }else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
   { path: ':idcliente', component: DetalleClienteComponent, canActivate: [formClientesGuardFn] },
   { path: ':idcliente/domicilios', component: DomiciliosClienteComponent, canActivate: [domicilioGuardFn] },
   { path: ':idcliente/pagos', component: PagosClienteComponent},
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent, canActivate: [formDomiGuardFn]},
-  { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent },
+  { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent, canActivate: [suscripcionGuardFn] },
   { path: ':idcliente/suscripciones/:idsuscripcion', component: DetalleSuscripcionClienteComponent },
   { path: ':idcliente/suscripciones/:idsuscripcion/cuotas', component: CuotasSuscripcionClienteComponent},
   { path: ':idcliente/suscripciones/:idsuscripcion/cuotas/:idcuota', component: DetalleCuotasSuscripcionClienteComponent}
