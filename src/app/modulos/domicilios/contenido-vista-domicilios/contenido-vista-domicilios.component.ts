@@ -35,8 +35,7 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    console.log(`idcliente en contenido vista domicilios> ${this.idcliente}`);
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   onExpandChange(id: number, checked: boolean): void {
