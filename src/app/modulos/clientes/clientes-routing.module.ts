@@ -68,11 +68,22 @@ const suscripcionGuardFn = (
   }else return true;
 }
 
+const pagosGuardFn = () => {
+  if(!inject(SesionService).permisos.has(361)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong></strong>',
+      'El usuario no tiene permisos para acceder al módulo de Pagos de Clientes'
+    );
+    return false;
+  }else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },
   { path: ':idcliente', component: DetalleClienteComponent, canActivate: [formClientesGuardFn] },
   { path: ':idcliente/domicilios', component: DomiciliosClienteComponent, canActivate: [domicilioGuardFn] },
-  { path: ':idcliente/pagos', component: PagosClienteComponent},
+  { path: ':idcliente/pagos', component: PagosClienteComponent, canActivate: [pagosGuardFn]},
   { path: ':idcliente/domicilios/:iddomicilio', component: DetalleDomicilioClienteComponent, canActivate: [formDomiGuardFn]},
   { path: ':idcliente/suscripciones', component: SuscripcionesClienteComponent, canActivate: [suscripcionGuardFn] },
   { path: ':idcliente/suscripciones/:idsuscripcion', component: DetalleSuscripcionClienteComponent },
