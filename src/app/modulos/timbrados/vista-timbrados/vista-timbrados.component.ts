@@ -32,7 +32,7 @@ export class VistaTimbradosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarDatos();
+    //this.cargarDatos();
   }
 
   cargarDatos(){
