@@ -78,7 +78,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       error: (e) => {
         console.log('Error al cargar total de facturas');
         console.log();
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
         this.loadingCantFacturas = false;
       }
     });
@@ -104,7 +104,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
         error: (e) => {
           console.log('Error al cargar cantidad de facturas pagadas');
           console.log(e);
-          this.httpErrorHandler.handle(e, 'consultar facturas pagadas.');
+          this.httpErrorHandler.process(e);
           this.loadingCantPagadas = false;
         }
       });
@@ -131,7 +131,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
         error: (e) => {
           console.log('Error al cargar cantidad de facturas pendientes');
           console.log(e);
-          this.httpErrorHandler.handle(e, 'consultar facturas pendientes.');
+          this.httpErrorHandler.process(e);
           this.loadingCantPendientes = false;
         }
       });
@@ -155,7 +155,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       error: (e) => {
         console.log('Error al cargar cantidad de facturas anuladas');
         console.log(e);
-        this.httpErrorHandler.handle(e, 'consultar facturas anuladas.');
+        this.httpErrorHandler.process(e);
         this.loadingCantAnuladas = false;
       }
     });
@@ -209,7 +209,7 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
       }, (e) => {
         console.log('Error al cargar monto total anulado de facturas');
         console.log(e);
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
         this.loadingMontoAnulado = false;
       });
     }
