@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CobroDetalleVenta } from '@dto/cobro-detalle-venta.dto';
+import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class CobrosService {
 
-  readonly url: string = `${AppSettings.urlAPI}/cobros`;
+  readonly url: string = `${environment.apiURL}/cobros`;
 
   constructor(
     private http: HttpClient

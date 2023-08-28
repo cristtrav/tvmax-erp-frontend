@@ -11,13 +11,14 @@ import { ResumenDepartamentosSuscripciones } from '@dto/resumen-departamentos-su
 import { ResumenDistritosSuscripciones } from '@dto/resumen-distritos-suscripciones.dto';
 import { ResumenBarriosSuscripciones } from '@dto/resumen-barrios-suscripciones.dto';
 import { ResumenGeneralSuscripciones } from '@dto/resumen-general-suscripciones.dto';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SuscripcionesService {
 
-  url = `${AppSettings.urlAPI}/suscripciones`;
+  url = `${environment.apiURL}/suscripciones`;
 
   constructor(
     private http: HttpClient

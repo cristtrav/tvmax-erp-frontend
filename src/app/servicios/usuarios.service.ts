@@ -3,13 +3,14 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '@dto/usuario.dto';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
 
-  url = `${AppSettings.urlAPI}/usuarios`;
+  url = `${environment.apiURL}/usuarios`;
 
   constructor(
     private http: HttpClient

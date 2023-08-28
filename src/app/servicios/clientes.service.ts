@@ -4,13 +4,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Cliente } from '../dto/cliente-dto';
 import { Observable } from 'rxjs';
 import { Suscripcion } from '@dto/suscripcion-dto';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientesService {
 
-  url = `${AppSettings.urlAPI}/clientes`;
+  url = `${environment.apiURL}/clientes`;
 
   constructor(
     private http: HttpClient

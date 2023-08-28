@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AppSettings } from './../util/app-settings';
 import { CuotaDTO } from './../dto/cuota-dto';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
+import { environment } from '@environments/environment';
 
 
 @Injectable({
@@ -11,8 +12,8 @@ import { CobroCuota } from '@dto/cobro-cuota.dto';
 })
 export class CuotasService {
 
-  url = `${AppSettings.urlAPI}/cuotas`;
-  urlSusc = `${AppSettings.urlAPI}/suscripciones`;
+  url = `${environment.apiURL}/cuotas`;
+  urlSusc = `${environment.apiURL}/suscripciones`;
 
   constructor(
     private http: HttpClient

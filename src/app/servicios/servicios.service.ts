@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Servicio } from './../dto/servicio-dto';
 import { AppSettings } from './../util/app-settings';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiciosService {
 
-  private url: string = `${AppSettings.urlAPI}/servicios`;
-  private urlSusc: string = `${AppSettings.urlAPI}/suscripciones`;
+  private url: string = `${environment.apiURL}/servicios`;
+  private urlSusc: string = `${environment.apiURL}/suscripciones`;
 
   constructor(private http: HttpClient) { }
 

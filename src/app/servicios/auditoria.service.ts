@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EventoAuditoria } from '@dto/evento-auditoria-dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
+import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class AuditoriaService {
 
-  url: string = `${AppSettings.urlAPI}/auditoria`;
+  url: string = `${environment.apiURL}/auditoria`;
 
   constructor(
     private http: HttpClient

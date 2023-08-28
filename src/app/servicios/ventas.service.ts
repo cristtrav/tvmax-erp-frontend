@@ -7,13 +7,14 @@ import { Observable } from 'rxjs';
 import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';
 import { ResumenServiciosVentas } from '@dto/resumen-servicios-ventas.dto';
 import { ResumenCobradoresVentas } from '@dto/resumen-cobradores-ventas.dto';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VentasService {
 
-  url: string = `${AppSettings.urlAPI}/ventas`;
+  url: string = `${environment.apiURL}/ventas`;
 
   constructor(
     private http: HttpClient

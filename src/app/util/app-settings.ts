@@ -1,5 +1,4 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { ISubmenu } from './interfaces/isubmenu.interface';
 import { IMenuButton } from './interfaces/imenu-button.interface';
 
@@ -138,11 +137,7 @@ export class AppSettings {
       })
     })
   }
-
-  public static get urlAPI(): string {
-    return `${location.protocol}//${location.hostname}:${location.port}/api`;
-  }
-
+  
   public static get httpOptionsPost(): Object {
     const httpOptions = {
       headers: new HttpHeaders({

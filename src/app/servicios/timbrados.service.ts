@@ -5,13 +5,14 @@ import { Timbrado } from '../dto/timbrado.dto';
 import { AppSettings } from './../util/app-settings';
 import { HttpClient } from '@angular/common/http';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimbradosService {
 
-  private url: string = `${AppSettings.urlAPI}/timbrados`
+  private url: string = `${environment.apiURL}/timbrados`
 
   constructor(
     private http: HttpClient

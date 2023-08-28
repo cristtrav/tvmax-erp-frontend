@@ -3,13 +3,14 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Grupo } from '../dto/grupo-dto';
 import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GruposService {
 
-  private url = `${AppSettings.urlAPI}/grupos`;
+  private url = `${environment.apiURL}/grupos`;
 
   constructor(private http: HttpClient) { }
 

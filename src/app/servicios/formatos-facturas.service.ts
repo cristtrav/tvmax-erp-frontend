@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
+import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class FormatosFacturasService {
 
-  readonly url: string = `${AppSettings.urlAPI}/formatosfacturas`
+  readonly url: string = `${environment.apiURL}/formatosfacturas`
 
   constructor(
     private http: HttpClient

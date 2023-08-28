@@ -7,13 +7,14 @@ import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AppSettings } from '../util/app-settings';
 import { IPreferenciaDashboard } from '@util/interfaces/ipreferencia-dashboard';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SesionService {
 
-  private url = `${AppSettings.urlAPI}/sesion`;
+  private url = `${environment.apiURL}/sesion`;
   private idusuarioBehavior: BehaviorSubject<number> = new BehaviorSubject(-1);
   private nombreBehavior: BehaviorSubject<string> = new BehaviorSubject('(Sin usuario)');
   public idusuarioObs: Observable<number> = this.idusuarioBehavior.asObservable();
@@ -166,7 +167,7 @@ export class SesionService {
   }
 
   checkServer() {
-    this.http.get(`${AppSettings.urlAPI}`, { responseType: 'text' }).subscribe({
+    this.http.get(`${environment.apiURL}`, { responseType: 'text' }).subscribe({
       next: (response) => {
         console.log('Server online!', response);
         const refreshToken = localStorage.getItem('refreshToken');

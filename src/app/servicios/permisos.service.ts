@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { Modulo } from '@dto/modulo-dto';
+import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class PermisosService {
 
-  private url: string = `${AppSettings.urlAPI}/permisos`;
+  private url: string = `${environment.apiURL}/permisos`;
 
   constructor(
     private http: HttpClient

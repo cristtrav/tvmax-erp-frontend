@@ -3,13 +3,14 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Departamento } from '../dto/departamento-dto';
 import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DepartamentosService {
 
-  url = `${AppSettings.urlAPI}/departamentos`;
+  url = `${environment.apiURL}/departamentos`;
 
   constructor(private http: HttpClient) { }
 

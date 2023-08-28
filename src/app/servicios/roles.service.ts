@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RolDTO } from '@dto/rol.dto';
+import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class RolesService {
 
-  private readonly url = `${AppSettings.urlAPI}/roles`;
+  private readonly url = `${environment.apiURL}/roles`;
 
   constructor(
     private http: HttpClient

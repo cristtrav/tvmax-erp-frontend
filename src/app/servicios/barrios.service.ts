@@ -3,13 +3,14 @@ import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Barrio } from '../dto/barrio-dto';
 import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BarriosService {
 
-  url: string = `${AppSettings.urlAPI}/barrios`;
+  url: string = `${environment.apiURL}/barrios`;
 
   constructor(
     private http: HttpClient
