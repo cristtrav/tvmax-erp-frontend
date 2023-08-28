@@ -32,6 +32,9 @@
       ],
       "@helper-componets/*": [
         "./src/app/helper-components/*"
+      ],
+      "@environments/*": [
+        "./src/environments/*"
       ]
     },
     "useDefineForClassFields": false
