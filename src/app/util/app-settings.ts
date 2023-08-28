@@ -140,9 +140,7 @@ export class AppSettings {
   }
 
   public static get urlAPI(): string {
-    if (environment.production) return `${location.protocol}//${location.hostname}:${location.port}/api`;
-    else return `http://localhost:3000/api`;
-
+    return `${location.protocol}//${location.hostname}:${location.port}/api`;
   }
 
   public static get httpOptionsPost(): Object {
