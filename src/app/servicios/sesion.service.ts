@@ -7,7 +7,7 @@ import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AppSettings } from '../util/app-settings';
 import { IPreferenciaDashboard } from '@util/interfaces/ipreferencia-dashboard';
-import { environment } from 'src/environments/environment';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -154,7 +154,6 @@ export class SesionService {
     const expiredate = new Date(jwtToken.exp * 1000);
     const timeout = (expiredate.getTime() - Date.now()) - (60 * 1000);
     this.refreshTokenTimeout = setTimeout(() => {
-      console.log('Se actualiza el token');
       const rtoken = localStorage.getItem('refreshToken');
       if (rtoken) {
         this.refresh(rtoken).subscribe();
@@ -169,7 +168,6 @@ export class SesionService {
   checkServer() {
     this.http.get(`${environment.apiURL}`, { responseType: 'text' }).subscribe({
       next: (response) => {
-        console.log('Server online!', response);
         const refreshToken = localStorage.getItem('refreshToken');
         if (!this.serverOnline && refreshToken) this.refresh(refreshToken).subscribe();
         this.serverOnline = true;
