@@ -25,6 +25,9 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   expandSet = new Set<number>();
 
   @Input()
+  mostrarTitular: boolean = true;
+
+  @Input()
   idcliente: number | null = null;
 
   constructor(

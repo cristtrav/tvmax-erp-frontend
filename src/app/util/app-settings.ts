@@ -80,6 +80,11 @@ export class AppSettings {
           id: 84,
           name: 'Barrios',
           routerLink: '/app/barrios',
+        },
+        {
+          id: 206,
+          name: 'Domicilios',
+          routerLink: '/app/domicilios'
         }
       ]
     },

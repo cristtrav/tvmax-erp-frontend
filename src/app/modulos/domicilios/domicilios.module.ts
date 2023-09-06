@@ -25,6 +25,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 @NgModule({
   declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent],
@@ -51,7 +52,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     NzTypographyModule,
     NzModalModule,
     NzDescriptionsModule,
-    NzGridModule
+    NzGridModule,
+    NzBreadCrumbModule
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
 })

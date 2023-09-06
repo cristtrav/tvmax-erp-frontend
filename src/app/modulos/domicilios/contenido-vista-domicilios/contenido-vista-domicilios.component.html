@@ -1,84 +1,105 @@
-<div nz-row>
-    <div nz-col nzFlex="auto">
-        <div nz-row [nzGutter]="[8, 8]">
-            <div nz-col>
-                <button nz-button nzType="primary" routerLink="nuevo">
-                    <i nz-icon nzType="plus"></i>
-                    Nuevo
-                </button>
-            </div>
-            <div nz-col>
-                <button nz-button nzType="default" (click)="cargarDatos()">
-                    <i nz-icon nzType="reload" nzTheme="outline"></i>
-                    Recargar
-                </button>
+<div nz-row [nzGutter]="[8,8]">
+    <div nz-col nzSpan="24">
+        <div nz-row>
+            <div nz-col nzFlex="auto">
+                <div nz-row [nzGutter]="[8, 8]">
+                    <div nz-col>
+                        <button nz-button nzType="primary" routerLink="nuevo">
+                            <i nz-icon nzType="plus"></i>
+                            Nuevo
+                        </button>
+                    </div>
+                    <div nz-col>
+                        <button nz-button nzType="default" (click)="cargarDatos()">
+                            <i nz-icon nzType="reload" nzTheme="outline"></i>
+                            Recargar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div nz-col nzSpan="24">
+        <nz-table 
+            #tbl
+            [nzData]="lstDomicilios"
+            nzSize="small"
+            [nzFrontPagination]="false"
+            [nzPageIndex]="pageIndex"
+            [nzPageSize]="pageSize"
+            [nzTotal]="totalRegisters"
+            [nzLoading]="tableLoading"
+            nzShowPagination
+            nzShowSizeChanger
+            (nzQueryParams)="onTableQueryParamsChange($event)">
+            <thead>
+                <tr>
+                    <th nzWidth="60px"></th>
+                    <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                    <th *ngIf="mostrarTitular" [nzColumnKey]="'cliente'" [nzSortFn]="true">Titular</th>
+                    <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Dirección</th>
+                    <th [nzColumnKey]="'barrio'" [nzSortFn]="true">Barrio</th>
+                    <th [nzColumnKey]="'tipo'" [nzSortFn]="true">Tipo</th>
+                    <th [nzColumnKey]="'nromedidor'" [nzSortFn]="true">ANDE</th>
+                    <th [nzColumnKey]="'principal'" [nzSortFn]="true">Nivel</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let d of tbl.data">
+                    <tr>
+                        <td [nzExpand]="expandSet.has(d.id ?? -1)" (nzExpandChange)="onExpandChange(d.id ?? -1, $event)"></td>
+                        <td>{{ d.id }}</td>
+                        <td *ngIf="mostrarTitular">{{ d.cliente }}</td>
+                        <td>{{ d.direccion }}</td>
+                        <td>{{ d.barrio }}</td>
+                        <td>
+                            <span *ngIf="d.tipo === 'PRO'">Propio</span>
+                            <span *ngIf="d.tipo === 'ALQ'">Alquiler</span>
+                            <span *ngIf="d.tipo === 'PRE'">Préstamo</span>               
+                        <td>
+                            <span *ngIf="d.nromedidor">{{ d.nromedidor }}</span>
+                            <span *ngIf="!d.nromedidor" nz-typography nzType="secondary">(Ninguno)</span>
+                        </td>
+                        <td>
+                            <nz-tag *ngIf="d.principal" nzColor="green">
+                                Principal
+                            </nz-tag>
+                            <nz-tag *ngIf="!d.principal" nzColor="default">
+                                <span nz-typography nzType="secondary">Secundario</span>
+                            </nz-tag>
+                        <td>
+                            <nz-space>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="[d.id]" nzTooltipTitle="Editar">
+                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                </button>
+                                <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzOkText="Eliminar" 
+                                (click)="confirmarEliminacion(d)" nzDanger>
+                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                </button>
+                            </nz-space>
+                        </td>
+                    </tr>
+                    <tr [nzExpand]="expandSet.has(d.id ?? -1)">
+                        <nz-descriptions>
+                            <nz-descriptions-item [nzTitle]="distritoTitle">
+                                <ng-template #distritoTitle>
+                                    <strong>Distrito</strong>
+                                </ng-template>
+                                {{ d.distrito }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="departamentoTitle">
+                                <ng-template #departamentoTitle>
+                                    <strong>Departamento</strong>
+                                </ng-template>
+                                {{ d.departamento }}
+                            </nz-descriptions-item>
+                        </nz-descriptions>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </nz-table>
+    </div>
 </div>
 
-<nz-table #tbl [nzData]="lstDomicilios" style="margin-top: 10px;" nzSize="small" [nzFrontPagination]="false"
-[nzPageIndex]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="totalRegisters" [nzLoading]="tableLoading"
-nzShowPagination nzShowSizeChanger (nzQueryParams)="onTableQueryParamsChange($event)">
-    <thead>
-        <tr>
-            <th nzWidth="60px"></th>
-            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
-            <th [nzColumnKey]="'direccion'" [nzSortFn]="true">Dirección</th>
-            <th [nzColumnKey]="'barrio'" [nzSortFn]="true">Barrio</th>
-            <th [nzColumnKey]="'tipo'" [nzSortFn]="true">Tipo</th>
-            <th [nzColumnKey]="'nromedidor'" [nzSortFn]="true">Medidor ANDE</th>
-            <th [nzColumnKey]="'principal'" [nzSortFn]="true">Nivel</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-container *ngFor="let d of tbl.data">
-            <tr>
-                <td [nzExpand]="expandSet.has(d.id ?? -1)" (nzExpandChange)="onExpandChange(d.id ?? -1, $event)"></td>
-                <td>{{ d.id }}</td>
-                <td>{{ d.direccion }}</td>
-                <td>{{ d.barrio }}</td>
-                <td>
-                    <span *ngIf="d.tipo === 'PRO'">Propio</span>
-                    <span *ngIf="d.tipo === 'ALQ'">Alquiler</span>
-                    <span *ngIf="d.tipo === 'PRE'">Préstamo</span>               
-                <td>{{ d.nromedidor }}</td>
-                <td>
-                    <nz-tag *ngIf="d.principal" nzColor="green">
-                        Principal
-                    </nz-tag>
-                    <nz-tag *ngIf="!d.principal" nzColor="default">
-                        <span nz-typography nzType="secondary">Secundario</span>
-                    </nz-tag>
-                <td>
-                    <nz-space>
-                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" [routerLink]="[d.id]" nzTooltipTitle="Editar">
-                            <i nz-icon nzType="edit" nzTheme="outline"></i>
-                        </button>
-                        <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Eliminar" nzOkText="Eliminar" 
-                        (click)="confirmarEliminacion(d)" nzDanger>
-                            <i nz-icon nzType="delete" nzTheme="outline"></i>
-                        </button>
-                    </nz-space>
-                </td>
-            </tr>
-            <tr [nzExpand]="expandSet.has(d.id ?? -1)">
-                <nz-descriptions>
-                    <nz-descriptions-item [nzTitle]="distritoTitle">
-                        <ng-template #distritoTitle>
-                            <strong>Distrito</strong>
-                        </ng-template>
-                        {{ d.distrito }}
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="departamentoTitle">
-                        <ng-template #departamentoTitle>
-                            <strong>Departamento</strong>
-                        </ng-template>
-                        {{ d.departamento }}
-                    </nz-descriptions-item>
-                </nz-descriptions>
-            </tr>
-        </ng-container>
-    </tbody>
-</nz-table>
+
