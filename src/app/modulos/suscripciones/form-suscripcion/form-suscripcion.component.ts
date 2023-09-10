@@ -57,6 +57,7 @@ export class FormSuscripcionComponent implements OnInit {
   idLoading: boolean = false;
   clienteLoading: boolean = false;
   textoBusquedaCliente: string = '';
+  timerBusqueda: any;
 
   constructor(
     private domiSrv: DomiciliosService,
@@ -87,15 +88,11 @@ export class FormSuscripcionComponent implements OnInit {
       this.onChangeServicio(value);
     });
     this.form.controls.gentileza.valueChanges.subscribe(value => {
-      //const idservicio = this.form.controls.idservicio.value;
-      if(value) this.form.controls.monto.setValue(0);
-      //if(!value && idservicio)
-      //  this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+      if (value) this.form.controls.monto.setValue(0);
     })
   }
 
   private cargarClienteActual(idcliente: number) {
-    console.log('cargar cliente actual', idcliente);
     this.clientesSrv.getPorId(idcliente).subscribe({
       next: (cliente) => {
         this.lstClientes.unshift(cliente);
@@ -180,15 +177,15 @@ export class FormSuscripcionComponent implements OnInit {
     s.iddomicilio = this.form.get('iddomicilio')?.value;
     s.idcliente = this.form.get('idcliente')?.value;
     s.estado = this.form.get('estado')?.value;
-    
+
     const fs: Date = this.form.get('fechasuscripcion')?.value;
     //if (fs) s.fechasuscripcion = Extra.dateToString(fs);
     if (fs) s.fechasuscripcion = formatDate(fs, 'yyyy-MM-dd', this.locale);
-    
+
     const fce: Date = this.form.get('fechacambioestado')?.value;
     if (fce) s.fechacambioestado = formatDate(fce, 'yyyy-MM-dd', this.locale);
     //if (fce) s.fechacambioestado = Extra.dateToString(fce)
-    
+
     s.gentileza = this.form.get('gentileza')?.value;
     s.observacion = this.form.get('observacion')?.value;
     return s;
@@ -233,7 +230,7 @@ export class FormSuscripcionComponent implements OnInit {
 
   onChangeServicio(idservicio: number): void {
     const servicio = this.lstServicios.find(servicio => servicio.id == idservicio);
-    if(servicio) this.form.controls.monto.setValue(servicio.precio);
+    if (servicio) this.form.controls.monto.setValue(servicio.precio);
   }
 
   cargarUltimoId(): void {
@@ -252,35 +249,31 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   buscarClientes(search: string) {
-    this.textoBusquedaCliente = search;
-    this.cargarClientes();
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.lstClientes = [];
+      this.textoBusquedaCliente = search;
+      this.cargarClientes();
+    }, 300);
   }
 
   cargarClientes(): void {
     this.clienteLoading = true;
-    this.clientesSrv.get(this.getHttpQueryParamsCliente())
+    let params: HttpParams = new HttpParams()
+      .append('eliminado', 'false')
+      .append('sort', '+razonsocial')
+      .append('offset', this.lstClientes.length)
+      .append('limit', '10');
+    if (this.textoBusquedaCliente) params = params.append('search', this.textoBusquedaCliente);
+
+    this.clientesSrv.get(params)
       .pipe(
         finalize(() => this.clienteLoading = false)
       )
       .subscribe({
-        next: clientes => this.lstClientes = clientes,
-        error: (e) => {
-          console.error('Error al cargar clientes', e);
-          this.httpErrorHandler.process(e);
-        }
-      });
-  }
-
-  cargarMasClientes() {
-    this.clienteLoading = true;
-    const params = this.getHttpQueryParamsCliente().append('offset', this.lstClientes.length);
-    this.clientesSrv.get(params).pipe(
-      finalize(() => this.clienteLoading = false)
-    )
-      .subscribe({
         next: clientes => this.lstClientes = this.lstClientes.concat(clientes),
         error: (e) => {
-          console.error('Error al cargar mas clientes', e);
+          console.error('Error al cargar clientes', e);
           this.httpErrorHandler.process(e);
         }
       });
@@ -314,13 +307,4 @@ export class FormSuscripcionComponent implements OnInit {
     }
   }
 
-  getHttpQueryParamsCliente(): HttpParams {
-    let params: HttpParams = new HttpParams()
-      .append('eliminado', 'false')
-      .append('sort', '+razonsocial')
-      .append('limit', '10');
-    if (this.textoBusquedaCliente) params = params.append('search', this.textoBusquedaCliente);
-
-    return params;
-  }
 }

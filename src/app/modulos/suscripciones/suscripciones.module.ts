@@ -65,7 +65,6 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzToolTipModule,
     NzSpinModule,
     NzBreadCrumbModule,
-    NzSpaceModule,
     CuotasModule,
     NzGridModule,
     NzBadgeModule,

@@ -29,13 +29,21 @@
                     nzShowSearch
                     nzServerSearch
                     formControlName="idcliente"
-                    (nzScrollToBottom)="cargarMasClientes()"
+                    (nzScrollToBottom)="cargarClientes()"
                     [nzDropdownRender]="loadingClientes"
                     (nzOnSearch)="buscarClientes($event)">
                     <nz-option
                         *ngFor="let cli of lstClientes"
+                        nzCustomContent=""
                         [nzLabel]="cli.razonsocial"
                         [nzValue]="cli.id">
+                        <nz-space>
+                            <span *nzSpaceItem nz-typography nzType="secondary">[{{ cli.id }}]</span>    
+                            <span *nzSpaceItem>{{cli.razonsocial}}</span>
+                            <span *nzSpaceItem>
+                                <nz-tag *ngIf="cli.ci"> {{ cli.ci | number }}</nz-tag>    
+                            </span>
+                        </nz-space>
                     </nz-option>
                 </nz-select>
                 <ng-template #loadingClientes>
@@ -47,9 +55,17 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Domicilio</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un domicilio.">
-                <nz-select formControlName="iddomicilio" nzShowSearch nzAllowClear [nzDropdownRender]="addDomicilio">
-                    <nz-option *ngFor="let dom of lstDomicilios" [nzValue]="dom.id"
-                        [nzLabel]="dom.direccion+' - '+dom.barrio+' ('+dom.id+')'"></nz-option>
+                <nz-select
+                    formControlName="iddomicilio"
+                    nzShowSearch
+                    nzAllowClear
+                    [nzDropdownRender]="addDomicilio"
+                    nzPlaceHolder="Seleccionar...">
+                    <nz-option
+                        *ngFor="let dom of lstDomicilios"
+                        [nzValue]="dom.id"
+                        [nzLabel]="dom.direccion+' - '+dom.barrio+' ('+dom.id+')'">
+                    </nz-option>
                 </nz-select>
                 <ng-template #addDomicilio>
                     <nz-divider style="margin: 4px 0;"></nz-divider>
@@ -66,10 +82,16 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Servicio</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un servicio.">
-                <nz-select formControlName="idservicio" nzShowSearch
-                    nzAllowClear>
-                    <nz-option *ngFor="let srv of lstServicios" [nzLabel]="srv.descripcion+' ('+srv.grupo+')'"
-                        [nzValue]="srv.id"></nz-option>
+                <nz-select
+                    formControlName="idservicio"
+                    nzShowSearch
+                    nzAllowClear
+                    nzPlaceHolder="Seleccionar...">
+                    <nz-option
+                        *ngFor="let srv of lstServicios"
+                        [nzLabel]="srv.descripcion+' ('+srv.grupo+')'"
+                        [nzValue]="srv.id">
+                    </nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
