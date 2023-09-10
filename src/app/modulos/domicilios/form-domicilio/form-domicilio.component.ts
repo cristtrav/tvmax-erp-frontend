@@ -1,13 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Barrio } from './../../../dto/barrio-dto';
-import { BarriosService } from './../../../servicios/barrios.service';
-import { Domicilio } from 'src/app/dto/domicilio-dto';
-import { DomiciliosService } from './../../../servicios/domicilios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
+import { Barrio } from '@dto/barrio-dto';
+import { BarriosService } from '@servicios/barrios.service';
+import { DomiciliosService } from '@servicios/domicilios.service';
+import { Domicilio } from '@dto/domicilio-dto';
+import { ClientesService } from '@servicios/clientes.service';
+import { Cliente } from '@dto/cliente-dto';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-form-domicilio',
@@ -22,12 +25,17 @@ export class FormDomicilioComponent implements OnInit {
   iddomicilioChange = new EventEmitter<string>();
   @Input()
   idcliente: number | null = null;
+
   lstBarrios: Barrio[] = []
+  lstClientes: Cliente[] = [];
   idsuscripcionNav: string | null = 'nueva';
   navigate: string | null = '';
+  private textoBusqueda: string = '';
+  private timerBusqueda: any;
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
+    idcliente: new FormControl(null, [Validators.required]),
     direccion: new FormControl(null, [Validators.required, Validators.maxLength(200)]),
     idbarrio: new FormControl(null, [Validators.required]),
     nromedidor: new FormControl(null, Validators.maxLength(30)),
@@ -39,6 +47,7 @@ export class FormDomicilioComponent implements OnInit {
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   getLastIdLoading: boolean = false;
+  clienteLoading: boolean = false;
 
   constructor(
     private barriosSrv: BarriosService,
@@ -46,7 +55,8 @@ export class FormDomicilioComponent implements OnInit {
     private domicilioSrv: DomiciliosService,
     private router: Router,
     private aroute: ActivatedRoute,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private clientesSrv: ClientesService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +64,10 @@ export class FormDomicilioComponent implements OnInit {
     if (Number.isInteger(Number(this.iddomicilio))) this.cargarDatos();
     this.navigate = this.aroute.snapshot.queryParamMap.get('navigate');
     this.idsuscripcionNav = this.aroute.snapshot.queryParamMap.get('idsuscripcion');
+    if(this.idcliente) {
+      this.cargarClientes();
+      this.form.get('idcliente')?.setValue(this.idcliente);
+    }
   }
 
   private cargarDatos(): void {
@@ -61,6 +75,7 @@ export class FormDomicilioComponent implements OnInit {
     this.domicilioSrv.getPorId(Number(this.iddomicilio)).subscribe({
       next: (domicilio) => {
         this.form.controls.id.setValue(domicilio.id);
+        this.form.controls.idcliente.setValue(domicilio.idcliente);
         this.form.controls.direccion.setValue(domicilio.direccion);
         this.form.controls.idbarrio.setValue(domicilio.idbarrio);
         this.form.controls.tipo.setValue(domicilio.tipo);
@@ -68,13 +83,56 @@ export class FormDomicilioComponent implements OnInit {
         this.form.controls.observacion.setValue(domicilio.observacion);
         this.form.controls.principal.setValue(domicilio.principal);
         this.formLoading = false;
+        if(!this.lstClientes.map(c => c.id).includes(domicilio.idcliente)) 
+          this.agregarCliente(Number(domicilio.idcliente));
       },
       error: (e) => {
         console.error('Error al cargar domicilio por ID', e);
         this.httpErrorHandler.process(e);
         this.formLoading = false;
       }
+    });
+  }
+
+  buscarClientes(busqueda: string){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.lstClientes = [];
+      this.textoBusqueda = busqueda;
+      this.cargarClientes();
+    }, 300);
+    
+  }
+
+  agregarCliente(idcliente: number) {
+    this.clientesSrv.getPorId(idcliente).subscribe({
+      next: (cliente) => {
+        this.lstClientes = [cliente, ...this.lstClientes];
+      },
+      error: (e) => {
+        console.error('Error al cargar cliente', e);
+      }
     })
+  }
+
+  cargarClientes(){
+    this.clienteLoading = true;
+    let httpParams = new HttpParams()
+      .append('eliminado', 'false')
+      .append('limit', '10')
+      .append('offset', this.lstClientes.length)
+      .append('sort', '+razonsocial');
+    if(this.textoBusqueda) httpParams = httpParams.append('search', this.textoBusqueda);
+
+    this.clientesSrv.get(httpParams)
+    .pipe(finalize(() => this.clienteLoading = false))
+    .subscribe({
+      next: (clientes) => this.lstClientes = [...this.lstClientes, ...clientes],
+      error: (e) => {
+        console.error('Error al cargar clientes', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
   private cargarBarrios(): void {
@@ -105,7 +163,7 @@ export class FormDomicilioComponent implements OnInit {
     domi.id = this.form.get('id')?.value;
     domi.direccion = this.form.get('direccion')?.value;
     domi.idbarrio = this.form.get('idbarrio')?.value;
-    domi.idcliente = this.idcliente;
+    domi.idcliente = this.form.get('idcliente')?.value;
     domi.tipo = this.form.get('tipo')?.value;
     domi.nromedidor = this.form.get('nromedidor')?.value;
     domi.observacion = this.form.get('observacion')?.value;

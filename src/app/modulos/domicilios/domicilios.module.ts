@@ -26,9 +26,11 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { DetalleDomicilioComponent } from './detalle-domicilio/detalle-domicilio.component';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @NgModule({
-  declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent],
+  declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent, DetalleDomicilioComponent],
   imports: [
     CommonModule,
     DomiciliosRoutingModule,
@@ -53,7 +55,8 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
     NzModalModule,
     NzDescriptionsModule,
     NzGridModule,
-    NzBreadCrumbModule
+    NzBreadCrumbModule,
+    NzRadioModule
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
 })

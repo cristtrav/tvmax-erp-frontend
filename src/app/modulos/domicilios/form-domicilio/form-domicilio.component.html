@@ -13,6 +13,33 @@
                 </ng-template>
             </nz-form-control>
         </nz-form-item>
+        <nz-form-item *ngIf="!idcliente">
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Titular</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" [nzErrorTip]="'Seleccione el titular'">
+                <nz-select
+                    formControlName="idcliente" 
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                    nzPlaceHolder="Seleccionar..."
+                    [nzDropdownRender]="renderTemplate"
+                    (nzScrollToBottom)="cargarClientes()"
+                    (nzOnSearch)="buscarClientes($event)"
+                    [nzCustomTemplate]="selectedTitular">
+                    <nz-option *ngFor="let cliente of lstClientes" [nzValue]="cliente.id" [nzLabel]="cliente.razonsocial" nzCustomContent>
+                        <span nz-typography nzType="secondary">{{ cliente.id }} |</span>
+                        {{ cliente.razonsocial }}
+                        <nz-tag *ngIf="cliente.ci">{{ cliente.ci | number }}</nz-tag>
+                    </nz-option>
+                </nz-select>
+                <ng-template #selectedTitular let-selected>
+                    <span>{{ selected.nzLabel }}</span>
+                </ng-template>
+            </nz-form-control>
+            <ng-template #renderTemplate>
+                <nz-spin *ngIf="clienteLoading"></nz-spin>
+            </ng-template>
+        </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Dirección</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una dirección. Máx. 200 carácteres.">
@@ -22,24 +49,40 @@
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Barrio</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un barrio.">
-                <nz-select nzAllowClear nzShowSearch formControlName="idbarrio">
-                    <nz-option *ngFor="let b of lstBarrios" [nzValue]="b.id"
-                        [nzLabel]="b.descripcion+' ('+b.distrito+', '+b.departamento+')'"></nz-option>
+                <nz-select
+                    nzAllowClear
+                    nzShowSearch
+                    formControlName="idbarrio"
+                    nzPlaceHolder="Seleccionar...">
+                    <nz-option
+                        *ngFor="let b of lstBarrios"
+                        [nzValue]="b.id"
+                        [nzLabel]="b.descripcion+' ('+b.distrito+', '+b.departamento+')'">
+                    </nz-option>
                 </nz-select>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un tipo de domicilio.">
-                <nz-select formControlName="tipo" nzAllowClear nzShowSearch>
+                <nz-radio-group nzButtonStyle="solid" formControlName="tipo">
+                    <label nz-radio-button [nzValue]="'PRO'">Propio</label>
+                    <label nz-radio-button [nzValue]="'ALQ'">Alquiler</label>
+                    <label nz-radio-button [nzValue]="'PRE'">Préstamo</label>
+                </nz-radio-group>
+                <!--<nz-select
+                    formControlName="tipo"
+                    nzAllowClear
+                    nzShowSearch
+                    nzPlaceHolder="Seleccionar...">
                     <nz-option  [nzValue]="'PRO'" [nzLabel]="'Propio'"></nz-option>
                     <nz-option  [nzValue]="'ALQ'" [nzLabel]="'Alquiler'"></nz-option>
                     <nz-option  [nzValue]="'PRE'" [nzLabel]="'Préstamo'"></nz-option>
-                </nz-select>
+                </nz-select>-->
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24">Medidor ANDE</nz-form-label>
+            <nz-form-label [nzSm]="7" [nzXs]="24">ANDE</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 30 carácteres.">
                 <input nz-input formControlName="nromedidor">
             </nz-form-control>
