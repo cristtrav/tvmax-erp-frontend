@@ -27,9 +27,13 @@
                     (nzOnSearch)="buscarClientes($event)"
                     [nzCustomTemplate]="selectedTitular">
                     <nz-option *ngFor="let cliente of lstClientes" [nzValue]="cliente.id" [nzLabel]="cliente.razonsocial" nzCustomContent>
-                        <span nz-typography nzType="secondary">{{ cliente.id }} |</span>
-                        {{ cliente.razonsocial }}
-                        <nz-tag *ngIf="cliente.ci">{{ cliente.ci | number }}</nz-tag>
+                        <nz-space>
+                            <span *nzSpaceItem nz-typography nzType="secondary">[{{ cliente.id }}]</span>
+                            <span *nzSpaceItem>{{ cliente.razonsocial }}</span>
+                            <span *nzSpaceItem>
+                                <nz-tag *ngIf="cliente.ci">{{ cliente.ci | number }}</nz-tag>
+                            </span>
+                        </nz-space>
                     </nz-option>
                 </nz-select>
                 <ng-template #selectedTitular let-selected>
