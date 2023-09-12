@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TimbradosService } from '@servicios/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { HttpParams } from '@angular/common/http';
@@ -206,7 +206,8 @@ export class DetalleVentaComponent implements OnInit {
     this.nroFacturaMax = t.nrofin ?? 9999999;
     this.formCabecera.get('nroFactura')?.clearValidators();
     this.formCabecera.get('nroFactura')?.addValidators([Validators.required, Validators.min(this.nroFacturaMin), Validators.max(this.nroFacturaMax)]);
-    this.formCabecera.get('nroFactura')?.setValue(t.ultimonrousado ? Number(t.ultimonrousado) + 1 : this.nroFacturaMin);
+    if(this.idventa == 'nueva')
+      this.formCabecera.get('nroFactura')?.setValue(t.ultimonrousado ? Number(t.ultimonrousado) + 1 : this.nroFacturaMin);
   }
 
   actualizarControlNroFacturaSeleccionado() {
