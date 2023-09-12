@@ -141,12 +141,27 @@
                                         [nzLg]="6">Cliente</nz-form-label>
                                     <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                         nzErrorTip="Seleccione el cliente de la factura.">
-                                        <nz-select nzAllowClear nzShowSearch [nzLoading]="loadingClientes"
+                                        <nz-select
+                                            nzAllowClear
+                                            nzShowSearch
+                                            [nzLoading]="loadingClientes"
                                             [nzDropdownRender]="spinCargarMasClientes"
                                             (nzOnSearch)="buscarCliente($event)"
                                             (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
-                                            <nz-option *ngFor="let cli of lstClientes" [nzLabel]="cli.razonsocial"
+                                            <nz-option
+                                                nzCustomContent
+                                                *ngFor="let cli of lstClientes"
+                                                [nzLabel]="cli.razonsocial"
                                                 [nzValue]="cli.id">
+                                                <nz-space>
+                                                    <span *nzSpaceItem>{{ cli.razonsocial }}</span>
+                                                    <ng-container *ngIf="cli.ci">
+                                                        <nz-tag *nzSpaceItem>
+                                                            {{ cli.ci | number }}
+                                                            <span *ngIf="cli.dvruc">- {{ cli.dvruc }}</span>
+                                                        </nz-tag>
+                                                    </ng-container>
+                                                </nz-space>
                                             </nz-option>
                                         </nz-select>
                                         <ng-template #spinCargarMasClientes>
