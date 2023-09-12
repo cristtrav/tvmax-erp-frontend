@@ -17,6 +17,14 @@
                     </div>
                 </div>
             </div>
+            <div nz-col>
+                <nz-input-group [nzPrefix]="prefixSearch">
+                    <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                </nz-input-group>
+                <ng-template #prefixSearch>
+                    <i nz-icon nzType="search" nzTheme="outline"></i>
+                </ng-template>
+            </div>
         </div>
     </div>
     <div nz-col nzSpan="24">

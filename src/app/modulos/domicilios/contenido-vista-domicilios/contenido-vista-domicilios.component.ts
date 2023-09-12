@@ -23,6 +23,8 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   sortStr: string | null = '+id';
   tableLoading: boolean = false;
   expandSet = new Set<number>();
+  textoBusqueda: string = '';
+  timerBusqueda: any;
 
   @Input()
   mostrarTitular: boolean = true;
@@ -44,6 +46,13 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   onExpandChange(id: number, checked: boolean): void {
     if (checked) this.expandSet.add(id);
     else this.expandSet.delete(id);
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.cargarDatos();
+    }, 300);
   }
 
   cargarDatos(): void {
@@ -85,6 +94,7 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
     if (this.sortStr) par = par.append('sort', this.sortStr);
     par = par.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     par = par.append('limit', `${this.pageSize}`);
+    if(this.textoBusqueda) par = par.append('search', this.textoBusqueda);
     return par;
   }
 
