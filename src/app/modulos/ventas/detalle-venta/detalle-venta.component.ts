@@ -288,7 +288,7 @@ export class DetalleVentaComponent implements OnInit {
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
         this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
-        this.cargarDatosVenta(idgenerado);
+        //this.cargarDatosVenta(idgenerado);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
