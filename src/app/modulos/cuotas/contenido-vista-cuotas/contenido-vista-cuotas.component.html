@@ -20,7 +20,27 @@
         <nz-spin [nzSpinning]="tabsLoading">
             <nz-alert *ngIf="lstServicios.length === 0 && !tabsLoading" nzType="warning" nzMessage="Ninguna cuota registrada" nzShowIcon></nz-alert>
             <nz-tabset *ngIf="lstServicios.length > 0" [nzTabPosition]="'left'" style="margin-top: 10px;">
-                <nz-tab *ngFor="let s of lstServicios" [nzTitle]="s.descripcion?s.descripcion:'-'">
+                <nz-tab *ngFor="let s of lstServicios" [nzTitle]="tabTitle">
+                    <ng-template #tabTitle>
+                        <nz-space>
+                            <ng-container *ngIf="s.descripcion">
+                                <span *nzSpaceItem>{{ s.descripcion}}</span>
+                            </ng-container>
+                            <ng-container *ngIf="!s.descripcion">
+                                <span *nzSpaceItem>-</span>
+                            </ng-container>
+                            <ng-container *ngIf="s.id == idservicioSuscrito">
+                                <i
+                                *nzSpaceItem
+                                nz-icon nzType="check-circle"
+                                nzTheme="twotone"
+                                nzTwotoneColor="#52c41a"
+                                nz-tooltip
+                                nzTooltipTitle="Suscripción vigente">
+                            </i>
+                            </ng-container>
+                        </nz-space>
+                    </ng-template>
                     <app-tabla-cuotas [idsuscripcion]="idsuscripcion" [idservicio]="s.id"></app-tabla-cuotas>
                 </nz-tab>
             </nz-tabset>
