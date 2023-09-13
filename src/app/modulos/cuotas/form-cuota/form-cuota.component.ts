@@ -38,6 +38,7 @@ export class FormCuotaComponent implements OnInit {
   idcuota = 'nueva';
   lstServicios: Servicio[] = [];
   suscripcionActual: Suscripcion | null = null;
+  private validandoFormulario: boolean = false;
 
   constructor(
     private serviciosSrv: ServiciosService,
@@ -52,9 +53,10 @@ export class FormCuotaComponent implements OnInit {
     if (this.idcuota && this.idcuota !== 'nueva') this.cargarDatos();
     this.form.get('idservicio')?.valueChanges.subscribe((value: number[]) => {
       console.log(value);
-      if (value.length > 0) {
+      if (value && value.length > 0) {
         const idservicio = value[value.length - 1];
-        this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+        if(!this.validandoFormulario)
+          this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
       } else this.form.controls.monto.reset();
     });
   }
@@ -116,10 +118,12 @@ export class FormCuotaComponent implements OnInit {
   }
 
   guardar(): void {
+    this.validandoFormulario = true;
     Object.keys(this.form.controls).forEach(ctrlName => {
       this.form.get(ctrlName)?.markAsDirty();
       this.form.get(ctrlName)?.updateValueAndValidity();
     });
+    this.validandoFormulario = false;
     if (this.form.valid) {
       if (this.idcuota === 'nueva') this.registrar();
       else this.modificar();

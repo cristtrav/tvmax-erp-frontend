@@ -59,6 +59,8 @@ export class FormSuscripcionComponent implements OnInit {
   textoBusquedaCliente: string = '';
   timerBusqueda: any;
 
+  private validandoFormulario: boolean = false;
+
   constructor(
     private domiSrv: DomiciliosService,
     private notif: NzNotificationService,
@@ -84,7 +86,7 @@ export class FormSuscripcionComponent implements OnInit {
     this.form.controls.idcliente.valueChanges.subscribe((value) => {
       this.onChangeCliente(value);
     });
-    this.form.controls.idservicio.valueChanges.subscribe(value => {
+    this.form.controls.idservicio.valueChanges.subscribe(value => {      
       this.onChangeServicio(value);
     });
     this.form.controls.gentileza.valueChanges.subscribe(value => {
@@ -159,10 +161,12 @@ export class FormSuscripcionComponent implements OnInit {
   }
 
   guardar() {
+    this.validandoFormulario = true;
     Object.keys(this.form.controls).forEach(ctrlName => {
       this.form.get(ctrlName)?.markAsDirty();
       this.form.get(ctrlName)?.updateValueAndValidity();
     });
+    this.validandoFormulario = false;
     if (this.form.valid) {
       if (this.idsuscripcion === 'nueva') this.registrar();
       else this.modificar();
@@ -230,7 +234,7 @@ export class FormSuscripcionComponent implements OnInit {
 
   onChangeServicio(idservicio: number): void {
     const servicio = this.lstServicios.find(servicio => servicio.id == idservicio);
-    if (servicio) this.form.controls.monto.setValue(servicio.precio);
+    if (servicio && !this.validandoFormulario) this.form.controls.monto.setValue(servicio.precio);
   }
 
   cargarUltimoId(): void {
