@@ -6,16 +6,6 @@ import { SesionService } from "@servicios/sesion.service";
 
 export class Extra {
 
-    public static dateTimeToString(d: Date): string {
-        const dia = `${d.getDate()}`.padStart(2, '0');
-        const mes = `${d.getMonth() + 1}`.padStart(2, '0');
-        const hora = `${d.getHours()}`.padStart(2, '0');
-        const minuto = `${d.getMinutes()}`.padStart(2, '0');
-        const segundo = `${d.getSeconds()}`.padStart(2, '0');
-        const strF: string = `${d.getFullYear()}-${mes}-${dia}T${hora}:${minuto}:${segundo}`;
-        return strF;
-    }
-
     public static dateStrToDate(dateStr: string): Date {
         return new Date(+dateStr.split('-')[0], (+dateStr.split('-')[1]) - 1, +dateStr.split('-')[2]);
     }

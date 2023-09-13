@@ -1,10 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
 import { AuditoriaService } from '@servicios/auditoria.service';
 import { UsuariosService } from '@servicios/usuarios.service';
-import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
@@ -31,6 +30,7 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
   eliminacionSelec: boolean = false;
 
   constructor(
+    @Inject(LOCALE_ID) private locale: string,
     private usuariosSrv: UsuariosService,
     private auditoriaSrv: AuditoriaService,
     private httpErrorHandler: HttpErrorResponseHandlerService
@@ -79,8 +79,8 @@ export class FormFiltroEventoAuditoriaComponent implements OnInit {
     const par: IParametroFiltro = {};
     if (this.idUsuarioSelec) par['idusuario'] = this.idUsuarioSelec;
     if (this.idTablaAuditoriaSelec) par['idtabla'] = this.idTablaAuditoriaSelec;
-    if (this.fechaHoraDesde) par['fechahoradesde'] = Extra.dateTimeToString(this.fechaHoraDesde);
-    if (this.fechaHoraHasta) par['fechahorahasta'] = Extra.dateTimeToString(this.fechaHoraHasta);
+    if (this.fechaHoraDesde) par['fechahoradesde'] = this.fechaHoraDesde.toISOString();
+    if (this.fechaHoraHasta) par['fechahorahasta'] = this.fechaHoraHasta.toISOString();
     if (this.registroSelec || this.modificacionSelec || this.eliminacionSelec) {
       const opeArr: string[] = [];
       if (this.registroSelec) opeArr.push('R');
