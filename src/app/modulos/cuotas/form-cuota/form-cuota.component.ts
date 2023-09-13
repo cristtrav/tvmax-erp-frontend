@@ -1,5 +1,5 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CuotaDTO } from "@dto/cuota-dto";
 import { Servicio } from "@dto/servicio-dto";
@@ -7,10 +7,10 @@ import { Suscripcion } from "@dto/suscripcion-dto";
 import { CuotasService } from "@servicios/cuotas.service";
 import { ServiciosService } from "@servicios/servicios.service";
 import { SuscripcionesService } from "@servicios/suscripciones.service";
-import { Extra } from "@util/extra";
 import { HttpErrorResponseHandlerService } from "@util/http-error-response-handler.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { mergeMap, forkJoin, of } from "rxjs";
+import { formatDate } from "@angular/common";
 
 
 @Component({
@@ -45,7 +45,8 @@ export class FormCuotaComponent implements OnInit {
     private notif: NzNotificationService,
     private cuotaSrv: CuotasService,
     private suscripcionesSrv: SuscripcionesService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    @Inject(LOCALE_ID) private locale: string
   ) { }
 
   ngOnInit(): void {
@@ -112,7 +113,7 @@ export class FormCuotaComponent implements OnInit {
     const obs = this.form.get('observacion')?.value;
     if (obs) c.observacion = obs === '' ? null : obs;
     const fv = this.form.get('fechavencimiento')?.value;
-    if (fv) c.fechavencimiento = Extra.dateToString(fv);
+    if (fv) c.fechavencimiento = formatDate(fv, 'yyyy-MM-dd', this.locale);
     c.idsuscripcion = this.idsuscripcion;
     return c;
   }
