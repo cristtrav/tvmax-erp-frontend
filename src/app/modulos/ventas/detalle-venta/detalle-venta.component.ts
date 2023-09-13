@@ -373,7 +373,7 @@ export class DetalleVentaComponent implements OnInit {
     dfv.idsuscripcion = cuota.idsuscripcion;
     dfv.idservicio = cuota.idservicio;
     dfv.idcuota = cuota.id;
-    dfv.montoiva = (dfv.subtotal * dfv.porcentajeiva) / (100 + dfv.porcentajeiva);
+    dfv.montoiva = Math.round((dfv.subtotal * dfv.porcentajeiva) / (100 + dfv.porcentajeiva));
     const vencStr: string = cuota.fechavencimiento ? formatDate(cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
     dfv.descripcion = `CUOTA ${vencStr} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();
     const arrDFV: DetalleVenta[] = this.lstDetallesVenta.slice();
@@ -466,7 +466,8 @@ export class DetalleVentaComponent implements OnInit {
     dt.idservicio = srv.id;
     dt.subtotal = dt.monto * dt.cantidad;
     dt.idsuscripcion = susc.id;
-    dt.porcentajeiva = srv.porcentajeiva;
+    dt.porcentajeiva = Number(srv.porcentajeiva);
+    dt.montoiva = Math.round((dt.subtotal * dt.porcentajeiva) / (100 + dt.porcentajeiva));
     dt.descripcion = `${srv.descripcion} | ${susc.servicio} [${susc.id}]`.toUpperCase();
     lstdt.push(dt);
     this.lstDetallesVenta = lstdt;
