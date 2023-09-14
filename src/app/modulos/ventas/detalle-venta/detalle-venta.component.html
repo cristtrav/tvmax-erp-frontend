@@ -7,7 +7,8 @@
                         <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
-                        <a routerLink="../">Ventas</a>
+                        <a *ngIf="moduloActivadoDesde == 'venta'" routerLink="../">Ventas</a>
+                        <span *ngIf="moduloActivadoDesde == 'pos'">POS</span>
                     </nz-breadcrumb-item>
                     <nz-breadcrumb-item>
                         <a>{{ idventa | titlecase }}</a>
@@ -106,7 +107,7 @@
                                         [nzLg]="6">Factura</nz-form-label>
                                     <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                         [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
-                                        <nz-input-group [nzAddOnBefore]="prefijoFactura">
+                                        <nz-input-group [nzAddOnBefore]="prefijoFactura" [nzAddOnAfter]="sufijoFactura" nzSearch>
                                             <ng-template #prefijoFactura>
                                                 <nz-select style="min-width: 7em;" [nzOptionOverflowSize]="32"
                                                     [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
@@ -119,7 +120,20 @@
                                             </ng-template>
                                             <nz-input-number style="width: 100%;" formControlName="nroFactura"
                                                 [nzDisabled]="nroFacturaDesactivado" [nzStep]="1"
-                                                [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax"></nz-input-number>
+                                                [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax">
+                                            </nz-input-number>
+                                            <ng-template #sufijoFactura>
+                                                <button
+                                                    nz-button
+                                                    nzType="default"
+                                                    nzSearch
+                                                    nz-tooltip
+                                                    nzTooltipTitle="Buscar y abrir factura"
+                                                    [nzLoading]="buscandoFactura"
+                                                    (click)="buscarFacturaPorNro()">
+                                                    <i nz-icon nzType="search" nzTheme="outline"></i>
+                                                </button>
+                                            </ng-template>
                                         </nz-input-group>
 
                                         <ng-template #renderPrefijo let-selected>

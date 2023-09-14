@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@servicios/sesion.service';
 import { CuotasPendientesComponent } from './cuotas-pendientes/cuotas-pendientes.component';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { ImpresionService } from '@servicios/impresion.service';
 
 @Component({
@@ -72,6 +72,9 @@ export class DetalleVentaComponent implements OnInit {
 
   mapCuotaEnDetalle: Map<number, boolean> = new Map();
   loadingImpresion: boolean = false;
+
+  buscandoFactura: boolean = false;
+  moduloActivadoDesde: 'venta' | 'pos' = 'venta';
 
   constructor(
     private timbradoSrv: TimbradosService,
@@ -131,7 +134,7 @@ export class DetalleVentaComponent implements OnInit {
     if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
 
     this.formCabecera.get('idTimbrado')?.setValue(this.getUltimoTimbradoSeleccionado(this.sesionSrv.idusuario));
-
+    this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
   }
 
   private getUltimoTimbradoSeleccionado(idusuario: number): number | null {
@@ -519,5 +522,36 @@ export class DetalleVentaComponent implements OnInit {
         }
       });
     }
+  }
+
+  buscarFacturaPorNro(){
+    if(!this.formCabecera.controls.idTimbrado.value){
+      this.notif.create('warning', 'Seleccione el prefijo de la factura','');
+      return;
+    }
+    if(!this.formCabecera.controls.nroFactura.value){
+      this.notif.create('warning', 'Ingrese un número de factura','');
+      return;
+    }
+    this.buscandoFactura = true;
+    const httpParams = new HttpParams()
+    .append('eliminado', false)
+    .append('idtimbrado', `${this.formCabecera.controls.idTimbrado.value}`)
+    .append('nrofactura', `${this.formCabecera.controls.nroFactura.value}`)
+    this.ventasSrv.get(httpParams).pipe(
+      finalize(() => this.buscandoFactura = false)
+    ).subscribe({
+      next: (venta) => {
+        if(venta.length > 0){
+          this.idventa = `${venta[0].id}`;
+          this.router.navigate(['../', venta[0].id ?? -1], { relativeTo: this.aroute });
+          this.cargarDatosVenta(venta[0].id ?? -1);
+        } else this.notif.create('warning', '<strong>No encontrado</strong>', `No se encontró ninguna factura con nro. ${this.formCabecera.controls.nroFactura.value}`);
+      },
+      error: (e) => {
+        console.error('Error al cargar factura por nro', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 }
