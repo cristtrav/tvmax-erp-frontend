@@ -53,7 +53,7 @@
         <div nz-col>
           <a>
             <nz-avatar nz-dropdown [nzText]="textoAvatar" [nzDropdownMenu]="menu"
-              style="margin-right: 8px; background-color: #87d068;"></nz-avatar>
+              style="margin-right: 8px" [ngStyle]="{'background-color': colorAvatarUsuario}"></nz-avatar>
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu>
