@@ -66,12 +66,12 @@ export class AppComponent implements OnInit{
   }
 
   doLogout(): void {
-    this.sesionSrv.logout().subscribe(()=>{
-      this.router.navigateByUrl('/login');
-    }, (e)=>{
-      console.log('Error al cerrar sesion');
-      console.log(e);
-      this.notif.create('error', 'Error al cerrar sesión', e.error);
+    this.sesionSrv.logout().subscribe({
+      next: () => this.router.navigateByUrl('/login'),
+      error: (e) => {
+        console.error('Error al cerrar sesion', e);
+        this.notif.create('error', 'Error al cerrar sesión', e.error);
+      }
     });
   }
 
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit{
     return visible;
   }
 
-  obtenerColorAleatorio(): string {
+  private obtenerColorAleatorio(): string {
     return COLORES_AVATAR_LIST[Math.floor(Math.random() * COLORES_AVATAR_LIST.length)];
   }
 
