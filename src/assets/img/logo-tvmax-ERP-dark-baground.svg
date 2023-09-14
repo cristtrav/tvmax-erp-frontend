@@ -3,7 +3,7 @@
    version="1.1"
    viewBox="0 0 1113.2953 399.04379"
    id="svg39"
-   sodipodi:docname="logo-nuevo-tvmax-ERP.svg"
+   sodipodi:docname="logo-tvmax-ERP-dark-baground.svg"
    inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    inkscape:export-filename="logo-nuevo-tvmax.png"
    inkscape:export-xdpi="224.78049"
@@ -78,10 +78,10 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.70710678"
-     inkscape:cx="569.92807"
-     inkscape:cy="212.13203"
+     inkscape:cx="569.22096"
+     inkscape:cy="212.83914"
      inkscape:window-width="1920"
-     inkscape:window-height="998"
+     inkscape:window-height="997"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -125,16 +125,10 @@
      id="path49"
      sodipodi:nodetypes="cccccccc"
      inkscape:label="Ve" />
-  <text
-     xml:space="preserve"
-     style="font-size:166.667px;opacity:1;fill:#ffffff;stroke:#ffffff;stroke-width:0.5;fill-opacity:1;stroke-opacity:1"
-     x="797.37665"
-     y="264.69193"
+  <path
+     style="font-size:166.667px;font-family:Sans;-inkscape-font-specification:Sans;fill:#ffffff;stroke:#ffffff;stroke-width:0.5"
+     d="m 813.7341,143.19103 h 76.82308 v 13.83466 h -60.38424 v 35.97012 h 57.86145 v 13.83467 h -57.86145 v 44.02678 h 61.84908 v 13.83467 H 813.7341 Z m 162.92351,64.53463 q 5.28973,1.79037 10.25393,7.64976 5.04558,5.85938 10.09117,16.11331 l 16.68299,33.2032 h -17.65956 l -15.54365,-31.16869 q -6.02215,-12.20705 -11.71877,-16.19469 -5.61525,-3.98764 -15.38089,-3.98764 h -17.90369 v 51.35102 h -16.43883 v -121.5009 h 37.10945 q 20.83338,0 31.0873,8.7077 10.25393,8.7077 10.25393,26.28586 0,11.47463 -5.3711,19.043 -5.28973,7.56838 -15.46228,10.49807 z m -41.17847,-51.02549 v 43.1316 h 20.67062 q 11.88153,0 17.90368,-5.45249 6.10353,-5.53386 6.10353,-16.19469 0,-10.66083 -6.10353,-16.03194 -6.02215,-5.45248 -17.90368,-5.45248 z m 115.80426,0 v 45.65439 h 20.6706 q 11.4747,0 17.7409,-5.94077 6.2663,-5.94077 6.2663,-16.92712 0,-10.90497 -6.2663,-16.84573 -6.2662,-5.94077 -17.7409,-5.94077 z m -16.4388,-13.50914 h 37.1094 q 20.4265,0 30.8432,9.27736 10.4981,9.19598 10.4981,27.01828 0,17.98507 -10.4981,27.18105 -10.4167,9.19598 -30.8432,9.19598 h -20.6706 v 48.82823 h -16.4388 z"
      id="text1"
-     inkscape:label="ERP"><tspan
-       sodipodi:role="line"
-       id="tspan1"
-       x="797.37665"
-       y="264.69193"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:166.667px;font-family:Sans;-inkscape-font-specification:Sans;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1">ERP</tspan></text>
+     inkscape:label="ERP"
+     aria-label="ERP" />
 </svg>
