@@ -1,8 +1,10 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { VentasService } from '@servicios/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { CardResumenVentasGruposServiciosComponent } from '../card-resumen-ventas-grupos-servicios/card-resumen-ventas-grupos-servicios.component';
+import { CardResumenVentasCobradoresComponent } from '../card-resumen-ventas-cobradores/card-resumen-ventas-cobradores.component';
 
 @Component({
   selector: 'app-contenido-estadisticas-ventas',
@@ -10,6 +12,11 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
   styleUrls: ['./contenido-estadisticas-ventas.component.scss']
 })
 export class ContenidoEstadisticasVentasComponent implements OnInit {
+
+  @ViewChild(CardResumenVentasGruposServiciosComponent)
+  cardResumenVentasGruposServiciosComp!: CardResumenVentasGruposServiciosComponent;
+  @ViewChild(CardResumenVentasCobradoresComponent)
+  cardResumenVentasCobradoresComp!: CardResumenVentasCobradoresComponent;
 
   @Input()
   get paramsFiltros(): IParametroFiltro { return this._paramsFiltros };
@@ -239,18 +246,13 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
           this.loadingMontoPendiente = false;
         }
       })
-      /*this.ventasSrv.getMontoTotal(params).subscribe((m: number) => {
-        console.log('monto pendiente', m);
-        this.montoTotalPendiente = m;
-        this.loadingMontoPendiente = false;
-      }, (e) => {
-        console.log('Error al cargar monto total pendiente de facturas');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.loadingMontoPendiente = false;
-      });*/
     }
+  }
 
+  recargar(){
+    this.cargarTotales();
+    this.cardResumenVentasCobradoresComp?.cargarDatos();
+    this.cardResumenVentasGruposServiciosComp?.refresh();
   }
 
   cargarTotales() {

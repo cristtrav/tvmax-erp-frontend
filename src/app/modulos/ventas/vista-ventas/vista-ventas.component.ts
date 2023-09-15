@@ -2,6 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImpresionService } from '@servicios/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { TablaVentasComponent } from '../tabla-ventas/tabla-ventas.component';
+import { TablaDetalleVentasCobrosComponent } from '../../cobros/tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';
+import { ContenidoEstadisticasVentasComponent } from '../../estadisticas/ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
 
 @Component({
   selector: 'app-vista-ventas',
@@ -9,6 +12,15 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
   styleUrls: ['./vista-ventas.component.scss']
 })
 export class VistaVentasComponent implements OnInit {
+
+  @ViewChild(TablaVentasComponent)
+  tablaVentasComp!: TablaVentasComponent;
+
+  @ViewChild(TablaDetalleVentasCobrosComponent)
+  tablaDetallesVentasComp!: TablaDetalleVentasCobrosComponent;
+
+  @ViewChild(ContenidoEstadisticasVentasComponent)
+  contenidoEstadisticasVentas!: ContenidoEstadisticasVentasComponent;
 
   @ViewChild("iframe") iframe!: ElementRef<HTMLIFrameElement>;
   vista: 'facturas' | 'detalles' | 'estadisticas' = 'facturas';
@@ -56,6 +68,12 @@ export class VistaVentasComponent implements OnInit {
         this.viewConteinerRef)
         .subscribe(loading => this.loadingImpresion = loading);
     }
+  }
+
+  recargar(){
+    this.tablaVentasComp?.cargarVentas();
+    this.tablaDetallesVentasComp?.cargarDetalleCobro();
+    this.contenidoEstadisticasVentas?.recargar();
   }
 
 }
