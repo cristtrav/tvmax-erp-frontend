@@ -6,6 +6,7 @@ import { SesionService } from './servicios/sesion.service';
 import { ISubmenu } from '@util/interfaces/isubmenu.interface';
 import { AppSettings } from '@util/app-settings';
 import { IMenuButton } from '@util/interfaces/imenu-button.interface';
+import { environment } from '@environments/environment';
 
 interface IPreferenciaColorAvatar{
   idusuario: number;
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit{
   guardarLoading: boolean = false;
   readonly mainMenu: ISubmenu[] = AppSettings.mainMenuStructure;
   colorAvatarUsuario: string = this.obtenerColorAleatorio();
+  devMode: boolean = !environment.production;
 
   constructor(
     public sesionSrv: SesionService,

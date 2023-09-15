@@ -44,11 +44,11 @@
   </nz-sider>
   <nz-layout>
     <nz-header>
-      <div class="app-header" nz-row>
+      <div class="app-header" [ngStyle]="{'background-color': devMode ? '#E57373' : ''}" nz-row>
         <div nz-col nzFlex="auto">
           <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
             <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
-          </span>
+          </span>          
         </div>
         <div nz-col>
           <a>
