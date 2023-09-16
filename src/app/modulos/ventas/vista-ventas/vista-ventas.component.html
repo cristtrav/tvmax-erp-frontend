@@ -49,9 +49,12 @@
                                 Recargar
                             </button>
                         </div>
-                        <div nz-col>
-                            <button nz-button nzType="default" (click)="imprimir()" [nzLoading]="loadingImpresion">
-                                <i nz-icon nzType="printer" nzTheme="outline"></i>
+                        <div nz-col *ngIf="vista === 'facturas' || vista === 'detalles'">
+                            <button
+                                nz-button nzType="default" 
+                                (click)="imprimir()"
+                                [nzLoading]="loadingImpresion">
+                                    <i nz-icon nzType="printer" nzTheme="outline"></i>
                                 Imprimir
                             </button>
                         </div>
