@@ -1,9 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { formatDate } from '@angular/common';
+
+const DATE_FORMAT: string = "yyyy-MM-dd";
 
 @Component({
   selector: 'app-form-filtros-ventas',
@@ -48,6 +51,7 @@ export class FormFiltrosVentasComponent implements OnInit {
   grupoServicioFiltro: string[] = [];
 
   constructor(
+    @Inject(LOCALE_ID) private locale: string,
     private usuariosSrv: UsuariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
@@ -189,28 +193,18 @@ export class FormFiltrosVentasComponent implements OnInit {
   getParams(): IParametroFiltro {
     let params: IParametroFiltro = {};
     params['eliminado'] = 'false';
-    if (this.fechaInicioFiltro) {
-      const fechaInicioStr = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechainiciofactura'] = fechaInicioStr;
-    }
-    if (this.fechaFinFiltro) {
-      const fechaFinStr = `${this.fechaFinFiltro.getFullYear()}-${(this.fechaFinFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechafinfactura'] = fechaFinStr;
-    }
     params['anulado'] = `${this.filtroAnulado}`;
-    if (!this.filtroAnulado) {
-      if (this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
-    }
+    if (this.fechaInicioFiltro) params['fechainiciofactura'] = formatDate(this.fechaInicioFiltro, DATE_FORMAT, this.locale);      
+    if (this.fechaFinFiltro) params['fechafinfactura'] = formatDate(this.fechaFinFiltro, DATE_FORMAT, this.locale);
+    
+    if (!this.filtroAnulado && this.filtroPagado != this.filtroPendiente) params['pagado'] = `${this.filtroPagado}`;
+    
     if (this.idCobradorFiltro) params['idcobradorcomision'] = `${this.idCobradorFiltro}`;
     if (this.idUsuarioCobroFiltro) params['idusuarioregistrocobro'] = `${this.idUsuarioCobroFiltro}`;
-    if (this.fechaInicioCobroFiltro) {
-      const fechaIniCobroStr: string = `${this.fechaInicioCobroFiltro.getFullYear()}-${(this.fechaInicioCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioCobroFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechainiciocobro'] = fechaIniCobroStr;
-    }
-    if (this.fechaFinCobroFiltro) {
-      const fechaFinCobroStr: string = `${this.fechaFinCobroFiltro.getFullYear()}-${(this.fechaFinCobroFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaFinCobroFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechafincobro'] = fechaFinCobroStr;
-    }
+
+    if (this.fechaInicioCobroFiltro) params['fechainiciocobro'] = formatDate(this.fechaInicioCobroFiltro, DATE_FORMAT, this.locale);
+    if (this.fechaFinCobroFiltro) params['fechafincobro'] = formatDate(this.fechaFinCobroFiltro, DATE_FORMAT, this.locale);
+    
     if (this.grupoServicioFiltro.length > 0) {
       const filtrosServicios: number[] = this.grupoServicioFiltro.filter(gs => gs.includes('ser')).map(servicio => Number(servicio.split('-')[1]));
       const filtrosGrupos: number[] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
