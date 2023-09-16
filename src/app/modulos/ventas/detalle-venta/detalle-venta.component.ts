@@ -276,7 +276,10 @@ export class DetalleVentaComponent implements OnInit {
       this.formCabecera.get(ctrlName)?.markAsDirty();
       this.formCabecera.get(ctrlName)?.updateValueAndValidity();
     })
-    if (this.formCabecera.valid) {
+    if(this.lstDetallesVenta.length === 0){
+      this.notif.create('error', '<strong>Error de validación</strong>', 'No se agregó ningún ítem a la factura');
+    }
+    if (this.formCabecera.valid && this.lstDetallesVenta.length > 0) {
       if (this.idventa === 'nueva') this.registrar();
       else this.editar();
     }
