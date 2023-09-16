@@ -52,7 +52,7 @@
                                                 Recargar
                                             </button>
                                         </div>
-                                        <div nz-col>
+                                        <div nz-col *ngIf="vista === 'registros'">
                                             <button nz-button nzType="default" [nzLoading]="loadingDatosReporte"
                                                 (click)="printWithSrv()">
                                                 <i nz-icon nzType="printer"></i>
