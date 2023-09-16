@@ -58,7 +58,7 @@
                         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                             <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                                 <i nz-icon nzType="save"></i>
-                                Guardar
+                                {{ idbarrio === 'nuevo' ? 'Registrar' : 'Editar'}}
                             </button>
                         </div>
                     </form>

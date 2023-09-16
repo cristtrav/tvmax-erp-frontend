@@ -60,7 +60,7 @@
                                     <div nz-col>
                                         <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardando">
                                             <i nz-icon nzType="save"></i>
-                                            Guardar
+                                            {{ idformato === 'nuevo' ? 'Registrar' : 'Editar' }}
                                         </button>
                                     </div>
                                 </div>

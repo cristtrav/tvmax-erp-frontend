@@ -161,7 +161,7 @@
                 <div nz-col>
                     <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                         <i nz-icon nzType="save"></i>
-                        Guardar
+                        {{ idsuscripcion === 'nueva' ? 'Registrar' : 'Editar' }}
                     </button>
                 </div>
             </div>

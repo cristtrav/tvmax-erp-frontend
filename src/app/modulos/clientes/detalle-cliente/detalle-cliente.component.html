@@ -132,7 +132,7 @@
                                 <span *nzSpaceItem>
                                     <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                                         <i nz-icon nzType="save"></i>
-                                        Guardar
+                                        {{ idcliente === 'nuevo' ? 'Registrar' : 'Editar' }}
                                     </button>
                                 </span>
                             </nz-space>
