@@ -58,6 +58,7 @@ export class TablaResumenVentasServiciosComponent implements OnInit {
   }
 
   private getHttpQueryParams(): HttpParams {
+    console.log(this.paramsFiltros)
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (!Object.keys(p).includes('anulado')) p['anulado'] = 'false';
     if (p['anulado'] == 'true') {
@@ -68,8 +69,7 @@ export class TablaResumenVentasServiciosComponent implements OnInit {
       if (p['pagado'] == 'true') this.tituloColumnaMonto = 'Total pagado';
       else this.tituloColumnaMonto = 'Total pendiente';
     }
-    let params: HttpParams = new HttpParams().appendAll(p);
-    params = params.append('eliminado', 'false');
+    let params: HttpParams = new HttpParams().appendAll(p);    
     params = params.append('offset', (this.pageIndex-1)*this.pageSize);
     if(this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('limit', this.pageSize);

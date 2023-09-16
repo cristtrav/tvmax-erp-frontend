@@ -31,7 +31,7 @@ export class VistaVentasComponent implements OnInit {
 
   expandSet = new Set<number>();
 
-  paramsFiltros: IParametroFiltro = {};
+  paramsFiltros: IParametroFiltro = { eliminado: 'false', anulado: 'false'};
   loadingImpresion: boolean = false;
 
   constructor(

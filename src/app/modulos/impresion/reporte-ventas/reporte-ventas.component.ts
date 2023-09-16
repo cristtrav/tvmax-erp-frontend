@@ -37,8 +37,7 @@ export class ReporteVentasComponent implements OnInit {
 
   cargarDatos(paramsFiltros: IParametroFiltro): Observable<any> {
     this.paramsFiltros = paramsFiltros;
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
+    let params: HttpParams = new HttpParams();    
     params = params.append('sort', '+cliente');
     params = params.appendAll(this.paramsFiltros);
 

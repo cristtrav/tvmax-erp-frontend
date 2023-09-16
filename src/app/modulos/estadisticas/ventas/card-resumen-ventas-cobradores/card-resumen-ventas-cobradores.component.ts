@@ -69,7 +69,6 @@ export class CardResumenVentasCobradoresComponent implements OnInit {
       else this.tituloColumnaMonto = 'Total pendiente';
     }
     let params: HttpParams = new HttpParams().appendAll(p);
-    params = params.append('eliminado', 'false');
     params = params.append('offset', (this.pageIndex - 1)* this.pageSize);
     params = params.append('limit', this.pageSize)
     if(this.sortStr) params = params.append('sort', this.sortStr);

@@ -71,7 +71,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarCantidadFacturas() {
     let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
     const p: IParametroFiltro = { ...this.paramsFiltros };
     delete p['anulado'];
     params = params.appendAll(p);
@@ -93,7 +92,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarCantidadPagadas() {
     let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     if (p['pagado'] == 'false' || p['anulado'] == 'true') {
@@ -120,7 +118,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarCantidadPendientes() {
     let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     if (p['pagado'] == 'true' || p['anulado'] == 'true') {
@@ -147,7 +144,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarCantidadAnulados() {
     let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     delete p['pagado'];
@@ -171,7 +167,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarMontoTotalPagado() {
     let params: HttpParams = new HttpParams()
-    .append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (p['pagado'] == 'false' || p['anulado'] == 'true') {
@@ -199,7 +194,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarMontoTotalAnulado() {
     let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (p['anulado'] == 'false') {
@@ -225,7 +219,6 @@ export class ContenidoEstadisticasVentasComponent implements OnInit {
 
   private cargarMontoTotalPendiente() {
     let params: HttpParams = new HttpParams()
-    .append('eliminado', 'false');
     if (this.textoBusqueda.length !== 0) params = params.append('search', this.textoBusqueda);
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (p['anulado'] == 'true' || p['pagado'] == 'true') {
