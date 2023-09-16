@@ -23,4 +23,5 @@ export class CobroDetalleVenta{
     cobrador: string | null = null;
     idusuarioregistrocobro: number | null = null;
     usuarioregistrocobro: string | null = null;
+    eliminado: boolean | null = null;
 }
