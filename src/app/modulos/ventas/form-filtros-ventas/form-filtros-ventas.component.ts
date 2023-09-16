@@ -188,6 +188,7 @@ export class FormFiltrosVentasComponent implements OnInit {
 
   getParams(): IParametroFiltro {
     let params: IParametroFiltro = {};
+    params['eliminado'] = 'false';
     if (this.fechaInicioFiltro) {
       const fechaInicioStr = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2, '0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;
       params['fechainiciofactura'] = fechaInicioStr;

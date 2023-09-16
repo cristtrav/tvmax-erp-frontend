@@ -121,8 +121,7 @@ export class TablaVentasComponent implements OnInit {
   }
 
   getHttpParams(): HttpParams {
-    let params: HttpParams = new HttpParams();
-    params = params.append('eliminado', 'false');
+    let params: HttpParams = new HttpParams();    
     if (this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);

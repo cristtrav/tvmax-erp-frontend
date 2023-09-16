@@ -104,7 +104,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
   }
 
   getHttpParams(): HttpParams{
-    let params: HttpParams = new HttpParams().append('eliminado', 'false');
+    let params: HttpParams = new HttpParams();
     if(this.paramsFiltros.anulado == null) params = params.append('anulado','false');
     if (this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
