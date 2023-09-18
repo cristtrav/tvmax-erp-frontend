@@ -70,6 +70,14 @@
                     </ng-template>
                     <nz-descriptions-item [nzTitle]="titulodirec">{{ s.direccion }}</nz-descriptions-item>
                     
+                    <ng-template #tituloobsdomicilio>
+                            <strong>Obs. Domicilio</strong>
+                    </ng-template>
+                    <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
+                        <span *ngIf="s.obsdomicilio">{{ s.obsdomicilio }}</span>
+                        <span *ngIf="!s.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
+                    </nz-descriptions-item>
+
                     <ng-template #tituloande>
                         <strong>ANDE</strong>
                     </ng-template>
@@ -111,7 +119,7 @@
                     <nz-descriptions-item [nzTitle]="titulocobrador">{{ s.cobrador }}</nz-descriptions-item>
                     
                     <ng-template #tituloobservacion>
-                        <strong>Observación</strong>
+                        <strong>Obs. Suscripción</strong>
                     </ng-template>
                     <nz-descriptions-item [nzTitle]="tituloobservacion">
                         <span *ngIf="!s.observacion" nz-typography nzType="secondary">(ninguna)</span>

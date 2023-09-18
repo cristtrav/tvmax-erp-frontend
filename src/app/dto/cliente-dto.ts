@@ -12,6 +12,7 @@ export class Cliente {
     cobrador: string | null = null;
     iddomicilio: number | null = null;
     direccion: string | null = null;
+    obsdomicilio: string | null = null;
     idbarrio: number | null = null;
     barrio: string | null = null;
     iddistrito: string | null = null;

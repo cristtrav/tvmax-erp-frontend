@@ -216,6 +216,14 @@
                                     <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin
                                         departamento)</span>
                                 </nz-descriptions-item>
+
+                                <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
+                                    <ng-template #tituloobsdomicilio>
+                                        <strong>Obs. Domicilio</strong>
+                                    </ng-template>
+                                    <span *ngIf="c.obsdomicilio">{{ c.obsdomicilio }}</span>
+                                    <span *ngIf="!c.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
+                                </nz-descriptions-item>
                             </nz-descriptions>
                         </tr>
                     </ng-container>

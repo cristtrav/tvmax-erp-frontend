@@ -9,6 +9,7 @@ export class Suscripcion{
     fechasuscripcion: string | null = null;
     iddomicilio: number | null = null;
     direccion: string | null = null;
+    obsdomicilio: string | null = null;
     nromedidor: string | null = null;
     idbarrio: number | null = null;
     barrio: string | null = null;
