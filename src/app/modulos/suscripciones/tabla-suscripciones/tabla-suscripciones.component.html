@@ -125,6 +125,15 @@
                         <span *ngIf="!s.observacion" nz-typography nzType="secondary">(ninguna)</span>
                         {{ s.observacion }}
                     </nz-descriptions-item>
+
+                    <ng-template #titulofechacambioestado>
+                        <strong *ngIf="s.estado === 'C'">Fecha de conexión</strong>
+                        <strong *ngIf="s.estado === 'R'">Fecha de reconexión</strong>
+                        <strong *ngIf="s.estado === 'D'">Fecha de desconexión</strong>
+                    </ng-template>
+                    <nz-descriptions-item [nzTitle]="titulofechacambioestado">
+                        {{ s.fechacambioestado | date: 'dd/MM/yyyy' }}
+                    </nz-descriptions-item>
                 </nz-descriptions>
             </tr>
         </ng-container>
