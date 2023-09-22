@@ -72,7 +72,7 @@ export class VistaServiciosComponent implements OnInit {
       ? orden : 'ascend';
 
     const pagina = Number(this.aroute.snapshot.queryParamMap.get('pagina'));
-    this.pageIndex = pagina != null && !Number.isNaN(pagina) ? pagina : 1;
+    this.pageIndex = pagina != null && !Number.isNaN(pagina) && pagina > 0 ? pagina : 1;
 
     const nroRegistros = Number(this.aroute.snapshot.queryParamMap.get('nroRegistros'));
     this.pageSize =
