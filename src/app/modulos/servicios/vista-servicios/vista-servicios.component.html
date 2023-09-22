@@ -84,7 +84,7 @@
                                     <nz-tag *ngIf="srv.suscribible" [nzColor]="'success'">Suscribible</nz-tag>
                                     <nz-tag *ngIf="!srv.suscribible" [nzColor]="'error'">No suscribible</nz-tag>
                                 </td>
-                                <td nzAlign="right">{{ srv.precio | number }}</td>
+                                <td nzAlign="right">Gs.{{ srv.precio | number }}</td>
                                 <td nzAlign="center">
                                     <nz-space>
                                         <button *nzSpaceItem nz-button nz-tooltip nzType="primary" nzTooltipTitle="Editar" [routerLink]="srv.id+''">
