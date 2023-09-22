@@ -23,7 +23,8 @@
             </tr>
             <tr>
                 <th style="text-align: left;">RUC</th>
-                <th colspan="7" style="text-align: left;">Direccion</th>
+                <th style="text-align: left;">Direccion</th>
+                <th colspan="6" style="text-align: left;">Teléfono</th>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +36,7 @@
                     <td style="text-align: center;">
                         <span *ngIf="s.estado === 'C'">CON</span>
                         <span *ngIf="s.estado === 'R'">REC</span>
-                        <span *ngIf="s.estado === 'D'">DESC</span>
+                        <span *ngIf="s.estado === 'D'">DES</span>
                     </td>
                     <td style="text-align: right;">{{ s.monto | number }}</td>
                     <td style="text-align: center;">{{ s.fechasuscripcion | date: 'dd/MM/yy' }}</td>
@@ -46,8 +47,14 @@
                     <td>
                         {{ s.ci | number }}{{ s.dvruc?'-'+s.dvruc:'' }}
                     </td>
-                    <td colSpan="7">
+                    <td>
                         {{ s.direccion }} | BARRIO: {{s.barrio}}
+                    </td>
+                    <td colspan="6">
+                        <span *ngIf="s.telefono1">{{ s.telefono1 }}</span>
+                        <span *ngIf="s.telefono1 && s.telefono2"> / </span>
+                        <span *ngIf="s.telefono2">{{ s.telefono2 }}</span>
+                        <span *ngIf="!s.telefono1 && !s.telefono2">(sin teléfono)</span>
                     </td>
                 </tr>
             </ng-container>

@@ -21,6 +21,8 @@ export class Suscripcion{
     cliente: string | null = null;
     ci: string | number | null = null;
     dvruc: number | null = null;
+    telefono1: string | null = null;
+    telefono2: string | null = null;
     monto: number| null = null;
     cuotaspendientes: number = 0;
     deuda: number = 0; 
