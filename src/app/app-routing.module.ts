@@ -25,7 +25,8 @@ const routes: Routes = [
       { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule), canActivate: [Extra.getCanEnterModuleFn(144)]},
       { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule), canActivate: [Extra.getCanEnterModuleFn(344)]},
       { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)},
-      { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)}
+      { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
+      { path: 'tiposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)}
     ]
   },
 ];

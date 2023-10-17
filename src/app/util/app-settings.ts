@@ -128,6 +128,18 @@ export class AppSettings {
           routerLink: '/app/auditoria',
         }
       ]
+    },
+    {
+      id: 8,
+      title: "Depósitos",
+      icon: "inbox",
+      children: [
+        {
+          id: 340,
+          name: 'Tipos de materiales',
+          routerLink: '/app/tiposmateriales'
+        }
+      ]
     }
   ]
 
