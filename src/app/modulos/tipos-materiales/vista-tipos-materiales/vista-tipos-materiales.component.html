@@ -17,9 +17,15 @@
                         <div nz-col nzFlex="auto">
                             <div nz-row [nzGutter]="[8,8]">
                                 <div nz-col>
-                                    <button nz-button nzType="primary">
+                                    <button nz-button nzType="primary" [routerLink]="'nuevo'">
                                         <i nz-icon nzType="plus" nzTheme="outline"></i>
                                         Nuevo
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="default" (click)="cargarDatos()">
+                                        <i nz-icon nzType="reload" nzTheme="outline"></i>
+                                        Recargar
                                     </button>
                                 </div>
                             </div>
@@ -30,25 +36,58 @@
                     </div>
                 </div>
                 <div nz-col nzSpan="24">
-                    <nz-table nzSize="small">
+                    <nz-table #tabla 
+                        [nzData]="lstTiposMateriales" 
+                        [nzFrontPagination]="false"
+                        [nzPageSize]="pageSize"
+                        [nzPageIndex]="pageIndex"
+                        [nzShowSizeChanger]="true"
+                        [nzLoading]="loadingtiposMateriales"
+                        [nzTotal]="totalRegisters"
+                        (nzQueryParams)="onTableQueryParamsChange($event)"
+                        nzSize="small">
                         <thead>
                             <tr>
-                                <th>Codigo</th>
-                                <th>Descripcion</th>
+                                <th [nzSortFn]="true" [nzColumnKey]="'id'" [nzSortOrder]="'ascend'">Codigo</th>
+                                <th [nzSortFn]="true" [nzColumnKey]="'descripcion'">Descripcion</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>10</td>
-                                <td>(sin tipo)</td>
-                                <td>botones</td>
+                            <tr *ngFor="let tipoMaterial of tabla.data">
+                                <td>{{ tipoMaterial.id }}</td>
+                                <td>{{ tipoMaterial.descripcion }}</td>
+                                <td>
+                                    <div nz-row [nzGutter]="[8, 8]">
+                                        <div nz-col>
+                                            <button
+                                                nz-tooltip
+                                                nzTooltipTitle="Editar tipo de material"
+                                                nz-button
+                                                nzType="primary"
+                                                [routerLink]="[tipoMaterial.id]">
+                                                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button 
+                                                nz-tooltip
+                                                nzTooltipTitle="Eliminar tipo de material"
+                                                nz-button
+                                                nzType="primary"
+                                                nzDanger
+                                                (click)="confirmarEliminacion(tipoMaterial)">
+                                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>

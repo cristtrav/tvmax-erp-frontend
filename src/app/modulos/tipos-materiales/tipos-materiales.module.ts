@@ -9,6 +9,12 @@ import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 @NgModule({
@@ -23,7 +29,14 @@ import { NzTableModule } from 'ng-zorro-antd/table';
     IconsProviderModule,
     NzButtonModule,
     NzGridModule,
-    NzTableModule
+    NzTableModule,
+    NzFormModule,
+    NzInputModule,
+    NzInputNumberModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NzToolTipModule,
+    NzModalModule
   ]
 })
 export class TiposMaterialesModule { }
