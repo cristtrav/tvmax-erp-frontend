@@ -109,7 +109,7 @@
                 </ng-container>
             </div>
             <div [ngStyle]="{'font-size.px': parametros.tamanioLetra}">
-                {{ venta.ci | number }}<span *ngIf="venta.dvruc"> - {{ venta.dvruc }}</span>
+                {{ venta.ci | number }}<span *ngIf="venta.dvruc != null"> - {{ venta.dvruc }}</span>
             </div>
         </div>
         <div class="fila4-cliente">
