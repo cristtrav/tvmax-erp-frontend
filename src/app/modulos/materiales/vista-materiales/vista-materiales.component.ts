@@ -24,6 +24,8 @@ export class VistaMaterialesComponent implements OnInit {
   totalRegisters: number = 0;
 
   sortStr: string | null = null;
+  textoBusqueda: string = '';
+  timerBusqueda: any;
 
   constructor(
     private materialesSrv: MaterialesService,
@@ -61,6 +63,7 @@ export class VistaMaterialesComponent implements OnInit {
     .append('limit', this.pageSize)
     .append('offset', (this.pageIndex - 1) * this.pageSize);
     if(this.sortStr) params = params.append('sort', this.sortStr);
+    if(this.textoBusqueda != '') params = params.append('search', this.textoBusqueda);
     return params;
   }
 
@@ -92,6 +95,18 @@ export class VistaMaterialesComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     })
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.cargarDatos();
+    }, 250);
+  }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.buscar();
   }
 
 }

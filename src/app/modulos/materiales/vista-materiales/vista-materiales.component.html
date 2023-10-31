@@ -30,7 +30,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div nz-col></div>
+                        <div nz-col>
+                            <nz-input-group [nzPrefix]="prefixIconSearch" [nzSuffix]="suffixIconClearSearch">
+                                <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">   
+                            </nz-input-group>
+                            <ng-template #prefixIconSearch>
+                                <i nz-icon nzType="search" nzTheme="outline"></i>
+                            </ng-template>
+                            <ng-template #suffixIconClearSearch>
+                                <i *ngIf="textoBusqueda != ''"
+                                    nz-icon nzType="close-circle"
+                                    nzTheme="fill"
+                                    class="ant-input-clear-icon"
+                                    (click)="limpiarBusqueda()">
+                                </i>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
                 <div nz-col nzSpan="24">
