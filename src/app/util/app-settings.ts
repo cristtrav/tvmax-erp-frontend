@@ -143,6 +143,11 @@ export class AppSettings {
           id: 360,
           name: 'Materiales',
           routerLink: '/app/materiales'
+        },
+        {
+          id: 380,
+          name: 'Movimientos',
+          routerLink: '/app/movimientosmateriales'
         }
       ]
     }

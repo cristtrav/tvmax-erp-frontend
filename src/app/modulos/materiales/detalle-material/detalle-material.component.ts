@@ -141,6 +141,7 @@ export class DetalleMaterialComponent implements OnInit {
       descripcion: this.form.controls.descripcion.value,
       idtipomaterial: this.form.controls.idtipomaterial.value,
       unidadmedida: this.form.controls.unidadmedida.value,
+      cantidad: 0,
       sololectura: false,
       eliminado: false
     }

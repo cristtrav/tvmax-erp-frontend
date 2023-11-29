@@ -4,6 +4,7 @@ export interface MaterialDTO{
     unidadmedida: string;
     idtipomaterial: number;
     tipomaterial?: string;
+    cantidad: number;
     sololectura: boolean;
     eliminado: boolean;
 }

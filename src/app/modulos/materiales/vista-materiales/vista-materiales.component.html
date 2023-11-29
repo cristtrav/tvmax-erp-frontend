@@ -64,8 +64,9 @@
                             <tr>
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                                 <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
-                                <th [nzColumnKey]="'unidadmedida'" [nzSortFn]="true">U. Medida</th>
                                 <th [nzColumnKey]="'tipomaterial'" [nzSortFn]="true">Tipo de Material</th>
+                                <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Existencias</th>
+                                <th [nzColumnKey]="'unidadmedida'" [nzSortFn]="true">U. Medida</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -74,11 +75,14 @@
                                 <td>{{ material.id }}</td>
                                 <td>{{ material.descripcion }}</td>
                                 <td>
-                                    <nz-tag *ngIf="material.unidadmedida == 'UD'" nzColor="purple">Unidades (ud)</nz-tag>
-                                    <nz-tag *ngIf="material.unidadmedida == 'MT'" nzColor="blue">Metros (mt)</nz-tag>
+                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+material.idtipomaterial">{{ material.tipomaterial }}</span>
+                                </td>
+                                <td nzAlign="right">
+                                    {{ material.cantidad | number }}
                                 </td>
                                 <td>
-                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+material.idtipomaterial">{{ material.tipomaterial }}</span>
+                                    <nz-tag *ngIf="material.unidadmedida == 'UD'" nzColor="purple">Unidades (ud)</nz-tag>
+                                    <nz-tag *ngIf="material.unidadmedida == 'MT'" nzColor="blue">Metros (mt)</nz-tag>
                                 </td>
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]">

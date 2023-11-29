@@ -1,0 +1,63 @@
+<button
+    nz-dropdown
+    [nzDropdownMenu]="menuMateriales"
+    nzTrigger="click"
+    [(nzVisible)]="menuMaterialesVisible"
+    [nzClickHide]="false"
+    [disabled]="disabled"
+    (nzVisibleChange)="limpiarBusquedaAlAbrirMenuMaterial()"
+    nz-button 
+    nzType="primary">
+    <i nz-icon nzType="search" nzTheme="outline"></i>
+    Materiales
+</button>
+<nz-dropdown-menu #menuMateriales="nzDropdownMenu">
+    <ul nz-menu style="min-width: 350px;">
+        <li nz-menu-item>
+            <nz-input-group [nzPrefixIcon]="'search'" [nzSuffix]="suffixLimpiarBusquedaMaterial">
+                <input 
+                    nz-input
+                    placeholder="Buscar"
+                    [(ngModel)]="textoBusquedaMaterial"
+                    (ngModelChange)="buscarMaterial()">
+            </nz-input-group>
+            <ng-template #suffixLimpiarBusquedaMaterial>
+                <i
+                    *ngIf="textoBusquedaMaterial != ''"
+                    nz-icon
+                    nzType="close-circle"
+                    nzTheme="fill"
+                    class="ant-input-clear-icon"
+                    (click)="limpiarBusquedaMaterial()">
+                </i>
+                
+            </ng-template>
+        </li>
+        <li nz-menu-divider></li>
+        <nz-spin [nzSpinning]="loadingMateriales">
+            <li nz-menu-item
+                *ngFor="let material of lstMateriales"
+                (click)="seleccionarMaterial(material)">
+                <nz-space nzSize="small">
+                    <span *nzSpaceItem>{{ material.descripcion }}</span>
+                    <span *nzSpaceItem>
+                        <nz-tag [nzColor]="material.cantidad > 0 ? 'green' : 'orange'">
+                            {{ material.cantidad }}
+                            <span *ngIf="material.unidadmedida === 'MT'">mts.</span>
+                            <span *ngIf="material.unidadmedida === 'UD'">uds.</span>
+                        </nz-tag>
+                        <nz-tag>
+                            <span nz-typography nzType="secondary">{{ material.tipomaterial }}</span>
+                        </nz-tag>
+                    </span>
+                </nz-space>
+            </li>
+            <li nz-menu-item *ngIf="lstMateriales.length < totalMateriales" (click)="cargarMateriales('mas')">
+                <span nz-typography nzType="secondary">Cargar más...</span>
+            </li>
+            <li *ngIf="lstMateriales.length == 0">
+                <nz-empty></nz-empty>
+            </li>
+        </nz-spin>
+    </ul>
+</nz-dropdown-menu>

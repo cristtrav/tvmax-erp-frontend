@@ -27,7 +27,8 @@ const routes: Routes = [
       { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)},
       { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
       { path: 'tiposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)},
-      { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)}
+      { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)},
+      { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)}
     ]
   },
 ];

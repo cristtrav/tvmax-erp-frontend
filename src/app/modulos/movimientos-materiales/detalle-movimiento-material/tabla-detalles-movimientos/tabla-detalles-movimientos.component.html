@@ -1,0 +1,54 @@
+<nz-table 
+    #tablaDetalle
+    [nzData]="lstDetallesMovimientos"
+    nzSize="small">
+    <thead>
+        <tr>
+            <th>Material</th>
+            <th *ngIf="tipoMovimiento == 'DE'">Cant. retirada</th>
+            <th>{{ tipoMovimiento == 'DE' ? 'Cant. devuelta' : 'Cantidad' }}</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let detalle of tablaDetalle.data" class="editable-row">
+            <td>{{ detalle.descripcion ?? detalle.material }}</td>
+            <td *ngIf="tipoMovimiento == 'DE'">
+                {{ detalle.cantidadretirada | number }}
+                <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
+                <span *ngIf="detalle.unidadmedida == 'UD'">uds.</span>
+            </td>
+            <td>
+                <div [hidden]="idDetalleEnEdicion == detalle.id" (click)="iniciarEdicion(detalle, inputCantidad)" class="editable-cell">
+                    {{ detalle.cantidad | number }}
+                    <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
+                    <span *ngIf="detalle.unidadmedida == 'UD'">uds.</span>
+                </div>
+                <nz-input-number-group [hidden]="idDetalleEnEdicion != detalle.id" [nzAddOnAfter]="addonAfterUnidadMedida">
+                    <nz-input-number
+                        #inputCantidad    
+                        [nzMin]="
+                            tipoMovimiento === 'AJ' || tipoMovimiento == 'DE'
+                            ? 0
+                            : detalle.unidadmedida === 'MT' ? 0.01 : 1
+                        "
+                        [nzStep]="detalle.unidadmedida == 'MT' ? 0.01 : 1"
+                        [nzMax]="detalle.cantidadretirada != null ? detalle.cantidadretirada : 9999999"
+                        [(ngModel)]="cantidadEnEdicion"
+                        (nzBlur)="finalizarEdicion()"
+                        style="width: 100px;">
+                    </nz-input-number>
+                    <ng-template #addonAfterUnidadMedida>
+                        <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
+                        <span *ngIf="detalle.unidadmedida == 'UD'">uds.</span>
+                    </ng-template>
+                </nz-input-number-group>
+            </td>
+            <td>
+                <button nz-button nzType="primary" nzDanger [disabled]="tipoMovimiento == 'DE'">
+                    <i nz-icon nzType="delete" nzTheme="outline" (click)="confirmarEliminacion(detalle)"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
