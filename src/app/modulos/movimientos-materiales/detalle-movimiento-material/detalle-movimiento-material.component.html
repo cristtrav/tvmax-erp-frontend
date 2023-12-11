@@ -105,7 +105,17 @@
                                 <input nz-input formControlName="observacion">
                             </nz-form-control>
                         </nz-form-item>
-                        <div nz-row [nzGutter]="[8, 8]" nzJustify="end">                                    
+                        <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
+                            <div nz-col>
+                                <button
+                                    *ngIf="idMovimientoMaterial != 'nuevo'"
+                                    nz-button nzType="default" 
+                                    [nzLoading]="loadingImpresion" 
+                                    (click)="imprimir()">
+                                    <i nz-icon nzType="printer"></i>
+                                    Imprimir
+                                </button>
+                            </div>
                             <div nz-col>
                                 <button nz-button nzType="default" (click)="limpiar()">
                                     <i *ngIf="idMovimientoMaterial === 'nuevo'" nz-icon nzType="clear" nzTheme="outline"></i>
@@ -131,3 +141,4 @@
         </div>
     </div>
 </div>
+<iframe #iframe style="display: none; visibility: hidden;"></iframe>

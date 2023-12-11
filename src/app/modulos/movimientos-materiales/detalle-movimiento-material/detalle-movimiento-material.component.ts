@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
@@ -13,6 +13,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { TablaDetallesMovimientosComponent } from './tabla-detalles-movimientos/tabla-detalles-movimientos.component';
 import { BuscadorMaterialesComponent } from './buscador-materiales/buscador-materiales.component';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
+import { ImpresionService } from '@servicios/impresion.service';
 
 @Component({
   selector: 'app-detalle-movimiento-material',
@@ -21,11 +22,14 @@ import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.d
 })
 export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('iframe')
+  iframe!: ElementRef<HTMLIFrameElement>;
   @ViewChild(TablaDetallesMovimientosComponent)
   tablaDetallesMovimientosComp!: TablaDetallesMovimientosComponent;
   @ViewChild(BuscadorMaterialesComponent)
   buscadorMaterialesComp!: BuscadorMaterialesComponent;
 
+  loadingImpresion: boolean = false;
   readonly setMostrarUsuarioTipo = new Set<string>(['SA', 'DE', 'EN'])
 
   idMovimientoMaterial: string = 'nuevo';
@@ -57,7 +61,9 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
     private notif: NzNotificationService,
     private usuariosSrv: UsuariosService,
     private sesionSrv: SesionService,
-    private movimientosSrv: MovimientosMaterialesService
+    private movimientosSrv: MovimientosMaterialesService,
+    private impresionSrv: ImpresionService,
+    private viewContainerRef: ViewContainerRef
   ){}
 
   ngAfterViewInit(): void {
@@ -209,6 +215,11 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
       eliminado: false,
       idmovimientoreferencia: this.idMovimientoReferencia != null ? Number(this.idMovimientoReferencia) : undefined
     }
+  }
+
+  imprimir(){
+    this.impresionSrv.imprimirReporteMovimientosMateriales(this.iframe, Number(this.idMovimientoMaterial), this.viewContainerRef)
+    .subscribe(loading => this.loadingImpresion = loading);
   }
 
   limpiar(){

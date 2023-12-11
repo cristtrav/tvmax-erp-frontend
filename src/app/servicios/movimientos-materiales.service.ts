@@ -33,8 +33,11 @@ export class MovimientosMaterialesService {
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getDetallesPorIdMovimiento(id: number, params: HttpParams): Observable<DetalleMovimientoMaterialDTO[]>{
-    return this.http.get<DetalleMovimientoMaterialDTO[]>(`${this.url}/${id}/detalles`, AppSettings.getHttpOptionsAuthWithParams(params))
+  getDetallesPorIdMovimiento(id: number, params?: HttpParams): Observable<DetalleMovimientoMaterialDTO[]>{
+    return this.http.get<DetalleMovimientoMaterialDTO[]>(
+      `${this.url}/${id}/detalles`,
+      params ? AppSettings.getHttpOptionsAuthWithParams(params) : AppSettings.getHttpOptionsAuth()
+    );
   }
 
   delete(idmovimiento: number): Observable<any> {
