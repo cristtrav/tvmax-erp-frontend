@@ -1,9 +1,11 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MaterialDTO } from '@dto/material.dto';
+import { ImpresionService } from '@servicios/impresion.service';
 import { MaterialesService } from '@servicios/materiales.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -15,6 +17,9 @@ import { finalize, forkJoin } from 'rxjs';
   styleUrls: ['./vista-materiales.component.scss']
 })
 export class VistaMaterialesComponent implements OnInit {
+
+  @ViewChild('iframe')
+  iframeComp!: ElementRef<HTMLIFrameElement>;
   
   lstMateriales: MaterialDTO[] = [];
   loadingMateriales: boolean = false;
@@ -27,11 +32,15 @@ export class VistaMaterialesComponent implements OnInit {
   textoBusqueda: string = '';
   timerBusqueda: any;
 
+  loadingImpresion: boolean = false;
+
   constructor(
     private materialesSrv: MaterialesService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private modal: NzModalService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private impresionSrv: ImpresionService,
+    private viewContainerRef: ViewContainerRef
   ){}
 
   ngOnInit(): void {
@@ -107,6 +116,20 @@ export class VistaMaterialesComponent implements OnInit {
   limpiarBusqueda(){
     this.textoBusqueda = '';
     this.buscar();
+  }
+
+  imprimirReporte(){
+    const httpParams = this.getHttpParams();
+    const paramsFiltros: IParametroFiltro = {};
+    httpParams.keys().forEach(key => {
+      const param = httpParams.get(key);
+      if(param != null) paramsFiltros[key] = param;
+    })
+    delete paramsFiltros.sort;
+    delete paramsFiltros.offset;
+    delete paramsFiltros.limit;
+    this.impresionSrv.imprimirReporteMateriales(this.iframeComp, this.viewContainerRef, paramsFiltros)
+      .subscribe(loading => this.loadingImpresion = loading);
   }
 
 }

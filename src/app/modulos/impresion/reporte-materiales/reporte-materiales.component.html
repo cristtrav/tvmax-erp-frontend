@@ -1,0 +1,39 @@
+<div>
+    <app-cabecera-reporte titulo="Materiales"></app-cabecera-reporte>
+</div>
+<div style="margin-top: 15px;">
+    <div>Filtros</div>
+    <app-filtros-reporte [lstFiltrosReporte]="lstFiltrosReporte"></app-filtros-reporte>
+</div>
+<div style="margin-top: 15px;">
+    <div>Registros</div>
+    <table class="tabla-reporte">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Tipo</th>
+                <th>Existencias</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let material of lstMateriales">
+                <td>{{ material.id }}</td>
+                <td>{{ material.descripcion }}</td>
+                <td>{{ material.tipomaterial }}</td>
+                <td>
+                    {{ material.cantidad | number }}
+                    <span *ngIf="material.unidadmedida == 'UD'">unidades</span>
+                    <span *ngIf="material.unidadmedida == 'MT'">metros</span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    Total de registros: {{ totalRegistros | number }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

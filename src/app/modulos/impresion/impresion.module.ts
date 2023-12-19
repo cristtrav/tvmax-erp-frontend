@@ -16,6 +16,7 @@ import { NumeroALetrasPipe } from '@util/pipes/numero-a-letras.pipe';
 import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
 import { ReporteDetallesVentasComponent } from './reporte-detalles-ventas/reporte-detalles-ventas.component';
 import { ReporteMovimientoMaterialComponent } from './reporte-movimiento-material/reporte-movimiento-material.component';
+import { ReporteMaterialesComponent } from './reporte-materiales/reporte-materiales.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ReporteMovimientoMaterialComponent } from './reporte-movimiento-materia
     TablaReporteComponent,
     FacturaPreimpresaVentaComponent,
     ReporteDetallesVentasComponent,
-    ReporteMovimientoMaterialComponent
+    ReporteMovimientoMaterialComponent,
+    ReporteMaterialesComponent
   ],
   imports: [
     CommonModule,

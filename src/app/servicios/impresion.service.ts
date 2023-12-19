@@ -10,6 +10,8 @@ import { TimbradosService } from './timbrados.service';
 import { VentasService } from './ventas.service';
 import { ReporteDetallesVentasComponent } from '../modulos/impresion/reporte-detalles-ventas/reporte-detalles-ventas.component';
 import { ReporteMovimientoMaterialComponent } from '../modulos/impresion/reporte-movimiento-material/reporte-movimiento-material.component';
+import { ReporteMaterialesComponent } from '../modulos/impresion/reporte-materiales/reporte-materiales.component';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -154,6 +156,31 @@ export class ImpresionService {
           }, 250);
         }
       })
+    return loading.asObservable();
+  }
+
+  imprimirReporteMateriales(
+    iframe: ElementRef<HTMLIFrameElement>,
+    viewContainerRef: ViewContainerRef,
+    paramsFiltros: IParametroFiltro
+  ): Observable<boolean>{
+    const loading = new BehaviorSubject<boolean>(true)
+    const iframeNative = iframe.nativeElement;
+    const reporteMaterialesComponent = viewContainerRef.createComponent(ReporteMaterialesComponent);
+    reporteMaterialesComponent.instance.cargarDatos(paramsFiltros)
+    .pipe(
+      finalize(() => loading.next(false))
+    )
+    .subscribe(() => {
+      if(!iframeNative.contentWindow || !iframeNative.contentDocument) return;
+      iframeNative.contentDocument.title = 'Reporte de Materiales';
+      iframeNative.contentDocument.body.appendChild(reporteMaterialesComponent.location.nativeElement);
+      iframeNative.contentWindow.onafterprint = () => reporteMaterialesComponent.destroy();
+
+      setTimeout(() => {
+        iframeNative.contentWindow?.print();
+      }, 250);
+    });
     return loading.asObservable();
   }
 

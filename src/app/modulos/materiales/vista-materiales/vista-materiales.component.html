@@ -28,6 +28,12 @@
                                         Recargar
                                     </button>
                                 </div>
+                                <div nz-col>
+                                    <button nz-button nzType="default" (click)="imprimirReporte()" [nzLoading]="loadingImpresion">
+                                        <i nz-icon nzType="printer" nzTheme="outline"></i>
+                                        Imprimir
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div nz-col>
@@ -106,3 +112,4 @@
         </div>
     </div>
 </div>
+<iframe #iframe style="display: none; visibility: hidden;"></iframe>
