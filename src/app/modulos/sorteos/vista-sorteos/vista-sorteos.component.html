@@ -58,10 +58,17 @@
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]">
                                         <div nz-col>
+                                            <button nz-button nzType="default"
+                                                nz-tooltip nzTooltipTitle="Premios"
+                                                [routerLink]="[sorteo.id, 'premios']">
+                                                <i nz-icon nzType="gift" theme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
                                             <button nz-button nzType="primary"
                                                 nz-tooltip nzTooltipTitle="Editar sorteo"
                                                 [routerLink]="[sorteo.id]">
-                                                <i nz-icon nzType="edit"></i>
+                                                <i nz-icon nzType="edit" theme="outline"></i>
                                             </button>
                                         </div>
                                         <div nz-col>

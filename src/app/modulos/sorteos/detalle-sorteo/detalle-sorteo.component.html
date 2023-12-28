@@ -51,10 +51,21 @@
                         </nz-form-control>
                     </nz-form-item>
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                            <i nz-icon nzType="save"></i>
-                            {{ idsorteo === 'nuevo' ? 'Registrar' : 'Editar' }}
-                        </button>
+                        <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" routerLink="premios">
+                                    <i nz-icon nzType="gift" nzTheme="outline"></i>
+                                    Premios
+                                </button>
+                            </div>
+                            <div nz-col>
+                                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                    <i nz-icon nzType="save"></i>
+                                    {{ idsorteo === 'nuevo' ? 'Registrar' : 'Editar' }}
+                                </button>
+                            </div>
+                        </div>
+                        
                     </div>
                 </form>
             </div>

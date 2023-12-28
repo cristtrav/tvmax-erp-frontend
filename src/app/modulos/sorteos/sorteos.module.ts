@@ -14,12 +14,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { VistaPremiosComponent } from './vista-premios/vista-premios.component';
+import { DetallePremioComponent } from './detalle-premio/detalle-premio.component';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 
 @NgModule({
   declarations: [
     VistaSorteosComponent,
-    DetalleSorteoComponent
+    DetalleSorteoComponent,
+    VistaPremiosComponent,
+    DetallePremioComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +40,9 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzTagModule,
+    NzTypographyModule
   ]
 })
 export class SorteosModule { }
