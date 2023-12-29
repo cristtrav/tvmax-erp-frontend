@@ -66,6 +66,7 @@
                                 <th [nzSortFn]="true" [nzColumnKey]="'descripcion'">Descripción</th>
                                 <th [nzSortFn]="true" [nzColumnKey]="'nropremio'" [nzSortOrder]="'ascend'">Nro. Premio</th>
                                 <th [nzSortFn]="true" [nzColumnKey]="'clienteganador'">Ganador</th>
+                                <th [nzSortFn]="true" [nzColumnKey]="'ciclienteganador'">Nro. CI</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -79,6 +80,10 @@
                                 <td>
                                     <span *ngIf="premio.clienteganador">{{ premio.clienteganador }}</span>
                                     <span nz-typography nzType="secondary" *ngIf="!premio.clienteganador">(sin ganador)</span>
+                                </td>
+                                <td nzAlign="right">
+                                    <span *ngIf="!premio.ciclienteganador" nz-typography nzType="secondary">(sin CI)</span>
+                                    <span *ngIf="premio.ciclienteganador">{{ premio.ciclienteganador | number }}</span>
                                 </td>
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]">
