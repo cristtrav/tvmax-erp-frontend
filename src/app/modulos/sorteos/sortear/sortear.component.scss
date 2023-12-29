@@ -1,5 +1,8 @@
 .contenedor-principal{
-    padding: 60px 30px 30px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*padding: 30px 30px 30px 30px;*/
     height: 100%;
     background-color: #EEEEEE;
 }
