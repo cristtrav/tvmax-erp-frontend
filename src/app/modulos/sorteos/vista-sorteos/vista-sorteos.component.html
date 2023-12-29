@@ -79,6 +79,14 @@
                                             </button>
                                         </div>
                                         <div nz-col>
+                                            <button
+                                                nz-tooltip nzTooltipTitle="Sortear"
+                                                nz-button nzType="default"
+                                                [routerLink]="['/sortear', sorteo.id]">
+                                                <i nz-icon nzType="check-square" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
                                             <button nz-button nzType="primary"
                                                 nz-tooltip nzTooltipTitle="Editar sorteo"
                                                 [routerLink]="[sorteo.id]">

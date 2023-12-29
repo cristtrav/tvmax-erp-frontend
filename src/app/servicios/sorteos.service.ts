@@ -55,8 +55,9 @@ export class SorteosService {
     return this.http.post(`${this.url}/${idsorteo}/participantes/agregar`, criterios, AppSettings.getHttpOptionsAuth());
   }
 
-  getParticipantes(idsorteo: number, params: HttpParams): Observable<ParticipanteSorteoDTO[]>{
-    return this.http.get<ParticipanteSorteoDTO[]>(`${this.url}/${idsorteo}/participantes`, AppSettings.getHttpOptionsAuthWithParams(params));
+  getParticipantes(idsorteo: number, params?: HttpParams): Observable<ParticipanteSorteoDTO[]>{
+    if(params) return this.http.get<ParticipanteSorteoDTO[]>(`${this.url}/${idsorteo}/participantes`, AppSettings.getHttpOptionsAuthWithParams(params));
+    else return this.http.get<ParticipanteSorteoDTO[]>(`${this.url}/${idsorteo}/participantes`, AppSettings.getHttpOptionsAuth());
   }
 
   getTotalParticipantes(idsorteo: number, params: HttpParams): Observable<number>{

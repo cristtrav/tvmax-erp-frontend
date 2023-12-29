@@ -14,7 +14,7 @@
     </div>
     <div class="module-container">
         <div nz-row nzAlign="top" nzJustify="center">
-            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+            <div nz-col class="module-content" [nzXXl]="14" [nzXl]="16" [nzLg]="18" [nzMd]="20" [nzSm]="22">
                 <form nz-form [formGroup]="form">
                     <nz-form-item>
                         <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>
@@ -64,6 +64,12 @@
                                     Premios
                                 </button>
                             </div>
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" [routerLink]="['/sortear', idsorteo]">
+                                    <i nz-icon nzType="check-square" nzTheme="outline"></i>
+                                    Sortear
+                                </button>
+                            </div>
                             <div nz-col>
                                 <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                                     <i nz-icon nzType="save"></i>
@@ -71,7 +77,6 @@
                                 </button>
                             </div>
                         </div>
-                        
                     </div>
                 </form>
             </div>

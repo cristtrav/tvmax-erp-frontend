@@ -17,12 +17,20 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { VistaPremiosComponent } from './vista-premios/vista-premios.component';
 import { DetallePremioComponent } from './detalle-premio/detalle-premio.component';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzImageModule } from 'ng-zorro-antd/image';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { ParticipantesComponent } from './participantes/participantes.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { SortearComponent } from './sortear/sortear.component';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { HideCiPipe } from '@util/pipes/hide-ci.pipe';
+import { GanadoresComponent } from './ganadores/ganadores.component';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 
 @NgModule({
@@ -31,7 +39,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     DetalleSorteoComponent,
     VistaPremiosComponent,
     DetallePremioComponent,
-    ParticipantesComponent
+    ParticipantesComponent,
+    SortearComponent,
+    GanadoresComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +61,14 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzModalModule,
     NzDatePickerModule,
     NzSpaceModule,
-    FormsModule
+    FormsModule,
+    NzImageModule,
+    NzSelectModule,
+    NzSpinModule,
+    PaddingZerosPipe,
+    NzAlertModule,
+    HideCiPipe,
+    NzListModule
   ]
 })
 export class SorteosModule { }

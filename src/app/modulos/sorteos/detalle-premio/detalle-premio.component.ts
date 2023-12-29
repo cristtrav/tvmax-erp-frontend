@@ -24,7 +24,8 @@ export class DetallePremioComponent implements OnInit {
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
     descripcion: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
-    nropremio: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(100)])
+    nropremio: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(100)]),
+    idclienteganador: new FormControl<number | null>(null)
   });
 
   constructor(
@@ -69,6 +70,7 @@ export class DetallePremioComponent implements OnInit {
         this.form.controls.id.setValue(premio.id);
         this.form.controls.descripcion.setValue(premio.descripcion);
         this.form.controls.nropremio.setValue(premio.nropremio);
+        this.form.controls.idclienteganador.setValue(premio.idclienteganador);
       },
       error: (e) => {
         console.error('Error al cargar premio por id', e);
@@ -139,6 +141,7 @@ export class DetallePremioComponent implements OnInit {
       descripcion: this.form.controls.descripcion.value,
       idsorteo: Number(this.idsorteo),
       nropremio: this.form.controls.nropremio.value,
+      idclienteganador: this.form.controls.idclienteganador.value,
       eliminado: false
     }
   }

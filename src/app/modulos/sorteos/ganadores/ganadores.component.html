@@ -1,0 +1,44 @@
+<div class="contenedor-principal">
+    <div nz-row nzJustify="center">
+        <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="18" [nzXl]="16" [nzXXl]="14">
+            <div nz-row nzJustify="center" nzAlign="middle" [nzGutter]="[24, 24]" class="contenedor-interno">
+                <div nz-col>
+                    <a [routerLink]="['/app', 'sorteos']">
+                        <img width="120" src="/assets/img/logo-tvmax.svg">
+                    </a>
+                </div>
+                <div nz-col nzFlex="auto">
+                    <nz-spin [nzSpinning]="loadingSorteo">
+                        <span style="font-size: xx-large;">{{ sorteo }}</span>
+                    </nz-spin>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-list [nzHeader]="tituloLista" [nzLoading]="loadingPremios">
+                        <ng-template #tituloLista>
+                            <strong>GANADORES</strong>
+                        </ng-template>
+                        <nz-list-item *ngFor="let premio of lstPremios">
+                            <span>
+                                <nz-tag nzColor="volcano">Premio N° {{ premio.nropremio }}</nz-tag>
+                                {{ premio.descripcion }}
+                            </span>
+                            <span>
+                                <div nz-row [nzGutter]="[8,8]">
+                                    <div nz-col>
+                                        <span *ngIf="!premio.clienteganador" nz-typography nzType="secondary">(sin ganador)</span>
+                                        <strong *ngIf="premio.clienteganador">{{ premio.clienteganador }}</strong>
+                                    </div>
+                                    <div nz-col *ngIf="premio.ciclienteganador">
+                                        <span>
+                                            <nz-tag>CI N° {{ premio.ciclienteganador | hideCi}}</nz-tag>
+                                        </span>
+                                    </div>
+                                </div>
+                            </span>
+                        </nz-list-item>
+                    </nz-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

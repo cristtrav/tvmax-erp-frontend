@@ -6,5 +6,6 @@ export interface PremioDTO {
     sorteo?: string;
     idclienteganador?: number;
     clienteganador?: string;
+    ciclienteganador?: string;
     eliminado: boolean;
 }
