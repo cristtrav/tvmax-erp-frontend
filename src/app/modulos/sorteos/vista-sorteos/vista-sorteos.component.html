@@ -48,6 +48,8 @@
                             <tr>
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
                                 <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
+                                <th>Cant. Premios</th>
+                                <th>Cant. Participantes</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -55,6 +57,8 @@
                             <tr *ngFor="let sorteo of tabla.data">
                                 <td>{{ sorteo.id }}</td>
                                 <td>{{ sorteo.descripcion }}</td>
+                                <td>{{ sorteo.nropremios | number }}</td>
+                                <td>{{ sorteo.nroparticipantes | number }}</td>
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]">
                                         <div nz-col>
