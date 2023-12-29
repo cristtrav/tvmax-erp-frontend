@@ -10,7 +10,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -19,6 +19,10 @@ import { DetallePremioComponent } from './detalle-premio/detalle-premio.componen
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { ParticipantesComponent } from './participantes/participantes.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 @NgModule({
@@ -26,7 +30,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     VistaSorteosComponent,
     DetalleSorteoComponent,
     VistaPremiosComponent,
-    DetallePremioComponent
+    DetallePremioComponent,
+    ParticipantesComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +47,11 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzInputModule,
     NzInputNumberModule,
     NzTagModule,
-    NzTypographyModule
+    NzTypographyModule,
+    NzModalModule,
+    NzDatePickerModule,
+    NzSpaceModule,
+    FormsModule
   ]
 })
 export class SorteosModule { }

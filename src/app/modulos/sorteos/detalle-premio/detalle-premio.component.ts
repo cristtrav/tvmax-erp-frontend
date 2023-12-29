@@ -83,7 +83,8 @@ export class DetallePremioComponent implements OnInit {
       .pipe(finalize(() => this.ultimoIdLoading = false))
       .subscribe({
         next: (ultimoid) => {
-          this.form.controls.id.setValue(ultimoid == 0 ? 10 : Number(ultimoid) + 1);
+          
+          this.form.controls.id.setValue(!ultimoid ? 10 : Number(ultimoid) + 1);
         },
         error: (e) => {
           console.error('Error al cargar ultimo id de premios', e);
@@ -108,6 +109,7 @@ export class DetallePremioComponent implements OnInit {
       .subscribe({
         next: () => {
           this.notif.success('<strong>Éxito</strong>', 'Premio registrado correctamente.');
+          this.form.reset();
         },
         error: (e) => {
           console.error('Error al registrar premio', e);

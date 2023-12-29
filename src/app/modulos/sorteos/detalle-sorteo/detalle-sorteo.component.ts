@@ -66,11 +66,9 @@ export class DetalleSorteoComponent implements OnInit {
       .post(this.getDTO())
       .pipe(finalize(() => this.guardarLoading = false))
       .subscribe({
-        next: () => {
-          const idsorteo = this.form.controls.id.value;
+        next: () => {          
           this.notif.create('success', `<strong>Éxito</strong>`, 'Sorteo registrado.');
-          this.router.navigate([idsorteo], { relativeTo: this.aroute.parent });
-          this.idsorteo = `${idsorteo}`;
+          this.form.reset();
         },
         error: (e) => {
           console.error('Error al registrar sorteo', e);

@@ -58,6 +58,16 @@
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]">
                                         <div nz-col>
+                                            <button
+                                                nz-button
+                                                nzType="default"
+                                                nz-tooltip
+                                                nzTooltipTitle="Participantes"
+                                                [routerLink]="[sorteo.id, 'participantes']">
+                                                <i nz-icon nzType="team" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
                                             <button nz-button nzType="default"
                                                 nz-tooltip nzTooltipTitle="Premios"
                                                 [routerLink]="[sorteo.id, 'premios']">

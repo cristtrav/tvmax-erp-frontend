@@ -53,6 +53,12 @@
                     <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                         <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
                             <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" routerLink="participantes">
+                                    <i nz-icon nzType="team" nzTheme="outline"></i>
+                                    Participantes
+                                </button>
+                            </div>
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
                                 <button nz-button nzType="default" routerLink="premios">
                                     <i nz-icon nzType="gift" nzTheme="outline"></i>
                                     Premios
