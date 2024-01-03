@@ -1,12 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, Output, EventEmitter, Input, LOCALE_ID, Inject } from '@angular/core';
 import { Usuario } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzMarks } from 'ng-zorro-antd/slider';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-form-filtro-suscripciones',
@@ -44,7 +44,12 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   lstCobradores: Usuario[] = [];
   idcobrador: number | null = null;
 
+  fechaInicioCambioEstado: Date | null = null;
+  fechaFinCambioEstado: Date | null = null;
+
   constructor(
+    @Inject(LOCALE_ID)
+    private locale: string,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private usuariosSrv: UsuariosService
   ) {}
@@ -76,19 +81,31 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   }
 
   disabledStartDate = (startValue: Date): boolean => {
-    if (!startValue || !this.fechaFinFiltro) {
-      return false;
-    }
+    if (!startValue || !this.fechaFinFiltro) return false;
+
     const ffd: Date = new Date(this.fechaFinFiltro.getFullYear(), this.fechaFinFiltro.getMonth(), this.fechaFinFiltro.getDate() + 1);
     return startValue.getTime() > ffd.getTime();
   };
 
   disabledEndDate = (endValue: Date): boolean => {
-    if (!endValue || !this.fechaInicioFiltro) {
-      return false;
-    }
-    const fid: Date = new Date(this.fechaInicioFiltro.getFullYear(), this.fechaInicioFiltro.getMonth(), this.fechaInicioFiltro.getDate()-1);
-    return endValue.getTime() <= fid.getTime();
+    if (!endValue || !this.fechaInicioFiltro) return false;
+    
+    const fid: Date = new Date(this.fechaInicioFiltro.getFullYear(), this.fechaInicioFiltro.getMonth(), this.fechaInicioFiltro.getDate() - 1);
+    return endValue.getTime() < fid.getTime();
+  };
+
+  disabledStartDateCambioEstado = (startValue: Date): boolean => {
+    if (!startValue || !this.fechaFinCambioEstado) return false;
+    
+    const ffd: Date = new Date(this.fechaFinCambioEstado.getFullYear(), this.fechaFinCambioEstado.getMonth(), this.fechaFinCambioEstado.getDate() + 1);
+    return startValue.getTime() > ffd.getTime();
+  };
+
+  disabledEndDateCambioEstado = (endValue: Date): boolean => {
+    if (!endValue || !this.fechaInicioCambioEstado) return false;
+
+    const fid: Date = new Date(this.fechaInicioCambioEstado.getFullYear(), this.fechaInicioCambioEstado.getMonth(), this.fechaInicioCambioEstado.getDate() - 1);
+    return endValue.getTime() < fid.getTime();
   };
 
   filtrar(): void{
@@ -100,8 +117,7 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     let cant: number = 0;
     cant += this.gruposServiciosFiltro.length;
     cant += this.ubicacionesFiltro.length;
-    if(this.fechaInicioFiltro) cant++;
-    if(this.fechaFinFiltro) cant++;
+    if(this.fechaInicioFiltro || this.fechaFinFiltro) cant++;    
     if(this.filtroConectado) cant++;
     if(this.filtroReconectado) cant++;
     if(this.filtroDesconectado) cant++;
@@ -111,6 +127,7 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     if(this.filtroNormal) cant++;
     if(this.filtroGentileza) cant++;
     if(this.idcobrador) cant++;
+    if(this.fechaInicioCambioEstado || this.fechaFinCambioEstado) cant++
     return cant;
   }
 
@@ -143,6 +160,12 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
 
   limpiarFiltroCobrador(){
     this.idcobrador = null;
+    this.filtrar();
+  }
+
+  limpiarFiltroFechaCambioEstado(){
+    this.fechaInicioCambioEstado = null;
+    this.fechaFinCambioEstado = null;
     this.filtrar();
   }
 
@@ -183,14 +206,11 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
     if(iddistritos.length !== 0) params['iddistrito'] = iddistritos;
     if(idbarrios.length !== 0) params['idbarrio'] = idbarrios;
 
-    if(this.fechaInicioFiltro){
-      const finiciostr: string = `${this.fechaInicioFiltro.getFullYear()}-${(this.fechaInicioFiltro.getMonth() + 1).toString().padStart(2 ,'0')}-${this.fechaInicioFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechainiciosuscripcion'] = finiciostr;
-    }
-    if(this.fechaFinFiltro){
-      const ffinstr: string = `${this.fechaFinFiltro.getFullYear()}-${(this.fechaFinFiltro.getMonth() + 1).toString().padStart(2 ,'0')}-${this.fechaFinFiltro.getDate().toString().padStart(2, '0')}`;
-      params['fechafinsuscripcion'] = ffinstr;
-    }
+    if(this.fechaInicioFiltro) params['fechainiciosuscripcion'] = formatDate(this.fechaInicioFiltro, 'yyyy-MM-dd', this.locale);
+    if(this.fechaFinFiltro) params['fechafinsuscripcion'] = formatDate(this.fechaFinFiltro, 'yyyy-MM-dd', this.locale);
+    
+    if(this.fechaInicioCambioEstado) params['fechainiciocambioestado'] = formatDate(this.fechaInicioCambioEstado, 'yyyy-MM-dd', this.locale);
+    if(this.fechaFinCambioEstado) params['fechafincambioestado'] = formatDate(this.fechaFinCambioEstado, 'yyyy-MM-dd', this.locale)
 
     const estados: string[] = [];
     if(this.filtroConectado || this.filtroReconectado || this.filtroDesconectado){
