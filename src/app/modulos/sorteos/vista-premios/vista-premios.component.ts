@@ -27,6 +27,8 @@ export class VistaPremiosComponent implements OnInit {
   pageSize: number = 10;
   pageIndex: number = 1;
   sortStr: string | null = null;
+  textoBusqueda: string = "";
+  timerBusqueda: any;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -81,6 +83,7 @@ export class VistaPremiosComponent implements OnInit {
     params = params.append('limit', this.pageSize);
     params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
     if(this.sortStr) params = params.append('sort', this.sortStr);
+    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     return params;
   }
 
@@ -112,6 +115,18 @@ export class VistaPremiosComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     })
+  }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.cargarPremios();
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    setTimeout(() => {
+      this.cargarPremios();
+    }, 250);
   }
 
 }

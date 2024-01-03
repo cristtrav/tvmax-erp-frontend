@@ -31,6 +31,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { HideCiPipe } from '@util/pipes/hide-ci.pipe';
 import { GanadoresComponent } from './ganadores/ganadores.component';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { ExclusionesComponent } from './exclusiones/exclusiones.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NzListModule } from 'ng-zorro-antd/list';
     DetallePremioComponent,
     ParticipantesComponent,
     SortearComponent,
-    GanadoresComponent
+    GanadoresComponent,
+    ExclusionesComponent
   ],
   imports: [
     CommonModule,

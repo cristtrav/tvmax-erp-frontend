@@ -45,7 +45,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div></div>
+                        <div>
+                            <nz-input-group nzPrefixIcon="search" [nzSuffix]="suffixLimpiarBusqueda">
+                                <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                                <ng-template #suffixLimpiarBusqueda>
+                                    <i nz-icon class="ant-input-clear-icon" nzType="close-circle"
+                                    *ngIf="textoBusqueda" (click)="limpiarBusqueda()"></i>
+                                </ng-template>
+                            </nz-input-group>
+                        </div>
                     </div>
                 </div>
                 <div nz-col nzSpan="24">
