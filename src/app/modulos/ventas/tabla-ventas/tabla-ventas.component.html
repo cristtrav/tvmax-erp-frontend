@@ -36,7 +36,12 @@
                     <span *ngIf="fv.fechacobro">{{ fv.fechacobro | date: 'dd/MM/yy' }}</span>
                     <span *ngIf="!fv.fechacobro" nz-typography nzType="secondary">(sin fecha)</span>
                 </td>
-                <td>{{ fv.prefijofactura }}-{{ fv.nrofactura?.toString()?.padStart(7, '0') }}</td>
+                <td>
+                    <span *ngIf="!fv.prefijofactura && !fv.nrofactura" nz-typography nzType="secondary">(sin factura)</span>
+                    <span *ngIf="fv.prefijofactura && fv.nrofactura">
+                        {{ fv.prefijofactura }}-{{ fv.nrofactura | paddingZeros: 7 }}
+                    </span>
+                </td>
                 <td nzAlign="center">
                     <div nz-row [nzGutter]="[8, 8]">
                         <div nz-col>

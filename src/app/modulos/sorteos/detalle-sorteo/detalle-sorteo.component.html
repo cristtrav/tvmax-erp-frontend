@@ -1,0 +1,85 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/sorteos">Sorteos</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idsorteo | titlecase }}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzAlign="top" nzJustify="center">
+            <div nz-col class="module-content" [nzXXl]="14" [nzXl]="16" [nzLg]="18" [nzMd]="20" [nzSm]="22">
+                <form nz-form [formGroup]="form">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>
+                            Código
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+                            <div nz-row>
+                                <div nz-col [nzSm]="12" [nzXs]="24">
+                                    <nz-input-group [nzAddOnAfter]="btnGenerarId" nzSearch>
+                                        <nz-input-number style="width: 100%;" formControlName="id"></nz-input-number>
+                                    </nz-input-group>
+                                    <ng-template #btnGenerarId>
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            nzSearch
+                                            nz-tooltip
+                                            nzTooltipTitle="Generar código."
+                                            [nzLoading]="ultimoIdLoading"
+                                            (click)="cargarUltimoId()">
+                                            <i nz-icon nzType="sync" nzTheme="outline"></i>
+                                        </button>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>
+                            Descripción
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 70 carácteres.">
+                            <input nz-input style="width: 100%;" formControlName="descripcion">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                        <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" routerLink="participantes">
+                                    <i nz-icon nzType="team" nzTheme="outline"></i>
+                                    Participantes
+                                </button>
+                            </div>
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" routerLink="premios">
+                                    <i nz-icon nzType="gift" nzTheme="outline"></i>
+                                    Premios
+                                </button>
+                            </div>
+                            <div nz-col *ngIf="idsorteo != 'nuevo'">
+                                <button nz-button nzType="default" [routerLink]="['/sortear', idsorteo]">
+                                    <i nz-icon nzType="check-square" nzTheme="outline"></i>
+                                    Sortear
+                                </button>
+                            </div>
+                            <div nz-col>
+                                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                    <i nz-icon nzType="save"></i>
+                                    {{ idsorteo === 'nuevo' ? 'Registrar' : 'Editar' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

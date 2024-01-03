@@ -128,6 +128,18 @@ export class AppSettings {
           routerLink: '/app/auditoria',
         }
       ]
+    },
+    {
+      id: 9,
+      title: 'Promociones',
+      icon: 'gift',
+      children: [
+        {
+          id: 400,
+          name: 'Sorteos',
+          routerLink: '/app/sorteos'
+        }
+      ]
     }
   ]
 

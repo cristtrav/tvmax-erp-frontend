@@ -3,9 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './util/auth.guard';
 import { AppComponent } from './app.component';
 import { Extra } from '@util/extra';
+import { SortearComponent } from './modulos/sorteos/sortear/sortear.component';
+import { GanadoresComponent } from './modulos/sorteos/ganadores/ganadores.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/app/dashboard' },
+  { path: 'sortear/:idsorteo', component: SortearComponent },
+  { path: 'sortear/:idsorteo/ganadores', component: GanadoresComponent },
   { path: 'login', loadChildren: () => import('./modulos/login/login.module').then(m => m.LoginModule), canActivate: [AuthGuard] },
   {
     path: 'app', component: AppComponent, canActivate: [AuthGuard], children: [
@@ -25,7 +29,8 @@ const routes: Routes = [
       { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule), canActivate: [Extra.getCanEnterModuleFn(144)]},
       { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule), canActivate: [Extra.getCanEnterModuleFn(344)]},
       { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)},
-      { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)}
+      { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
+      { path: 'sorteos', loadChildren: () => import('./modulos/sorteos/sorteos.module').then(m => m.SorteosModule)}
     ]
   },
 ];

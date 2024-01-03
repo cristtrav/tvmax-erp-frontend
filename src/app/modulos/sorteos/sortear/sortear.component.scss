@@ -1,0 +1,26 @@
+.contenedor-principal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*padding: 30px 30px 30px 30px;*/
+    height: 100%;
+    background-color: #EEEEEE;
+}
+
+.contenedor-interno{
+    background-color: white;
+    padding: 20px;
+}
+
+.etiqueta-codigo-cliente{
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #1D39C4;
+    background-color: #F0F5FF;
+    color: #1D39C4;
+    padding: 10px;
+    font-size: 40px;
+    width: 100%;
+    text-align: center;
+}

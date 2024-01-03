@@ -1,0 +1,109 @@
+<div class="contenedor-principal">
+    <div nz-row nzJustify="center">
+        <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="18" [nzXl]="16" [nzXXl]="14">
+            <div nz-row nzJustify="center" nzAlign="middle" [nzGutter]="[24, 24]" class="contenedor-interno">
+                <div nz-col>
+                    <a [routerLink]="['/app', 'sorteos']">
+                        <img width="200" src="/assets/img/logo-tvmax.svg">
+                    </a>
+                </div>
+                <div nz-col nzFlex="auto">
+                    <nz-spin [nzSpinning]="loadingSorteo">
+                        <span style="font-size: xx-large;">{{ sorteo }}</span>
+                    </nz-spin>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-select
+                        [nzDisabled]="sorteoEnProceso"
+                        [nzLoading]="loadingPremios"
+                        [nzCustomTemplate]="premioTemplate"
+                        [(ngModel)]="premioSeleccionado"
+                        (ngModelChange)="cambioDePremio()"
+                        nzAllowClear
+                        nzPlaceHolder="Seleccionar premio..."
+                        nzSize="large"
+                        style="width: 100%;">
+                        <nz-option nzCustomContent *ngFor="let premio of lstPremios" [nzLabel]="premio.descripcion" [nzValue]="premio">
+                            <nz-tag nzColor="volcano">Premio N° {{ premio.nropremio }}</nz-tag>
+                            <span>{{ premio.descripcion }}</span>
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #premioTemplate let-selected>
+                        <nz-tag nzColor="volcano">Premio N° {{selected.nzValue.nropremio}}</nz-tag>
+                        <span>{{ selected.nzValue.descripcion }}</span>
+                    </ng-template>
+                </div>
+                <div nz-col nzSpan="24">
+                    <div class="etiqueta-codigo-cliente">
+                        {{ codClienteActual | paddingZeros:7 }}
+                    </div>
+                </div>
+                <div nz-col nzSpan="24">
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col nzSpan="12">
+                            <button
+                                *ngIf="!sorteoEnProceso"
+                                nz-button
+                                nzType="primary"
+                                nzSize="large"
+                                nzBlock
+                                (click)="iniciarSorteo()">
+                                Iniciar
+                            </button>
+                            <button
+                                *ngIf="sorteoEnProceso"
+                                nz-button
+                                nzType="primary"
+                                nzSize="large"
+                                nzBlock
+                                nzDanger
+                                (click)="detenerSorteo()">
+                                Detener
+                            </button>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <button
+                                nz-button
+                                nzType="default"
+                                nzSize="large"
+                                nzBlock
+                                (click)="cancelarSorteo()">
+                                Cancelar
+                            </button>
+                        </div>
+                        <div nz-col nzSpan="6">
+                            <button
+                                nz-button
+                                nzType="default"
+                                nzSize="large"nzBlock
+                                [disabled]="sorteoEnProceso"
+                                [routerLink]="['ganadores']">
+                                Ganadores
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col nzSpan="24">
+                    <ng-template #tituloAlertGanador>
+                        <span style="font-size: x-large;">¡Felicidades!</span>
+                    </ng-template>
+                    <ng-template #descripcionAlertGanador>
+                        <div style="font-size: large;">{{ clienteActual?.razonsocial }}</div>
+                        <div style="font-size: large;" *ngIf="clienteActual?.ci">
+                            Nro. de Documento: {{ clienteActual?.ci| hideCi}}
+                        </div>
+                    </ng-template>
+                    <nz-alert
+                        *ngIf="clienteActual"
+                        nzType="success"
+                        [nzMessage]="tituloAlertGanador"
+                        [nzDescription]="descripcionAlertGanador"
+                        nzShowIcon>
+                    </nz-alert>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+    

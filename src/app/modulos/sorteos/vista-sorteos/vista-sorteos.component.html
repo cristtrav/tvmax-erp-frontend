@@ -1,0 +1,119 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                Sorteos
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div class="module-content">
+            <div nz-row [nzGutter]="[8,8]">
+                <div nz-col nzSpan="24">
+                    <div nz-row>
+                        <div nz-col nzFlex="auto">
+                            <div nz-row [nzGutter]="[8,8]">
+                                <div nz-col>
+                                    <button nz-button nzType="primary" [routerLink]="'nuevo'">
+                                        <i nz-icon nzType="plus" nzTheme="outline"></i>
+                                        Nuevo
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="default" (click)="cargarDatos()">
+                                        <i nz-icon nzType="reload" nzTheme="outline"></i>
+                                        Recargar
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="default" routerLink="exclusiones">
+                                        <i nz-icon nzType="usergroup-delete" nzTheme="outline"></i>
+                                        Exclusiones
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-table
+                        #tabla
+                        [nzData]="lstSorteos"
+                        [nzLoading]="loadingSorteos"
+                        [nzPageSize]="pageSize"
+                        [nzPageIndex]="pageIndex"
+                        [nzTotal]="totalRegisters"
+                        [nzFrontPagination]="false"
+                        nzShowSizeChanger="true"
+                        (nzQueryParams)="onTableQueryParamsChange($event)"
+                        nzSize="small">
+                        <thead>
+                            <tr>
+                                <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+                                <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
+                                <th>Cant. Premios</th>
+                                <th>Cant. Participantes</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let sorteo of tabla.data">
+                                <td>{{ sorteo.id }}</td>
+                                <td>{{ sorteo.descripcion }}</td>
+                                <td>{{ sorteo.nropremios | number }}</td>
+                                <td>{{ sorteo.nroparticipantes | number }}</td>
+                                <td>
+                                    <div nz-row [nzGutter]="[8,8]">
+                                        <div nz-col>
+                                            <button
+                                                nz-button
+                                                nzType="default"
+                                                nz-tooltip
+                                                nzTooltipTitle="Participantes"
+                                                [routerLink]="[sorteo.id, 'participantes']">
+                                                <i nz-icon nzType="team" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button nz-button nzType="default"
+                                                nz-tooltip nzTooltipTitle="Premios"
+                                                [routerLink]="[sorteo.id, 'premios']">
+                                                <i nz-icon nzType="gift" theme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button
+                                                nz-tooltip nzTooltipTitle="Sortear"
+                                                nz-button nzType="default"
+                                                [routerLink]="['/sortear', sorteo.id]">
+                                                <i nz-icon nzType="check-square" nzTheme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button nz-button nzType="primary"
+                                                nz-tooltip nzTooltipTitle="Editar sorteo"
+                                                [routerLink]="[sorteo.id]">
+                                                <i nz-icon nzType="edit" theme="outline"></i>
+                                            </button>
+                                        </div>
+                                        <div nz-col>
+                                            <button nz-button nzType="primary" nzDanger
+                                                nz-tooltip nzTooltipTitle="Eliminar sorteo"
+                                                (click)="confirmarEliminacion(sorteo)">
+                                                <i nz-icon nzType="delete"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
