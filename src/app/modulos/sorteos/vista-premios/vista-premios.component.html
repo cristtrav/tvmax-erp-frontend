@@ -49,7 +49,7 @@
                             <nz-input-group nzPrefixIcon="search" [nzSuffix]="suffixLimpiarBusqueda">
                                 <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
                                 <ng-template #suffixLimpiarBusqueda>
-                                    <i nz-icon class="ant-input-clear-icon" nzType="close-circle"
+                                    <i nz-icon class="ant-input-clear-icon" nzType="close-circle" nzTheme="fill"
                                     *ngIf="textoBusqueda" (click)="limpiarBusqueda()"></i>
                                 </ng-template>
                             </nz-input-group>

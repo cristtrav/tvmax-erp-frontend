@@ -41,7 +41,7 @@
                                     [(ngModel)]="textoBusquedaExcluidos"
                                     (ngModelChange)="buscarExcluidos()">
                                 <ng-template #suffixBusquedaExcluidos>
-                                    <i nz-icon class="ant-input-clear-icon" nzType="close-circle"
+                                    <i nz-icon class="ant-input-clear-icon" nzType="close-circle" nzTheme="fill"
                                     *ngIf="textoBusquedaExcluidos" (click)="limpiarBusquedaExcluidos()"></i>
                                 </ng-template>
                             </nz-input-group>
@@ -114,7 +114,7 @@
                 <nz-input-group [nzPrefixIcon]="'search'" [nzSuffix]="suffixLimpiarBusquedaClientes">
                     <input nz-input style="width: 100%;" placeholder="Buscar cliente..." [(ngModel)]="textoBusquedaClientes" (ngModelChange)="buscarClientes()">
                     <ng-template #suffixLimpiarBusquedaClientes>
-                        <i nz-icon class="ant-input-clear-icon" nzType="close-circle"
+                        <i nz-icon class="ant-input-clear-icon" nzType="close-circle" nzTheme="fill"
                         *ngIf="textoBusquedaClientes" (click)="limpiarBusquedaClientes()"></i>
                     </ng-template>
                 </nz-input-group>
