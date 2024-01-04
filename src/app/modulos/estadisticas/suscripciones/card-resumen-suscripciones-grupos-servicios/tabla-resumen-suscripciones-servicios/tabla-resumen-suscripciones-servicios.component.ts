@@ -42,7 +42,7 @@ export class TablaResumenSuscripcionesServiciosComponent implements OnInit {
   lstResumenServicios: ResumenServiciosSuscripciones[] = [];
   sortStr: string | null = '+servicio';
   totalRegisters: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 5;
   pageIndex: number = 1;
   tableLoading: boolean = false;
 

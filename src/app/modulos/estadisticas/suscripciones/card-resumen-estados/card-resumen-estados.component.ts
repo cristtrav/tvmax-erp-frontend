@@ -42,7 +42,7 @@ export class CardResumenEstadosComponent implements OnInit {
   lstResumenEstados: ResumenEstadosSuscripciones[] = [];
   tableLoading: boolean = false;
   totalRegisters: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 5;
   pageIndex: number = 1;
   sortStr: string | null = null;
 

@@ -18,7 +18,8 @@
         [nzPageIndex]="pageIndex"
         [nzPageSize]="pageSize"
         [nzFooter]="pieTabla"
-        [nzTotal]="totalRegisters">
+        [nzTotal]="totalRegisters"
+        [nzPageSizeOptions]="[5, 10, 15, 20, 25]">
         <thead>
             <tr>
                 <th [nzSortFn]="true" [nzColumnKey]="'cuotaspendientes'" [nzSortOrder]="'ascend'">Cuotas pendientes</th>

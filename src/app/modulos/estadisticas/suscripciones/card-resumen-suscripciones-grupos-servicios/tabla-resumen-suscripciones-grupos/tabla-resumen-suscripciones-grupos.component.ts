@@ -41,7 +41,7 @@ export class TablaResumenSuscripcionesGruposComponent implements OnInit {
 
   lstResumenGrupos: ResumenGruposSuscripciones[] = [];
   loadingDatos: boolean = false;
-  pageSize: number = 10;
+  pageSize: number = 5;
   pageIndex: number = 1;
   totalRegisters: number = 0;
   sortStr: string | null = '+grupo';

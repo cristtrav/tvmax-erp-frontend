@@ -28,7 +28,7 @@ export class CardResumenCuotasPendientesComponent implements OnInit {
   loadingDatos: boolean = false;
   sortStr: string | null = '+cuotaspendientes'
   pageIndex: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 5;
   totalRegisters: number = 0;
 
   @Input()

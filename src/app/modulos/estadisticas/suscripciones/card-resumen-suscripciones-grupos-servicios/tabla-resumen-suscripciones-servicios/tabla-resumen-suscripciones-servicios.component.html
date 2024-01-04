@@ -1,6 +1,16 @@
-<nz-table #tabla nzSize="small" [nzData]="lstResumenServicios" [nzFrontPagination]="false" [nzTotal]="totalRegisters"
-    [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" [nzShowSizeChanger]="true" [nzLoading]="tableLoading"
-    [nzFooter]="pieTabla" (nzQueryParams)="onQueryParamsChange($event)">
+<nz-table
+    #tabla
+    nzSize="small"
+    [nzData]="lstResumenServicios"
+    [nzFrontPagination]="false"
+    [nzTotal]="totalRegisters"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzShowSizeChanger]="true"
+    [nzLoading]="tableLoading"
+    [nzFooter]="pieTabla"
+    [nzPageSizeOptions]="[5, 10, 15, 20, 25]"
+    (nzQueryParams)="onQueryParamsChange($event)">
     <thead>
         <tr>
             <th [nzColumnKey]="'servicio'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Servicio</th>
