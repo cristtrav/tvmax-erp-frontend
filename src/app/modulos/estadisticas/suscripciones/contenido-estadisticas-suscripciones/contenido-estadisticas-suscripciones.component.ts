@@ -7,6 +7,7 @@ import { CardResumenCuotasPendientesComponent } from '../card-resumen-cuotas-pen
 import { CardResumenEstadosComponent } from '../card-resumen-estados/card-resumen-estados.component';
 import { CardResumenSuscripcionesGruposServiciosComponent } from '../card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';
 import { CardResumenSuscripcionesUbicacionesComponent } from '../card-resumen-suscripciones-ubicaciones/card-resumen-suscripciones-ubicaciones.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-contenido-estadisticas-suscripciones',
@@ -55,6 +56,7 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
   totalSuscActivos: number = 0;
   totalSuscDesconectadas: number = 0;
   totalDeuda: number = 0;
+  loadingTotales: boolean = false;
 
   constructor(
     private suscripcionesSrv: SuscripcionesService,
@@ -66,7 +68,10 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
   }
 
   cargarDatos() {
-    this.suscripcionesSrv.getResumenGeneral(this.getHttpQueryParams()).subscribe({
+    this.loadingTotales = true;
+    this.suscripcionesSrv.getResumenGeneral(this.getHttpQueryParams())
+    .pipe(finalize(() => this.loadingTotales = false))
+    .subscribe({
       next: (resumen) => {
         this.totalSuscripciones = resumen.cantidadTotal ?? 0;
         this.totalSuscActivos = resumen.cantidadActivos ?? 0;
