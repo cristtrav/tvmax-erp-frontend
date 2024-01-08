@@ -44,8 +44,36 @@ const accesoParticipantesGuardFn = (
   if(!inject(SesionService).permisos.has(440)){
     inject(NzNotificationService).create(
       'warning',
-      '<strong></strong>',
+      '<strong>No autorizado</strong>',
       'El usuario no tiene permisos para acceder al módulo Participantes de Sorteos'
+    )
+    return false;
+  } else return true;
+}
+
+const accesoPremiosGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(480)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al módulo Premios de Sorteos'
+    )
+    return false;
+  } else return true;
+}
+
+const accesoFormPremiosGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(481)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al formulario de Premios'
     )
     return false;
   } else return true;
@@ -55,8 +83,8 @@ const routes: Routes = [
   { path: '', component: VistaSorteosComponent, canActivate: [accesoSorteoGuardFn]},
   { path: 'exclusiones', component: ExclusionesComponent },
   { path: ':idsorteo', component: DetalleSorteoComponent, canActivate: [formSorteoGuardFn] },
-  { path: ':idsorteo/premios', component: VistaPremiosComponent },
-  { path: ':idsorteo/premios/:idpremio', component: DetallePremioComponent },
+  { path: ':idsorteo/premios', component: VistaPremiosComponent, canActivate: [accesoPremiosGuardFn] },
+  { path: ':idsorteo/premios/:idpremio', component: DetallePremioComponent, canActivate: [accesoFormPremiosGuardFn] },
   { path: ':idsorteo/participantes', component: ParticipantesComponent, canActivate: [accesoParticipantesGuardFn] }
 ];
 
