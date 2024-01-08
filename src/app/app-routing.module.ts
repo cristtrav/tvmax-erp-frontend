@@ -1,14 +1,30 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule, inject } from '@angular/core';
+import { Routes, RouterModule, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthGuard } from './util/auth.guard';
 import { AppComponent } from './app.component';
 import { Extra } from '@util/extra';
 import { SortearComponent } from './modulos/sorteos/sortear/sortear.component';
 import { GanadoresComponent } from './modulos/sorteos/ganadores/ganadores.component';
+import { SesionService } from '@servicios/sesion.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+const accesoRealizarSorteosGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(407)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para realizar Sorteos'
+    )
+    return false;
+  } else return true;
+}
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/app/dashboard' },
-  { path: 'sortear/:idsorteo', component: SortearComponent },
+  { path: 'sortear/:idsorteo', component: SortearComponent, canActivate: [accesoRealizarSorteosGuardFn] },
   { path: 'sortear/:idsorteo/ganadores', component: GanadoresComponent },
   { path: 'login', loadChildren: () => import('./modulos/login/login.module').then(m => m.LoginModule), canActivate: [AuthGuard] },
   {
