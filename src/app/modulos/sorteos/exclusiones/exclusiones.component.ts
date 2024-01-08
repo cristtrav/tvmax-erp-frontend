@@ -2,8 +2,11 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
+import { SesionService } from '@servicios/sesion.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
 
@@ -36,7 +39,10 @@ export class ExclusionesComponent implements OnInit {
 
   constructor(
     private clientesSrv: ClientesService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private notif: NzNotificationService,
+    private sesionSrv: SesionService,
+    private modal: NzModalService
   ){}
 
   ngOnInit(): void {
@@ -63,6 +69,10 @@ export class ExclusionesComponent implements OnInit {
   }
 
   cargarExcluidos(){
+    if(!this.sesionSrv.permisos.has(521)){
+      this.notif.error('<strong>No autorizado</strong>', 'El usuario no tiene permisos para consultar excluidos de sorteos');
+      return;
+    }
     this.loadingExcluidos = true;
     forkJoin({
       clientes: this.clientesSrv.get(this.getHttpParams()),
@@ -151,18 +161,37 @@ export class ExclusionesComponent implements OnInit {
       error: (e) => {
         console.error('Error al editar cliente', e);
         this.httpErrorHandler.process(e);
+        cliente.excluidosorteo = !cliente.excluidosorteo;
       }
     });
   }
 
   excluirCliente(cliente: Cliente){
-    cliente.excluidosorteo = true;
-    this.editarCliente(cliente);
+    if(!this.sesionSrv.permisos.has(522)){
+      this.notif.error('<strong>No autorizado</strong>', 'El usuario no tiene permisos para agregar exclusiones');
+    }else{
+      cliente.excluidosorteo = true;
+      this.editarCliente(cliente);
+    }
+  }
+
+  confirmarRevertirExclusion(cliente: Cliente){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar la exclusión?',
+      nzContent: `${cliente.id} - ${cliente.razonsocial}`,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.revertirExclusion(cliente)
+    })
   }
 
   revertirExclusion(cliente: Cliente){
-    cliente.excluidosorteo = false;
-    this.editarCliente(cliente);
+    if(!this.sesionSrv.permisos.has(523)){
+      this.notif.error('<strong>No autorizado</strong>', 'El usuario no tiene permisos para eliminar exclusiones');
+    }else{
+      cliente.excluidosorteo = false;
+      this.editarCliente(cliente);
+    }
   }
 
   mostrarModalCliente(){

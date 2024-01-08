@@ -79,9 +79,23 @@ const accesoFormPremiosGuardFn = (
   } else return true;
 }
 
+const accesoExclusionesGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(520)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong>No autorizado</strong>',
+      'El usuario no tiene permisos para acceder al módulo Exclusiones de Sorteos'
+    )
+    return false;
+  } else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaSorteosComponent, canActivate: [accesoSorteoGuardFn]},
-  { path: 'exclusiones', component: ExclusionesComponent },
+  { path: 'exclusiones', component: ExclusionesComponent, canActivate: [accesoExclusionesGuardFn] },
   { path: ':idsorteo', component: DetalleSorteoComponent, canActivate: [formSorteoGuardFn] },
   { path: ':idsorteo/premios', component: VistaPremiosComponent, canActivate: [accesoPremiosGuardFn] },
   { path: ':idsorteo/premios/:idpremio', component: DetallePremioComponent, canActivate: [accesoFormPremiosGuardFn] },
