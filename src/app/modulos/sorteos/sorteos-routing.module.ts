@@ -37,13 +37,27 @@ const formSorteoGuardFn = (
   } else return true;
 }
 
+const accesoParticipantesGuardFn = (
+  next: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  if(!inject(SesionService).permisos.has(440)){
+    inject(NzNotificationService).create(
+      'warning',
+      '<strong></strong>',
+      'El usuario no tiene permisos para acceder al módulo Participantes de Sorteos'
+    )
+    return false;
+  } else return true;
+}
+
 const routes: Routes = [
   { path: '', component: VistaSorteosComponent, canActivate: [accesoSorteoGuardFn]},
   { path: 'exclusiones', component: ExclusionesComponent },
   { path: ':idsorteo', component: DetalleSorteoComponent, canActivate: [formSorteoGuardFn] },
   { path: ':idsorteo/premios', component: VistaPremiosComponent },
   { path: ':idsorteo/premios/:idpremio', component: DetallePremioComponent },
-  { path: ':idsorteo/participantes', component: ParticipantesComponent }
+  { path: ':idsorteo/participantes', component: ParticipantesComponent, canActivate: [accesoParticipantesGuardFn] }
 ];
 
 @NgModule({
