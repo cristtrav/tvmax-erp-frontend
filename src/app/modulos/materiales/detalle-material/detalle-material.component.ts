@@ -28,7 +28,8 @@ export class DetalleMaterialComponent implements OnInit {
     id: new FormControl(null, [Validators.required]),
     descripcion: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
     idtipomaterial: new FormControl(null, [Validators.required]),
-    unidadmedida: new FormControl(null, [Validators.required])
+    unidadmedida: new FormControl(null, [Validators.required]),
+    identificable: new FormControl(null, [Validators.required])
   })
 
   constructor(
@@ -44,6 +45,9 @@ export class DetalleMaterialComponent implements OnInit {
     this.idmaterial = !Number.isNaN(Number(idm)) ? `${idm}` : 'nuevo';
     if(this.idmaterial != 'nuevo') this.cargarDatos();
     this.cargarTiposMateriales();
+    this.form.controls.identificable.valueChanges.subscribe((val) => {
+      if(val) this.form.controls.unidadmedida.setValue('UD')
+    });
   }
 
   cargarDatos(){
@@ -54,6 +58,7 @@ export class DetalleMaterialComponent implements OnInit {
           this.form.controls.descripcion.setValue(material.descripcion);
           this.form.controls.idtipomaterial.setValue(material.idtipomaterial);
           this.form.controls.unidadmedida.setValue(material.unidadmedida);
+          this.form.controls.identificable.setValue(material.identificable);
         },
         error: (e) => {
           console.error('Error al cargar datos del material', e);
@@ -143,6 +148,7 @@ export class DetalleMaterialComponent implements OnInit {
       unidadmedida: this.form.controls.unidadmedida.value,
       cantidad: 0,
       sololectura: false,
+      identificable: this.form.controls.identificable.value,
       eliminado: false
     }
   }

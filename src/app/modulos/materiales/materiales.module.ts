@@ -16,8 +16,9 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 @NgModule({
@@ -41,7 +42,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzRadioModule,
     NzTagModule,
     NzToolTipModule,
-    FormsModule
+    FormsModule,
+    NzCheckboxModule,
+    NzSpaceModule
   ]
 })
 export class MaterialesModule { }

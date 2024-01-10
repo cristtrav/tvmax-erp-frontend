@@ -71,6 +71,7 @@
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                                 <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
                                 <th [nzColumnKey]="'tipomaterial'" [nzSortFn]="true">Tipo de Material</th>
+                                <th [nzColumnKey]="'identificable'" [nzSortFn]="true">Identificable</th>
                                 <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Existencias</th>
                                 <th [nzColumnKey]="'unidadmedida'" [nzSortFn]="true">U. Medida</th>
                                 <th>Acciones</th>
@@ -82,6 +83,10 @@
                                 <td>{{ material.descripcion }}</td>
                                 <td>
                                     <span nz-tooltip [nzTooltipTitle]="'Código: '+material.idtipomaterial">{{ material.tipomaterial }}</span>
+                                </td>
+                                <td nzAlign="center">
+                                    <nz-tag nzColor="green" *ngIf="material.identificable">Sí</nz-tag>
+                                    <nz-tag nzColor="red" *ngIf="!material.identificable">No</nz-tag>
                                 </td>
                                 <td nzAlign="right">
                                     {{ material.cantidad | number }}

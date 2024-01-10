@@ -6,5 +6,6 @@ export interface MaterialDTO{
     tipomaterial?: string;
     cantidad: number;
     sololectura: boolean;
+    identificable: boolean;
     eliminado: boolean;
 }
