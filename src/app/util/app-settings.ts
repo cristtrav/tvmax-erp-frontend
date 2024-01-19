@@ -112,8 +112,8 @@ export class AppSettings {
       children: [
         {
           id: 600,
-          name: 'Tipos de materiales',
-          routerLink: '/app/tiposmateriales'
+          name: 'Grupos',
+          routerLink: '/app/gruposmateriales'
         },
         {
           id: 680,
