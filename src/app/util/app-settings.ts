@@ -106,30 +106,6 @@ export class AppSettings {
       ]
     },
     {
-      id: 6,
-      title: 'Ajustes de impresión',
-      icon: 'printer',
-      children: [
-        {
-          id: 344,
-          name: 'Formatos de facturas',
-          routerLink: '/app/formatosfacturas',
-        }
-      ]
-    },
-    {
-      id: 7,
-      title: 'Auditoría',
-      icon: 'audit',
-      children: [
-        {
-          id: 321,
-          name: 'Eventos',
-          routerLink: '/app/auditoria',
-        }
-      ]
-    },
-    {
       id: 8,
       title: "Depósitos",
       icon: "inbox",
@@ -153,6 +129,23 @@ export class AppSettings {
           id: 720,
           name: 'Usuarios',
           routerLink: '/app/usuariosdepositos'
+        }
+      ]
+    },
+    {
+      id: 8,
+      title: 'Extras',
+      icon: 'control',
+      children: [
+        {
+          id: 321,
+          name: 'Eventos del sistema',
+          routerLink: '/app/auditoria',
+        },
+        {
+          id: 344,
+          name: 'Formatos de facturas',
+          routerLink: '/app/formatosfacturas',
         }
       ]
     }
