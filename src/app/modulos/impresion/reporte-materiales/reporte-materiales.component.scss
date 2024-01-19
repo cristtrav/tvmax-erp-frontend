@@ -1,0 +1,5 @@
+$row-background: #E0E0E0;
+
+.filas-resaltadas tr:nth-child(4n), .filas-resaltadas tr:nth-child(4n-1){
+    background-color: $row-background;
+}

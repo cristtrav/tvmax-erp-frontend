@@ -52,4 +52,12 @@ export class MaterialesService {
   getTotalMaterialesIdentificablesByMaterial(idmaterial: number, params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/${idmaterial}/identificables/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
+
+  getIdentificables(params: HttpParams): Observable<MaterialIdentificableDTO[]>{
+    return this.http.get<MaterialIdentificableDTO[]>(`${this.url}/identificables`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getTotalIdentificables(params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/identificables/total`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
 }

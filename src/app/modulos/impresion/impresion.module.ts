@@ -17,6 +17,7 @@ import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
 import { ReporteDetallesVentasComponent } from './reporte-detalles-ventas/reporte-detalles-ventas.component';
 import { ReporteMovimientoMaterialComponent } from './reporte-movimiento-material/reporte-movimiento-material.component';
 import { ReporteMaterialesComponent } from './reporte-materiales/reporte-materiales.component';
+import { JoinPipe } from '@util/pipes/join.pipe';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ReporteMaterialesComponent } from './reporte-materiales/reporte-materia
     NzSpaceModule,
     PaddingZerosPipe,
     NumeroALetrasPipe,
-    StringToNumberPipe
+    StringToNumberPipe,
+    JoinPipe
   ],
   exports: [
     ReporteSuscripcionesComponent, FacturaPreimpresaVentaComponent

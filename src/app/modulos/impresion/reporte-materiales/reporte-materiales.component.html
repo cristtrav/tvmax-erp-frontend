@@ -7,30 +7,46 @@
 </div>
 <div style="margin-top: 15px;">
     <div>Registros</div>
-    <table class="tabla-reporte">
+    <table class="tabla-reporte filas-resaltadas">
         <thead>
             <tr>
                 <th>Código</th>
                 <th>Descripción</th>
                 <th>Tipo</th>
+                <th>Identificable</th>
                 <th>Existencias</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let material of lstMateriales">
-                <td>{{ material.id }}</td>
-                <td>{{ material.descripcion }}</td>
-                <td>{{ material.tipomaterial }}</td>
-                <td>
-                    {{ material.cantidad | number }}
-                    <span *ngIf="material.unidadmedida == 'UD'">unidades</span>
-                    <span *ngIf="material.unidadmedida == 'MT'">metros</span>
-                </td>
-            </tr>
+            <ng-container *ngFor="let material of lstMateriales">
+                <tr>
+                    <td>{{ material.id }}</td>
+                    <td>{{ material.descripcion }}</td>
+                    <td>{{ material.tipomaterial }}</td>
+                    <td>{{ material.identificable ? 'Identificable' : 'No identificable' }}</td>
+                    <td> 
+                        {{ material.cantidad | number }}
+                        <span *ngIf="material.unidadmedida == 'UD'">unidades</span>
+                        <span *ngIf="material.unidadmedida == 'MT'">metros</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <strong>Nros. Serie: </strong>
+                        <span *ngIf="!material.identificable">(no aplica)</span>
+                        <span *ngIf="material.identificable && (mapIdentificables.get(material.id)?.length ?? 0) == 0">
+                            (ninguno)
+                        </span>
+                        <span *ngIf="material.identificable && (mapIdentificables.get(material.id)?.length ?? 0) > 0">
+                            {{ mapIdentificables.get(material.id) | join:', ' }}
+                        </span>
+                    </td>
+                </tr>
+            </ng-container>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4">
+                <td colspan="5">
                     Total de registros: {{ totalRegistros | number }}
                 </td>
             </tr>
