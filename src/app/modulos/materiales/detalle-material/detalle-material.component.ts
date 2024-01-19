@@ -29,7 +29,7 @@ export class DetalleMaterialComponent implements OnInit {
     descripcion: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
     idtipomaterial: new FormControl(null, [Validators.required]),
     unidadmedida: new FormControl(null, [Validators.required]),
-    identificable: new FormControl(null, [Validators.required])
+    identificable: new FormControl(null)
   })
 
   constructor(
@@ -148,7 +148,7 @@ export class DetalleMaterialComponent implements OnInit {
       unidadmedida: this.form.controls.unidadmedida.value,
       cantidad: 0,
       sololectura: false,
-      identificable: this.form.controls.identificable.value,
+      identificable: this.form.controls.identificable.value ?? false,
       eliminado: false
     }
   }
