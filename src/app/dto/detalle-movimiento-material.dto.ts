@@ -9,5 +9,7 @@ export interface DetalleMovimientoMaterialDTO {
     cantidadretirada?: number;
     descripcion?: string;
     iddetallemovimientoreferencia?: number;
+    nroseriematerial?: string;
+    materialidentificable?: boolean;
     eliminado: boolean;
 }

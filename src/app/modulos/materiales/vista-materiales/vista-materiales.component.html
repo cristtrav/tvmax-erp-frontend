@@ -68,48 +68,90 @@
                         (nzQueryParams)="onTableQueryChange($event)">
                         <thead>
                             <tr>
+                                <th nzWidth="60px"></th>
                                 <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
                                 <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
                                 <th [nzColumnKey]="'tipomaterial'" [nzSortFn]="true">Tipo de Material</th>
-                                <th [nzColumnKey]="'identificable'" [nzSortFn]="true">Identificable</th>
                                 <th [nzColumnKey]="'cantidad'" [nzSortFn]="true">Existencias</th>
                                 <th [nzColumnKey]="'unidadmedida'" [nzSortFn]="true">U. Medida</th>
+                                <th [nzColumnKey]="'identificable'" [nzSortFn]="true">Identificable</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let material of lstMateriales">
-                                <td>{{ material.id }}</td>
-                                <td>{{ material.descripcion }}</td>
-                                <td>
-                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+material.idtipomaterial">{{ material.tipomaterial }}</span>
-                                </td>
-                                <td nzAlign="center">
-                                    <nz-tag nzColor="green" *ngIf="material.identificable">Sí</nz-tag>
-                                    <nz-tag nzColor="red" *ngIf="!material.identificable">No</nz-tag>
-                                </td>
-                                <td nzAlign="right">
-                                    {{ material.cantidad | number }}
-                                </td>
-                                <td>
-                                    <nz-tag *ngIf="material.unidadmedida == 'UD'" nzColor="purple">Unidades (ud)</nz-tag>
-                                    <nz-tag *ngIf="material.unidadmedida == 'MT'" nzColor="blue">Metros (mt)</nz-tag>
-                                </td>
-                                <td>
-                                    <div nz-row [nzGutter]="[8,8]">
-                                        <div nz-col>
-                                            <button nz-button nzType="primary" [disabled]="material.sololectura" [routerLink]="[material.id]">
-                                                <i nz-icon nzType="edit" nzTheme="outline"></i>
-                                            </button>
+                            <ng-container *ngFor="let material of lstMateriales">
+                                <tr>
+                                    <td *ngIf="!material.identificable"></td>
+                                    <td *ngIf="material.identificable" [nzExpand]="expandSet.has(material.id)" (nzExpandChange)="onExpandChange(material.id, $event)"></td>
+                                    <td>{{ material.id }}</td>
+                                    <td>{{ material.descripcion }}</td>
+                                    <td>
+                                        <span nz-tooltip [nzTooltipTitle]="'Código: '+material.idtipomaterial">{{ material.tipomaterial }}</span>
+                                    </td>
+                                    
+                                    <td nzAlign="right">
+                                        <nz-tag *ngIf="material.cantidad > 0" nzColor="green">
+                                            <strong>{{ material.cantidad | number }}</strong>
+                                        </nz-tag>
+                                        <nz-tag *ngIf="material.cantidad == 0" nzColor="orange">
+                                            <strong>{{ material.cantidad | number }}</strong>
+                                        </nz-tag>
+                                    </td>
+                                    <td>
+                                        {{ material.unidadmedida | lowercase }} ({{ material.unidadmedida == 'MT' ? 'metros' : 'unidades' }})
+                                    </td>
+                                    <td nzAlign="center">
+                                        <nz-tag nzColor="green" *ngIf="material.identificable">Sí</nz-tag>
+                                        <nz-tag nzColor="red" *ngIf="!material.identificable">No</nz-tag>
+                                    </td>
+                                    <td>
+                                        <div nz-row [nzGutter]="[8,8]">
+                                            <div nz-col>
+                                                <button nz-button nzType="primary" [disabled]="material.sololectura" [routerLink]="[material.id]">
+                                                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                                </button>
+                                            </div>
+                                            <div nz-col>
+                                                <button nz-button nzType="primary" nzDanger [disabled]="material.sololectura" (click)="confirmarEliminacion(material)">
+                                                    <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div nz-col>
-                                            <button nz-button nzType="primary" nzDanger [disabled]="material.sololectura" (click)="confirmarEliminacion(material)">
-                                                <i nz-icon nzType="delete" nzTheme="outline"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                                <tr [nzExpand]="expandSet.has(material.id)">
+                                    <label nz-checkbox (nzCheckedChange)="cargarIdentificables(material.id, $event)">Mostrar no disponibles</label>
+                                    <nz-table
+                                        [nzData]="mapIdentificablesMeta.get(material.id)?.lstMaterialesIdentificables ?? []"
+                                        [nzFrontPagination]="false"
+                                        [nzShowSizeChanger]="true"
+                                        [nzPageIndex]="mapIdentificablesMeta.get(material.id)?.pageIndex ?? 1"
+                                        [nzPageSize]="mapIdentificablesMeta.get(material.id)?.pageSize ?? 10"
+                                        [nzTotal]="mapIdentificablesMeta.get(material.id)?.totalRegisters ?? 0"
+                                        [nzLoading]="mapIdentificablesMeta.get(material.id)?.loading"
+                                        [nzFooter]="pieTablaIdentificable"
+                                        (nzQueryParams)="onTableIdentificablesQueryChange(material.id, $event)">
+                                        <thead>
+                                            <tr>
+                                                <th [nzColumnKey]="'serial'" [nzSortFn]="true">Nro. Serie</th>
+                                                <th [nzColumnKey]="'disponible'" [nzSortFn]="true" [nzSortOrder]="'descend'">Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let identificable of mapIdentificablesMeta.get(material.id)?.lstMaterialesIdentificables">
+                                                <td>{{ identificable.serial }}</td>
+                                                <td>
+                                                    <nz-tag nzColor="green" *ngIf="identificable.disponible">Disponible</nz-tag>
+                                                    <nz-tag nzColor="red" *ngIf="!identificable.disponible">No disponible</nz-tag>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <ng-template #pieTablaIdentificable>
+                                            <strong>Total de registros:</strong><span> {{ (mapIdentificablesMeta.get(material.id)?.totalRegisters ?? 0) | number }}</span>
+                                        </ng-template>
+                                    </nz-table>
+                                </tr>
+                            </ng-container>
                         </tbody>
                     </nz-table>
                 </div>

@@ -1,9 +1,14 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
+import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
 import { MaterialDTO } from '@dto/material.dto';
-import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
+import { MaterialesService } from '@servicios/materiales.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { NzStatus } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-tabla-detalles-movimientos',
@@ -13,52 +18,89 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 export class TablaDetallesMovimientosComponent {
 
   @Input()
-  tipoMovimiento: string | null = null;
+  set tipoMovimiento(tipo: string | null){
+    if(tipo != this._tipoMovimiento && this.idDetalleEnEdicion) this.limpiarNrosDeSerieDetalle();
+    this._tipoMovimiento = tipo;
+  }
+
+  get tipoMovimiento(): string | null {
+    return this._tipoMovimiento;
+  }
+  private _tipoMovimiento: string | null = null;
 
   @Input()
-  lstDetallesMovimientos: DetalleMovimientoMaterialDTO[] = [];
+  set lstDetallesMovimientos(detalles: DetalleMovimientoMaterialDTO[]){
+    this.mapLoadingIdentificables.clear();
+    this.mapMaterialIdentificable.clear();
+    this.mapStatusSelectSerial.clear();
+    this._lstDetallesMovimientos = detalles;
+  }
+
+  get lstDetallesMovimientos(): DetalleMovimientoMaterialDTO[]{
+    return this._lstDetallesMovimientos;
+  }
+  private _lstDetallesMovimientos: DetalleMovimientoMaterialDTO[] = [];
 
   @Output()
   lstDetallesMovimientosChange = new EventEmitter<DetalleMovimientoMaterialDTO[]>()
 
-  idDetalleEnEdicion: number | null = 0;
+  idDetalleEnEdicion: number | null = null;
   cantidadEnEdicion: number = 1;
+
+  idDetalleSerialEdicion: number | null = null;
+  nroSerieEnEdicion: string | undefined;
+
+  lstMaterialIdentificableActual: MaterialIdentificableDTO[] = [];
+  isOpenMenuMaterial: boolean = false;
+
+  mapMaterialIdentificable = new Map<number, MaterialIdentificableDTO[]>();
+  mapLoadingIdentificables = new Map<number, boolean>();
+  mapStatusSelectSerial = new Map<number, NzStatus>();
 
   constructor(
     private modal: NzModalService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private materialesSrv: MaterialesService,
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ){}
 
   agregarDetalleMovimiento(material: MaterialDTO){
     const detalleMovimiento: DetalleMovimientoMaterialDTO = {
-      id: Number(`${this.lstDetallesMovimientos.length}${material.id}`),
+      id: this.lstDetallesMovimientos.length,
       idmaterial: material.id,
       material: material.descripcion,
       descripcion: material.descripcion.toUpperCase(),
       cantidad: 1.0,
       unidadmedida: material.unidadmedida,
+      materialidentificable: material.identificable,
       eliminado: false
     };
+    this.mapLoadingIdentificables.set(detalleMovimiento.id ?? -1, false);
+    this.cargarMaterialesIdentificables(detalleMovimiento, true)
     this.lstDetallesMovimientos = this.lstDetallesMovimientos.concat([detalleMovimiento]);
+    this.mapStatusSelectSerial.set(detalleMovimiento.id ?? -1, '');
   }
 
-  iniciarEdicion(detalleMovimiento: DetalleMovimientoMaterialDTO | undefined, inputComp: NzInputNumberComponent){
-    if(detalleMovimiento == null || detalleMovimiento.id == null) return;
-    
-    this.idDetalleEnEdicion = detalleMovimiento.id;
-    this.cantidadEnEdicion = detalleMovimiento.cantidad;
-    setTimeout(() => {
-      inputComp.focus();
-    }, 200);
+  cargarTodosMaterialesIdentificables(disponible?: boolean){
+    this.lstDetallesMovimientos.forEach(d => this.cargarMaterialesIdentificables(d, disponible));
   }
 
-  finalizarEdicion(){
-    this.lstDetallesMovimientos = this.lstDetallesMovimientos.map(detalle => {
-      if(detalle.id == this.idDetalleEnEdicion) detalle.cantidad = this.cantidadEnEdicion;
-      return detalle;
-    });
-    this.idDetalleEnEdicion = null;
-    this.lstDetallesMovimientosChange.emit(this.lstDetallesMovimientos);
+  private cargarMaterialesIdentificables(detalle: DetalleMovimientoMaterialDTO, disponible?: boolean){
+    let params = new HttpParams();
+    if(disponible != null) params = params.append('disponible', disponible);
+    this.mapLoadingIdentificables.set(detalle.id ?? -1, true);
+    this.materialesSrv.getMaterialIdentificableByMaterial(detalle.idmaterial, params)
+    .pipe(finalize(() => this.mapLoadingIdentificables.set(detalle.id ?? -1, false)))
+    .subscribe({
+      next: (identificables) => {
+        this.mapMaterialIdentificable.set(detalle.id ?? -1, identificables)
+      },
+      error: (e) => {
+        this.mapMaterialIdentificable.set(detalle.id ?? -1, []);
+        console.error('Error al cargar materiales identificables', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   confirmarEliminacion(detalleMovimiento: DetalleMovimientoMaterialDTO){
@@ -68,13 +110,17 @@ export class TablaDetallesMovimientosComponent {
       nzOkText: 'Eliminar',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.eliminarDetalle(detalleMovimiento.id ?? -1)
+        this.eliminarDetalle(detalleMovimiento.id ?? -1);
       }
     })
   }
 
   eliminarDetalle(idDetalleMovimiento: number){
     this.lstDetallesMovimientos = this.lstDetallesMovimientos.filter(detalle => detalle.id != idDetalleMovimiento);
+    this.mapLoadingIdentificables.delete(idDetalleMovimiento);
+    this.mapMaterialIdentificable.delete(idDetalleMovimiento);
+    this.mapStatusSelectSerial.delete(idDetalleMovimiento);
+    this.existenSerialesDuplicados();
     this.lstDetallesMovimientosChange.emit(this.lstDetallesMovimientos);
   }
 
@@ -88,7 +134,73 @@ export class TablaDetallesMovimientosComponent {
       this.notif.create('error', '<strong>Error de validación</strong>', 'Las cantidades 0 (cero) solo se admiten en el tipo «Ajuste».');
       return false;
     }
-    return true;
+    return !this.existenSerialesDuplicados();
+  }
+
+  existenSerialesDuplicados(): boolean {
+    this.mapStatusSelectSerial.forEach((value, key, map) => map.set(key, ''));
+    let existDuplicates = false;
+    const lstDetallesIdentificables = this.lstDetallesMovimientos.filter(d => d.materialidentificable && d.nroseriematerial != null);
+    for(let detIdent of lstDetallesIdentificables){
+      const index = lstDetallesIdentificables
+        .filter(d => d.id != detIdent.id)
+        .findIndex(d => d.nroseriematerial == detIdent.nroseriematerial && d.idmaterial == detIdent.idmaterial);
+      if(index != -1){
+        this.mapStatusSelectSerial.set(detIdent.id ?? -1, 'error');
+        existDuplicates = true;
+      };
+    }
+    if(existDuplicates) this.notif.error('<strong>Duplicados</strong>', 'Existen números de serie duplicados.')
+    return existDuplicates;
+  }
+
+  onSerialSeleccionado(serial: string | null){
+    this.lstDetallesMovimientosChange.emit(this.lstDetallesMovimientos);
+  }
+
+  onChangeSelectSerial(detalle: DetalleMovimientoMaterialDTO){
+    this.existenSerialesDuplicados();
+    this.lstDetallesMovimientosChange.emit(this.lstDetallesMovimientos);
+  }
+
+  onDetalleMovimientosChange(){
+    this.lstDetallesMovimientosChange.emit(this.lstDetallesMovimientos);
+  }
+
+  limpiarNrosDeSerieDetalle(){
+    this.lstDetallesMovimientos.forEach(d => d.nroseriematerial = undefined)
+  }
+
+  recargarNrosDeSerie(){
+    this.lstDetallesMovimientos.forEach(d => this.cargarMaterialesIdentificables(d, true));
+  }
+
+  disabledInputCantidad(detalle: DetalleMovimientoMaterialDTO): boolean {
+    if(detalle.materialidentificable && this.tipoMovimiento == 'DE') return false;
+    else return detalle.materialidentificable ?? false;
+  }
+
+  minInputCantidad(detalle: DetalleMovimientoMaterialDTO): number {
+    if(this.tipoMovimiento == 'AJ' || this.tipoMovimiento == 'DE') return 0;
+    if(detalle.unidadmedida == 'MT') return 0.01;
+    return 1;
+  }
+  
+  maxInputCantidad(detalle: DetalleMovimientoMaterialDTO): number {
+    if(detalle.cantidadretirada != null) return detalle.cantidadretirada;
+    return 999999;
+  }
+
+  stepInputCantidad(detalle: DetalleMovimientoMaterialDTO): number {
+    if(detalle.unidadmedida == 'MT') return 0.01;
+    return 1;
+  }
+
+  limpiar(){
+    this.lstDetallesMovimientos = [];
+    this.mapLoadingIdentificables.clear();
+    this.mapMaterialIdentificable.clear();
+    this.mapStatusSelectSerial.clear();
   }
 
 }

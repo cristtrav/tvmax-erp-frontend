@@ -14,6 +14,8 @@ import { TablaDetallesMovimientosComponent } from './tabla-detalles-movimientos/
 import { BuscadorMaterialesComponent } from './buscador-materiales/buscador-materiales.component';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { ImpresionService } from '@servicios/impresion.service';
+import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
+import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
 
 @Component({
   selector: 'app-detalle-movimiento-material',
@@ -39,8 +41,9 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
   idDetalleEnEdicion: number | null = 0;
   cantidadEnEdicion: number = 1;
 
-  lstUsuarios: Usuario[] = [];
+  lstUsuarios: UsuarioDepositoDTO[] = [];
   guardandoMovimiento: boolean = false;
+  loadingUsuarios: boolean = false;
 
   disabledDate = (current: Date): boolean => {
     if(this.fechaRetiro == null) return false;
@@ -59,11 +62,11 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
     private aroute: ActivatedRoute,
     private router: Router,
     private notif: NzNotificationService,
-    private usuariosSrv: UsuariosService,
     private sesionSrv: SesionService,
     private movimientosSrv: MovimientosMaterialesService,
     private impresionSrv: ImpresionService,
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private usuariosDeposito: UsuariosDepositosService
   ){}
 
   ngAfterViewInit(): void {
@@ -72,16 +75,16 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
   }
   
   ngOnInit(): void {
+    this.formCabecera.controls.tipoMovimiento.valueChanges.subscribe(tipo => {
+      this.formCabecera.controls.idUsuarioEntrega.clearValidators();
+      if(tipo === 'SA') this.formCabecera.controls.idUsuarioEntrega.addValidators(Validators.required);
+      this.cargarUsuarios();
+    });
+
     const idmaterialStr = this.aroute.snapshot.paramMap.get('idmovimientomaterial');
     this.idMovimientoMaterial = !Number.isNaN(Number.parseInt(`${idmaterialStr}`)) ? `${idmaterialStr}` : 'nuevo';
     this.idMovimientoReferencia = this.aroute.snapshot.queryParamMap.get('idmovimientoreferencia');
     if(this.idMovimientoReferencia != null) this.formCabecera.controls.tipoMovimiento.setValue('DE');
-    
-    this.formCabecera.controls.tipoMovimiento.valueChanges.subscribe(tipo => {
-      this.formCabecera.controls.idUsuarioEntrega.clearValidators();
-      if(tipo === 'SA') this.formCabecera.controls.idUsuarioEntrega.addValidators(Validators.required);
-    })
-    this.cargarUsuarios();
   }  
   
   cargarDatos(idmovimiento: number){
@@ -119,10 +122,13 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
         cantidadretirada: detalle.cantidadretirada != null ? Number(detalle.cantidadretirada) : undefined,
         unidadmedida: detalle.unidadmedida,
         descripcion: detalle.descripcion,
+        nroseriematerial: detalle.nroseriematerial,
+        materialidentificable: detalle.materialidentificable,
         iddetallemovimientoreferencia: detalle.iddetallemovimientoreferencia,
         eliminado: detalle.eliminado
       }
-    })
+    });
+    this.tablaDetallesMovimientosComp.cargarTodosMaterialesIdentificables();
   }
 
   private cargarDatosDevolucion(movimiento: MovimientoMaterialDTO, detalles: DetalleMovimientoMaterialDTO[]){
@@ -138,18 +144,26 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
         cantidad: Number(detalle.cantidad),
         cantidadretirada: Number(detalle.cantidad),
         unidadmedida: detalle.unidadmedida,
+        materialidentificable: detalle.materialidentificable,
+        nroseriematerial: detalle.nroseriematerial,
         descripcion: detalle.descripcion,
         iddetallemovimientoreferencia: detalle.id,
         eliminado: false,
       }
-    })
+    });
+    this.tablaDetallesMovimientosComp.cargarTodosMaterialesIdentificables();
   }
 
   cargarUsuarios(){
-    const httpParams = new HttpParams()
-      .append('eliminado', 'false')
-      .append('idrol', '6');
-    this.usuariosSrv.get(httpParams).subscribe({
+    let httpParams = new HttpParams().append('eliminado', 'false');
+    const tm = this.formCabecera.controls.tipoMovimiento.value
+    if(tm == 'EN') httpParams = httpParams.append('rol', 'PR');
+    else httpParams = httpParams.append('rol', 'RE');
+    
+    this.loadingUsuarios = true;
+    this.usuariosDeposito.get(httpParams)
+    .pipe(finalize(() => this.loadingUsuarios = false))
+    .subscribe({
       next: (usuarios) => {
         this.lstUsuarios = usuarios;
       },
@@ -180,7 +194,8 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
         this.notif.create('success', '<strong>Éxito</strong>', 'Movimiento de materiales registrado.');
         this.idMovimientoMaterial = `${idmovimiento}`;
         this.router.navigate([idmovimiento], {relativeTo: this.aroute.parent});
-        this.buscadorMaterialesComp.reset();
+        this.buscadorMaterialesComp.reset();        
+        this.cargarDatos(Number(this.idMovimientoMaterial));
       },
       error: (e) => {
         console.error('Error al registrar movimiento de material', e);
@@ -194,6 +209,7 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
       next: () => {
         this.notif.create('success', '<strong>Éxito</strong>', 'Editado correctamente.');
         this.buscadorMaterialesComp.reset();
+        this.cargarDatos(Number(this.idMovimientoMaterial));
       },
       error: (e) => {
         console.log('Error al editar movimiento de material', e);
@@ -208,7 +224,7 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
       fecha: this.formCabecera.controls.fecha.value?.toISOString() ?? new Date().toISOString(),
       tipomovimiento: this.formCabecera.controls.tipoMovimiento.value ?? '-',
       idusuarioentrega: this.formCabecera.controls.idUsuarioEntrega.value ?? -1,
-      idusuarioresponsable: this.sesionSrv.idusuario ?? -1,
+      idusuarioresponsable: this.sesionSrv.idusuario,
       observacion: this.formCabecera.controls.observacion.value ?? undefined,
       detalles: this.tablaDetallesMovimientosComp.lstDetallesMovimientos,
       devuelto: false,

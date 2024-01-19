@@ -156,12 +156,17 @@
                                         <thead>
                                             <tr>
                                                 <th>Descripción</th>
+                                                <th>Nro. Serie</th>
                                                 <th>Cantidad</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let detalle of tablaDetalles.data">
                                                 <td>{{ detalle.material }}</td>
+                                                <td>
+                                                    <span *ngIf="detalle.nroseriematerial">{{ detalle.nroseriematerial }}</span>
+                                                    <span *ngIf="!detalle.nroseriematerial" nz-typography nzType="secondary">(ninguno)</span>
+                                                </td>
                                                 <td>{{ detalle.cantidad | number }}</td>
                                             </tr>
                                         </tbody>

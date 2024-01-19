@@ -5,6 +5,7 @@
     <thead>
         <tr>
             <th>Material</th>
+            <th>Nro. Serie</th>
             <th *ngIf="tipoMovimiento == 'DE'">Cant. retirada</th>
             <th>{{ tipoMovimiento == 'DE' ? 'Cant. devuelta' : 'Cantidad' }}</th>
             <th>Acciones</th>
@@ -13,30 +14,57 @@
     <tbody>
         <tr *ngFor="let detalle of tablaDetalle.data" class="editable-row">
             <td>{{ detalle.descripcion ?? detalle.material }}</td>
+            <td>
+                <span *ngIf="detalle.materialidentificable && tipoMovimiento == 'DE'">{{ detalle.nroseriematerial }}</span>
+                
+                <span nz-typography nzType="secondary" *ngIf="!detalle.materialidentificable">(ninguno)</span>
+                
+                <nz-tag
+                    *ngIf="tipoMovimiento == null && detalle.materialidentificable"
+                    nzColor="gold">
+                    <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+                    Selecc. tipo de mov.
+                </nz-tag>
+                    <input
+                        *ngIf="detalle.materialidentificable && (tipoMovimiento == 'EN' || tipoMovimiento == 'AJ')"
+                        nz-input
+                        placeholder="Ingresar..."
+                        [(ngModel)]="detalle.nroseriematerial"
+                        [nzStatus]="mapStatusSelectSerial.get(detalle.id ?? -1) ?? ''"
+                        (blur)="existenSerialesDuplicados()">
+                    <nz-select
+                        *ngIf="detalle.materialidentificable && tipoMovimiento == 'SA'"
+                        nzPlaceHolder="Seleccionar..."
+                        [(ngModel)]="detalle.nroseriematerial"
+                        [nzStatus]="mapStatusSelectSerial.get(detalle.id ?? -1) ?? ''"
+                        (ngModelChange)="onChangeSelectSerial(detalle)"
+                        [nzLoading]="mapLoadingIdentificables.get(detalle.id ?? -1)"
+                        nzAllowClear
+                        nzShowSearch
+                        style="min-width: 100px; width: 100%;">
+                        <nz-option
+                            *ngFor="let matIdent of mapMaterialIdentificable.get(detalle.id ?? -1)"
+                            [nzLabel]="matIdent.serial"
+                            [nzValue]="matIdent.serial">
+                        </nz-option>
+                    </nz-select>
+            </td>
             <td *ngIf="tipoMovimiento == 'DE'">
                 {{ detalle.cantidadretirada | number }}
                 <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
                 <span *ngIf="detalle.unidadmedida == 'UD'">uds.</span>
             </td>
             <td>
-                <div [hidden]="idDetalleEnEdicion == detalle.id" (click)="iniciarEdicion(detalle, inputCantidad)" class="editable-cell">
-                    {{ detalle.cantidad | number }}
-                    <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
-                    <span *ngIf="detalle.unidadmedida == 'UD'">uds.</span>
-                </div>
-                <nz-input-number-group [hidden]="idDetalleEnEdicion != detalle.id" [nzAddOnAfter]="addonAfterUnidadMedida">
+                <nz-input-number-group [nzAddOnAfter]="addonAfterUnidadMedida" >
                     <nz-input-number
-                        #inputCantidad    
-                        [nzMin]="
-                            tipoMovimiento === 'AJ' || tipoMovimiento == 'DE'
-                            ? 0
-                            : detalle.unidadmedida === 'MT' ? 0.01 : 1
-                        "
-                        [nzStep]="detalle.unidadmedida == 'MT' ? 0.01 : 1"
-                        [nzMax]="detalle.cantidadretirada != null ? detalle.cantidadretirada : 9999999"
-                        [(ngModel)]="cantidadEnEdicion"
-                        (nzBlur)="finalizarEdicion()"
-                        style="width: 100px;">
+                        #inputCantidad
+                        [nzDisabled]="disabledInputCantidad(detalle)"
+                        [nzMin]="minInputCantidad(detalle)"
+                        [nzStep]="stepInputCantidad(detalle)"
+                        [nzMax]="maxInputCantidad(detalle)"
+                        [(ngModel)]="detalle.cantidad"
+                        (ngModelChange)="onDetalleMovimientosChange()"
+                        style="max-width: 80px;">
                     </nz-input-number>
                     <ng-template #addonAfterUnidadMedida>
                         <span *ngIf="detalle.unidadmedida == 'MT'">mts.</span>
@@ -44,9 +72,9 @@
                     </ng-template>
                 </nz-input-number-group>
             </td>
-            <td>
-                <button nz-button nzType="primary" nzDanger [disabled]="tipoMovimiento == 'DE'">
-                    <i nz-icon nzType="delete" nzTheme="outline" (click)="confirmarEliminacion(detalle)"></i>
+            <td nzAlign="center">
+                <button nz-button nzType="primary" nzDanger [disabled]="tipoMovimiento == 'DE'" (click)="confirmarEliminacion(detalle)">
+                    <i nz-icon nzType="delete" nzTheme="outline"></i>
                 </button>
             </td>
         </tr>

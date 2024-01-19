@@ -77,16 +77,15 @@
                                 [nzRequired]="formCabecera.controls.tipoMovimiento.value == 'SA'">
                                 <span *ngIf="formCabecera.controls.tipoMovimiento.value == null">Usuario</span>
                                 <span *ngIf="formCabecera.controls.tipoMovimiento.value == 'SA'">Entregado a</span>
-                                <span *ngIf="formCabecera.controls.tipoMovimiento.value == 'DE' ||
-                                    formCabecera.controls.tipoMovimiento.value == 'EN'">
-                                Entregado por
-                            </span>
+                                <span *ngIf="formCabecera.controls.tipoMovimiento.value == 'DE'">Entregado por</span>
+                                <span *ngIf="formCabecera.controls.tipoMovimiento.value == 'EN'">Proveedor</span>
                             </nz-form-label>
                             <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                 nzErrorTip="Seleccione el responsable.">
                                 <nz-select
                                     nzPlaceHolder="Seleccionar..."
-                                    formControlName="idUsuarioEntrega"                                    
+                                    formControlName="idUsuarioEntrega"
+                                    nzShowSearch
                                     nzAllowClear>
                                     <nz-option
                                         *ngFor="let usuario of lstUsuarios"

@@ -135,19 +135,24 @@ export class AppSettings {
       icon: "inbox",
       children: [
         {
-          id: 340,
+          id: 600,
           name: 'Tipos de materiales',
           routerLink: '/app/tiposmateriales'
         },
         {
-          id: 360,
+          id: 680,
           name: 'Materiales',
           routerLink: '/app/materiales'
         },
         {
-          id: 380,
+          id: 640,
           name: 'Movimientos',
           routerLink: '/app/movimientosmateriales'
+        },
+        {
+          id: 720,
+          name: 'Usuarios',
+          routerLink: '/app/usuariosdepositos'
         }
       ]
     }

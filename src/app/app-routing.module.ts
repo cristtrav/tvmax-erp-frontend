@@ -28,7 +28,8 @@ const routes: Routes = [
       { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
       { path: 'tiposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)},
       { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)},
-      { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)}
+      { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)},
+      { path: 'usuariosdepositos', loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)}
     ]
   },
 ];

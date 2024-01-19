@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
 import { MaterialDTO } from '@dto/material.dto';
 import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
@@ -42,5 +43,13 @@ export class MaterialesService {
 
   getLastId(): Observable<number>{
     return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getMaterialIdentificableByMaterial(idmaterial: number, params: HttpParams): Observable<MaterialIdentificableDTO[]>{
+    return this.http.get<MaterialIdentificableDTO[]>(`${this.url}/${idmaterial}/identificables`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+  
+  getTotalMaterialesIdentificablesByMaterial(idmaterial: number, params: HttpParams): Observable<number>{
+    return this.http.get<number>(`${this.url}/${idmaterial}/identificables/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 }

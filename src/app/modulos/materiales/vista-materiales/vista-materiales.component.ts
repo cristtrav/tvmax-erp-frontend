@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
 import { MaterialDTO } from '@dto/material.dto';
 import { ImpresionService } from '@servicios/impresion.service';
 import { MaterialesService } from '@servicios/materiales.service';
@@ -33,6 +34,8 @@ export class VistaMaterialesComponent implements OnInit {
   timerBusqueda: any;
 
   loadingImpresion: boolean = false;
+  expandSet = new Set<number>();
+  mapIdentificablesMeta = new Map<number, IdentificablesMetadataInterface>();
 
   constructor(
     private materialesSrv: MaterialesService,
@@ -43,11 +46,17 @@ export class VistaMaterialesComponent implements OnInit {
     private viewContainerRef: ViewContainerRef
   ){}
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void { }
+
+  onExpandChange(id: number, checked: boolean){
+    if(checked){
+      this.expandSet.add(id);
+      this.cargarIdentificables(id, this.mapIdentificablesMeta.get(id)?.mostrarNoDisponibles ?? false);
+    } else this.expandSet.delete(id);
   }
 
   cargarDatos(){
+    this.mapIdentificablesMeta.clear();
     this.loadingMateriales = true;
     forkJoin({
       materiales: this.materialesSrv.get(this.getHttpParams()),
@@ -58,6 +67,14 @@ export class VistaMaterialesComponent implements OnInit {
         next: (resp) => {
           this.lstMateriales = resp.materiales;
           this.totalRegisters = resp.total;
+          this.lstMateriales.forEach(m => this.mapIdentificablesMeta.set(m.id, {
+            lstMaterialesIdentificables: [],
+            loading: false,
+            pageIndex: 1,
+            pageSize: 10,
+            totalRegisters: 0,
+            mostrarNoDisponibles: false
+          }));
         },
         error: (e) => {
           console.error('Error al consultar materiales', e);
@@ -74,6 +91,46 @@ export class VistaMaterialesComponent implements OnInit {
     if(this.sortStr) params = params.append('sort', this.sortStr);
     if(this.textoBusqueda != '') params = params.append('search', this.textoBusqueda);
     return params;
+  }
+
+  cargarIdentificables(idmaterial: number, mostrarNoDisponibles: boolean){
+    const identMeta = this.mapIdentificablesMeta.get(idmaterial);
+    if(identMeta == null) return;
+
+    let params = new HttpParams()
+    .append('limit', identMeta.pageSize)
+    .append('offset', (identMeta.pageIndex - 1) * identMeta.pageSize);
+
+    if(!mostrarNoDisponibles) params = params.append('disponible', true);
+    identMeta.mostrarNoDisponibles = mostrarNoDisponibles;
+    
+    if(identMeta.sortStr) params = params.append('sort', identMeta.sortStr);
+    identMeta.loading = true;
+    forkJoin({
+      identificables: this.materialesSrv.getMaterialIdentificableByMaterial(idmaterial, params),
+      total: this.materialesSrv.getTotalMaterialesIdentificablesByMaterial(idmaterial, params)
+    })
+    .pipe(finalize(() => identMeta.loading = false))
+    .subscribe({
+      next: (resp) => {
+        identMeta.totalRegisters = resp.total;
+        identMeta.lstMaterialesIdentificables = resp.identificables;
+      },
+      error: (e) => {
+        console.error('Error al cargar datos de material identificable', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
+  }  
+
+  onTableIdentificablesQueryChange(idmaterial: number, tableParams: NzTableQueryParams){
+    const identificableMeta = this.mapIdentificablesMeta.get(idmaterial);
+    if(identificableMeta == null) return;
+
+    identificableMeta.pageSize = tableParams.pageSize;
+    identificableMeta.pageIndex = tableParams.pageIndex;    
+    identificableMeta.sortStr = Extra.buildSortString(tableParams.sort) ?? undefined;
+    this.cargarIdentificables(idmaterial, identificableMeta.mostrarNoDisponibles);
   }
 
   onTableQueryChange(tableParams: NzTableQueryParams){
@@ -132,4 +189,14 @@ export class VistaMaterialesComponent implements OnInit {
       .subscribe(loading => this.loadingImpresion = loading);
   }
 
+}
+
+interface IdentificablesMetadataInterface{
+  lstMaterialesIdentificables: MaterialIdentificableDTO[];
+  pageIndex: number;
+  pageSize: number;
+  totalRegisters: number;
+  loading: boolean;
+  sortStr?: string;
+  mostrarNoDisponibles: boolean;
 }
