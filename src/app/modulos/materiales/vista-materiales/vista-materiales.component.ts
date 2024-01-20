@@ -11,6 +11,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
+import { FormFiltroMaterialesComponent } from '../form-filtro-materiales/form-filtro-materiales.component';
 
 @Component({
   selector: 'app-vista-materiales',
@@ -37,6 +38,10 @@ export class VistaMaterialesComponent implements OnInit {
   expandSet = new Set<number>();
   mapIdentificablesMeta = new Map<number, IdentificablesMetadataInterface>();
 
+  drawerFiltrosVisible: boolean = false;
+  cantFiltros: number = 0;
+  paramFiltros: IParametroFiltro = {};
+
   constructor(
     private materialesSrv: MaterialesService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -47,6 +52,14 @@ export class VistaMaterialesComponent implements OnInit {
   ){}
 
   ngOnInit(): void { }
+
+  openDrawerFiltros(){
+    this.drawerFiltrosVisible = true;
+  }
+
+  closeDrawerFiltros(){
+    this.drawerFiltrosVisible = false;
+  }
 
   onExpandChange(id: number, checked: boolean){
     if(checked){
@@ -83,11 +96,18 @@ export class VistaMaterialesComponent implements OnInit {
       });
   }
 
+  filtrar(paramsFiltros: IParametroFiltro){
+    this.paramFiltros = paramsFiltros;
+    this.cargarDatos();
+  }
+
   getHttpParams(): HttpParams{
     let params = new HttpParams()
     .append('eliminado', 'false')
     .append('limit', this.pageSize)
-    .append('offset', (this.pageIndex - 1) * this.pageSize);
+    .append('offset', (this.pageIndex - 1) * this.pageSize)
+    .appendAll(this.paramFiltros);
+    
     if(this.sortStr) params = params.append('sort', this.sortStr);
     if(this.textoBusqueda != '') params = params.append('search', this.textoBusqueda);
     return params;

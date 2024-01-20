@@ -19,12 +19,16 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { FormFiltroMaterialesComponent } from './form-filtro-materiales/form-filtro-materiales.component';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 
 @NgModule({
   declarations: [
     VistaMaterialesComponent,
-    DetalleMaterialComponent
+    DetalleMaterialComponent,
+    FormFiltroMaterialesComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +48,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzToolTipModule,
     FormsModule,
     NzCheckboxModule,
-    NzSpaceModule
+    NzSpaceModule,
+    NzDrawerModule,
+    NzBadgeModule
   ]
 })
 export class MaterialesModule { }

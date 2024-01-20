@@ -37,20 +37,34 @@
                             </div>
                         </div>
                         <div nz-col>
-                            <nz-input-group [nzPrefix]="prefixIconSearch" [nzSuffix]="suffixIconClearSearch">
-                                <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">   
-                            </nz-input-group>
-                            <ng-template #prefixIconSearch>
-                                <i nz-icon nzType="search" nzTheme="outline"></i>
-                            </ng-template>
-                            <ng-template #suffixIconClearSearch>
-                                <i *ngIf="textoBusqueda != ''"
-                                    nz-icon nzType="close-circle"
-                                    nzTheme="fill"
-                                    class="ant-input-clear-icon"
-                                    (click)="limpiarBusqueda()">
-                                </i>
-                            </ng-template>
+                            <div nz-row [nzGutter]="[8,8]">
+                                <div nz-col>
+                                    <nz-input-group [nzPrefixIcon]="'search'" [nzSuffix]="suffixIconClearSearch">
+                                        <input nz-input [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">   
+                                        <ng-template #suffixIconClearSearch>
+                                            <i *ngIf="textoBusqueda != ''"
+                                                nz-icon nzType="close-circle"
+                                                nzTheme="fill"
+                                                class="ant-input-clear-icon"
+                                                (click)="limpiarBusqueda()">
+                                            </i>
+                                        </ng-template>
+                                    </nz-input-group>
+                                </div>
+                                <div nz-col>
+                                    <nz-badge [nzCount]="cantFiltros">
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            nz-tooltip
+                                            nzTooltipTitle="Filtros"
+                                            (click)="openDrawerFiltros()">
+                                            <i nz-icon nzType="filter" nzTheme="outline"></i>
+                                        </button>
+                                    </nz-badge>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -159,4 +173,15 @@
         </div>
     </div>
 </div>
+<nz-drawer
+    [nzVisible]="drawerFiltrosVisible"
+    (nzOnClose)="closeDrawerFiltros()"
+    [nzContent]="filtrosMateriales"
+    [nzTitle]="'Filtros'">
+</nz-drawer>
+<ng-template #filtrosMateriales>
+    <app-form-filtro-materiales (paramsFiltrosChange)="filtrar($event)" (cantFiltrosChange)="cantFiltros = $event">
+    </app-form-filtro-materiales>
+</ng-template>
+
 <iframe #iframe style="display: none; visibility: hidden;"></iframe>
