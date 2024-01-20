@@ -11,7 +11,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
-import { FormFiltroMaterialesComponent } from '../form-filtro-materiales/form-filtro-materiales.component';
 
 @Component({
   selector: 'app-vista-materiales',
@@ -196,16 +195,11 @@ export class VistaMaterialesComponent implements OnInit {
   }
 
   imprimirReporte(){
-    const httpParams = this.getHttpParams();
-    const paramsFiltros: IParametroFiltro = {};
-    httpParams.keys().forEach(key => {
-      const param = httpParams.get(key);
-      if(param != null) paramsFiltros[key] = param;
-    })
-    delete paramsFiltros.sort;
-    delete paramsFiltros.offset;
-    delete paramsFiltros.limit;
-    this.impresionSrv.imprimirReporteMateriales(this.iframeComp, this.viewContainerRef, paramsFiltros)
+    const paramsFiltros: IParametroFiltro = {...this.paramFiltros};
+    if(this.textoBusqueda) paramsFiltros['search'] = this.textoBusqueda;
+    this.impresionSrv.imprimirReporteMateriales(
+      this.iframeComp,
+      this.viewContainerRef, paramsFiltros)
       .subscribe(loading => this.loadingImpresion = loading);
   }
 
