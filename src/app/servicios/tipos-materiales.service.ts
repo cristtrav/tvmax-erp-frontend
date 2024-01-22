@@ -25,7 +25,7 @@ export class TiposMaterialesService {
   }
 
   getLastId(): Observable<number>{
-    return this.http.get<number>(`${this.url}/ultimoid`);
+    return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
   post(tipoMaterial: TipoMaterialDTO): Observable<any>{
