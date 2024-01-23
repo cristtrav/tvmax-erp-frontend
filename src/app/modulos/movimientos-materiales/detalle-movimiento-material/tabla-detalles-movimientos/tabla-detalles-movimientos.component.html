@@ -25,13 +25,29 @@
                     <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
                     Selecc. tipo de mov.
                 </nz-tag>
-                    <input
-                        *ngIf="detalle.materialidentificable && (tipoMovimiento == 'EN' || tipoMovimiento == 'AJ')"
+                    <nz-input-group 
+                        *ngIf="detalle.materialidentificable && (tipoMovimiento == 'EN' || tipoMovimiento == 'AJ')"    
+                        [nzAddOnAfter]="addonGenerarSerial"
+                        nzSearch>
+                        <input
                         nz-input
                         placeholder="Ingresar..."
                         [(ngModel)]="detalle.nroseriematerial"
                         [nzStatus]="mapStatusSelectSerial.get(detalle.id ?? -1) ?? ''"
                         (blur)="existenSerialesDuplicados()">
+                        <ng-template #addonGenerarSerial>
+                            <button
+                                nz-button
+                                nzType="primary"
+                                nz-tooltip
+                                nzTooltipTitle="Generar número de serie."
+                                nzSearch
+                                (click)="generarSerial(detalle)">
+                                <i nz-icon nzType="sync" nzTheme="outline"></i>
+                            </button>
+                        </ng-template>
+                    </nz-input-group>
+                    
                     <nz-select
                         *ngIf="detalle.materialidentificable && tipoMovimiento == 'SA'"
                         nzPlaceHolder="Seleccionar..."

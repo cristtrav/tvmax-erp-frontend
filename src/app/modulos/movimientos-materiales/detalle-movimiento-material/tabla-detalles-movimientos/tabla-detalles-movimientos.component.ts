@@ -203,4 +203,31 @@ export class TablaDetallesMovimientosComponent {
     this.mapStatusSelectSerial.clear();
   }
 
+  generarSerial(detalleMovimiento: DetalleMovimientoMaterialDTO){
+    this.materialesSrv.getLastGeneratedSerial(detalleMovimiento.idmaterial)
+    .subscribe({
+      next: (serial) => {
+        detalleMovimiento.nroseriematerial = this.generarSiguienteSerial(detalleMovimiento.idmaterial, serial);
+      },
+      error: (e) => {
+        console.error('Error al cargar nro de serie material', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+  }
+
+  private generarSiguienteSerial(idmaterial: number, serialPrevio: string): string{
+    let nroSeriePrevio: number = 0;
+    if(serialPrevio) nroSeriePrevio = Number(serialPrevio.substring(8));
+    const detallesSerialGenerado =
+      this.lstDetallesMovimientos.filter(dm =>
+        dm.nroseriematerial?.substring(0,4) == 'TVMX' &&
+        dm.idmaterial == idmaterial
+      );
+    for(let detalle of detallesSerialGenerado){
+      const nro = Number(detalle.nroseriematerial?.substring(8));
+      if(Number.isInteger(nro) && nro > nroSeriePrevio) nroSeriePrevio = nro;
+    }
+    return `TVMX${idmaterial.toString().padStart(4, '0')}${(nroSeriePrevio + 1).toString().padStart(6, '0')}`;
+  }
 }
