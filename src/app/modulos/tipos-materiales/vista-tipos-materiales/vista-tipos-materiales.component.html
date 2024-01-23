@@ -65,6 +65,7 @@
                                                 nzTooltipTitle="Editar tipo de material"
                                                 nz-button
                                                 nzType="primary"
+                                                [disabled]="tipoMaterial.sololectura"
                                                 [routerLink]="[tipoMaterial.id]">
                                                 <i nz-icon nzType="edit" nzTheme="outline"></i>
                                             </button>
@@ -75,6 +76,7 @@
                                                 nzTooltipTitle="Eliminar tipo de material"
                                                 nz-button
                                                 nzType="primary"
+                                                [disabled]="tipoMaterial.sololectura"
                                                 nzDanger
                                                 (click)="confirmarEliminacion(tipoMaterial)">
                                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
