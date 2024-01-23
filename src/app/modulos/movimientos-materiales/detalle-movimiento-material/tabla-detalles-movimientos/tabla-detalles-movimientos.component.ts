@@ -207,7 +207,7 @@ export class TablaDetallesMovimientosComponent {
     this.materialesSrv.getLastGeneratedSerial(detalleMovimiento.idmaterial)
     .subscribe({
       next: (serial) => {
-        detalleMovimiento.nroseriematerial = this.generarSiguienteSerial(detalleMovimiento.idmaterial, serial);
+        detalleMovimiento.nroseriematerial = this.generarSiguienteSerial(detalleMovimiento, serial);
       },
       error: (e) => {
         console.error('Error al cargar nro de serie material', e);
@@ -216,18 +216,19 @@ export class TablaDetallesMovimientosComponent {
     });
   }
 
-  private generarSiguienteSerial(idmaterial: number, serialPrevio: string): string{
+  private generarSiguienteSerial(detalle: DetalleMovimientoMaterialDTO, serialPrevio: string): string{
     let nroSeriePrevio: number = 0;
     if(serialPrevio) nroSeriePrevio = Number(serialPrevio.substring(8));
     const detallesSerialGenerado =
       this.lstDetallesMovimientos.filter(dm =>
         dm.nroseriematerial?.substring(0,4) == 'TVMX' &&
-        dm.idmaterial == idmaterial
+        dm.idmaterial == detalle.idmaterial &&
+        dm.id != detalle.id
       );
     for(let detalle of detallesSerialGenerado){
       const nro = Number(detalle.nroseriematerial?.substring(8));
       if(Number.isInteger(nro) && nro > nroSeriePrevio) nroSeriePrevio = nro;
     }
-    return `TVMX${idmaterial.toString().padStart(4, '0')}${(nroSeriePrevio + 1).toString().padStart(6, '0')}`;
+    return `TVMX${detalle.idmaterial.toString().padStart(4, '0')}${(nroSeriePrevio + 1).toString().padStart(6, '0')}`;
   }
 }
