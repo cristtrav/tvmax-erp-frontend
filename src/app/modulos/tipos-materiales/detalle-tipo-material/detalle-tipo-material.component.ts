@@ -109,7 +109,7 @@ export class DetalleTipoMaterialComponent implements OnInit {
     )
     .subscribe({
       next: (lastId) => {
-        this.form.controls.id.setValue(lastId > 0 ? lastId + 1 : 10);
+        this.form.controls.id.setValue(lastId > 9 ? lastId + 1 : 10);
       },
       error: (e) => {
         console.error('Error al consultar ultimo id de tipo de materiales', e);

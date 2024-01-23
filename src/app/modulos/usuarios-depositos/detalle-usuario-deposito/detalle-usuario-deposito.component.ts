@@ -48,8 +48,7 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
     .pipe(finalize(() => this.loadingId = false))
     .subscribe({
       next: (ultimoId) => {
-        if(ultimoId == 0) this.form.controls.id.setValue(10);
-        else this.form.controls.id.setValue(Number(ultimoId) + 1);
+        this.form.controls.id.setValue(ultimoId > 9 ? ultimoId + 1 : 10);
       },
       error: (e) => {
         console.error('Error al cargar ultimo ID', e);
