@@ -31,7 +31,47 @@
             </div>
             <div nz-col nzSpan="10">
                 <div class="module-content">
-                    <form nz-form [formGroup]="formCabecera">
+                    <form nz-form [formGroup]="formCabecera">                        
+                        <nz-form-item>
+                            <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired>
+                                Tipo
+                            </nz-form-label>
+                            <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
+                                nzErrorTip="Seleccione el tipo de movimiento.">
+                                <nz-select
+                                    formControlName="tipoMovimiento"
+                                    nzPlaceHolder="Seleccionar..."
+                                    [nzCustomTemplate]="tipoMovimientoTemplate"
+                                    [nzAllowClear]="idMovimientoMaterial == 'nuevo' && formCabecera.controls.tipoMovimiento.value != 'DE'">
+                                    <nz-option [nzValue]="'SA'" [nzLabel]="'Salida'" *ngIf="opcionSAHabilitada()" nzCustomContent>
+                                        <i nz-icon nzType="upload" nzTheme="outline"></i>
+                                        Salida
+                                    </nz-option>
+                                    <nz-option [nzValue]="'EN'" [nzLabel]="'Entrada'" *ngIf="opcionENHabilitada()" nzCustomContent>
+                                        <i nz-icon nzType="download" nzTheme="outline"></i>
+                                        Entrada
+                                    </nz-option>
+                                    <nz-option [nzValue]="'AJ'" [nzLabel]="'Ajuste'" *ngIf="opcionAJHabilitada()" nzCustomContent>
+                                        <i nz-icon nzType="control" nzTheme="outline"></i>
+                                        Ajuste
+                                    </nz-option>
+                                    <nz-option [nzValue]="'DE'" [nzLabel]="'Devolución'" *ngIf="formCabecera.controls.tipoMovimiento.value == 'DE'" nzCustomContent>
+                                        <i nz-icon nzType="import" nzTheme="outline"></i>
+                                        Devolución
+                                    </nz-option>
+                                </nz-select>
+                                <ng-template #tipoMovimientoTemplate let-selected>
+                                    <i *ngIf="selected.nzValue == 'SA'" nz-icon nzType="upload" nzTheme="outline"></i>
+                                    <i *ngIf="selected.nzValue == 'EN'" nz-icon nzType="download" nzTheme="outline"></i>
+                                    <i *ngIf="selected.nzValue == 'AJ'" nz-icon nzType="control" nzTheme="outline"></i>
+                                    <i *ngIf="selected.nzValue == 'DE'" nz-icon nzType="import" nzTheme="outline"></i>
+                                    <span *ngIf="selected.nzValue == 'SA'"> Salida</span>
+                                    <span *ngIf="selected.nzValue == 'EN'"> Entrada</span>
+                                    <span *ngIf="selected.nzValue == 'AJ'"> Ajuste</span>
+                                    <span *ngIf="selected.nzValue == 'DE'"> Devolución</span>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired>
                                 <span>Fecha</span>
@@ -44,32 +84,6 @@
                                     formControlName="fecha"
                                     [nzDisabledDate]="disabledDate">
                                 </nz-date-picker>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6" nzRequired>
-                                Tipo
-                            </nz-form-label>
-                            <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                nzErrorTip="Seleccione el tipo de movimiento.">
-                                <nz-radio-group formControlName="tipoMovimiento">
-                                    <label *ngIf="opcionSAHabilitada()" nz-radio-button nzValue="SA">
-                                        <i nz-icon nzType="upload" nzTheme="outline"></i>
-                                        Salida
-                                    </label>
-                                    <label *ngIf="opcionENHabilitada()" nz-radio-button nzValue="EN">
-                                        <i nz-icon nzType="download" nzTheme="outline"></i>
-                                        Entrada
-                                    </label>
-                                    <label *ngIf="opcionAJHabilitada()" nz-radio-button nzValue="AJ">
-                                        <i nz-icon nzType="control" nzTheme="outline"></i>
-                                        Ajuste
-                                    </label>
-                                    <label *ngIf="formCabecera.controls.tipoMovimiento.value == 'DE'" nz-radio-button nzValue="DE">
-                                        <i nz-icon nzType="import" nzTheme="outline"></i>
-                                        Devolución
-                                    </label>
-                                </nz-radio-group>
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item *ngIf="setMostrarUsuarioTipo.has(formCabecera.controls.tipoMovimiento.value ?? '')">
