@@ -1,0 +1,57 @@
+<div>
+    <app-cabecera-reporte titulo="Movimiento de Materiales"></app-cabecera-reporte>
+</div>
+
+<div style="margin-top: 15px;">
+    <div>Detalles</div>
+    <app-filtros-reporte [lstFiltrosReporte]="lstFiltrosReporte"></app-filtros-reporte>
+</div>
+
+<div style="margin-top: 15px;">
+    <div>Registros</div>
+    <table class="tabla-reporte filas-resaltadas">
+        <thead>
+            <tr>
+                <th style="text-align: left;">Descripción</th>
+                <th style="text-align: left;">Nro. serie</th>
+                <th style="text-align: left;">
+                    <span *ngIf="movimiento?.tipomovimiento == 'DE'">Cant. retirada</span>
+                    <span *ngIf="movimiento?.tipomovimiento == 'DE'">Cant. devuelta</span>
+                    <span *ngIf="movimiento?.tipomovimiento != 'DE'">Cantidad</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let detalle of detallesMovimientos">
+                <td>{{ detalle.descripcion}}</td>
+                <td>
+                    <span *ngIf="!detalle.nroseriematerial">(ninguno)</span>
+                    <span *ngIf="detalle.nroseriematerial">{{ detalle.nroseriematerial }}</span>
+                </td>
+                <td *ngIf="movimiento?.tipomovimiento == 'DE'" style="text-align: right;">
+                    {{ detalle.cantidadretirada | number }}
+                    <span *ngIf="detalle.unidadmedida == 'MT'">metros</span>
+                    <span *ngIf="detalle.unidadmedida == 'UD'">unidades</span>
+                </td>
+                <td>
+                    {{ detalle.cantidad | number }}
+                    <span *ngIf="detalle.unidadmedida == 'MT'">metros</span>
+                    <span *ngIf="detalle.unidadmedida == 'UD'">unidades</span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td *ngIf="movimiento?.tipomovimiento == 'DE'" colspan="3">
+                    <ng-container [ngTemplateOutlet]="pieTabla"></ng-container>
+                </td>
+                <td *ngIf="movimiento?.tipomovimiento != 'DE'" colspan="3">
+                    <ng-container [ngTemplateOutlet]="pieTabla"></ng-container>
+                </td>
+                <ng-template #pieTabla>
+                    <strong>Total de registros:</strong> {{ detallesMovimientos.length }}
+                </ng-template>
+            </tr>
+        </tfoot>
+    </table>
+</div>

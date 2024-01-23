@@ -106,26 +106,29 @@ export class AppSettings {
       ]
     },
     {
-      id: 6,
-      title: 'Ajustes de impresión',
-      icon: 'printer',
+      id: 8,
+      title: "Depósitos",
+      icon: "inbox",
       children: [
         {
-          id: 344,
-          name: 'Formatos de facturas',
-          routerLink: '/app/formatosfacturas',
-        }
-      ]
-    },
-    {
-      id: 7,
-      title: 'Auditoría',
-      icon: 'audit',
-      children: [
+          id: 600,
+          name: 'Grupos',
+          routerLink: '/app/gruposmateriales'
+        },
         {
-          id: 321,
-          name: 'Eventos',
-          routerLink: '/app/auditoria',
+          id: 680,
+          name: 'Materiales',
+          routerLink: '/app/materiales'
+        },
+        {
+          id: 640,
+          name: 'Movimientos',
+          routerLink: '/app/movimientosmateriales'
+        },
+        {
+          id: 720,
+          name: 'Usuarios',
+          routerLink: '/app/usuariosdepositos'
         }
       ]
     },
@@ -138,6 +141,23 @@ export class AppSettings {
           id: 400,
           name: 'Sorteos',
           routerLink: '/app/sorteos'
+        }
+      ]
+    },
+    {
+      id: 8,
+      title: 'Extras',
+      icon: 'control',
+      children: [
+        {
+          id: 321,
+          name: 'Eventos del sistema',
+          routerLink: '/app/auditoria',
+        },
+        {
+          id: 344,
+          name: 'Formatos de facturas',
+          routerLink: '/app/formatosfacturas',
         }
       ]
     }

@@ -45,8 +45,12 @@ const routes: Routes = [
       { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule), canActivate: [Extra.getCanEnterModuleFn(144)]},
       { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule), canActivate: [Extra.getCanEnterModuleFn(344)]},
       { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)},
+      { path: 'sorteos', loadChildren: () => import('./modulos/sorteos/sorteos.module').then(m => m.SorteosModule)},
       { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
-      { path: 'sorteos', loadChildren: () => import('./modulos/sorteos/sorteos.module').then(m => m.SorteosModule)}
+      { path: 'gruposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)},
+      { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)},
+      { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)},
+      { path: 'usuariosdepositos', loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)}
     ]
   },
 ];

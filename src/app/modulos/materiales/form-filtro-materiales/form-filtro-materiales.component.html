@@ -1,0 +1,27 @@
+<div nz-row [nzGutter]="[16,16]">
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="tiposMaterialesSelec.length > 0" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de grupo de materiales">
+                    <i nz-icon nzType="clear" (click)="this.limpiarFiltroTiposMateriales()"></i>
+                </a>
+                Grupos de Materiales
+            </h3>
+        </nz-badge>
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            style="width: 100%;"
+            [nzMode]="'multiple'"
+            [nzShowArrow]="true"
+            nzAllowClear
+            nzShowSearch
+            [(ngModel)]="tiposMaterialesSelec"
+            (ngModelChange)="filtrar()">
+            <nz-option
+                *ngFor="let tipoMaterial of lstTiposMateriales"
+                [nzValue]="tipoMaterial.id"
+                [nzLabel]="tipoMaterial.descripcion">
+            </nz-option>
+        </nz-select>
+    </div>
+</div>

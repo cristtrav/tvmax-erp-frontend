@@ -1,0 +1,70 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/usuariosdepositos">Usuarios depósitos</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idusuario | titlecase }}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
+                <nz-spin [nzSpinning]="loading">
+                    <form [formGroup]="form">
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+                                <div nz-row>
+                                    <div nz-col [nzSm]="12" [nzXs]="24">
+                                        <nz-input-group [nzAddOnAfter]="addonGenerarCodigo" nzSearch>
+                                            <nz-input-number style="width: 100%;" formControlName="id"></nz-input-number>
+                                            <ng-template #addonGenerarCodigo>
+                                                <button
+                                                    nz-button
+                                                    nzType="primary"
+                                                    nzSearch
+                                                    nz-tooltip
+                                                    nzTooltipTitle="Generar código"
+                                                    [nzLoading]="loadingId"
+                                                    (click)="generarId()">
+                                                    <i nz-icon nzType="sync" nzTheme="outline"></i>
+                                                </button>
+                                            </ng-template>
+                                        </nz-input-group>
+                                    </div>
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Razón social</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una razón social. Máx. 80 carácteres.">
+                                <input nz-input formControlName="razonsocial">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Rol</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un rol.">
+                                <nz-select nzPlaceHolder="Seleccionar..." formControlName="rol" nzAllowClear>
+                                    <nz-option [nzValue]="'PR'" [nzLabel]="'Proveedor'"></nz-option>
+                                    <nz-option [nzValue]="'RE'" [nzLabel]="'Retiro de materiales'"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardando">
+                                <i nz-icon nzType="save" nzTheme="outline"></i>
+                                {{ idusuario === 'nuevo' ? 'Registrar' : 'Editar' }}
+                            </button>
+                        </div>
+                    </form>
+                </nz-spin>
+            </div>
+        </div>
+    </div>
+</div>
