@@ -30,8 +30,9 @@ export class ReporteMaterialesComponent {
   ){}
 
   cargarDatos(paramsFiltros: IParametroFiltro): Observable<any>{
-    
-    const httpParams = new HttpParams().appendAll(paramsFiltros);
+    const httpParams = new HttpParams()
+    .append('eliminado', false)
+    .appendAll(paramsFiltros);
     const paramsIdentificables = new HttpParams().append('disponible', true);
 
     return forkJoin({
