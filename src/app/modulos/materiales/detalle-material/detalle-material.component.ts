@@ -29,6 +29,7 @@ export class DetalleMaterialComponent implements OnInit {
     descripcion: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
     idtipomaterial: new FormControl(null, [Validators.required]),
     unidadmedida: new FormControl(null, [Validators.required]),
+    ultimoprecio: new FormControl(null, [Validators.min(0)]),
     identificable: new FormControl(null)
   })
 
@@ -59,6 +60,7 @@ export class DetalleMaterialComponent implements OnInit {
           this.form.controls.idtipomaterial.setValue(material.idtipomaterial);
           this.form.controls.unidadmedida.setValue(material.unidadmedida);
           this.form.controls.identificable.setValue(material.identificable);
+          this.form.controls.ultimoprecio.setValue(material.ultimoprecio);
         },
         error: (e) => {
           console.error('Error al cargar datos del material', e);
@@ -149,6 +151,7 @@ export class DetalleMaterialComponent implements OnInit {
       cantidad: 0,
       sololectura: false,
       identificable: this.form.controls.identificable.value ?? false,
+      ultimoprecio: this.form.controls.ultimoprecio.value ?? 0,
       eliminado: false
     }
   }

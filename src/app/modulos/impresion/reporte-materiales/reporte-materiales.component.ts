@@ -22,6 +22,7 @@ export class ReporteMaterialesComponent {
   totalRegistros: number = 0;
 
   lstTiposMateriales: TipoMaterialDTO[] = [];
+  valorTotal: number = 0;
 
   constructor(
     private materialesSrv: MaterialesService,
@@ -41,12 +42,16 @@ export class ReporteMaterialesComponent {
     })
     .pipe(
       tap((resp) => {
+        this.valorTotal = 0;
         this.lstMateriales = resp.materiales;
         this.totalRegistros = resp.total;
         resp.materiales.forEach(
-          m => this.mapIdentificables.set(
+          m => {
+            this.valorTotal = this.valorTotal + Number(m.preciototal);
+            this.mapIdentificables.set(
             m.id,
             resp.identificables.filter(idn => idn.idmaterial == m.id).map(idnf => idnf.serial))
+          }
         );
         console.log('tipos materiales consultados', resp.tiposMateriales);
         this.lstTiposMateriales = resp.tiposMateriales;

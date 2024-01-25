@@ -69,6 +69,19 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item>
+                        <nz-form-label [nzSm]="7" [nzXs]="24">Ult. precio compra</nz-form-label>
+                        <nz-form-control [nzSm]="15" [nzXs]="24">
+                            <nz-input-number
+                                formControlName="ultimoprecio"
+                                nz-tooltip
+                                nzTooltipTitle="El precio de compra más reciente por unidad/metro."
+                                [nzStep]="1"
+                                [nzMin]="0"
+                                style="width: 100%;">
+                            </nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
                         <div nz-col [nzSm]="7" [nzXs]="24"></div>
                         <nz-form-control [nzSm]="15" [nzXs]="24">
                             <label nz-checkbox formControlName="identificable">Identificable</label>

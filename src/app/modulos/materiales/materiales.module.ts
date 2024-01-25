@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MaterialesRoutingModule } from './materiales-routing.module';
 import { VistaMaterialesComponent } from './vista-materiales/vista-materiales.component';
 import { DetalleMaterialComponent } from './detalle-material/detalle-material.component';
@@ -22,6 +21,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { FormFiltroMaterialesComponent } from './form-filtro-materiales/form-filtro-materiales.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 
 @NgModule({
@@ -50,7 +51,9 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzCheckboxModule,
     NzSpaceModule,
     NzDrawerModule,
-    NzBadgeModule
+    NzBadgeModule,
+    NzTabsModule,
+    NzDescriptionsModule
   ]
 })
 export class MaterialesModule { }

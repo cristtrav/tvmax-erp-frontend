@@ -15,6 +15,8 @@
                 <th>Tipo</th>
                 <th>Identificable</th>
                 <th>Existencias</th>
+                <th>V. Unitario</th>
+                <th>V. Total</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +31,11 @@
                         <span *ngIf="material.unidadmedida == 'UD'">unidades</span>
                         <span *ngIf="material.unidadmedida == 'MT'">metros</span>
                     </td>
+                    <td style="text-align: right;">Gs.{{ material.ultimoprecio | number }}</td>
+                    <td style="text-align: right;">Gs.{{ material.preciototal | number }}</td>
                 </tr>
                 <tr>
-                    <td colspan="5">
+                    <td colspan="7">
                         <strong>Nros. Serie: </strong>
                         <span *ngIf="!material.identificable">(no aplica)</span>
                         <span *ngIf="material.identificable && (mapIdentificables.get(material.id)?.length ?? 0) == 0">
@@ -46,10 +50,17 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5">
+                <td colspan="4">
                     Total de registros: {{ totalRegistros | number }}
+                </td>
+                <td colspan="3" style="text-align: right;">
+                    Valor total: Gs.{{ valorTotal | number }}
                 </td>
             </tr>
         </tfoot>
     </table>
+</div>
+<div class="observacion">
+    <strong style="font-size: smaller;">Observación: </strong>
+    <span style="font-size: smaller;">El calculo del valor total se hace en base al último precio de compra. No tiene en cuenta el historial de variación de precios.</span>
 </div>

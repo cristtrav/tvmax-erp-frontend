@@ -7,5 +7,7 @@ export interface MaterialDTO{
     cantidad: number;
     sololectura: boolean;
     identificable: boolean;
+    ultimoprecio: string;
+    preciototal?: string;
     eliminado: boolean;
 }
