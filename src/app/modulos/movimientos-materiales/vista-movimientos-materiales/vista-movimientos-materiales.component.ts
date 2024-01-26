@@ -88,7 +88,7 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
 
   onTableQueryParamsChange(params: NzTableQueryParams){
     this.pageSize = params.pageSize;
-    this.pageIndex = this.pageIndex;
+    this.pageIndex = params.pageIndex;
     this.sortStr = Extra.buildSortString(params.sort);
     this.cargarDatos();
   }
