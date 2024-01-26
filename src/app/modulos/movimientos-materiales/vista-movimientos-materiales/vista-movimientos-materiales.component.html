@@ -155,6 +155,7 @@
                                         nzBordered>
                                         <thead>
                                             <tr>
+                                                <th>Cód. Material</th>
                                                 <th>Descripción</th>
                                                 <th>Nro. Serie</th>
                                                 <th>Cantidad</th>
@@ -162,6 +163,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let detalle of tablaDetalles.data">
+                                                <td>{{ detalle.idmaterial }}</td>
                                                 <td>{{ detalle.material }}</td>
                                                 <td>
                                                     <span *ngIf="detalle.nroseriematerial">{{ detalle.nroseriematerial }}</span>
