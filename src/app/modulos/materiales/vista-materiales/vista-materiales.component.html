@@ -78,6 +78,7 @@
                         [nzFrontPagination]="false"
                         [nzShowSizeChanger]="true"
                         [nzLoading]="loadingMateriales"
+                        [nzFooter]="pieTabla"
                         nzSize="small"
                         (nzQueryParams)="onTableQueryChange($event)">
                         <thead>
@@ -188,6 +189,9 @@
                                 </tr>
                             </ng-container>
                         </tbody>
+                        <ng-template #pieTabla>
+                            <strong>Total de registros: </strong>{{ totalRegisters | number }}
+                        </ng-template>
                     </nz-table>
                 </div>
             </div>

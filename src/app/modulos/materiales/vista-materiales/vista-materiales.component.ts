@@ -153,6 +153,8 @@ export class VistaMaterialesComponent implements OnInit {
   }
 
   onTableQueryChange(tableParams: NzTableQueryParams){
+    this.pageSize = tableParams.pageSize;
+    this.pageIndex = tableParams.pageIndex;
     this.sortStr = Extra.buildSortString(tableParams.sort);
     this.cargarDatos();
   }
