@@ -29,4 +29,33 @@
             </div>
         </div>
     </div>
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="tiposMovimientosFiltro.length > 0" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha" (click)="limpiarFiltroTipoMovimiento()">
+                    <i nz-icon nzType="clear"></i>
+                </a>
+                Tipo
+            </h3>
+        </nz-badge>
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            style="width: 100%;"
+            nzMode="multiple"
+            [(ngModel)]="tiposMovimientosFiltro"
+            (ngModelChange)="filtrar()">
+            <nz-option [nzLabel]="'Entrada'" [nzValue]="'EN'" nzCustomContent>
+                <i nz-icon nzType="upload" nzTheme="outline"></i> Salida
+            </nz-option>
+            <nz-option [nzLabel]="'Salida'" [nzValue]="'SA'" nzCustomContent>
+                <i nz-icon nzType="download" nzTheme="outline"></i> Entrada
+            </nz-option>
+            <nz-option [nzLabel]="'Devolución'" [nzValue]="'DE'" nzCustomContent>
+                <i nz-icon nzType="import" nzTheme="outline"></i> Devolución
+            </nz-option>
+            <nz-option [nzLabel]="'Ajuste'" [nzValue]="'AJ'" nzCustomContent>
+                <i nz-icon nzType="control" nzTheme="outline"></i> Ajuste
+            </nz-option>
+        </nz-select>
+    </div>
 </div>

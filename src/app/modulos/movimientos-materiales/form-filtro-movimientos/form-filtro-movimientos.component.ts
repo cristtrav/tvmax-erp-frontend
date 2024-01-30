@@ -17,6 +17,7 @@ export class FormFiltroMovimientosComponent {
 
   fechaInicioFiltro: Date | null = null;
   fechaFinFiltro: Date | null = null;
+  tiposMovimientosFiltro: string[] = [];
 
   constructor(
     @Inject(LOCALE_ID)
@@ -43,7 +44,12 @@ export class FormFiltroMovimientosComponent {
     this.filtrar();
   }
 
-  filtrar(){
+  limpiarFiltroTipoMovimiento(){
+    this.tiposMovimientosFiltro = [];
+    this.filtrar();
+  }
+
+  filtrar(){    
     this.paramsFiltrosChange.emit(this.getQueryParams());
     this.cantFiltrosChange.emit(this.getCantidadFiltros());
   }
@@ -52,13 +58,14 @@ export class FormFiltroMovimientosComponent {
     const params: IParametroFiltro = {};
     if(this.fechaInicioFiltro) params['fechainicio'] = formatDate(this.fechaInicioFiltro, 'yyyy-MM-dd', this.locale);
     if(this.fechaFinFiltro) params['fechafin'] = formatDate(this.fechaFinFiltro, 'yyyy-MM-dd', this.locale);
-    //if(this.tiposMaterialesSelec.length > 0) params['idtipomaterial'] = this.tiposMaterialesSelec;
+    if(this.tiposMovimientosFiltro.length > 0) params['tipomovimiento'] = this.tiposMovimientosFiltro;
     return params;
   }
 
   private getCantidadFiltros(): number{
     let cantidad: number = 0;
     if(this.fechaInicioFiltro != null || this.fechaFinFiltro != null) cantidad++;
+    if(this.tiposMovimientosFiltro.length > 0) cantidad++;
     return cantidad;
   }
 
