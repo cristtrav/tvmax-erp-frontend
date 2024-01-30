@@ -45,10 +45,10 @@
             [(ngModel)]="tiposMovimientosFiltro"
             (ngModelChange)="filtrar()">
             <nz-option [nzLabel]="'Entrada'" [nzValue]="'EN'" nzCustomContent>
-                <i nz-icon nzType="upload" nzTheme="outline"></i> Salida
+                <i nz-icon nzType="download" nzTheme="outline"></i> Entrada
             </nz-option>
             <nz-option [nzLabel]="'Salida'" [nzValue]="'SA'" nzCustomContent>
-                <i nz-icon nzType="download" nzTheme="outline"></i> Entrada
+                <i nz-icon nzType="upload" nzTheme="outline"></i> Salida
             </nz-option>
             <nz-option [nzLabel]="'Devolución'" [nzValue]="'DE'" nzCustomContent>
                 <i nz-icon nzType="import" nzTheme="outline"></i> Devolución
