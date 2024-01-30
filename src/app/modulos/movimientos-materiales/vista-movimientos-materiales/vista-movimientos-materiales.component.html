@@ -31,16 +31,41 @@
                             </div>
                         </nz-col>
                         <nz-col>
-                            <nz-badge [nzCount]="cantidadFiltros">
-                                <button
-                                    nz-button
-                                    nzType="primary"
-                                    nz-tooltip
-                                    nzTooltipTitle="Filtros"
-                                    (click)="mostrarDrawerFiltros()">
-                                    <i nz-icon nzType="filter" nzTheme="outline"></i>
-                                </button>
-                            </nz-badge>
+                            <div nz-row [nzGutter]="[8,8]">
+                                <div nz-col>
+                                    <nz-input-group
+                                        [nzPrefixIcon]="'search'"
+                                        [nzSuffix]="suffixLimpiarBusqueda"
+                                        class="ant-input-clear-icon">
+                                        <input
+                                            nz-input
+                                            placeholder="Buscar por código"
+                                            [(ngModel)]="textoBusqueda"
+                                            (ngModelChange)="buscar()">
+                                        <ng-template #suffixLimpiarBusqueda>
+                                            <i
+                                                *ngIf="textoBusqueda"
+                                                nz-icon
+                                                nzType="close-circle"
+                                                nzTheme="fill"
+                                                (click)="limpiarBusqueda()">
+                                            </i>
+                                        </ng-template>
+                                    </nz-input-group>
+                                </div>
+                                <div nz-col>
+                                    <nz-badge [nzCount]="cantidadFiltros">
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            nz-tooltip
+                                            nzTooltipTitle="Filtros"
+                                            (click)="mostrarDrawerFiltros()">
+                                            <i nz-icon nzType="filter" nzTheme="outline"></i>
+                                        </button>
+                                    </nz-badge>
+                                </div>
+                            </div>                            
                         </nz-col>
                     </div>
                 </div>

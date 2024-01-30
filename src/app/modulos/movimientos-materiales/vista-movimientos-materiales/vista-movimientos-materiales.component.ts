@@ -33,6 +33,9 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
   cantidadFiltros: number = 0;
   paramsFiltros: IParametroFiltro = {};
 
+  textoBusqueda: string = '';
+  timerBusqueda: any;
+
   constructor(
     private movimientosMaterialesSrv: MovimientosMaterialesService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -41,7 +44,18 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
   ){ }
   
   ngOnInit(): void {
-    //this.cargarDatos();
+  }
+
+  limpiarBusqueda(){
+    this.textoBusqueda = '';
+    this.buscar();
+  }
+
+  buscar(){
+    clearTimeout(this.timerBusqueda);
+    this.timerBusqueda = setTimeout(() => {
+      this.cargarDatos();
+    }, 250);
   }
 
   filtrar(filtros: IParametroFiltro){
@@ -99,6 +113,7 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
       .append('limit', `${this.pageSize}`)
       .append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     if(this.sortStr) params = params.append('sort', this.sortStr);
+    if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     params = params.appendAll(this.paramsFiltros);
     return params;
   }
