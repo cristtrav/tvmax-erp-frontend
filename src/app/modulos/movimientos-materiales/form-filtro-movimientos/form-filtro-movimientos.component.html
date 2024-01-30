@@ -58,4 +58,28 @@
             </nz-option>
         </nz-select>
     </div>
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idusuarioResponsable != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha" (click)="limpiarFiltroResponsableDeposito()">
+                    <i nz-icon nzType="clear"></i>
+                </a>
+                Responsable de depósito
+            </h3>
+        </nz-badge>
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            style="width: 100%;"
+            [nzLoading]="loadingUsuariosResponsables"
+            [(ngModel)]="idusuarioResponsable"
+            (ngModelChange)="filtrar()"
+            nzAllowClear
+            nzShowSearch>
+            <nz-option
+                *ngFor="let usuario of lstUsuariosResponsables"
+                [nzValue]="usuario.id"
+                [nzLabel]="usuario.razonsocial">
+            </nz-option>
+        </nz-select>
+    </div>
 </div>
