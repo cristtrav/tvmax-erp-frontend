@@ -1,0 +1,32 @@
+<div nz-row [nzGutter]="[16,16]">
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="fechaInicioFiltro != null || fechaFinFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha" (click)="limpiarFiltroFecha()">
+                    <i nz-icon nzType="clear"></i>
+                </a>
+                Fecha
+            </h3>
+        </nz-badge>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="12">
+                <nz-date-picker
+                    [nzFormat]="'dd/MM/yyyy'"
+                    [(ngModel)]="fechaInicioFiltro"
+                    [nzDisabledDate]="disabledStartDate"
+                    (ngModelChange)="filtrar()"
+                    nzPlaceHolder="Desde">
+                </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-date-picker
+                    [nzFormat]="'dd/MM/yyyy'"
+                    [(ngModel)]="fechaFinFiltro"
+                    [nzDisabledDate]="disabledEndDate"
+                    (ngModelChange)="filtrar()"
+                    nzPlaceHolder="Hasta">
+                </nz-date-picker>
+            </div>
+        </div>
+    </div>
+</div>

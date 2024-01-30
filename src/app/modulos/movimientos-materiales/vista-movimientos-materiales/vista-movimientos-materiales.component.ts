@@ -5,6 +5,7 @@ import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
 import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
@@ -28,7 +29,9 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
   mapDetallesMovimientos = new Map<number, IDetallesMovimientos>();
 
   ultimoIdMovimiento: number = 0;
-  
+  drawerFiltrosVisible: boolean = false;
+  cantidadFiltros: number = 0;
+  paramsFiltros: IParametroFiltro = {};
 
   constructor(
     private movimientosMaterialesSrv: MovimientosMaterialesService,
@@ -39,6 +42,19 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
   
   ngOnInit(): void {
     //this.cargarDatos();
+  }
+
+  filtrar(filtros: IParametroFiltro){
+    this.paramsFiltros = filtros;
+    this.cargarDatos();
+  }
+
+  cerrarDrawerFiltros(){
+    this.drawerFiltrosVisible = false;
+  }
+
+  mostrarDrawerFiltros(){
+    this.drawerFiltrosVisible = true;
   }
 
   onExpandChange(id: number, checked: boolean){
@@ -82,7 +98,8 @@ export class VistaMovimientosMaterialesComponent implements OnInit {
       .append('eliminado', 'false')
       .append('limit', `${this.pageSize}`)
       .append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
-      if(this.sortStr) params = params.append('sort', this.sortStr);
+    if(this.sortStr) params = params.append('sort', this.sortStr);
+    params = params.appendAll(this.paramsFiltros);
     return params;
   }
 

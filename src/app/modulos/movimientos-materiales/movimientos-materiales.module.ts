@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MovimientosMaterialesRoutingModule } from './movimientos-materiales-routing.module';
 import { VistaMovimientosMaterialesComponent } from './vista-movimientos-materiales/vista-movimientos-materiales.component';
 import { DetalleMovimientoMaterialComponent } from './detalle-movimiento-material/detalle-movimiento-material.component';
@@ -26,6 +25,9 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { TablaDetallesMovimientosComponent } from './detalle-movimiento-material/tabla-detalles-movimientos/tabla-detalles-movimientos.component';
 import { BuscadorMaterialesComponent } from './detalle-movimiento-material/buscador-materiales/buscador-materiales.component';
+import { FormFiltroMovimientosComponent } from './form-filtro-movimientos/form-filtro-movimientos.component';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import { BuscadorMaterialesComponent } from './detalle-movimiento-material/busca
     VistaMovimientosMaterialesComponent,
     DetalleMovimientoMaterialComponent,
     TablaDetallesMovimientosComponent,
-    BuscadorMaterialesComponent
+    BuscadorMaterialesComponent,
+    FormFiltroMovimientosComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +62,9 @@ import { BuscadorMaterialesComponent } from './detalle-movimiento-material/busca
     NzFormModule,
     NzTypographyModule,
     NzDescriptionsModule,
-    NzRadioModule
+    NzRadioModule,
+    NzDrawerModule,
+    NzBadgeModule
   ]
 })
 export class MovimientosMaterialesModule { }

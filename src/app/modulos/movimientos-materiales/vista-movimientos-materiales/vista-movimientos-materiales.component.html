@@ -31,6 +31,16 @@
                             </div>
                         </nz-col>
                         <nz-col>
+                            <nz-badge [nzCount]="cantidadFiltros">
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    nz-tooltip
+                                    nzTooltipTitle="Filtros"
+                                    (click)="mostrarDrawerFiltros()">
+                                    <i nz-icon nzType="filter" nzTheme="outline"></i>
+                                </button>
+                            </nz-badge>
                         </nz-col>
                     </div>
                 </div>
@@ -183,7 +193,18 @@
                     </nz-table>
                 </div>
             </div>
-            
         </div>
+        <nz-drawer
+            [nzTitle]="'Filtros'"
+            [nzContent]="contenidoFiltros"
+            [(nzVisible)]="drawerFiltrosVisible"
+            (nzOnClose)="cerrarDrawerFiltros()">
+            <ng-template #contenidoFiltros>
+                <app-form-filtro-movimientos
+                    (paramsFiltrosChange)="filtrar($event)"                    
+                    (cantFiltrosChange)="this.cantidadFiltros = $event">
+                </app-form-filtro-movimientos>
+            </ng-template>
+        </nz-drawer>
     </div>
 </div>
