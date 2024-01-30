@@ -6,6 +6,8 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
+import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
 
 @Component({
   selector: 'app-form-filtro-movimientos',
@@ -28,18 +30,25 @@ export class FormFiltroMovimientosComponent implements OnInit {
   loadingUsuariosResponsables: boolean = false;
   idusuarioResponsable: number | null = null;
 
+  lstUsariosEntrega: UsuarioDepositoDTO[] = [];
+  lstProveedores: UsuarioDepositoDTO[] = [];
+  loadingUsuariosEntrega: boolean = false;
+  idusuarioEntrega: number | null = null;
+
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
     private usuariosSrv: UsuariosService,
+    private usuariosDepositosSrv: UsuariosDepositosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ){}
 
   ngOnInit(): void {
-    this.cargarUsuarios();
+    this.cargarUsuariosResponsables();
+    this.cargarUsuariosEntrega();
   }
 
-  cargarUsuarios(){
+  cargarUsuariosResponsables(){
     const httpParams = new HttpParams()
       .append('eliminado', false)
       .append('idrol', 6);
@@ -53,6 +62,25 @@ export class FormFiltroMovimientosComponent implements OnInit {
         },
         error: (e) => {
           console.error('Error al cargar usuario', e);
+          this.httpErrorHandler.process(e);
+        }
+      })
+  }
+
+  cargarUsuariosEntrega(){
+    const httpParams = new HttpParams()
+      .append('eliminado', false);
+    this.loadingUsuariosEntrega = true;
+    this.usuariosDepositosSrv
+      .get(httpParams)
+      .pipe(finalize(() => this.loadingUsuariosEntrega = false))
+      .subscribe({
+        next: (usuarios) => {
+          this.lstUsariosEntrega = usuarios.filter(u => u.rol == 'RE');
+          this.lstProveedores = usuarios.filter(u => u.rol == 'PR');
+        },
+        error: (e) => {
+          console.error('Error al cargar usuarios de depósitos', e);
           this.httpErrorHandler.process(e);
         }
       })
@@ -88,6 +116,11 @@ export class FormFiltroMovimientosComponent implements OnInit {
     this.filtrar();
   }
 
+  limpiarFiltroUsuarioEntrega(){
+    this.idusuarioEntrega = null;
+    this.filtrar();
+  }
+
   filtrar(){    
     this.paramsFiltrosChange.emit(this.getQueryParams());
     this.cantFiltrosChange.emit(this.getCantidadFiltros());
@@ -98,7 +131,8 @@ export class FormFiltroMovimientosComponent implements OnInit {
     if(this.fechaInicioFiltro) params['fechainicio'] = formatDate(this.fechaInicioFiltro, 'yyyy-MM-dd', this.locale);
     if(this.fechaFinFiltro) params['fechafin'] = formatDate(this.fechaFinFiltro, 'yyyy-MM-dd', this.locale);
     if(this.tiposMovimientosFiltro.length > 0) params['tipomovimiento'] = this.tiposMovimientosFiltro;
-    if(this.idusuarioResponsable) params['idusuarioresponsable'] = this.idusuarioResponsable;
+    if(this.idusuarioResponsable != null) params['idusuarioresponsable'] = this.idusuarioResponsable;
+    if(this.idusuarioEntrega != null) params['idusuarioentrega'] = this.idusuarioEntrega;
     return params;
   }
 
@@ -107,6 +141,7 @@ export class FormFiltroMovimientosComponent implements OnInit {
     if(this.fechaInicioFiltro != null || this.fechaFinFiltro != null) cantidad++;
     if(this.tiposMovimientosFiltro.length > 0) cantidad++;
     if(this.idusuarioResponsable != null) cantidad++;
+    if(this.idusuarioEntrega != null) cantidad++;
     return cantidad;
   }
 

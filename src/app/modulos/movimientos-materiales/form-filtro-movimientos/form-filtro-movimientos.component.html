@@ -82,4 +82,37 @@
             </nz-option>
         </nz-select>
     </div>
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idusuarioEntrega != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha" (click)="limpiarFiltroUsuarioEntrega()">
+                    <i nz-icon nzType="clear"></i>
+                </a>
+                Entrega/Proveedor
+            </h3>
+        </nz-badge>
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            style="width: 100%;"
+            [nzLoading]="loadingUsuariosEntrega"
+            [(ngModel)]="idusuarioEntrega"
+            (ngModelChange)="filtrar()"
+            nzAllowClear
+            nzShowSearch>
+            <nz-option-group nzLabel="Retiro de materiales">
+                <nz-option
+                    *ngFor="let usuario of lstUsariosEntrega"
+                    [nzValue]="usuario.id"
+                    [nzLabel]="usuario.razonsocial">
+                </nz-option>
+            </nz-option-group>
+            <nz-option-group nzLabel="Proveedores">
+                <nz-option
+                    *ngFor="let proveedor of lstProveedores"
+                    [nzValue]="proveedor.id"
+                    [nzLabel]="proveedor.razonsocial">
+                </nz-option>
+            </nz-option-group>
+        </nz-select>
+    </div>
 </div>
