@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, marker, tileLayer } from 'leaflet';
+import { Extra } from '@util/extra';
+import { Icon, LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, marker, tileLayer } from 'leaflet';
 
 @Component({
   selector: 'app-ubicacion',
@@ -9,6 +10,16 @@ import { LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, marker, tileLay
 export class UbicacionComponent implements AfterViewInit {
 
   readonly DEFAULT_LOCATION: LatLngTuple = [-25.44240, -56.44198];
+  readonly LEAFLET_MARKER_ICON: Icon = new Icon({
+    iconUrl:"assets/leaflet/marker-icon.png",
+    iconRetinaUrl:"assets/leaflet/marker-icon-2x.png",
+    shadowUrl:"assets/leaflet/marker-shadow.png",
+    iconSize:[25,41],
+    iconAnchor:[12,41],
+    popupAnchor:[1,-34],
+    tooltipAnchor:[16,-28],
+    shadowSize:[41,41]
+  });
   
   @Input()
   set ubicacion(u: LatLngTuple){
@@ -32,7 +43,7 @@ export class UbicacionComponent implements AfterViewInit {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-    this.marker = marker(this.ubicacion).addTo(this.map);
+    this.marker = marker(this.ubicacion, {icon: this.LEAFLET_MARKER_ICON}).addTo(this.map);
     this.map.on('click', (e: LeafletMouseEvent) => {      
       this.setUbicacion([e.latlng.lat, e.latlng.lng]);
     })
