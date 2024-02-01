@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
@@ -11,6 +11,15 @@ import { Domicilio } from '@dto/domicilio-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Cliente } from '@dto/cliente-dto';
 import { finalize } from 'rxjs';
+import { UbicacionComponent } from '../ubicacion/ubicacion.component';
+import { LatLngTuple } from 'leaflet';
+import OpenLocationCode, { CodeArea } from 'open-location-code-typescript';
+
+const ValidateOpenLocationCode = (control: AbstractControl) => {
+  if(!control.value) return null;
+  if(!OpenLocationCode.isValid(control.value)) return {invalidOpenLocationCode: true};
+  return null
+}
 
 @Component({
   selector: 'app-form-domicilio',
@@ -18,6 +27,11 @@ import { finalize } from 'rxjs';
   styleUrls: ['./form-domicilio.component.scss']
 })
 export class FormDomicilioComponent implements OnInit {
+
+  readonly DEFAULT_LAT_LNG: LatLngTuple = [-25.44240, -56.44198];
+
+  @ViewChild(UbicacionComponent)
+  ubicacionComp!: UbicacionComponent;
 
   @Input()
   iddomicilio = 'nuevo';
@@ -41,6 +55,7 @@ export class FormDomicilioComponent implements OnInit {
     nromedidor: new FormControl(null, Validators.maxLength(30)),
     tipo: new FormControl(null, [Validators.required]),
     observacion: new FormControl(null, [Validators.maxLength(150)]),
+    ubicacionOpenCode: new FormControl(null, [ValidateOpenLocationCode]),
     principal: new FormControl(false)
   });
 
@@ -48,6 +63,9 @@ export class FormDomicilioComponent implements OnInit {
   formLoading: boolean = false;
   getLastIdLoading: boolean = false;
   clienteLoading: boolean = false;
+
+  modalUbicacionVisible: boolean = false;
+  ubicacionActual: LatLngTuple = this.DEFAULT_LAT_LNG;
 
   constructor(
     private barriosSrv: BarriosService,
@@ -70,9 +88,44 @@ export class FormDomicilioComponent implements OnInit {
     }
   }
 
+  mostrarModalUbicacion(){
+    this.modalUbicacionVisible = true;
+  }
+
+  cerrarModalUbicacion(){
+    this.modalUbicacionVisible = false;
+  }
+
+  aceptarUbicacion(){
+    this.ubicacionActual = this.ubicacionComp.ubicacion;
+    this.form.controls.ubicacionOpenCode.setValue(this.getShortCode(this.ubicacionActual[0], this.ubicacionActual[1]));
+    this.cerrarModalUbicacion();
+  }
+
+  private getShortCode(lat: number, lng: number): string{
+    const code = OpenLocationCode.encode(lat, lng, 11);
+    return OpenLocationCode.shorten(code, Number(lat.toFixed(1)), Number(lng.toFixed(1)));
+  }
+
+  onUbicacionBlur(){
+    if(this.form.controls.ubicacionOpenCode.valid && this.form.controls.ubicacionOpenCode.value){
+      const code = OpenLocationCode.recoverNearest(
+        this.form.controls.ubicacionOpenCode.value,
+        Number(this.DEFAULT_LAT_LNG[0].toFixed(1)),
+        Number(this.DEFAULT_LAT_LNG[1].toFixed(1))
+      )
+      const location: CodeArea = OpenLocationCode.decode(code)
+      const lat = Number(location.latitudeCenter.toFixed(5));
+      const lng = Number(location.longitudeCenter.toFixed(5));
+      this.ubicacionActual = [lat, lng];
+    }
+  }
+
   private cargarDatos(): void {
     this.formLoading = true;
-    this.domicilioSrv.getPorId(Number(this.iddomicilio)).subscribe({
+    this.domicilioSrv.getPorId(Number(this.iddomicilio))
+    .pipe(finalize(() => this.formLoading = false))
+    .subscribe({
       next: (domicilio) => {
         this.form.controls.id.setValue(domicilio.id);
         this.form.controls.idcliente.setValue(domicilio.idcliente);
@@ -82,14 +135,16 @@ export class FormDomicilioComponent implements OnInit {
         this.form.controls.nromedidor.setValue(domicilio.nromedidor);
         this.form.controls.observacion.setValue(domicilio.observacion);
         this.form.controls.principal.setValue(domicilio.principal);
-        this.formLoading = false;
+        if(domicilio.latitud != null && domicilio.longitud != null){
+          this.form.controls.ubicacionOpenCode.setValue(this.getShortCode(domicilio.latitud, domicilio.longitud));
+          this.ubicacionActual = [domicilio.latitud, domicilio. longitud];
+        }
         if(!this.lstClientes.map(c => c.id).includes(domicilio.idcliente)) 
           this.agregarCliente(Number(domicilio.idcliente));
       },
       error: (e) => {
         console.error('Error al cargar domicilio por ID', e);
-        this.httpErrorHandler.process(e);
-        this.formLoading = false;
+        this.httpErrorHandler.process(e);        
       }
     });
   }
@@ -168,6 +223,11 @@ export class FormDomicilioComponent implements OnInit {
     domi.nromedidor = this.form.get('nromedidor')?.value;
     domi.observacion = this.form.get('observacion')?.value;
     domi.principal = this.form.get('principal')?.value;
+    domi.latitud = this.ubicacionActual[0];
+    if(this.form.controls.ubicacionOpenCode.value){
+      domi.latitud = this.ubicacionActual[0];
+      domi.longitud = this.ubicacionActual[1];
+    }
     return domi;
   }
 

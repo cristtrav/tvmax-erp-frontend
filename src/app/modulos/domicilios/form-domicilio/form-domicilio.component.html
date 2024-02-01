@@ -92,6 +92,23 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">Ubicación</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código de ubicación válido.">
+                <nz-input-group nzSearch [nzAddOnAfter]="addonUbicacion">
+                    <input
+                        nz-input
+                        placeholder="Seleccionar..."
+                        formControlName="ubicacionOpenCode"
+                        (blur)="onUbicacionBlur()">
+                    <ng-template #addonUbicacion>
+                        <button nz-button nzType="primary" nzSearch (click)="mostrarModalUbicacion()">
+                            <i nz-icon nzType="environment" nzTheme="outline"></i>
+                        </button>
+                    </ng-template>
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
             <nz-form-label [nzSm]="7" [nzXs]="24">Observación</nz-form-label>
             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 150 carácteres.">
                 <input nz-input formControlName="observacion">
@@ -111,3 +128,15 @@
         </div>
     </form>
 </nz-spin>
+<nz-modal
+    [nzTitle]="'Ubicación'"
+    [nzWidth]="800"
+    [nzContent]="ubicacionTpl"
+    [(nzVisible)]="modalUbicacionVisible"
+    (nzOnCancel)="cerrarModalUbicacion()"
+    (nzOnOk)="aceptarUbicacion()"
+    nzCentered>
+</nz-modal>
+<ng-template #ubicacionTpl>
+    <app-ubicacion [ubicacion]="ubicacionActual"></app-ubicacion>
+</ng-template>
