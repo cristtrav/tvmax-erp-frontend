@@ -64,93 +64,119 @@
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(s.id ?? -1)">
-                <nz-descriptions nzSize="small">
-                    <ng-template #titulodirec>
-                        <strong>Dirección</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulodirec">{{ s.direccion }}</nz-descriptions-item>
-                    
-                    <ng-template #tituloobsdomicilio>
-                            <strong>Obs. Domicilio</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
-                        <span *ngIf="s.obsdomicilio">{{ s.obsdomicilio }}</span>
-                        <span *ngIf="!s.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
-                    </nz-descriptions-item>
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzXl="12" nzXXl="12">
+                        <nz-collapse>
+                            <nz-collapse-panel nzHeader="Suscripción" nzShowArrow="false" nzActive="true" nzDisabled="true">
+                                <nz-descriptions nzSize="small" [nzColumn]="1">
+                                    <nz-descriptions-item [nzTitle]="titulofechasus">
+                                        <ng-template #titulofechasus>
+                                            <strong>Fecha de Suscripción</strong>
+                                        </ng-template>
+                                        <span>{{ s.fechasuscripcion | date:'dd/MM/yyyy' }}</span>
+                                    </nz-descriptions-item>
 
-                    <ng-template #tituloande>
-                        <strong>ANDE</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="tituloande">
-                        <span *ngIf="s.nromedidor">{{ s.nromedidor }}</span>
-                        <span *ngIf="!s.nromedidor" nz-typography nzType="secondary">(ninguno)</span>
-                    </nz-descriptions-item>
-                    <ng-template #titulobarrio>
-                        <strong>Barrio</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulobarrio">{{ s.barrio }}</nz-descriptions-item>
-                    
-                    <ng-template #titulofechasus>
-                        <strong>Fecha de Suscripción</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulofechasus">{{ s.fechasuscripcion | date:'dd/MM/yyyy' }}</nz-descriptions-item>
-                    
-                    <ng-template #titulodist>
-                        <strong>Distrito</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulodist">{{ s.distrito }}</nz-descriptions-item>
-                    
-                    <ng-template #titulodepa>
-                        <strong>Departamento</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulodepa">{{ s.departamento }}</nz-descriptions-item>
-                    
-                    <ng-template #titulogentileza>
-                        <strong>Tipo de suscripción</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulogentileza">
-                        <span *ngIf="s.gentileza">Gentileza</span>
-                        <span *ngIf="!s.gentileza">Normal</span>
-                    </nz-descriptions-item>
-                    
-                    <ng-template #titulocobrador>
-                        <strong>Cobrador</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulocobrador">{{ s.cobrador }}</nz-descriptions-item>
-                    
-                    <ng-template #tituloobservacion>
-                        <strong>Obs. Suscripción</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="tituloobservacion">
-                        <span *ngIf="!s.observacion" nz-typography nzType="secondary">(ninguna)</span>
-                        {{ s.observacion }}
-                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="titulogentileza">
+                                        <ng-template #titulogentileza>
+                                            <strong>Tipo de suscripción</strong>
+                                        </ng-template>
+                                        <span *ngIf="s.gentileza">Gentileza</span>
+                                        <span *ngIf="!s.gentileza">Normal</span>
+                                    </nz-descriptions-item>
 
-                    <ng-template #titulofechacambioestado>
-                        <strong *ngIf="s.estado === 'C'">Fecha de conexión</strong>
-                        <strong *ngIf="s.estado === 'R'">Fecha de reconexión</strong>
-                        <strong *ngIf="s.estado === 'D'">Fecha de desconexión</strong>
-                    </ng-template>
-                    <nz-descriptions-item [nzTitle]="titulofechacambioestado">
-                        {{ s.fechacambioestado | date: 'dd/MM/yyyy' }}
-                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="titulocobrador">
+                                        <ng-template #titulocobrador>
+                                            <strong>Cobrador</strong>
+                                        </ng-template>
+                                        <span>{{ s.cobrador }}</span>
+                                    </nz-descriptions-item>
 
-                    <nz-descriptions-item [nzTitle]="ubicacionTitle">
-                        <a
-                            *ngIf="s.latitud != null && s.longitud != null"
-                            nz-tooltip
-                            nzTooltipTitle="Ver ubicación"
-                            (click)="mostrarModalUbicacion([s.latitud, s.longitud])">
-                            {{ [s.latitud, s.longitud] | openLocationCode }}
-                        </a>
-                        <span nz-typography nzType="secondary" *ngIf="s.latitud == null || s.longitud == null">
-                            (Sin ubicación)
-                        </span>
-                        <ng-template #ubicacionTitle>
-                            <strong>Ubicación</strong>
-                        </ng-template>
-                    </nz-descriptions-item>
-                </nz-descriptions>
+                                    <nz-descriptions-item [nzTitle]="titulofechacambioestado">
+                                        <ng-template #titulofechacambioestado>
+                                            <strong *ngIf="s.estado === 'C'">Fecha de conexión</strong>
+                                            <strong *ngIf="s.estado === 'R'">Fecha de reconexión</strong>
+                                            <strong *ngIf="s.estado === 'D'">Fecha de desconexión</strong>
+                                        </ng-template>
+                                        <span>{{ s.fechacambioestado | date: 'dd/MM/yyyy' }}</span>
+                                    </nz-descriptions-item>
+
+                                    <nz-descriptions-item [nzTitle]="tituloobservacion">
+                                        <ng-template #tituloobservacion>
+                                            <strong>Observación</strong>
+                                        </ng-template>
+                                        <span *ngIf="!s.observacion" nz-typography nzType="secondary">(ninguna)</span>
+                                        <span>{{ s.observacion }}</span>
+                                    </nz-descriptions-item>
+                                </nz-descriptions>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+
+                    <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzXl="12" nzXXl="12">
+                        <nz-collapse style="min-width: 300px;">
+                            <nz-collapse-panel nzHeader="Domicilio" nzShowArrow="false" nzActive="true" nzDisabled="true">
+                                <nz-descriptions nzSize="small" [nzColumn]="1">
+                                    <ng-template #titulodirec>
+                                        <strong>Dirección</strong>
+                                    </ng-template>
+                                    <nz-descriptions-item [nzTitle]="titulodirec">{{ s.direccion }}</nz-descriptions-item>                                                                
+                
+                                    <ng-template #tituloande>
+                                        <strong>ANDE</strong>
+                                    </ng-template>
+                                    <nz-descriptions-item [nzTitle]="tituloande">
+                                        <span *ngIf="s.nromedidor">{{ s.nromedidor }}</span>
+                                        <span *ngIf="!s.nromedidor" nz-typography nzType="secondary">(ninguno)</span>
+                                    </nz-descriptions-item>
+                                    
+                                    <nz-descriptions-item [nzTitle]="titulodist">
+                                        <ng-template #titulodist>
+                                            <strong>Distrito</strong>
+                                        </ng-template>
+                                        {{ s.distrito }}
+                                    </nz-descriptions-item>
+                                    
+                                    <nz-descriptions-item [nzTitle]="titulodepa">
+                                        <ng-template #titulodepa>
+                                            <strong>Departamento</strong>
+                                        </ng-template>
+                                        {{ s.departamento }}
+                                    </nz-descriptions-item>
+                                    
+                                    <nz-descriptions-item [nzTitle]="titulobarrio">
+                                        <ng-template #titulobarrio>
+                                            <strong>Barrio</strong>
+                                        </ng-template>
+                                        {{ s.barrio }}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="ubicacionTitle">
+                                        <a
+                                            *ngIf="s.latitud != null && s.longitud != null"
+                                            nz-tooltip
+                                            nzTooltipTitle="Ver ubicación"
+                                            (click)="mostrarModalUbicacion([s.latitud, s.longitud])">
+                                            {{ [s.latitud, s.longitud] | openLocationCode }}
+                                        </a>
+                                        <span nz-typography nzType="secondary" *ngIf="s.latitud == null || s.longitud == null">
+                                            (Sin ubicación)
+                                        </span>
+                                        <ng-template #ubicacionTitle>
+                                            <strong>Ubicación</strong>
+                                        </ng-template>
+                                    </nz-descriptions-item>
+
+                                    <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
+                                        <ng-template #tituloobsdomicilio>
+                                            <strong>Observación</strong>
+                                        </ng-template>
+                                        <span *ngIf="s.obsdomicilio">{{ s.obsdomicilio }}</span>
+                                        <span *ngIf="!s.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
+                                    </nz-descriptions-item>
+                                </nz-descriptions>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                </div>
             </tr>
         </ng-container>
     </tbody>
@@ -172,6 +198,7 @@
     [nzFooter]="footerUbicacionTpl"
     [(nzVisible)]="modalUbicacionVisible"
     (nzOnCancel)="cerrarModalUbicacion()"
+    (nzAfterOpen)="ubicacionComp.centrarVista()"
     [nzOkDisabled]="true"
     nzCentered>
     <ng-template #ubicacionTpl>

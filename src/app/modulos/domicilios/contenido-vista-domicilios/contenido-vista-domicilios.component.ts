@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Domicilio } from './../../../dto/domicilio-dto';
@@ -9,6 +9,7 @@ import { Extra } from 'src/app/util/extra';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
+import { UbicacionComponent } from '../ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-contenido-vista-domicilios',
@@ -16,6 +17,9 @@ import { LatLngTuple } from 'leaflet';
   styleUrls: ['./contenido-vista-domicilios.component.scss']
 })
 export class ContenidoVistaDomiciliosComponent implements OnInit {
+
+  @ViewChild(UbicacionComponent)
+  ubicacionComp!: UbicacionComponent;
 
   lstDomicilios: Domicilio[] = [];
   pageIndex: number = 1;

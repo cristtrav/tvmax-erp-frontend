@@ -117,6 +117,13 @@
                                     (sin ubicación)
                                 </span>
                             </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="observacionTitle">
+                                <ng-template #observacionTitle>
+                                    <strong>Observación</strong>
+                                </ng-template>
+                                <span *ngIf="d.observacion">{{ d.observacion }}</span>
+                                <span *ngIf="!d.observacion" nz-typography nzType="secondary">(ninguna)</span>
+                            </nz-descriptions-item>
                         </nz-descriptions>
                     </tr>
                 </ng-container>
@@ -131,6 +138,7 @@
     [nzFooter]="footerUbicacionTpl"
     [(nzVisible)]="modalUbicacionVisible"
     (nzOnCancel)="cerrarModalUbicacion()"
+    (nzAfterOpen)="ubicacionComp.centrarVista()"
     [nzOkDisabled]="true"
     nzCentered>
     <ng-template #ubicacionTpl>

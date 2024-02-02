@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { Extra } from '@util/extra';
@@ -11,6 +11,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 import { formatNumber } from '@angular/common';
 import { LatLngTuple } from 'leaflet';
+import { UbicacionComponent } from '../../domicilios/ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-tabla-suscripciones',
@@ -18,6 +19,9 @@ import { LatLngTuple } from 'leaflet';
   styleUrls: ['./tabla-suscripciones.component.scss']
 })
 export class TablaSuscripcionesComponent implements OnInit {
+
+  @ViewChild(UbicacionComponent)
+  ubicacionComp!: UbicacionComponent;
 
   @Input()
   idcliente: number | null = null;

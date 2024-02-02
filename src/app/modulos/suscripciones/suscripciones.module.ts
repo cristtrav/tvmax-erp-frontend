@@ -44,6 +44,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
 import { DomiciliosModule } from '../domicilios/domicilios.module';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -84,7 +85,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     NzTypographyModule,
     OpenLocationCodePipe,
     DomiciliosModule,
-    NzCardModule
+    NzCollapseModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })
