@@ -42,6 +42,8 @@ import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
 import { CobrosModule } from "../cobros/cobros.module";
 import { VentasModule } from '../ventas/ventas.module';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
 
 @NgModule({
     declarations: [VistaClientesComponent, DetalleClienteComponent, DomiciliosClienteComponent, DetalleDomicilioClienteComponent, SuscripcionesClienteComponent, DetalleSuscripcionClienteComponent, CuotasSuscripcionClienteComponent, DetalleCuotasSuscripcionClienteComponent, FormFiltroClientesComponent, PagosClienteComponent],
@@ -78,7 +80,9 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
         NzDropDownModule,
         CobrosModule,
         VentasModule,
-        NzTabsModule
+        NzTabsModule,
+        NzCollapseModule,
+        OpenLocationCodePipe
     ]
 })
 export class ClientesModule { }

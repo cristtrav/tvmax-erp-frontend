@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Cliente } from './../../../dto/cliente-dto';
@@ -10,6 +10,8 @@ import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { Usuario } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { LatLngTuple } from 'leaflet';
+import { UbicacionComponent } from '../../domicilios/ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-vista-clientes',
@@ -17,6 +19,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   styleUrls: ['./vista-clientes.component.scss']
 })
 export class VistaClientesComponent implements OnInit {
+
+  @ViewChild(UbicacionComponent)
+  ubicacionComp!: UbicacionComponent;
 
   lstClientes: Cliente[] = [];
   total: number = 0;
@@ -37,6 +42,9 @@ export class VistaClientesComponent implements OnInit {
 
   paramsFiltros: IParametroFiltro = {};
 
+  modalUbicacionVisible: boolean = false;
+  ubicacionActual: LatLngTuple | null = null;
+
   constructor(
     private cliSrv: ClientesService,
     private notif: NzNotificationService,
@@ -46,6 +54,15 @@ export class VistaClientesComponent implements OnInit {
 
   ngOnInit(): void {
     //this.cargarDatos();
+  }
+
+  cerrarModalUbicacion(){
+    this.modalUbicacionVisible = false;
+  }
+
+  mostrarModalUbicacion(ubicacion: LatLngTuple){
+    this.ubicacionActual = ubicacion;
+    this.modalUbicacionVisible = true;
   }
 
   cargarDatos(): void {

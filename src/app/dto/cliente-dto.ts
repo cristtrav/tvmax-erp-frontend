@@ -23,4 +23,6 @@ export class Cliente {
     cantdesconectados: number = 0;
     eliminado: boolean | null = null;
     excluidosorteo: boolean | null = null;
+    latitud: number | null = null;
+    longitud: number | null = null;
 }

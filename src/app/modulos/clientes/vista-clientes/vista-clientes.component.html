@@ -158,73 +158,108 @@
                             </td>
                         </tr>
                         <tr [nzExpand]="expandSet.has(c.id===null?-1:c.id)">
-                            <nz-descriptions nzSize="small">
-                                <nz-descriptions-item [nzTitle]="tituloemail">
-                                    <ng-template #tituloemail>
-                                        <strong>Email</strong>
-                                    </ng-template>
-                                    <span [style]="!c.email?'color: gray':''">
-                                        {{ c.email?c.email:'(sin email)'}}
-                                    </span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulotelef1">
-                                    <ng-template #titulotelef1>
-                                        <strong>Teléfono princ.</strong>
-                                    </ng-template>
-                                    <span [style]="!c.telefono1?'color: gray':''">
-                                        {{c.telefono1?c.telefono1:'(sin teléfono)' }}
-                                    </span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulotelef2">
-                                    <ng-template #titulotelef2>
-                                        <strong>Teléfono sec.</strong>
-                                    </ng-template>
-                                    <span [style]="!c.telefono2?'color: gray':''">
-                                        {{c.telefono2?c.telefono2:'(sin teléfono)' }}
-                                    </span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulocobrador">
-                                    <ng-template #titulocobrador>
-                                        <strong>Cobrador</strong>
-                                    </ng-template>
-                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+c.idcobrador">{{ c.cobrador }}</span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulobarrio">
-                                    <ng-template #titulobarrio>
-                                        <strong>Barrio</strong>
-                                    </ng-template>
-                                    <span *ngIf="c.idbarrio" nz-tooltip [nzTooltipTitle]="'Código: '+c.idbarrio">
-                                        {{c.barrio }}
-                                    </span>
-                                    <span *ngIf="!c.idbarrio" nz-typography nzType="secondary">(sin barrio)</span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulodist">
-                                    <ng-template #titulodist>
-                                        <strong>Distrito</strong>
-                                    </ng-template>
-                                    <span *ngIf="c.iddistrito" nz-tooltip [nzTooltipTitle]="'Código: '+c.iddistrito">
-                                        {{ c.distrito }}
-                                    </span>
-                                    <span *ngIf="!c.iddistrito" nz-typography nzType="secondary">(Sin distrito)</span>
-                                </nz-descriptions-item>
-                                <nz-descriptions-item [nzTitle]="titulodep">
-                                    <ng-template #titulodep>
-                                        <strong>Departamento</strong>
-                                    </ng-template>
-                                    <span *ngIf="c.iddepartamento" nz-tooltip
-                                        [nzTooltipTitle]="'Código: '+c.iddepartamento">{{ c.departamento }}</span>
-                                    <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin
-                                        departamento)</span>
-                                </nz-descriptions-item>
+                            <div nz-row [nzGutter]="[8,8]">
+                                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12" nzXl="12" nzXXl="12">
+                                    <nz-collapse>
+                                        <nz-collapse-panel nzHeader="Cliente" nzShowArrow="false" nzActive nzDisabled>
+                                            <nz-descriptions nzSize="small" [nzColumn]="1">
+                                                <nz-descriptions-item [nzTitle]="tituloemail">
+                                                    <ng-template #tituloemail>
+                                                        <strong>Email</strong>
+                                                    </ng-template>
+                                                    <span [style]="!c.email?'color: gray':''">
+                                                        {{ c.email?c.email:'(sin email)'}}
+                                                    </span>
+                                                </nz-descriptions-item>
+                                                <nz-descriptions-item [nzTitle]="titulotelef1">
+                                                    <ng-template #titulotelef1>
+                                                        <strong>Teléfono princ.</strong>
+                                                    </ng-template>
+                                                    <span [style]="!c.telefono1?'color: gray':''">
+                                                        {{c.telefono1?c.telefono1:'(sin teléfono)' }}
+                                                    </span>
+                                                </nz-descriptions-item>
+                                                <nz-descriptions-item [nzTitle]="titulotelef2">
+                                                    <ng-template #titulotelef2>
+                                                        <strong>Teléfono sec.</strong>
+                                                    </ng-template>
+                                                    <span [style]="!c.telefono2?'color: gray':''">
+                                                        {{c.telefono2?c.telefono2:'(sin teléfono)' }}
+                                                    </span>
+                                                </nz-descriptions-item>
+                                                <nz-descriptions-item [nzTitle]="titulocobrador">
+                                                    <ng-template #titulocobrador>
+                                                        <strong>Cobrador</strong>
+                                                    </ng-template>
+                                                    <span nz-tooltip [nzTooltipTitle]="'Código: '+c.idcobrador">{{ c.cobrador }}</span>
+                                                </nz-descriptions-item>
+                                            </nz-descriptions>
+                                        </nz-collapse-panel>
+                                    </nz-collapse>
+                                </div>
+                                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12" nzXl="12" nzXXl="12">
+                                    <nz-collapse>
+                                        <nz-collapse-panel nzHeader="Domicilio Principal" nzShowArrow="false" nzActive nzDisabled>
+                                            <nz-descriptions nzSize="small" [nzColumn]="1">
+                                                <nz-descriptions-item [nzTitle]="titulobarrio">
+                                                    <ng-template #titulobarrio>
+                                                        <strong>Barrio</strong>
+                                                    </ng-template>
+                                                    <span *ngIf="c.idbarrio" nz-tooltip [nzTooltipTitle]="'Código: '+c.idbarrio">
+                                                        {{c.barrio }}
+                                                    </span>
+                                                    <span *ngIf="!c.idbarrio" nz-typography nzType="secondary">(sin barrio)</span>
+                                                </nz-descriptions-item>
+                                                <nz-descriptions-item [nzTitle]="titulodist">
+                                                    <ng-template #titulodist>
+                                                        <strong>Distrito</strong>
+                                                    </ng-template>
+                                                    <span *ngIf="c.iddistrito" nz-tooltip [nzTooltipTitle]="'Código: '+c.iddistrito">
+                                                        {{ c.distrito }}
+                                                    </span>
+                                                    <span *ngIf="!c.iddistrito" nz-typography nzType="secondary">(Sin distrito)</span>
+                                                </nz-descriptions-item>
+                                                <nz-descriptions-item [nzTitle]="titulodep">
+                                                    <ng-template #titulodep>
+                                                        <strong>Departamento</strong>
+                                                    </ng-template>
+                                                    <span *ngIf="c.iddepartamento" nz-tooltip
+                                                        [nzTooltipTitle]="'Código: '+c.iddepartamento">{{ c.departamento }}</span>
+                                                    <span *ngIf="!c.iddepartamento" nz-typography nzType="secondary">(Sin
+                                                        departamento)</span>
+                                                </nz-descriptions-item>
 
-                                <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
-                                    <ng-template #tituloobsdomicilio>
-                                        <strong>Obs. Domicilio</strong>
-                                    </ng-template>
-                                    <span *ngIf="c.obsdomicilio">{{ c.obsdomicilio }}</span>
-                                    <span *ngIf="!c.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
-                                </nz-descriptions-item>
-                            </nz-descriptions>
+                                                <nz-descriptions-item [nzTitle]="tituloUbicacion">
+                                                    <ng-template #tituloUbicacion>
+                                                        <strong>Ubicación</strong>
+                                                    </ng-template>
+                                                    <a
+                                                        *ngIf="c.latitud != null && c.longitud != null"
+                                                        (click)="mostrarModalUbicacion([c.latitud, c.longitud])"
+                                                        nz-tooltip
+                                                        nzTooltipTitle="Ver ubicación">
+                                                        {{ [c.latitud, c.longitud] | openLocationCode }}
+                                                    </a>
+                                                    <span
+                                                        *ngIf="c.latitud == null || c.longitud == null"
+                                                        nz-typography
+                                                        nzType="secondary">
+                                                        (ninguna)
+                                                    </span>
+                                                </nz-descriptions-item>
+                
+                                                <nz-descriptions-item [nzTitle]="tituloobsdomicilio">
+                                                    <ng-template #tituloobsdomicilio>
+                                                        <strong>Observación</strong>
+                                                    </ng-template>
+                                                    <span *ngIf="c.obsdomicilio">{{ c.obsdomicilio }}</span>
+                                                    <span *ngIf="!c.obsdomicilio" nz-typography nzType="secondary">(ninguna)</span>
+                                                </nz-descriptions-item>
+                                            </nz-descriptions>
+                                        </nz-collapse-panel>
+                                    </nz-collapse>
+                                </div>
+                            </div>
                         </tr>
                     </ng-container>
                 </tbody>
@@ -232,3 +267,22 @@
         </div>
     </div>
 </div>
+<nz-modal
+    [nzTitle]="'Ubicación'"
+    [nzWidth]="800"
+    [nzContent]="ubicacionTpl"
+    [nzFooter]="footerUbicacionTpl"
+    [(nzVisible)]="modalUbicacionVisible"
+    (nzOnCancel)="cerrarModalUbicacion()"
+    (nzAfterOpen)="ubicacionComp.centrarVista()"
+    [nzOkDisabled]="true"
+    nzCentered>
+    <ng-template #ubicacionTpl>
+        <app-ubicacion [ubicacion]="ubicacionActual" [soloLectura]="true"></app-ubicacion>
+    </ng-template>
+    <ng-template #footerUbicacionTpl>
+        <button nz-button nzType="default" (click)="cerrarModalUbicacion()">
+            Cerrar
+        </button>
+    </ng-template>
+</nz-modal>
