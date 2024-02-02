@@ -30,6 +30,7 @@ import { DetalleDomicilioComponent } from './detalle-domicilio/detalle-domicilio
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { UbicacionComponent } from './ubicacion/ubicacion.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
 
 @NgModule({
   declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent, DetalleDomicilioComponent, UbicacionComponent],
@@ -59,7 +60,8 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzGridModule,
     NzBreadCrumbModule,
     NzRadioModule,
-    NzAlertModule
+    NzAlertModule,
+    OpenLocationCodePipe
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
 })

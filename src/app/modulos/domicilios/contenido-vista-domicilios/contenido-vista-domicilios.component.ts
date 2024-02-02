@@ -8,6 +8,7 @@ import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-respons
 import { Extra } from 'src/app/util/extra';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { LatLngTuple } from 'leaflet';
 
 @Component({
   selector: 'app-contenido-vista-domicilios',
@@ -25,6 +26,8 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   expandSet = new Set<number>();
   textoBusqueda: string = '';
   timerBusqueda: any;
+  ubicacionActual: LatLngTuple | null = null;
+  modalUbicacionVisible: boolean = false;
 
   @Input()
   mostrarTitular: boolean = true;
@@ -41,6 +44,15 @@ export class ContenidoVistaDomiciliosComponent implements OnInit {
   
   ngOnInit(): void {
     //this.cargarDatos();
+  }
+
+  mostrarModalUbicacion(ubicacion: LatLngTuple){
+    this.ubicacionActual = ubicacion;
+    this.modalUbicacionVisible = true;
+  }
+
+  cerrarModalUbicacion(){
+    this.modalUbicacionVisible = false;
   }
 
   onExpandChange(id: number, checked: boolean): void {

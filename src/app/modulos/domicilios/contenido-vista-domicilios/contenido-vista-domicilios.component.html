@@ -102,6 +102,21 @@
                                 </ng-template>
                                 {{ d.departamento }}
                             </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="ubicacionTitle">
+                                <ng-template #ubicacionTitle>
+                                    <strong>Ubicación</strong>
+                                </ng-template>
+                                <a
+                                    *ngIf="d.latitud != null && d.longitud != null"
+                                    (click)="mostrarModalUbicacion([d.latitud, d.longitud])"
+                                    nz-tooltip
+                                    nzTooltipTitle="Ver ubicación">
+                                    {{ [d.latitud, d.longitud] | openLocationCode}}
+                                </a>
+                                <span *ngIf="d.latitud == null || d.longitud == null" nz-typography nzType="secondary">
+                                    (sin ubicación)
+                                </span>
+                            </nz-descriptions-item>
                         </nz-descriptions>
                     </tr>
                 </ng-container>
@@ -109,5 +124,21 @@
         </nz-table>
     </div>
 </div>
-
-
+<nz-modal
+    [nzTitle]="'Ubicación'"
+    [nzWidth]="800"
+    [nzContent]="ubicacionTpl"
+    [nzFooter]="footerUbicacionTpl"
+    [(nzVisible)]="modalUbicacionVisible"
+    (nzOnCancel)="cerrarModalUbicacion()"
+    [nzOkDisabled]="true"
+    nzCentered>
+    <ng-template #ubicacionTpl>
+        <app-ubicacion [ubicacion]="ubicacionActual"></app-ubicacion>
+    </ng-template>
+    <ng-template #footerUbicacionTpl>
+        <button nz-button nzType="default" (click)="cerrarModalUbicacion()">
+            Cerrar
+        </button>
+    </ng-template>
+</nz-modal>
