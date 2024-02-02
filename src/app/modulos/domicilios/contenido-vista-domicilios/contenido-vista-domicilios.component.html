@@ -134,7 +134,7 @@
     [nzOkDisabled]="true"
     nzCentered>
     <ng-template #ubicacionTpl>
-        <app-ubicacion [ubicacion]="ubicacionActual"></app-ubicacion>
+        <app-ubicacion [ubicacion]="ubicacionActual" [soloLectura]="true"></app-ubicacion>
     </ng-template>
     <ng-template #footerUbicacionTpl>
         <button nz-button nzType="default" (click)="cerrarModalUbicacion()">

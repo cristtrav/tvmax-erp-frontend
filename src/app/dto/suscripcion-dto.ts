@@ -31,4 +31,6 @@ export class Suscripcion{
     idcobrador: number | null = null;
     cobrador: string | null = null;
     observacion: string | null = null;
+    latitud: number | null = null;
+    longitud: number | null = null;
 }

@@ -63,6 +63,6 @@ import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
     NzAlertModule,
     OpenLocationCodePipe
   ],
-  exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent] 
+  exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent, UbicacionComponent] 
 })
 export class DomiciliosModule { }

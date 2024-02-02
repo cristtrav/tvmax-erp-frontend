@@ -10,6 +10,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 import { formatNumber } from '@angular/common';
+import { LatLngTuple } from 'leaflet';
 
 @Component({
   selector: 'app-tabla-suscripciones',
@@ -75,6 +76,9 @@ export class TablaSuscripcionesComponent implements OnInit {
   srtOrderCliente: string | null = null;
   srtOrderId: string | null = null;
 
+  modalUbicacionVisible: boolean = false;
+  ubicacionActual: LatLngTuple | null = null;
+
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
@@ -85,6 +89,15 @@ export class TablaSuscripcionesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void { }
+
+  cerrarModalUbicacion(){
+    this.modalUbicacionVisible = false;
+  }
+
+  mostrarModalUbicacion(ubicacion: LatLngTuple){
+    this.ubicacionActual = ubicacion;
+    this.modalUbicacionVisible = true;
+  }
 
   cargarDatos(): void {
     this.tableLoading = true;

@@ -41,6 +41,9 @@ import { ImpresionModule } from '../impresion/impresion.module';
 import { PortalModule } from '@angular/cdk/portal'
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
+import { DomiciliosModule } from '../domicilios/domicilios.module';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -78,7 +81,10 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     ImpresionModule,    
     PortalModule,
     NzModalModule,
-    NzTypographyModule
+    NzTypographyModule,
+    OpenLocationCodePipe,
+    DomiciliosModule,
+    NzCardModule
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

@@ -19,6 +19,9 @@ export class UbicacionComponent implements AfterViewInit {
     tooltipAnchor:[16,-28],
     shadowSize:[41,41]
   });
+
+  @Input()
+  soloLectura: boolean = false;
   
   @Input()
   set ubicacion(u: LatLngTuple | null){
@@ -43,9 +46,9 @@ export class UbicacionComponent implements AfterViewInit {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
     this.setMarkerLocation(this.ubicacion);
-    this.map.on('click', (e: LeafletMouseEvent) => {      
+    if(!this.soloLectura) this.map.on('click', (e: LeafletMouseEvent) => {      
       this.setUbicacion([e.latlng.lat, e.latlng.lng]);
-    })
+    });
   }
 
   setUbicacion(ubi: LatLngTuple){

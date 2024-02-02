@@ -134,6 +134,22 @@
                     <nz-descriptions-item [nzTitle]="titulofechacambioestado">
                         {{ s.fechacambioestado | date: 'dd/MM/yyyy' }}
                     </nz-descriptions-item>
+
+                    <nz-descriptions-item [nzTitle]="ubicacionTitle">
+                        <a
+                            *ngIf="s.latitud != null && s.longitud != null"
+                            nz-tooltip
+                            nzTooltipTitle="Ver ubicación"
+                            (click)="mostrarModalUbicacion([s.latitud, s.longitud])">
+                            {{ [s.latitud, s.longitud] | openLocationCode }}
+                        </a>
+                        <span nz-typography nzType="secondary" *ngIf="s.latitud == null || s.longitud == null">
+                            (Sin ubicación)
+                        </span>
+                        <ng-template #ubicacionTitle>
+                            <strong>Ubicación</strong>
+                        </ng-template>
+                    </nz-descriptions-item>
                 </nz-descriptions>
             </tr>
         </ng-container>
@@ -149,3 +165,21 @@
         </span>
     </nz-space>
 </ng-template>
+<nz-modal
+    [nzTitle]="'Ubicación'"
+    [nzWidth]="800"
+    [nzContent]="ubicacionTpl"
+    [nzFooter]="footerUbicacionTpl"
+    [(nzVisible)]="modalUbicacionVisible"
+    (nzOnCancel)="cerrarModalUbicacion()"
+    [nzOkDisabled]="true"
+    nzCentered>
+    <ng-template #ubicacionTpl>
+        <app-ubicacion [ubicacion]="ubicacionActual" [soloLectura]="true"></app-ubicacion>
+    </ng-template>
+    <ng-template #footerUbicacionTpl>
+        <button nz-button nzType="default" (click)="cerrarModalUbicacion()">
+            Cerrar
+        </button>
+    </ng-template>
+</nz-modal>
