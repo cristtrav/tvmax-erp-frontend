@@ -65,7 +65,7 @@ export class FormDomicilioComponent implements OnInit {
   clienteLoading: boolean = false;
 
   modalUbicacionVisible: boolean = false;
-  ubicacionActual: LatLngTuple = this.DEFAULT_LAT_LNG;
+  ubicacionActual: LatLngTuple | null = null;
 
   constructor(
     private barriosSrv: BarriosService,
@@ -98,7 +98,9 @@ export class FormDomicilioComponent implements OnInit {
 
   aceptarUbicacion(){
     this.ubicacionActual = this.ubicacionComp.ubicacion;
-    this.form.controls.ubicacionOpenCode.setValue(this.getShortCode(this.ubicacionActual[0], this.ubicacionActual[1]));
+    if(this.ubicacionActual != null)
+      this.form.controls.ubicacionOpenCode.setValue(this.getShortCode(this.ubicacionActual[0], this.ubicacionActual[1]));
+    else this.form.controls.ubicacionOpenCode.reset();
     this.cerrarModalUbicacion();
   }
 
@@ -118,7 +120,7 @@ export class FormDomicilioComponent implements OnInit {
       const lat = Number(location.latitudeCenter.toFixed(5));
       const lng = Number(location.longitudeCenter.toFixed(5));
       this.ubicacionActual = [lat, lng];
-    }
+    }else this.ubicacionActual = null;
   }
 
   private cargarDatos(): void {
@@ -222,9 +224,8 @@ export class FormDomicilioComponent implements OnInit {
     domi.tipo = this.form.get('tipo')?.value;
     domi.nromedidor = this.form.get('nromedidor')?.value;
     domi.observacion = this.form.get('observacion')?.value;
-    domi.principal = this.form.get('principal')?.value;
-    domi.latitud = this.ubicacionActual[0];
-    if(this.form.controls.ubicacionOpenCode.value){
+    domi.principal = this.form.get('principal')?.value;    
+    if(this.form.controls.ubicacionOpenCode.value && this.ubicacionActual != null){
       domi.latitud = this.ubicacionActual[0];
       domi.longitud = this.ubicacionActual[1];
     }

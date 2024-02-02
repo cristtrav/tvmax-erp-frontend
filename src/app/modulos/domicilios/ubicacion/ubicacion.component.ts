@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { Extra } from '@util/extra';
 import { Icon, LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, marker, tileLayer } from 'leaflet';
 
 @Component({
@@ -22,28 +21,28 @@ export class UbicacionComponent implements AfterViewInit {
   });
   
   @Input()
-  set ubicacion(u: LatLngTuple){
-    if(this.marker) this.marker.setLatLng(u);
+  set ubicacion(u: LatLngTuple | null){
+    this.setMarkerLocation(u);
     this._ubicacion = u;
   }
-  get ubicacion(): LatLngTuple{
+  get ubicacion(): LatLngTuple | null{
     return this._ubicacion;
   }
-  private _ubicacion: LatLngTuple = this.DEFAULT_LOCATION;
+  private _ubicacion: LatLngTuple | null = null;
 
   map!: Map;
-  marker!: Marker;
+  marker: Marker | null = null;
   tileLayer!: TileLayer;
 
   constructor(){}
 
   ngAfterViewInit(): void {
-    this.map = new Map('mapa').setView(this.ubicacion, 16);
+    this.map = new Map('mapa').setView(this.ubicacion ?? this.DEFAULT_LOCATION, 16);
     this.tileLayer = tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-    this.marker = marker(this.ubicacion, {icon: this.LEAFLET_MARKER_ICON}).addTo(this.map);
+    this.setMarkerLocation(this.ubicacion);
     this.map.on('click', (e: LeafletMouseEvent) => {      
       this.setUbicacion([e.latlng.lat, e.latlng.lng]);
     })
@@ -51,11 +50,24 @@ export class UbicacionComponent implements AfterViewInit {
 
   setUbicacion(ubi: LatLngTuple){
     this.ubicacion = ubi;
-    this.marker.setLatLng(ubi);
+    this.setMarkerLocation(ubi);
+  }
+
+  setMarkerLocation(ubi: LatLngTuple | null){
+    if(ubi == null) this.removeMarker();
+    else{
+      if(this.marker != null) this.marker.setLatLng(ubi);
+      else if(this.map != null) this.marker = marker(ubi, {icon: this.LEAFLET_MARKER_ICON}).addTo(this.map);
+    }
+  }
+
+  removeMarker(){
+    if(this.marker != null) this.marker.removeFrom(this.map);
   }
 
   centrarVista(){
-    if(this.map) this.map.setView(this.ubicacion, this.map.getZoom());
+    if(this.map != null && this.ubicacion != null)
+      this.map.setView(this.ubicacion, this.map.getZoom());
   }
 
 }
