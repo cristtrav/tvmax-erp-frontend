@@ -1,0 +1,82 @@
+<div class="inner-content">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a [routerLink]="['/app', 'motivosreclamos']" [queryParams]="{ordenarPor: 'id', orden: 'descend'}">
+                    Motivos de reclamos
+                </a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idmotivo | titlecase }}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row nzJustify="center" nzAlign="top">
+            <div nz-col class="module-content" [appNzColResponsiveSizes]="formSizes">
+                <nz-spin [nzSpinning]="cargandoMotivo">
+                    <form [formGroup]="form">
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formLabelSizes" nzRequired>
+                                Código
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formControlSizes"
+                                nzErrorTip="Ingrese un código.">
+                                <div nz-row>
+                                    <div nz-col [nzSm]="24" [nzXs]="24" [nzMd]="12">
+                                        <nz-input-group [nzAddOnAfter]="generarCodigo" nzSearch>
+                                            <nz-input-number nz-input formControlName="id" style="width: 100%;"></nz-input-number>
+                                            <ng-template #generarCodigo>
+                                                <button
+                                                    nz-button
+                                                    nzType="primary"
+                                                    nzSearch
+                                                    nz-tooltip
+                                                    nzTooltipTitle="Generar código"
+                                                    [nzLoading]="generandoId"
+                                                    (click)="generarId()">
+                                                    <i nz-icon nzType="sync" nzTheme="outline"></i>
+                                                </button>
+                                            </ng-template>
+                                        </nz-input-group>
+                                    </div>
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formLabelSizes" nzRequired>
+                                Descripción
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formControlSizes"
+                                nzErrorTip="Ingrese una descripción. Máx. 80 carácteres.">
+                                <input nz-input formControlName="descripcion">
+                            </nz-form-control>
+                        </nz-form-item>
+                        
+                        <div nz-col [appNzColResponsiveSizes]="formSaveSize" style="text-align: right;">
+                            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                                <div nz-col *ngIf="idmotivo != 'nuevo'">
+                                    <button nz-button nzType="default" (click)="limpiar()">
+                                        <i nz-icon nzType="plus" nzTheme="outline"></i>
+                                        Nuevo
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardando">
+                                        <i nz-icon nzType="save" nzTheme="outline"></i>
+                                        {{ idmotivo == 'nuevo' ? 'Registrar' : 'Editar' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                    </form>
+                </nz-spin>
+            </div>
+        </div>
+    </div>
+</div>

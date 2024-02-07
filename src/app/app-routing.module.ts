@@ -31,7 +31,7 @@ const routes: Routes = [
     path: 'app', component: AppComponent, canActivate: [AuthGuard], children: [
       {path: 'grupos', loadChildren: () => import('./modulos/grupos/grupos.module').then(m => m.GruposModule), canActivate: [Extra.getCanEnterModuleFn(5)]},
       { path: 'servicios', loadChildren: () => import('./modulos/servicios/servicios.module').then(m => m.ServiciosModule), canActivate: [Extra.getCanEnterModuleFn(24)] },
-      { path: 'dashboard', loadChildren: () => import('./modulos/dashboard/dashboard.module').then(m=> m.DashboardModule) },
+      { path: 'dashboard', loadChildren: () => import('./modulos/dashboard/dashboard.module').then(m=> m.DashboardModule) , data: {breadcrumb: 'Inicio'} },
       { path: 'departamentos', loadChildren: () => import('./modulos/departamentos/departamentos.module').then(m => m.DepartamentosModule), canActivate: [Extra.getCanEnterModuleFn(44)] },
       { path: 'distritos', loadChildren: () => import('./modulos/distritos/distritos.module').then(m => m.DistritosModule), canActivate: [Extra.getCanEnterModuleFn(64)] },
       { path: 'barrios', loadChildren: () => import('./modulos/barrios/barrios.module').then(m => m.BarriosModule), canActivate: [Extra.getCanEnterModuleFn(84)] },
@@ -50,7 +50,8 @@ const routes: Routes = [
       { path: 'gruposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)},
       { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)},
       { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)},
-      { path: 'usuariosdepositos', loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)}
+      { path: 'usuariosdepositos', loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)},
+      { path: 'motivosreclamos', loadChildren: () => import('./modulos/reclamos/motivos/motivos.module').then(m => m.MotivosModule), data: {breadcrumb: 'Motivos Reclamos'}}
     ]
   },
 ];

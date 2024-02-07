@@ -20,7 +20,7 @@
           <ul>
             <ng-container *ngFor="let menu of submenu.children">
               <li *ngIf="sesionSrv.permisos.has(menu.id)" nz-menu-item nzMatchRouter style="display: flex; justify-content: space-between;">
-                <a [routerLink]="menu.routerLink">{{ menu.name }}</a>
+                <a [routerLink]="menu.routerLink" [queryParams]="menu.queryParams">{{ menu.name }}</a>
                 <button nz-button nzType="link" (click)="sesionSrv.switchMenuFav(menu.id)">
                   <i *ngIf="!(sesionSrv.menuFavsObs| async)?.includes(menu.id)" 
                     nz-icon nzType="star" 

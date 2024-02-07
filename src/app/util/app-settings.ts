@@ -106,7 +106,7 @@ export class AppSettings {
       ]
     },
     {
-      id: 8,
+      id: 6,
       title: "Depósitos",
       icon: "inbox",
       children: [
@@ -133,7 +133,7 @@ export class AppSettings {
       ]
     },
     {
-      id: 9,
+      id: 7,
       title: 'Promociones',
       icon: 'gift',
       children: [
@@ -146,6 +146,19 @@ export class AppSettings {
     },
     {
       id: 8,
+      title: 'Reclamos',
+      icon: 'notification',
+      children: [
+        {
+          id: 760,
+          name: 'Motivos',
+          routerLink: '/app/motivosreclamos',
+          queryParams: {orden: 'descend', ordenarPor: 'id', pagina: '1', nroRegistros: '10'}
+        }
+      ]
+    },
+    {
+      id: 9,
       title: 'Extras',
       icon: 'control',
       children: [

@@ -35,6 +35,18 @@
       ],
       "@environments/*": [
         "./src/environments/*"
+      ],
+      "@global-utils/*": [
+        "./src/global/utils/*"
+      ],
+      "@global-directives/*" :[
+        "./src/global/directives/*"
+      ],
+      "@global-services/*":[
+        "./src/global/services/*"
+      ],
+      "@global-dtos/*":[
+        "./src/global/dtos/*"
       ]
     },
     "useDefineForClassFields": false
