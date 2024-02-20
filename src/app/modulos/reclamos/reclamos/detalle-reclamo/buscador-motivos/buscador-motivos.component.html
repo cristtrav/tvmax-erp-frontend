@@ -1,0 +1,43 @@
+
+<button
+    nz-dropdown
+    nz-button
+    nzType="primary"
+    [nzDropdownMenu]="drowpdownMotivos"
+    nzTrigger="click"
+    [nzClickHide]="false"
+    [(nzVisible)]="menuVisible">
+    <i nz-icon nzType="search"></i>
+    Motivos
+</button>
+
+<nz-dropdown-menu #drowpdownMotivos="nzDropdownMenu">
+    <ul nz-menu>
+        <li nz-menu-item>
+            <nz-input-group nzPrefixIcon="search" [nzSuffix]="suffixLimpiarBusqueda">
+                <input nz-input placeholder="Buscar..." [formControl]="busquedaCtrl">
+                <ng-template #suffixLimpiarBusqueda>
+                    <i
+                        *ngIf="busquedaCtrl.value"
+                        (click)="busquedaCtrl.reset()"
+                        nz-icon
+                        nzType="close-circle"
+                        nzTheme="fill"
+                        class="ant-input-clear-icon">
+                    </i>
+                </ng-template>
+            </nz-input-group>
+        </li>
+        <ng-container *ngIf="motivos$ | loadingStatus | async as data">
+            <cdk-virtual-scroll-viewport
+                [itemSize]="14"
+                [ngStyle]="{'height.px': (data.value?.length ?? 0) < 10 ? (data.value?.length ?? 0) * 32: 320}">
+                    <nz-spin [nzSpinning]="data.loading">
+                        <li nz-menu-item *cdkVirtualFor="let motivo of data.value" (click)="seleccionarMotivo(motivo)">
+                            {{ motivo.descripcion }}
+                        </li>
+                    </nz-spin>
+                </cdk-virtual-scroll-viewport>
+        </ng-container>
+    </ul>
+</nz-dropdown-menu>

@@ -154,6 +154,11 @@ export class AppSettings {
           name: 'Motivos',
           routerLink: '/app/motivosreclamos',
           queryParams: {orden: 'descend', ordenarPor: 'id', pagina: '1', nroRegistros: '10'}
+        },
+        {
+          id: 800,
+          name: 'Reclamos',
+          routerLink: '/app/reclamos'
         }
       ]
     },

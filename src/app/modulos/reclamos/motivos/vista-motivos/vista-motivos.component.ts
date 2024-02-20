@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dtos';
+import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dto';
 import { MotivosReclamosService } from '@global-services/reclamos/motivos-reclamos.service';
 import { Extra } from '@util/extra';
 import { TableHeaderInterface } from '@util/table-utils/table-header.interface';
