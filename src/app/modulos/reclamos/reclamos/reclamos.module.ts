@@ -15,7 +15,6 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { LoadingStatusPipe } from '@util/pipes/loading-status.pipe';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
@@ -26,6 +25,7 @@ import { BuscadorMotivosComponent } from './detalle-reclamo/buscador-motivos/bus
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 
 
 @NgModule({
@@ -58,7 +58,8 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzSpinModule,
     ReactiveFormsModule,
     ScrollingModule,
-    NzAlertModule
+    NzAlertModule,
+    NzDescriptionsModule
   ]
 })
 export class ReclamosModule { }

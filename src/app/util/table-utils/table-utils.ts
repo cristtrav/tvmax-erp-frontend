@@ -1,5 +1,6 @@
 import { NzTableSortOrder } from "ng-zorro-antd/table";
 import { TableHeaderInterface } from "./table-header.interface";
+import { HttpParams } from "@angular/common/http";
 
 export class TableUtils {
     static isSortColumnOrderValid(
@@ -20,5 +21,11 @@ export class TableUtils {
         return tableHeaders.map(h => {
             return {...h, sortOrder: h.key == sortKey ? sortOrder : null}
         });
+    }
+
+    static addSortToHttp(params: HttpParams, tableHeaders: TableHeaderInterface[]): HttpParams{
+        const sortCol = tableHeaders.find(h => h.sortOrder != null);
+        if(sortCol) return params.append('sort', `${sortCol.sortOrder == 'descend' ? '-' : '+'}${sortCol.key}`);
+        return params;
     }
 }

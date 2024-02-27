@@ -23,7 +23,7 @@
                                     </button>
                                 </div>
                                 <div nz-col>
-                                    <button nz-button nzType="default">
+                                    <button nz-button nzType="default" (click)="cargarDatos()">
                                         <i nz-icon nzType="reload" nzTheme="outline"></i>
                                         Recargar
                                     </button>
@@ -34,9 +34,9 @@
                             <div nz-row [nzGutter]="[8,8]">
                                 <div nz-col>
                                     <nz-input-group nzPrefixIcon="search" [nzSuffix]="suffixIconClearSearch">
-                                        <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda">
+                                        <input nz-input placeholder="Buscar..." [formControl]="busquedaCtrl">
                                         <ng-template #suffixIconClearSearch>
-                                            <i *ngIf="textoBusqueda != ''"
+                                            <i *ngIf="busquedaCtrl.value != ''"
                                                 nz-icon nzType="close-circle"
                                                 nzTheme="fill"
                                                 class="ant-input-clear-icon"
@@ -59,7 +59,115 @@
                     </div>
                 </div>
                 <div nz-col nzSpan="24">
-                    tabla
+                    <ng-container *ngIf="reclamos$ | loadingStatus | async as data">
+                        <nz-table
+                            #tabla
+                            [nzData]="data.value?.reclamos ?? tabla.data"
+                            [(nzPageIndex)]="pageIndex"
+                            [(nzPageSize)]="pageSize"
+                            [nzTotal]="data.value?.total ?? tabla.nzTotal"
+                            [nzLoading]="data.loading"
+                            [nzFrontPagination]="false"
+                            [nzShowSizeChanger]="true"
+                            [nzFooter]="pieTabla"
+                            (nzQueryParams)="onTableQueryParamsChange($event)"
+                            nzSize="small">
+                            <thead>
+                                <tr>
+                                    <th nzWidth="60px"></th>
+                                    <th *ngFor="let header of tableHeaders"
+                                    [nzColumnKey]="header.key"
+                                    [nzSortFn]="header.sortFn"
+                                    [(nzSortOrder)]="header.sortOrder">
+                                        {{ header.description }}
+                                    </th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let reclamo of tabla.data">
+                                    <tr>
+                                        <td [nzExpand]="expandSet.has(reclamo.id)" (nzExpandChange)="onExpandChange(reclamo.id, $event)"></td>
+                                        <td>{{ reclamo.id }}</td>
+                                        <td>{{ reclamo.fecha | date: 'dd/MM/yyyy' }}</td>
+                                        <td>
+                                            <span nz-tooltip [nzTooltipTitle]="'Código de Cliente: '+reclamo.idcliente">
+                                                {{ reclamo.cliente }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span nz-tooltip [nzTooltipTitle]="'Código de suscripción: '+reclamo.idsuscripcion">{{ reclamo.servicio }}</span>
+                                        </td>
+                                        <td>
+                                            <nz-tag *ngIf="reclamo.estado == 'PEN'" nzColor="red">Pendiente</nz-tag>
+                                            <nz-tag *ngIf="reclamo.estado == 'PRO'" nzColor="orange">En Proceso</nz-tag>
+                                            <nz-tag *ngIf="reclamo.estado == 'POS'" nzColor="orange">Pospuesto</nz-tag>
+                                            <nz-tag *ngIf="reclamo.estado == 'FIN'" nzColor="green">Finalizado</nz-tag>
+                                            <nz-tag *ngIf="reclamo.estado == 'OTR'" nzColor="purple">
+                                                {{ reclamo.observacionestado ?? 'Otro' }}
+                                            </nz-tag>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="reclamo.usuarioresponsable">{{ reclamo.usuarioresponsable }}</span>
+                                            <span *ngIf="!reclamo.usuarioresponsable" nz-typography nzType="secondary">(Sin responsable)</span>
+                                        </td>
+                                        <td>
+                                            <div nz-row [nzGutter]="[8,8]" [nzJustify]="'center'">
+                                                <div nz-col>
+                                                    <button nz-button nzType="primary">
+                                                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                                    </button>
+                                                </div>
+                                                <div nz-col>
+                                                    <button nz-button nzType="primary" nzDanger (click)="confirmarEliminacion(reclamo)">
+                                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr [nzExpand]="expandSet.has(reclamo.id)">
+                                        <nz-descriptions>
+                                            <nz-descriptions-item [nzTitle]="tituloUsuarioReg">
+                                                <ng-template #tituloUsuarioReg>
+                                                    <strong>Registrado por</strong>
+                                                </ng-template>
+                                                {{ reclamo.usuarioregistro }}
+                                            </nz-descriptions-item>
+                                        </nz-descriptions>
+                                        <ng-container *ngIf="mapDetallesReclamos.get(reclamo.id) as detalleObs">
+                                            <ng-container *ngIf="detalleObs | loadingStatus | async as dataDetalle">
+                                                <nz-table
+                                                    #tablaDetalle
+                                                    [nzData]="dataDetalle.value ?? tablaDetalle.data"
+                                                    [nzLoading]="dataDetalle.loading"
+                                                    nzSize="small">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Motivo</th>
+                                                            <th>Observacion</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let detalle of tablaDetalle.data">
+                                                            <td>{{ detalle.motivo }}</td>
+                                                            <td>
+                                                                <span *ngIf="!detalle.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                <span *ngIf="detalle.observacion">{{ detalle.observacion }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </nz-table>
+                                            </ng-container>
+                                        </ng-container>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <ng-template #pieTabla>
+                                <strong>Total de registros: </strong><span>{{ data.value?.total | number }}</span>
+                            </ng-template>
+                        </nz-table>
+                    </ng-container>
                 </div>
             </div>
         </div>

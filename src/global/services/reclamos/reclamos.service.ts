@@ -1,6 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dto';
+import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { HttpUtilsService } from '@global-services/http-utils/http-utils.service';
 import { AppSettings } from '@util/app-settings';
@@ -17,8 +18,24 @@ export class ReclamosService {
     private httpUtilSrv: HttpUtilsService
   ) { }
 
-  post(reclamo: ReclamoDTO): Observable<any>{
-    return this.httpUtilSrv.post(this.url, reclamo, AppSettings.getHttpOptionsAuth());
+  get(params: HttpParams): Observable<ReclamoDTO[]>{
+    return this.httpUtilSrv.get(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getTotal(params: HttpParams): Observable<number>{
+    return this.httpUtilSrv.get(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  post(reclamo: ReclamoDTO): Observable<number>{
+    return this.httpUtilSrv.post<number>(this.url, reclamo, AppSettings.getHttpOptionsTextAuth());
+  }
+
+  getDetallesByReclamo(idreclamo: number): Observable<DetalleReclamoDTO[]>{
+    return this.httpUtilSrv.get<DetalleReclamoDTO[]>(`${this.url}/${idreclamo}/detalles`, AppSettings.getHttpOptionsAuth());
+  }
+
+  delete(idreclamo: number): Observable<any>{
+    return this.httpUtilSrv.delete(`${this.url}/${idreclamo}`, AppSettings.getHttpOptionsAuth());
   }
 
 }

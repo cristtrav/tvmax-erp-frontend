@@ -203,6 +203,9 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   eliminarDetalle(id: number){
     this.lstDetallesReclamos = this.lstDetallesReclamos.filter(detalle => detalle.id != id);
     this.alertaDetallesVisible = this.lstDetallesReclamos.length == 0;
+    this.reclamosSrv.delete(id).subscribe(() => {
+      this.notif.success('<strong>Éxito</strong>', 'Reclamo eliminado.');
+    });
   }
 
   guardar(){
@@ -235,7 +238,11 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     this.reclamosSrv
       .post(this.getDto())
       .pipe(finalize(() => this.guardando = false))
-      .subscribe(() => this.notif.success('<strong>Éxito</strong>', 'Reclamo registrado.'));
+      .subscribe((idreclamo) => {
+        this.idreclamo = `${idreclamo}`;
+        this.router.navigate([idreclamo], { relativeTo: this.aroute.parent });
+        this.notif.success('<strong>Éxito</strong>', 'Reclamo registrado.');
+      });
   }
 
   private editar(){
