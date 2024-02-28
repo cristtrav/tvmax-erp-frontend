@@ -26,13 +26,17 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { FormFiltroReclamosComponent } from './form-filtro-reclamos/form-filtro-reclamos.component';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 
 @NgModule({
   declarations: [
     VistaReclamosComponent,
     DetalleReclamoComponent,
-    BuscadorMotivosComponent
+    BuscadorMotivosComponent,
+    FormFiltroReclamosComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +63,9 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     ReactiveFormsModule,
     ScrollingModule,
     NzAlertModule,
-    NzDescriptionsModule
+    NzDescriptionsModule,
+    NzDrawerModule,
+    NzBadgeModule
   ]
 })
 export class ReclamosModule { }

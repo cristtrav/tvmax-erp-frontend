@@ -17,11 +17,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription, finalize } from 'rxjs';
 
-interface DataInteface {
-  clientes: Cliente[],
-  total: number
-}
-
 @Component({
   selector: 'app-detalle-reclamo',
   templateUrl: './detalle-reclamo.component.html',
@@ -203,9 +198,6 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   eliminarDetalle(id: number){
     this.lstDetallesReclamos = this.lstDetallesReclamos.filter(detalle => detalle.id != id);
     this.alertaDetallesVisible = this.lstDetallesReclamos.length == 0;
-    this.reclamosSrv.delete(id).subscribe(() => {
-      this.notif.success('<strong>Éxito</strong>', 'Reclamo eliminado.');
-    });
   }
 
   guardar(){

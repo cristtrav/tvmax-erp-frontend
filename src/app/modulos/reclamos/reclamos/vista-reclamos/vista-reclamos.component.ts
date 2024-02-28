@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
+import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { TableHeaderInterface } from '@util/table-utils/table-header.interface';
 import { TableUtils } from '@util/table-utils/table-utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -40,6 +41,10 @@ export class VistaReclamosComponent implements OnInit {
 
   expandSet = new Set<number>();
   mapDetallesReclamos = new Map<number, Observable<DetalleReclamoDTO[]>>
+
+  drawerFiltrosVisible: boolean = false;
+  parametrosFiltros: IParametroFiltro = {};
+  cantidadFiltros: number = 0;
   
   constructor(
     private reclamosSrv: ReclamosService,
@@ -60,6 +65,15 @@ export class VistaReclamosComponent implements OnInit {
     else this.expandSet.delete(id);
   }
 
+  filtrar(params: IParametroFiltro){
+    this.parametrosFiltros = params;
+    this.cargarDatos();
+  }
+
+  abrirDrawerFiltros(){ this.drawerFiltrosVisible = true }
+
+  cerrarDrawerFiltros(){ this.drawerFiltrosVisible = false }
+
   cargarDatos(){
     this.reclamos$ = forkJoin({
       reclamos: this.reclamosSrv.get(this.getHttpParams()),
@@ -75,15 +89,14 @@ export class VistaReclamosComponent implements OnInit {
     );
   }
 
-  limpiarBusqueda(){
-    this.busquedaCtrl.reset();
-  }
+  limpiarBusqueda(){ this.busquedaCtrl.reset() }
 
   getHttpParams(): HttpParams{
     let params = new HttpParams().append('eliminado', false);
     params = params.append('limit', this.pageSize);
     params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
     params = TableUtils.addSortToHttp(params, this.tableHeaders);
+    params = params.appendAll(this.parametrosFiltros);
     if(this.busquedaCtrl.value) params = params.append('search', this.busquedaCtrl.value);
     return params;
   }
