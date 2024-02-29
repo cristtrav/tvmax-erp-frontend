@@ -83,7 +83,8 @@ export class VistaReclamosComponent implements OnInit {
       tap(resp => {
         this.mapDetallesReclamos.clear();
         resp.reclamos.forEach(reclamo => {
-          this.mapDetallesReclamos.set(reclamo.id ?? -1, this.reclamosSrv.getDetallesByReclamo(reclamo.id ?? -1));
+          const params = new HttpParams().append('eliminado', false);
+          this.mapDetallesReclamos.set(reclamo.id ?? -1, this.reclamosSrv.getDetallesByReclamo(reclamo.id ?? -1, params));
         })
       })
     );

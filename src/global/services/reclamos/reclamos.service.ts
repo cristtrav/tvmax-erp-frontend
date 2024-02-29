@@ -30,12 +30,20 @@ export class ReclamosService {
     return this.httpUtilSrv.post<number>(this.url, reclamo, AppSettings.getHttpOptionsTextAuth());
   }
 
-  getDetallesByReclamo(idreclamo: number): Observable<DetalleReclamoDTO[]>{
-    return this.httpUtilSrv.get<DetalleReclamoDTO[]>(`${this.url}/${idreclamo}/detalles`, AppSettings.getHttpOptionsAuth());
+  put(oldId: number, reclamo: ReclamoDTO): Observable<any>{
+    return this.httpUtilSrv.put(`${this.url}/${oldId}`, reclamo, AppSettings.getHttpOptionsAuth());
+  }
+
+  getDetallesByReclamo(idreclamo: number, params: HttpParams): Observable<DetalleReclamoDTO[]>{
+    return this.httpUtilSrv.get<DetalleReclamoDTO[]>(`${this.url}/${idreclamo}/detalles`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   delete(idreclamo: number): Observable<any>{
     return this.httpUtilSrv.delete(`${this.url}/${idreclamo}`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getPorId(idreclamo: number): Observable<ReclamoDTO>{
+    return this.httpUtilSrv.get<ReclamoDTO>(`${this.url}/${idreclamo}`, AppSettings.getHttpOptionsAuth());
   }
 
 }

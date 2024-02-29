@@ -29,6 +29,7 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { FormFiltroReclamosComponent } from './form-filtro-reclamos/form-filtro-reclamos.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzAlertModule,
     NzDescriptionsModule,
     NzDrawerModule,
-    NzBadgeModule
+    NzBadgeModule,
+    NzSpaceModule
   ]
 })
 export class ReclamosModule { }

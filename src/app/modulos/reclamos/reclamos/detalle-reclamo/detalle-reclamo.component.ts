@@ -15,7 +15,7 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Subscription, finalize } from 'rxjs';
+import { Subscription, finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-reclamo',
@@ -33,7 +33,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   idreclamo: string = 'nuevo';
 
   formCabecera: FormGroup = new FormGroup({
-    fecha: new FormControl(new Date, [Validators.required]),
+    fecha: new FormControl(new Date, [Validators.required]),    
     idcliente: new FormControl(null, [Validators.required]),
     idsuscripcion: new FormControl(null, [Validators.required]),
     idusuarioresponsable: new FormControl<number | null>(null),
@@ -80,6 +80,11 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const idreclamoStr = this.aroute.snapshot.paramMap.get('idreclamo');
     this.idreclamo = Number.isInteger(Number(idreclamoStr)) ? `${idreclamoStr}` : 'nuevo';
+    if(this.idreclamo != 'nuevo'){
+      this.cargarDatos(Number(this.idreclamo));
+      this.formCabecera.controls.estado.addValidators(Validators.required);
+    }else this.formCabecera.controls.estado.removeValidators(Validators.required);
+    
     this.cargarClientes();
     this.cargarResponsables();
     
@@ -91,6 +96,31 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       if (value == null) this.lstSuscripciones = []
       else this.cargarSuscripciones(value);
     });
+  }
+
+  cargarDatos(idreclamo: number){
+    const paramsDetalles = new HttpParams().append('eliminado', false);
+    forkJoin({
+      reclamo: this.reclamosSrv.getPorId(idreclamo),
+      detalles: this.reclamosSrv.getDetallesByReclamo(idreclamo, paramsDetalles)
+    })
+    .subscribe(resp => {
+      this.formCabecera.controls.fecha.setValue(resp.reclamo.fecha);
+      this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
+      this.formCabecera.controls.idcliente.setValue(resp.reclamo.idcliente);
+      this.formCabecera.controls.idsuscripcion.setValue(resp.reclamo.idsuscripcion);
+      this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
+      this.formCabecera.controls.observacionestado.setValue(resp.reclamo.observacionestado);
+      this.formCabecera.controls.idusuarioresponsable.setValue(resp.reclamo.idusuarioresponsable);
+      if(!this.lstClientes.find(cli => cli.id == resp.reclamo.idcliente)) this.agregarClienteLista(resp.reclamo.idcliente ?? -1);
+      this.lstDetallesReclamos = resp.detalles;
+    });
+  }
+
+  agregarClienteLista(idcliente: number){
+    this.clientesSrv
+      .getPorId(idcliente)
+      .subscribe((cliente) => this.lstClientes = this.lstClientes.concat([cliente]));
   }
 
   cargarResponsables(){
@@ -234,15 +264,19 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
         this.idreclamo = `${idreclamo}`;
         this.router.navigate([idreclamo], { relativeTo: this.aroute.parent });
         this.notif.success('<strong>Éxito</strong>', 'Reclamo registrado.');
+        this.formCabecera.controls.estado.setValue('PEN');
       });
   }
 
   private editar(){
-
+    this.reclamosSrv
+      .put(Number(this.idreclamo), this.getDto())
+      .subscribe(() => this.notif.success('<strong>Éxito</strong>', 'Reclamo editado.'));
   }
 
   getDto(): ReclamoDTO{
     return {
+      id: this.idreclamo != 'nuevo' ? Number(this.idreclamo) : undefined,
       fecha: this.formCabecera.controls.fecha.value,
       idsuscripcion: this.formCabecera.controls.idsuscripcion.value,
       estado: this.formCabecera.controls.estado.value ?? 'PEN',

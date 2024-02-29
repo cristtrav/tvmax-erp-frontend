@@ -25,6 +25,7 @@
                             <nz-table
                                 #tabla
                                 [nzData]="lstDetallesReclamos"
+                                [nzFooter]="pieTabla"
                                 nzSize="small">
                                 <thead>
                                     <tr>
@@ -52,6 +53,9 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <ng-template #pieTabla>
+                                    <strong>Total de registros: </strong>{{ lstDetallesReclamos.length | number }}
+                                </ng-template>
                             </nz-table>
                             <nz-alert *ngIf="alertaDetallesVisible" nzType="error" nzShowIcon nzMessage="Ingrese por lo menos un motivo."></nz-alert>
                         </div>
@@ -72,6 +76,35 @@
                                     nzPlaceHolder="Seleccionar..."
                                     style="width: 100%;">
                                 </nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item *ngIf="idreclamo != 'nuevo'">
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Estado
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                nzErrorTip="Seleccione un estado.">
+                                <nz-select
+                                    formControlName="estado"
+                                    nzPlaceHolder="Seleccionar..."
+                                    nzAllowClear>
+                                    <nz-option [nzLabel]="'Pendiente'" [nzValue]="'PEN'" nzCustomContent>
+                                        <nz-tag nzColor="red">Pendiente</nz-tag>
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'En Proceso'" [nzValue]="'PRO'" nzCustomContent>
+                                        <nz-tag nzColor="orange">En Proceso</nz-tag>
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'Pospuesto'" [nzValue]="'POS'" nzCustomContent>
+                                        <nz-tag nzColor="orange">Pospuesto</nz-tag>
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'Finalizado'" [nzValue]="'FIN'" nzCustomContent>
+                                        <nz-tag nzColor="green">Finalizado</nz-tag>
+                                    </nz-option>
+                                    <nz-option [nzLabel]="'Otro'" [nzValue]="'OTR'" nzCustomContent>
+                                        <nz-tag nzColor="purple">Otro</nz-tag>
+                                    </nz-option>
+                                </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
@@ -115,6 +148,7 @@
                                     formControlName="idsuscripcion"
                                     [nzDisabled]="!formCabecera.controls.idcliente.value"
                                     [nzLoading]="loadingSuscripciones"
+                                    [nzCustomTemplate]="suscripcionTempl"
                                     nzPlaceHolder="Seleccionar..."
                                     nzAllowClear>
                                     <nz-option
@@ -122,13 +156,17 @@
                                         [nzLabel]="suscripcion.servicio"
                                         [nzValue]="suscripcion.id"
                                         nzCustomContent>
+                                        <nz-tag>{{ suscripcion.id }}</nz-tag>
+                                        <span>{{ suscripcion.servicio }} </span>
                                         <nz-tag *ngIf="suscripcion.estado == 'C'" nzColor="green">Con.</nz-tag>
                                         <nz-tag *ngIf="suscripcion.estado == 'R'" nzColor="green">Recon.</nz-tag>
                                         <nz-tag *ngIf="suscripcion.estado == 'D'" nzColor="red">Desc.</nz-tag>
-                                        <span>{{ suscripcion.servicio }} </span>
-                                        <nz-tag>Gs.{{ suscripcion.monto | number }}/mes</nz-tag>
                                     </nz-option>
                                 </nz-select>
+                                <ng-template #suscripcionTempl let-selected>
+                                    {{ selected.nzLabel }}
+                                    <nz-tag>{{ selected.nzValue }}</nz-tag>
+                                </ng-template>
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
