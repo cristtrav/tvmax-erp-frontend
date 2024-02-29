@@ -49,6 +49,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   timerBusqueda: any;
 
   idclienteSuscription!: Subscription;
+  estadoSuscription!: Subscription;
 
   lstSuscripciones: Suscripcion[] = [];
   loadingSuscripciones: boolean = false;
@@ -75,6 +76,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.idclienteSuscription.unsubscribe();
+    this.estadoSuscription.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -84,6 +86,16 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       this.cargarDatos(Number(this.idreclamo));
       this.formCabecera.controls.estado.addValidators(Validators.required);
     }else this.formCabecera.controls.estado.removeValidators(Validators.required);
+
+    this.estadoSuscription = this.formCabecera.controls.estado.valueChanges.subscribe(val => {
+      if(val == 'OTR' && this.idreclamo != 'nuevo') {
+        this.formCabecera.controls.observacionestado.addValidators(Validators.required);
+      }
+      else {
+        this.formCabecera.controls.observacionestado.removeValidators(Validators.required);
+        this.formCabecera.controls.observacionestado.reset();
+      }
+    });
     
     this.cargarClientes();
     this.cargarResponsables();
@@ -253,6 +265,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     this.lstDetallesReclamos = [];
     this.alertaDetallesVisible = false;
     this.formCabecera.controls.fecha.setValue(new Date());
+    this.idreclamo = 'nuevo';
+    this.router.navigate(['nuevo'], { relativeTo: this.aroute.parent });
   }
 
   private registrar(){
@@ -282,6 +296,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       estado: this.formCabecera.controls.estado.value ?? 'PEN',
       idusuarioresponsable: this.formCabecera.controls.idusuarioresponsable.value,
       detalles: this.lstDetallesReclamos,
+      observacionestado: this.formCabecera.controls.observacionestado.value,
       eliminado: false
     }
   }

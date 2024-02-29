@@ -107,6 +107,14 @@
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
+                        <nz-form-item *ngIf="idreclamo != 'nuevo' && formCabecera.controls.estado.value == 'OTR'">
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Obs. Estado
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese el estado. Máx. 30 carácteres.">
+                                <input nz-input formControlName="observacionestado">
+                            </nz-form-control>
+                        </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
                                 Cliente
