@@ -5,6 +5,7 @@ import { DetalleUsuarioComponent } from './detalle-usuario/detalle-usuario.compo
 import { PermisosUsuarioComponent } from './permisos-usuario/permisos-usuario.component';
 import { SesionService } from '@servicios/sesion.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
 
 const guardFn: CanActivateFn = (
   next: ActivatedRouteSnapshot,
@@ -37,7 +38,8 @@ const formPermisosGuardFn: CanActivateFn = (
 const routes: Routes = [
   { path: '', component: VistaUsuariosComponent },
   { path: ':idusuario', component: DetalleUsuarioComponent, canActivate: [guardFn]},
-  { path: ':idusuario/permisos', component: PermisosUsuarioComponent, canActivate: [formPermisosGuardFn] }
+  { path: ':idusuario/permisos', component: PermisosUsuarioComponent, canActivate: [formPermisosGuardFn] },
+  { path: ':idusuario/roles', component: RolesUsuarioComponent }
 ];
 
 @NgModule({

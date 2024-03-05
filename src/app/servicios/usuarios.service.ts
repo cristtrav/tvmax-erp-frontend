@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { AppSettings } from '../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { environment } from '@environments/environment';
+import { RolDTO } from '@dto/rol.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +17,23 @@ export class UsuariosService {
     private http: HttpClient
   ) { }
 
-  post(u: Usuario): Observable<any> {
+  post(u: UsuarioDTO): Observable<any> {
     return this.http.post(this.url, u, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<UsuarioDTO[]> {
+    return this.http.get<UsuarioDTO[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getTotal(params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getPorId(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  getPorId(id: number): Observable<UsuarioDTO> {
+    return this.http.get<UsuarioDTO>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  put(id: number, u: Usuario): Observable<any> {
+  put(id: number, u: UsuarioDTO): Observable<any> {
     return this.http.put(`${this.url}/${id}`, u, AppSettings.getHttpOptionsAuth());
   }
 
@@ -46,5 +47,9 @@ export class UsuariosService {
 
   changePassword(idusuario: number, oldPass: string, newPass: string): Observable<any>{
     return this.http.post(`${this.url}/${idusuario}/password`, {oldPass, newPass}, AppSettings.getHttpOptionsAuth());
+  }
+
+  getRolesByUsuario(idusuario: number): Observable<RolDTO[]>{
+    return this.http.get<RolDTO[]>(`${this.url}/${idusuario}/roles`, AppSettings.getHttpOptionsAuth());
   }
 }

@@ -10,7 +10,7 @@
             </h3>
         </nz-badge>
         <nz-select [nzPlaceHolder]="'Seleccionar...'" [(ngModel)]="idcobrador" (ngModelChange)="filtrar()" style="width: 100%;" nzAllowClear>
-            <nz-option *ngFor="let cobrador of lstCobradores" [nzLabel]="cobrador.nombres+' '+(cobrador.apellidos ?? '')" [nzValue]="cobrador.id"></nz-option>
+            <nz-option *ngFor="let cobrador of lstCobradores" [nzLabel]="cobrador.razonsocial ?? ''" [nzValue]="cobrador.id"></nz-option>
         </nz-select>
     </div>
     <div nz-col nzSpan="24">

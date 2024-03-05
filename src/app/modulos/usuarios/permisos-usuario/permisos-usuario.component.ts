@@ -7,7 +7,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { UsuariosService } from '@servicios/usuarios.service';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 
@@ -34,7 +34,7 @@ export class PermisosUsuarioComponent implements OnInit {
   guardandoPermisos: boolean = false;
   cargandoPermisos: boolean = false;
 
-  usuario: Usuario | null = null;
+  usuario: UsuarioDTO | null = null;
 
   constructor(
     private aroute: ActivatedRoute,

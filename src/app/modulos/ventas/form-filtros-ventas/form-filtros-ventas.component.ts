@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -38,10 +38,10 @@ export class FormFiltrosVentasComponent implements OnInit {
   fechaInicioCobroFiltro: Date | null = null;
   fechaFinCobroFiltro: Date | null = null;
 
-  lstCobradoresFiltro: Usuario[] = [];
+  lstCobradoresFiltro: UsuarioDTO[] = [];
   idCobradorFiltro: number | null = null;
 
-  lstUsuariosFiltro: Usuario[] = [];
+  lstUsuariosFiltro: UsuarioDTO[] = [];
   idUsuarioCobroFiltro: number | null = null;
 
   filtroPagado: boolean = false;

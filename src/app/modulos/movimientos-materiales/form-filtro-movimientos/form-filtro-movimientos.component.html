@@ -78,7 +78,7 @@
             <nz-option
                 *ngFor="let usuario of lstUsuariosResponsables"
                 [nzValue]="usuario.id"
-                [nzLabel]="usuario.razonsocial">
+                [nzLabel]="usuario.razonsocial ?? ''">
             </nz-option>
         </nz-select>
     </div>

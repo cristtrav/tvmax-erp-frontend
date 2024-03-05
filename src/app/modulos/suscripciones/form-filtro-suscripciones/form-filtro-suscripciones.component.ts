@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter, Input, LOCALE_ID, Inject } from '@angular/core';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -41,7 +41,7 @@ export class FormFiltroSuscripcionesComponent implements OnInit, IFormFiltroSkel
   timerFiltroCuotasPend: any;
   filtroGentileza: boolean = false;
   filtroNormal: boolean = false;
-  lstCobradores: Usuario[] = [];
+  lstCobradores: UsuarioDTO[] = [];
   idcobrador: number | null = null;
 
   fechaInicioCambioEstado: Date | null = null;

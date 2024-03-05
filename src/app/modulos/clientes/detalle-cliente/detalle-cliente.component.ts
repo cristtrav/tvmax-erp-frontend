@@ -6,7 +6,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class DetalleClienteComponent implements OnInit {
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   lastIdLoading: boolean = false;
-  lstCobradores: Usuario[] = [];
+  lstCobradores: UsuarioDTO[] = [];
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),

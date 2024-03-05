@@ -4,7 +4,7 @@ import { Component, Inject, LOCALE_ID, OnInit, ViewEncapsulation } from '@angula
 import { CobroDetalleVenta } from '@dto/cobro-detalle-venta.dto';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { CobrosService } from '@servicios/cobros.service';
 import { GruposService } from '@servicios/grupos.service';
 import { ServiciosService } from '@servicios/servicios.service';
@@ -23,7 +23,7 @@ export class ReporteDetallesVentasComponent implements OnInit {
 
   lstFiltrosReporte: IFiltroReporte[] = [];
   lstDetallesVentas: CobroDetalleVenta[] = [];
-  cobradorFiltro: Usuario | null = null;
+  cobradorFiltro: UsuarioDTO | null = null;
   montoTotal: number = 0;
 
   constructor(
@@ -80,14 +80,14 @@ export class ReporteDetallesVentasComponent implements OnInit {
     );
   }
 
-  private getFiltroCobrador(cobrador: Usuario | null): IFiltroReporte{    
+  private getFiltroCobrador(cobrador: UsuarioDTO | null): IFiltroReporte{    
     return {
       titulo: 'Cobrador',
       contenido: cobrador != null ? `${cobrador.razonsocial}` : '*'
     }
   }
 
-  private getFiltroUsuario(usuario: Usuario | null): IFiltroReporte{
+  private getFiltroUsuario(usuario: UsuarioDTO | null): IFiltroReporte{
     return {
       titulo: 'Cobro registrado por',
       contenido: usuario != null ? `${usuario.razonsocial}` : '*'

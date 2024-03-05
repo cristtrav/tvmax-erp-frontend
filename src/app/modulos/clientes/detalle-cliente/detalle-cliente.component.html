@@ -99,7 +99,7 @@
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un cobrador.">
                                 <nz-select nzAllowClear nzShowSearch formControlName="idcobrador">
                                     <nz-option *ngFor="let co of lstCobradores" [nzValue]="co.id"
-                                        [nzLabel]="co.razonsocial"></nz-option>
+                                        [nzLabel]="co.razonsocial ?? ''"></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>

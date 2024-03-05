@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewContainerR
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
 import { SesionService } from '@servicios/sesion.service';
 import { UsuariosService } from '@servicios/usuarios.service';

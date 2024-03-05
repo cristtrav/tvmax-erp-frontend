@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { ServiciosService } from '@servicios/servicios.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
@@ -30,11 +30,11 @@ export class FormFiltrosCobrosComponent implements OnInit, IFormFiltroSkel {
   public fechaFinCobro: Date | null = null;
 
   public idcobrador: number | null = null;
-  public lstCobradores: Usuario[] = [];
+  public lstCobradores: UsuarioDTO[] = [];
   public cargandoCobradores: boolean = false;
 
   public idusuario: number | null = null;
-  public lstUsuarios: Usuario[] = [];
+  public lstUsuarios: UsuarioDTO[] = [];
   public cargandoUsuarios: boolean = false;
 
   public nodosGruposServicios: NzTreeNodeOptions[] = [];

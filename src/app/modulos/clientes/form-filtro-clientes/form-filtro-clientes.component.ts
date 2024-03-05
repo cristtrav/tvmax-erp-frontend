@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
@@ -19,7 +19,7 @@ export class FormFiltroClientesComponent implements OnInit, IFormFiltroSkel {
   @Output()
   cantFiltrosChange = new EventEmitter<number>();
 
-  lstCobradoresFiltro: Usuario[] = [];
+  lstCobradoresFiltro: UsuarioDTO[] = [];
   cobradoresSeleccionadosFiltro: number[] = [];
 
   ubicacionesSelec: string[] = [];

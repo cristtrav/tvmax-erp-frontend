@@ -7,7 +7,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { Extra } from '../../../util/extra';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
@@ -37,7 +37,7 @@ export class VistaClientesComponent implements OnInit {
   textoBusqueda: string = '';
   timerBusqueda: any;
 
-  lstCobradoresFiltro: Usuario[] = [];
+  lstCobradoresFiltro: UsuarioDTO[] = [];
   cobradoresSeleccionadosFiltro: number[] = [];
 
   paramsFiltros: IParametroFiltro = {};

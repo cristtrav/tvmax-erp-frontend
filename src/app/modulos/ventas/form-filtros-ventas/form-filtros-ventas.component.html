@@ -63,7 +63,7 @@
         </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear [(ngModel)]="idUsuarioCobroFiltro"
             (ngModelChange)="filtrar()" style="width: 100%;" nzShowSearch>
-            <nz-option *ngFor="let usu of lstUsuariosFiltro" [nzLabel]="usu.razonsocial" [nzValue]="usu.id"></nz-option>
+            <nz-option *ngFor="let usu of lstUsuariosFiltro" [nzLabel]="usu.razonsocial ?? ''" [nzValue]="usu.id"></nz-option>
         </nz-select>
     </div>
     <div nz-col nzSpan="24">
@@ -77,7 +77,7 @@
         </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." nzAllowClear [(ngModel)]="idCobradorFiltro"
             (ngModelChange)="filtrar()" style="width: 100%;" nzShowSearch>
-            <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial"
+            <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial ?? ''"
                 [nzValue]="cob.id"></nz-option>
         </nz-select>
     </div>

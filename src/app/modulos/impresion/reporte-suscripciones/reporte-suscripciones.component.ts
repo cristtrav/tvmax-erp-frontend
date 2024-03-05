@@ -7,7 +7,7 @@ import { Distrito } from '@dto/distrito-dto';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { BarriosService } from '@servicios/barrios.service';
 import { DepartamentosService } from '@servicios/departamentos.service';
 import { DistritosService } from '@servicios/distritos.service';
@@ -138,7 +138,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     return this.serviciosSrv.getServicios(params);
   }
 
-  private cargarCobrador(idusuario: number): Observable<Usuario> {
+  private cargarCobrador(idusuario: number): Observable<UsuarioDTO> {
     return this.usuariosSrv.getPorId(idusuario);
   }
 
@@ -155,7 +155,7 @@ export class ReporteSuscripcionesComponent implements OnInit {
     }
   }
 
-  private getCobradorFiltroReporte(cobrador: Usuario | null): IFiltroReporte {
+  private getCobradorFiltroReporte(cobrador: UsuarioDTO | null): IFiltroReporte {
     const titulo = 'Cobrador';
     let contenido = '*';
     if (cobrador != null) {

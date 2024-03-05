@@ -34,7 +34,7 @@
             [(ngModel)]="idcobrador"
             (ngModelChange)="filtrar()"
             style="width: 100%;">
-            <nz-option *ngFor="let cobrador of lstCobradores" [nzLabel]="cobrador.razonsocial" [nzValue]="cobrador.id">
+            <nz-option *ngFor="let cobrador of lstCobradores" [nzLabel]="cobrador.razonsocial ?? ''" [nzValue]="cobrador.id">
             </nz-option>
         </nz-select>
     </div>
@@ -52,7 +52,7 @@
             [nzAllowClear]="true"
             [nzLoading]="cargandoUsuarios"
             style="width: 100%;">
-            <nz-option *ngFor="let usuario of lstUsuarios" [nzLabel]="usuario.razonsocial" [nzValue]="usuario.id"></nz-option>
+            <nz-option *ngFor="let usuario of lstUsuarios" [nzLabel]="usuario.razonsocial ?? ''" [nzValue]="usuario.id"></nz-option>
         </nz-select>
     </div>
     <div nz-col nzSpan="24">

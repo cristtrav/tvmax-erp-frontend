@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UsuariosService } from './../../../servicios/usuarios.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { RolDTO } from '@dto/rol.dto';
 import { RolesService } from '@servicios/roles.service';
 import { HttpParams } from '@angular/common/http';
+import { UsuariosService } from '@servicios/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { Subscription, finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-usuario',
   templateUrl: './detalle-usuario.component.html',
   styleUrls: ['./detalle-usuario.component.scss']
 })
-export class DetalleUsuarioComponent implements OnInit {
+export class DetalleUsuarioComponent implements OnInit, OnDestroy {
 
   idusuario = 'nuevo';
   form: FormGroup = new FormGroup({
@@ -26,7 +27,7 @@ export class DetalleUsuarioComponent implements OnInit {
     telefono: new FormControl(null, [Validators.maxLength(20)]),
     password: new FormControl(null, [Validators.minLength(5)]),
     accesosistema: new FormControl(false, [Validators.required]),
-    idrol: new FormControl(null, [Validators.required])
+    idroles: new FormControl(null, [Validators.required])
   });
 
   pwdVisible: boolean = false;
@@ -37,6 +38,9 @@ export class DetalleUsuarioComponent implements OnInit {
   listaRoles: RolDTO[] = [];
   accesoSistema: boolean = false;
 
+  accesoSistemaSuscription!: Subscription;
+  passwordSuscription!: Subscription;
+
   constructor(
     private usuarioSrv: UsuariosService,
     private notif: NzNotificationService,
@@ -45,14 +49,19 @@ export class DetalleUsuarioComponent implements OnInit {
     private rolesSrv: RolesService
   ) { }
 
+  ngOnDestroy(): void {
+    this.accesoSistemaSuscription.unsubscribe();
+    this.passwordSuscription.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.idusuario = this.aroute.snapshot.paramMap.get('idusuario') ?? 'nuevo';
     this.cargarRoles();
-    this.form.controls.accesosistema.valueChanges.subscribe(acceso => {
+    this.accesoSistemaSuscription = this.form.controls.accesosistema.valueChanges.subscribe(acceso => {
       this.updateAcesoControlRequiredValidator(acceso);
       this.updatePwdControlRequiredValidator(acceso, this.form.controls.password.value, this.idusuario);
     })
-    this.form.controls.password.valueChanges.subscribe(pwd => {
+    this.passwordSuscription = this.form.controls.password.valueChanges.subscribe(pwd => {
       this.updatePwdControlRequiredValidator(
         this.form.controls.accesosistema.value,
         pwd,
@@ -104,22 +113,25 @@ export class DetalleUsuarioComponent implements OnInit {
 
   private cargarDatos(): void {
     this.formLoading = true;
-    this.usuarioSrv.getPorId(Number(this.idusuario)).subscribe({
-      next: (usuario) => {
-        this.form.controls.id.setValue(usuario.id);
-        this.form.controls.nombres.setValue(usuario.nombres);
-        this.form.controls.apellidos.setValue(usuario.apellidos);
-        this.form.controls.ci.setValue(usuario.ci);
-        this.form.controls.email.setValue(usuario.email);
-        this.form.controls.telefono.setValue(usuario.telefono);
-        this.form.controls.accesosistema.setValue(usuario.accesosistema);
-        this.form.controls.idrol.setValue(usuario.idrol);
-        this.formLoading = false;
+    forkJoin({
+      usuario: this.usuarioSrv.getPorId(Number(this.idusuario)),
+      roles: this.usuarioSrv.getRolesByUsuario(Number(this.idusuario))
+    })
+    .pipe(finalize(() => this.formLoading = false))
+    .subscribe({
+      next: (resp) => {
+        this.form.controls.id.setValue(resp.usuario.id);
+        this.form.controls.nombres.setValue(resp.usuario.nombres);
+        this.form.controls.apellidos.setValue(resp.usuario.apellidos);
+        this.form.controls.ci.setValue(resp.usuario.ci);
+        this.form.controls.email.setValue(resp.usuario.email);
+        this.form.controls.telefono.setValue(resp.usuario.telefono);
+        this.form.controls.accesosistema.setValue(resp.usuario.accesosistema);
+        this.form.controls.idroles.setValue(resp.roles.map(r => r.id));
       },
       error: (e) => {
         console.error('Error al cargar Usuario', e);
         this.httpErrorHandler.process(e);
-        this.formLoading = false;
       }
     })
   }
@@ -138,18 +150,19 @@ export class DetalleUsuarioComponent implements OnInit {
     }
   }
 
-  private getDto(): Usuario {
-    const u: Usuario = new Usuario();
-    u.id = this.form.controls.id.value;
-    u.nombres = this.form.controls.nombres.value;
-    u.apellidos = this.form.controls.apellidos.value;
-    u.ci = this.form.controls.ci.value;
-    u.email = this.form.controls.email.value;
-    u.telefono = this.form.controls.telefono.value;
-    u.password = this.form.controls.password.value;
-    u.accesosistema = this.form.controls.accesosistema.value;
-    u.idrol = this.form.controls.idrol.value;
-    return u;
+  private getDto(): UsuarioDTO {
+    return {
+      id: this.form.controls.id.value,
+      nombres: this.form.controls.nombres.value,
+      apellidos: this.form.controls.apellidos.value,
+      ci: this.form.controls.ci.value,
+      email: this.form.controls.email.value,
+      telefono: this.form.controls.telefono.value,
+      password: this.form.controls.password.value,
+      accesosistema: this.form.controls.accesosistema.value,
+      idroles: this.form.controls.idroles.value,
+      eliminado: false
+    }
   }
 
   private registrar(): void {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
@@ -26,7 +26,7 @@ export class FormFiltroMovimientosComponent implements OnInit {
   fechaFinFiltro: Date | null = null;
   tiposMovimientosFiltro: string[] = [];
 
-  lstUsuariosResponsables: Usuario[] = [];
+  lstUsuariosResponsables: UsuarioDTO[] = [];
   loadingUsuariosResponsables: boolean = false;
   idusuarioResponsable: number | null = null;
 
