@@ -82,7 +82,8 @@
                                             nzTooltipTitle="Roles"
                                             nz-button
                                             nzType="default"
-                                            [routerLink]="[u.id, 'roles']">
+                                            [routerLink]="[u.id, 'roles']"
+                                            [disabled]="u.sololectura">
                                             <i nz-icon nzType="tags"></i>
                                         </button>
                                     </div>
