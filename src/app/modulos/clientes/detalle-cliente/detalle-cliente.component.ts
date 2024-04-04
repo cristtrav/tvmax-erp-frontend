@@ -24,9 +24,9 @@ export class DetalleClienteComponent implements OnInit {
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
-    nombres: new FormControl(null, [Validators.minLength(2), Validators.maxLength(50)]),
-    apellidos: new FormControl(null, [Validators.minLength(2), Validators.maxLength(50)]),
-    razonsocial: new FormControl(null, [Validators.minLength(2), Validators.required, Validators.maxLength(100)]),
+    nombres: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
+    apellidos: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
+    razonsocial: new FormControl(null, [Validators.minLength(2), Validators.required, Validators.maxLength(160)]),
     ci: new FormControl(null, [Validators.minLength(2), Validators.maxLength(15)]),
     dvruc: new FormControl(null),
     telefono1: new FormControl(null, [Validators.minLength(4), Validators.maxLength(20)]),
