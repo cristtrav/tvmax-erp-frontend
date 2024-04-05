@@ -42,17 +42,23 @@
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Razón social</nz-form-label>
+                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Nombres</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una razón social. Máx. 80 carácteres.">
-                                <input nz-input formControlName="razonsocial">
+                                <input nz-input formControlName="nombres">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [nzSm]="7" [nzXs]="24">Apellidos</nz-form-label>
+                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 80 carácteres.">
+                                <input nz-input formControlName="apellidos">
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Rol</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un rol.">
-                                <nz-select nzPlaceHolder="Seleccionar..." formControlName="rol" nzAllowClear>
-                                    <nz-option [nzValue]="'PR'" [nzLabel]="'Proveedor'"></nz-option>
-                                    <nz-option [nzValue]="'RE'" [nzLabel]="'Retiro de materiales'"></nz-option>
+                                <nz-select nzPlaceHolder="Seleccionar..." formControlName="roles" nzMode="multiple" nzAllowClear>
+                                    <nz-option [nzValue]="8" [nzLabel]="'Proveedor de materiales'"></nz-option>
+                                    <nz-option [nzValue]="7" [nzLabel]="'Retiro de materiales'"></nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>

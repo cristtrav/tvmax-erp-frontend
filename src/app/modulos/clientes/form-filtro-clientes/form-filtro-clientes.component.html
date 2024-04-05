@@ -10,7 +10,7 @@
         </nz-badge>
         <nz-select nzPlaceHolder="Seleccionar..." nzMode="multiple" [(ngModel)]="cobradoresSeleccionadosFiltro"
             (ngModelChange)="filtrar()" style="width: 100%;">
-            <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial" [nzValue]="cob.id">
+            <nz-option *ngFor="let cob of lstCobradoresFiltro" [nzLabel]="cob.razonsocial ?? ''" [nzValue]="cob.id">
             </nz-option>
         </nz-select>
     </div>

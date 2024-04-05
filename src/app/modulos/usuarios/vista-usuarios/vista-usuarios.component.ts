@@ -2,12 +2,12 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { UsuariosService } from './../../../servicios/usuarios.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Extra } from '@util/extra';
+import { UsuariosService } from '@servicios/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-vista-usuarios',
@@ -16,7 +16,7 @@ import { Extra } from '@util/extra';
 })
 export class VistaUsuariosComponent implements OnInit {
 
-  lstUsuarios: Usuario[] = [];
+  lstUsuarios: UsuarioDTO[] = [];
   pageSize: number = 10;
   pageIndex: number = 1;
   totalRegisters: number = 1;
@@ -36,7 +36,7 @@ export class VistaUsuariosComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  confirmarEliminacion(usuario: Usuario) {
+  confirmarEliminacion(usuario: UsuarioDTO) {
     this.modal.confirm({
       nzTitle: '¿Desea eliminar el Usuario?',
       nzContent: `«${usuario.id} - ${usuario.razonsocial}»`,
@@ -48,8 +48,24 @@ export class VistaUsuariosComponent implements OnInit {
     });
   }
 
+  cargarRoles(idusuario: number){
+    this.usuariosSrv.getRolesByUsuario(idusuario).subscribe({
+      next: (roles) => {
+        const usu = this.lstUsuarios.find(u => u.id == idusuario)
+        if(usu) usu.roles = roles;
+      },
+      error: (e) => {
+        console.error('Error al cargar roles', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
+  }
+
   onExpandChange(id: number, checked: boolean) {
-    if (checked) this.expandSet.add(id);
+    if (checked){
+      this.expandSet.add(id);
+      this.cargarRoles(id);
+    }
     else this.expandSet.delete(id);
   }
 
@@ -72,7 +88,7 @@ export class VistaUsuariosComponent implements OnInit {
     })
   }
 
-  eliminar(usuario: Usuario): void {
+  eliminar(usuario: UsuarioDTO): void {
     if (usuario.id) this.usuariosSrv.delete(usuario.id).subscribe({
       next: () => {
         this.notif.create('success', '<strong>Éxito</strong>', 'Usuario eliminado');

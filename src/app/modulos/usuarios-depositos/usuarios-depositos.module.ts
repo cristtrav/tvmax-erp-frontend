@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { UsuariosDepositosRoutingModule } from './usuarios-depositos-routing.module';
 import { DetalleUsuarioDepositoComponent } from './detalle-usuario-deposito/detalle-usuario-deposito.component';
 import { VistaUsuariosDepositosComponent } from './vista-usuarios-depositos/vista-usuarios-depositos.component';
@@ -17,7 +16,8 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzInputNumberModule,
     NzSelectModule,
     NzSpinModule,
-    NzModalModule
+    NzModalModule,
+    NzTypographyModule,
+    NzTagModule
   ]
 })
 export class UsuariosDepositosModule { }

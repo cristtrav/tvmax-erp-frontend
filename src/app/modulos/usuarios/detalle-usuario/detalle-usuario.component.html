@@ -45,14 +45,6 @@
                             </nz-form-control>
                         </nz-form-item>
                         <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Rol</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un Rol.">
-                                <nz-select nzPlaceHolder="Seleccionar..." nzShowSearch nzAllowClear formControlName="idrol">
-                                    <nz-option *ngFor="let rol of listaRoles" [nzLabel]="rol.descripcion" [nzValue]="rol.id"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
                             <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Nombres</nz-form-label>
                             <nz-form-control [nzSm]="15" [nzXs]="24"
                                 nzErrorTip="Ingrese un nombre. Máx. 80 carácteres.">
@@ -115,18 +107,26 @@
                             </nz-form-control>
                         </nz-form-item>
                         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                            <nz-space>
-                                <span *nzSpaceItem>
-                                    <button *ngIf="idusuario!=='nuevo'" nz-button nzType="default" [routerLink]="'permisos'">
+                            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                                <div nz-col *ngIf="idusuario!='nuevo'">
+                                    <button nz-button nzType="default" [routerLink]="['roles']">
+                                        <i nz-icon nzType="tags" nzTheme="outline"></i>
+                                        Roles
+                                    </button>
+                                </div>
+                                <div nz-col *ngIf="idusuario!=='nuevo'">
+                                    <button nz-button nzType="default" [routerLink]="'permisos'">
                                         <i nz-icon nzType="key" nzTheme="outline"></i>
                                         Permisos
                                     </button>
-                                </span>
-                                <button *nzSpaceItem nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                                    <i nz-icon nzType="save"></i>
-                                    {{ idusuario === 'nuevo' ? 'Registrar' : 'Editar' }}
-                                </button>
-                            </nz-space>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                                        <i nz-icon nzType="save"></i>
+                                        {{ idusuario === 'nuevo' ? 'Registrar' : 'Editar' }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </nz-spin>

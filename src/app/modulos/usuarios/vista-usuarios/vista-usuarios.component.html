@@ -49,7 +49,6 @@
                         <th [nzColumnKey]="'nombres'" [nzSortFn]="true">Nombres</th>
                         <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">Apellidos</th>
                         <th [nzColumnKey]="'ci'" [nzSortFn]="true">Nro. Documento</th>
-                        <th [nzColumnKey]="'rol'" [nzSortFn]="true">Rol</th>
                         <th [nzColumnKey]="'accesosistema'" [nzSortFn]="true" nzAlign="center">Acceso</th>
                         <th>Acciones</th>
                     </tr>
@@ -71,15 +70,23 @@
                                 {{ u.ci | number}}
                                 <span *ngIf="u.ci == null" nz-typography nzType="secondary">(sin nro. doc.)</span>
                             </td>
-                            <td>
-                                {{u.rol}}
-                            </td>
                             <td nzAlign="center">
                                 <nz-tag *ngIf="u.accesosistema" nzColor="green">Sí</nz-tag>
                                 <nz-tag *ngIf="!u.accesosistema" nzColor="red">No</nz-tag>
                             </td>
                             <td>
                                 <div nz-row [nzGutter]="[8, 8]">
+                                    <div nz-col>
+                                        <button
+                                            nz-tooltip
+                                            nzTooltipTitle="Roles"
+                                            nz-button
+                                            nzType="default"
+                                            [routerLink]="[u.id, 'roles']"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="tags"></i>
+                                        </button>
+                                    </div>
                                     <div nz-col>
                                         <button
                                             nz-button
@@ -133,8 +140,22 @@
                                     <span *ngIf="!u.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
                                 </nz-descriptions-item>
                             </nz-descriptions>
-                        </tr>   
-
+                            <nz-table
+                                #tablaRol
+                                nzSize="small"
+                                [nzData]="u.roles ?? tablaRol.data">
+                                <thead>
+                                    <tr>
+                                        <th>Roles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let rol of tablaRol.data">
+                                        <td>{{ rol.descripcion }}</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </tr>  
                     </ng-container>
                 </tbody>
             </nz-table>

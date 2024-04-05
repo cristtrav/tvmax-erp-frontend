@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, Inject, LOCALE_ID, OnInit, ViewEncapsulation } from '@angular/core';
 import { Venta } from '@dto/venta.dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { VentasService } from '@servicios/ventas.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
@@ -111,13 +111,13 @@ export class ReporteVentasComponent implements OnInit {
     return { titulo, contenido };
   }
 
-  private getUsuarioRegistroFiltroReporte(usu: Usuario | null): IFiltroReporte {
+  private getUsuarioRegistroFiltroReporte(usu: UsuarioDTO | null): IFiltroReporte {
     const titulo: string = `Registrado por`;
     const contenido: string = usu ? `${usu.razonsocial}` : '*';
     return { titulo, contenido };
   }
 
-  private getCobradorFiltroReporte(cob: Usuario): IFiltroReporte {
+  private getCobradorFiltroReporte(cob: UsuarioDTO): IFiltroReporte {
     const titulo: string = 'Cobrador';
     const contenido: string = cob ? `${cob.razonsocial}` : '*';
     return { titulo, contenido };

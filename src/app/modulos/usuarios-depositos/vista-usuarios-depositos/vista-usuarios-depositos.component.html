@@ -59,11 +59,13 @@
                         [nzTotal]="totalRegisters"
                         [nzLoading]="loading"
                         [nzSize]="'small'"
+                        [nzFooter]="tfooter"
                         (nzQueryParams)="onTableQueryParamsChange($event)">
                         <thead>
                             <tr>
-                                <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
-                                <th [nzColumnKey]="'razonsocial'" [nzSortFn]="true">Razon social</th>
+                                <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+                                <th [nzColumnKey]="'nombres'" [nzSortFn]="true">Nombres</th>
+                                <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">apellidos</th>
                                 <th [nzColumnKey]="'rol'" [nzSortFn]="true">Rol</th>
                                 <th>Acciones</th>
                             </tr>
@@ -71,14 +73,14 @@
                         <tbody>
                             <tr *ngFor="let usuario of tabla.data">
                                 <td>{{ usuario.id }}</td>
-                                <td>{{ usuario.razonsocial }}</td>
+                                <td>{{ usuario.nombres }}</td>
                                 <td>
-                                    <span *ngIf="usuario.rol == 'RE'">
-                                        Retiro de materiales
-                                    </span>
-                                    <span *ngIf="usuario.rol == 'PR'">
-                                        Proveedor
-                                    </span>
+                                    <span *ngIf="usuario.apellidos">{{ usuario.apellidos }}</span>
+                                    <span *ngIf="!usuario.apellidos" nz-typography nzType="secondary">(sin apellido)</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="mapRoles.get(usuario.id)?.length == 0" nz-typography nzType="secondary">(sin roles)</span>
+                                   <nz-tag *ngFor="let rol of mapRoles.get(usuario.id)">{{ rol.descripcion }}</nz-tag>
                                 </td>
                                 <td>
                                     <div nz-row [nzGutter]="[8,8]" nzJustify="center">
@@ -107,6 +109,9 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <ng-template #tfooter>
+                            <strong>Total de registros: </strong> {{ totalRegisters }}
+                        </ng-template>
                     </nz-table>
                 </div>
             </div>

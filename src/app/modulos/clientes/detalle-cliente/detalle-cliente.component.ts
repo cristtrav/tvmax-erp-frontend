@@ -6,7 +6,7 @@ import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 
 @Component({
@@ -20,13 +20,13 @@ export class DetalleClienteComponent implements OnInit {
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   lastIdLoading: boolean = false;
-  lstCobradores: Usuario[] = [];
+  lstCobradores: UsuarioDTO[] = [];
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
-    nombres: new FormControl(null, [Validators.minLength(2), Validators.maxLength(50)]),
-    apellidos: new FormControl(null, [Validators.minLength(2), Validators.maxLength(50)]),
-    razonsocial: new FormControl(null, [Validators.minLength(2), Validators.required, Validators.maxLength(100)]),
+    nombres: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
+    apellidos: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
+    razonsocial: new FormControl(null, [Validators.minLength(2), Validators.required, Validators.maxLength(160)]),
     ci: new FormControl(null, [Validators.minLength(2), Validators.maxLength(15)]),
     dvruc: new FormControl(null),
     telefono1: new FormControl(null, [Validators.minLength(4), Validators.maxLength(20)]),

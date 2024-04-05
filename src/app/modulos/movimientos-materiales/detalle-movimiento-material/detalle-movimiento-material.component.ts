@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewContainerR
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
 import { SesionService } from '@servicios/sesion.service';
 import { UsuariosService } from '@servicios/usuarios.service';
@@ -14,8 +14,6 @@ import { TablaDetallesMovimientosComponent } from './tabla-detalles-movimientos/
 import { BuscadorMaterialesComponent } from './buscador-materiales/buscador-materiales.component';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { ImpresionService } from '@servicios/impresion.service';
-import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
-import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
 
 @Component({
   selector: 'app-detalle-movimiento-material',
@@ -41,7 +39,7 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
   idDetalleEnEdicion: number | null = 0;
   cantidadEnEdicion: number = 1;
 
-  lstUsuarios: UsuarioDepositoDTO[] = [];
+  lstUsuarios: UsuarioDTO[] = [];
   guardandoMovimiento: boolean = false;
   loadingUsuarios: boolean = false;
 
@@ -66,7 +64,7 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
     private movimientosSrv: MovimientosMaterialesService,
     private impresionSrv: ImpresionService,
     private viewContainerRef: ViewContainerRef,
-    private usuariosDeposito: UsuariosDepositosService
+    private usuariosSrv: UsuariosService
   ){}
 
   ngAfterViewInit(): void {
@@ -157,11 +155,11 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
   cargarUsuarios(){
     let httpParams = new HttpParams().append('eliminado', 'false');
     const tm = this.formCabecera.controls.tipoMovimiento.value
-    if(tm == 'EN') httpParams = httpParams.append('rol', 'PR');
-    else httpParams = httpParams.append('rol', 'RE');
+    if(tm == 'EN') httpParams = httpParams.append('idrol', 8);
+    else httpParams = httpParams.append('idrol', 7);
     
     this.loadingUsuarios = true;
-    this.usuariosDeposito.get(httpParams)
+    this.usuariosSrv.get(httpParams)
     .pipe(finalize(() => this.loadingUsuarios = false))
     .subscribe({
       next: (usuarios) => {

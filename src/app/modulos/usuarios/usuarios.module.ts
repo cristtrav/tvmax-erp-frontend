@@ -27,9 +27,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { FormCambioPasswordComponent } from './form-cambio-password/form-cambio-password.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
 
 @NgModule({
-  declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent, FormCambioPasswordComponent],
+  declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent, FormCambioPasswordComponent, RolesUsuarioComponent],
   imports: [
     CommonModule,
     UsuariosRoutingModule,
@@ -55,7 +58,10 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzDescriptionsModule,
     NzSelectModule,
     NzModalModule,
-    NzAlertModule    
+    NzAlertModule,
+    NzListModule,
+    NzEmptyModule,
+    NzCheckboxModule
   ],
   exports: [FormCambioPasswordComponent]
 })

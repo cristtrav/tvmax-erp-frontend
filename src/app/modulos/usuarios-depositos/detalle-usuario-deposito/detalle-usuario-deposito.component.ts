@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
-import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
+import { UsuarioDTO } from '@dto/usuario.dto';
+import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize } from 'rxjs';
@@ -18,16 +18,19 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
   loadingId: boolean = false;
   guardando: boolean = false;
   loading: boolean = false;
+
+  usuarioEditar!: UsuarioDTO;
   
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
-    razonsocial: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
-    rol: new FormControl(null, [Validators.required])
+    nombres: new FormControl(null, [Validators.required, Validators.maxLength(80)]),
+    apellidos: new FormControl(null, [Validators.maxLength(80)]),
+    roles: new FormControl<number[]>([], [Validators.required])
   })
 
   constructor(
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private usuariosDepositosSrv: UsuariosDepositosService,
+    private usuariosSrv: UsuariosService,
     private aroute: ActivatedRoute,
     private router: Router,
     private notif: NzNotificationService
@@ -43,8 +46,8 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
 
   generarId(){
     this.loadingId = true;
-    this.usuariosDepositosSrv
-    .getUltimoId()
+    this.usuariosSrv
+    .getLastId()
     .pipe(finalize(() => this.loadingId = false))
     .subscribe({
       next: (ultimoId) => {
@@ -70,7 +73,7 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
 
   private registrar(){
     this.guardando = true;
-    this.usuariosDepositosSrv
+    this.usuariosSrv
     .post(this.getDto())
     .pipe(finalize(() => this.guardando = false))
     .subscribe({
@@ -87,8 +90,8 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
 
   private editar(){
     this.guardando = true;
-    this.usuariosDepositosSrv
-    .put(Number(this.idusuario), this.getDto())
+    this.usuariosSrv
+    .put(Number(this.idusuario), this.getDtoEdicion())
     .pipe(finalize(() => this.guardando = false))
     .subscribe({
       next: () => {
@@ -103,25 +106,39 @@ export class DetalleUsuarioDepositoComponent implements OnInit {
     });
   }
 
-  private getDto(): UsuarioDepositoDTO{
+  private getDto(): UsuarioDTO{
     return {
       id: this.form.controls.id.value,
-      razonsocial: this.form.controls.razonsocial.value,
-      rol: this.form.controls.rol.value,
+      nombres: this.form.controls.nombres.value,
+      apellidos: this.form.controls.apellidos.value,
+      idroles: this.form.controls.roles.value,
+      accesosistema: false,
       eliminado: false
+    }
+  }
+
+  private getDtoEdicion(): UsuarioDTO{
+    return {
+      ...this.usuarioEditar,
+      id: this.form.controls.id.value,
+      nombres: this.form.controls.nombres.value,
+      apellidos: this.form.controls.apellidos.value,
+      idroles: this.form.controls.roles.value.concat((this.usuarioEditar.idroles ?? []).filter(idr => idr != 7 && idr != 8))
     }
   }
 
   cargarDatos(id: number){
     this.loading = true;
-    this.usuariosDepositosSrv
+    this.usuariosSrv
     .getPorId(id)
     .pipe(finalize(() => this.loading = false))
     .subscribe({
       next: (usuario) => {
+        this.usuarioEditar = usuario;
         this.form.controls.id.setValue(usuario.id);
-        this.form.controls.razonsocial.setValue(usuario.razonsocial);
-        this.form.controls.rol.setValue(usuario.rol);
+        this.form.controls.nombres.setValue(usuario.nombres);
+        this.form.controls.apellidos.setValue(usuario.apellidos);
+        this.form.controls.roles.setValue((usuario.idroles ?? []).filter(idr => idr == 7 || idr == 8));
       },
       error: (e) => {
         console.error('Error al cargar usuario de deposito por id', e);
