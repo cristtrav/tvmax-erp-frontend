@@ -6,8 +6,6 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
-import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
 
 @Component({
   selector: 'app-form-filtro-movimientos',
@@ -30,8 +28,8 @@ export class FormFiltroMovimientosComponent implements OnInit {
   loadingUsuariosResponsables: boolean = false;
   idusuarioResponsable: number | null = null;
 
-  lstUsariosEntrega: UsuarioDepositoDTO[] = [];
-  lstProveedores: UsuarioDepositoDTO[] = [];
+  lstUsariosEntrega: UsuarioDTO[] = [];
+  lstProveedores: UsuarioDTO[] = [];
   loadingUsuariosEntrega: boolean = false;
   idusuarioEntrega: number | null = null;
 
@@ -39,8 +37,7 @@ export class FormFiltroMovimientosComponent implements OnInit {
     @Inject(LOCALE_ID)
     private locale: string,
     private usuariosSrv: UsuariosService,
-    private usuariosDepositosSrv: UsuariosDepositosService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
   ){}
 
   ngOnInit(): void {
@@ -71,13 +68,13 @@ export class FormFiltroMovimientosComponent implements OnInit {
     const httpParams = new HttpParams()
       .append('eliminado', false);
     this.loadingUsuariosEntrega = true;
-    this.usuariosDepositosSrv
+    this.usuariosSrv
       .get(httpParams)
       .pipe(finalize(() => this.loadingUsuariosEntrega = false))
       .subscribe({
         next: (usuarios) => {
-          this.lstUsariosEntrega = usuarios.filter(u => u.rol == 'RE');
-          this.lstProveedores = usuarios.filter(u => u.rol == 'PR');
+          this.lstUsariosEntrega = usuarios.filter(u => (u.idroles ?? []).includes(7));
+          this.lstProveedores = usuarios.filter(u => (u.idroles ?? []).includes(8));
         },
         error: (e) => {
           console.error('Error al cargar usuarios de depósitos', e);

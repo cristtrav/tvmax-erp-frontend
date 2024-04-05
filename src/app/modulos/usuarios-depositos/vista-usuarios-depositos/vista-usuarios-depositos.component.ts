@@ -1,13 +1,19 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UsuarioDepositoDTO } from '@dto/usuario-deposito.dto';
-import { UsuariosDepositosService } from '@servicios/usuarios-depositos.service';
+import { RolDTO } from '@dto/rol.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
+import { UsuariosService } from '@servicios/usuarios.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { finalize, forkJoin } from 'rxjs';
+import { finalize, flatMap, forkJoin, from, map, merge, mergeMap, of, tap, toArray } from 'rxjs';
+
+interface RolesUsuarioInterface{
+  roles: RolDTO[],
+  loading: boolean
+}
 
 @Component({
   selector: 'app-vista-usuarios-depositos',
@@ -16,7 +22,7 @@ import { finalize, forkJoin } from 'rxjs';
 })
 export class VistaUsuariosDepositosComponent implements OnInit {
 
-  lstUsuariosDepositos: UsuarioDepositoDTO[] = [];
+  lstUsuariosDepositos: UsuarioDTO[] = [];
   totalRegisters: number = 0;
   pageSize: number = 10;
   pageIndex: number = 1;
@@ -24,30 +30,54 @@ export class VistaUsuariosDepositosComponent implements OnInit {
   sortSr: string | null = null;
   textoBusqueda: string = ''
   timerBusqueda: any;
+  mapRoles: Map<number, RolDTO[]> = new Map();
 
   constructor(
-    private usuariosDepositosSrv: UsuariosDepositosService,
+    private usuariosSrv: UsuariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private modal: NzModalService,
     private notif: NzNotificationService
   ){}
 
   ngOnInit(): void {
-
   }
 
   cargarDatos(){
     this.loading = true;
     forkJoin({
-      usuarios: this.usuariosDepositosSrv.get(this.getHttpParams()),
-      total: this.usuariosDepositosSrv.getTotal(this.getHttpParams())
+      usuarios: this.usuariosSrv.get(this.getHttpParams()),
+      total: this.usuariosSrv.getTotal(this.getHttpParams())
     })
-    .pipe(finalize(() => this.loading = false))
+    .pipe(
+      mergeMap(respA => {
+        return forkJoin({
+          usuarios: of(respA.usuarios),
+          total: of(respA.total),
+          roles: from(respA.usuarios).pipe(
+            mergeMap(usuario => {
+              return this.usuariosSrv
+                .getRolesByUsuario(usuario.id)
+                .pipe(
+                  mergeMap((roles: RolDTO[]) => of({idusuario: usuario.id, roles})
+                )
+              )
+            }),
+            toArray(),
+            map(idusuariosRoles => {
+              const mapa: Map<number, RolDTO[]> = new Map();
+              idusuariosRoles.forEach(idusuariorol => mapa.set(idusuariorol.idusuario, idusuariorol.roles));
+              return mapa;
+            })
+          )
+        })
+      }),
+      finalize(() => this.loading = false)
+    )
     .subscribe({
       next: (resp) => {
-        console.log(resp);
         this.totalRegisters = resp.total;
         this.lstUsuariosDepositos = resp.usuarios;
+        this.mapRoles = resp.roles;
       },
       error: (e) => {
         console.error('Error al cargar usuarios de depositos', e);
@@ -58,6 +88,8 @@ export class VistaUsuariosDepositosComponent implements OnInit {
 
   private getHttpParams(): HttpParams{
     let params = new HttpParams();
+    params = params.append('idrol', 7);
+    params = params.append('idrol', 8);
     params = params.append('eliminado', 'false');
     params = params.append('limit', this.pageSize);
     params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
@@ -85,7 +117,7 @@ export class VistaUsuariosDepositosComponent implements OnInit {
     }, 250);
   }
 
-  confirmarEliminacion(usuario: UsuarioDepositoDTO){
+  confirmarEliminacion(usuario: UsuarioDTO){
     this.modal.confirm({
       nzTitle: '¿Desea eliminar el usuario de depósito?',
       nzContent: `${usuario.id} - ${usuario.razonsocial}`,
@@ -96,7 +128,7 @@ export class VistaUsuariosDepositosComponent implements OnInit {
   }
 
   eliminar(id: number){
-    this.usuariosDepositosSrv.delete(id).subscribe({
+    this.usuariosSrv.delete(id).subscribe({
       next: () => {
         this.notif.success('<strong>Éxito</strong>', 'Usuario de depósito eliminado');
         this.cargarDatos();
@@ -106,6 +138,7 @@ export class VistaUsuariosDepositosComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
+
   }
 
 }

@@ -103,14 +103,14 @@
                 <nz-option
                     *ngFor="let usuario of lstUsariosEntrega"
                     [nzValue]="usuario.id"
-                    [nzLabel]="usuario.razonsocial">
+                    [nzLabel]="usuario.razonsocial ?? ''">
                 </nz-option>
             </nz-option-group>
             <nz-option-group nzLabel="Proveedores">
                 <nz-option
                     *ngFor="let proveedor of lstProveedores"
                     [nzValue]="proveedor.id"
-                    [nzLabel]="proveedor.razonsocial">
+                    [nzLabel]="proveedor.razonsocial ?? ''">
                 </nz-option>
             </nz-option-group>
         </nz-select>
