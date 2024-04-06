@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
@@ -25,10 +25,10 @@ export class FormFiltroReclamosComponent implements OnInit {
   idusuarioregistro: number | null = null;
   idusuarioresponsable: number | null = null;
 
-  lstUsuariosResponsables: Usuario[] = [];
+  lstUsuariosResponsables: UsuarioDTO[] = [];
   loadingUsuariosResponsables: boolean = false;
 
-  lstUsuariosRegistro: Usuario[] = [];
+  lstUsuariosRegistro: UsuarioDTO[] = [];
   loadingUsuariosRegistro: boolean = false;
   
   constructor(

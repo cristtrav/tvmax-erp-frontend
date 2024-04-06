@@ -191,7 +191,7 @@
                                     <nz-option
                                         *ngFor="let responsable of lstResponsables"
                                         [nzValue]="responsable.id"
-                                        [nzLabel]="responsable.razonsocial">
+                                        [nzLabel]="responsable.razonsocial ?? ''">
                                     </nz-option>
                                 </nz-select>
                             </nz-form-control>

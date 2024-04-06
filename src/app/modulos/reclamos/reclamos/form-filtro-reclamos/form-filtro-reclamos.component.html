@@ -74,7 +74,7 @@
             
             <nz-option
                 *ngFor="let responsable of lstUsuariosResponsables"
-                [nzLabel]="responsable.razonsocial"
+                [nzLabel]="responsable.razonsocial ?? ''"
                 [nzValue]="responsable.id">
             </nz-option>
         </nz-select>
@@ -99,7 +99,7 @@
             
             <nz-option
                 *ngFor="let usuarioRegistro of lstUsuariosRegistro"
-                [nzLabel]="usuarioRegistro.razonsocial"
+                [nzLabel]="usuarioRegistro.razonsocial ?? ''"
                 [nzValue]="usuarioRegistro.id">
             </nz-option>
         </nz-select>

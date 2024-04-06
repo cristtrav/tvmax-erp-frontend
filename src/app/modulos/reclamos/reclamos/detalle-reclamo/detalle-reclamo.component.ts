@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { Usuario } from '@dto/usuario.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
@@ -54,7 +54,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   lstSuscripciones: Suscripcion[] = [];
   loadingSuscripciones: boolean = false;
 
-  lstResponsables: Usuario[] = [];
+  lstResponsables: UsuarioDTO[] = [];
   loadingResponsables: boolean = false;
 
   lstDetallesReclamos: DetalleReclamoDTO[] = [];
