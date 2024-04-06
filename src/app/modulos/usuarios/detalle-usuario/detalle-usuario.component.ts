@@ -3,9 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { RolDTO } from '@dto/rol.dto';
 import { RolesService } from '@servicios/roles.service';
-import { HttpParams } from '@angular/common/http';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { Subscription, finalize, forkJoin } from 'rxjs';
@@ -27,7 +25,6 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
     telefono: new FormControl(null, [Validators.maxLength(20)]),
     password: new FormControl(null, [Validators.minLength(5)]),
     accesosistema: new FormControl(false, [Validators.required]),
-    idroles: new FormControl(null, [Validators.required])
   });
 
   pwdVisible: boolean = false;
@@ -35,7 +32,6 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
   formLoading: boolean = false;
   pwdRequired: boolean = false;
   lastIdLoading: boolean = false;
-  listaRoles: RolDTO[] = [];
   accesoSistema: boolean = false;
 
   accesoSistemaSuscription!: Subscription;
@@ -45,8 +41,7 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
     private usuarioSrv: UsuariosService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
-    private httpErrorHandler: HttpErrorResponseHandlerService,
-    private rolesSrv: RolesService
+    private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnDestroy(): void {
@@ -56,7 +51,6 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.idusuario = this.aroute.snapshot.paramMap.get('idusuario') ?? 'nuevo';
-    this.cargarRoles();
     this.accesoSistemaSuscription = this.form.controls.accesosistema.valueChanges.subscribe(acceso => {
       this.updateAcesoControlRequiredValidator(acceso);
       this.updatePwdControlRequiredValidator(acceso, this.form.controls.password.value, this.idusuario);
@@ -72,10 +66,8 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
   }
 
   private updateAcesoControlRequiredValidator(acceso: boolean) {
-    if (acceso)
-      this.form.controls.ci.addValidators(Validators.required);
-    else
-      this.form.controls.ci.removeValidators(Validators.required);
+    if (acceso) this.form.controls.ci.addValidators(Validators.required);
+    else this.form.controls.ci.removeValidators(Validators.required);
   }
 
   private updatePwdControlRequiredValidator(acceso: boolean, pwd: string, idusuario: string) {
@@ -95,22 +87,6 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
     return false
   }
 
-  private cargarRoles() {
-    const params = new HttpParams()
-      .append('eliminado', 'false')
-      .append('sort', '+descripcion');
-
-    this.rolesSrv.get(params).subscribe({
-      next: (roles) => {
-        this.listaRoles = roles;
-      },
-      error: (e) => {
-        console.error('Error al cargar roles', e);
-        this.httpErrorHandler.process(e);
-      }
-    })
-  }
-
   private cargarDatos(): void {
     this.formLoading = true;
     forkJoin({
@@ -127,7 +103,6 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
         this.form.controls.email.setValue(resp.usuario.email);
         this.form.controls.telefono.setValue(resp.usuario.telefono);
         this.form.controls.accesosistema.setValue(resp.usuario.accesosistema);
-        this.form.controls.idroles.setValue(resp.roles.map(r => r.id));
       },
       error: (e) => {
         console.error('Error al cargar Usuario', e);
@@ -141,13 +116,8 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
       this.form.get(ctrlName)?.markAsDirty();
       this.form.get(ctrlName)?.updateValueAndValidity();
     });
-    if (this.form.valid) {
-      if (this.idusuario === 'nuevo') {
-        this.registrar();
-      } else {
-        this.modificar();
-      }
-    }
+    if(this.form.valid && this.idusuario == 'nuevo') this.registrar();
+    if(this.form.valid && this.idusuario != 'nuevo') this.modificar();
   }
 
   private getDto(): UsuarioDTO {
@@ -160,53 +130,53 @@ export class DetalleUsuarioComponent implements OnInit, OnDestroy {
       telefono: this.form.controls.telefono.value,
       password: this.form.controls.password.value,
       accesosistema: this.form.controls.accesosistema.value,
-      idroles: this.form.controls.idroles.value,
       eliminado: false
     }
   }
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.usuarioSrv.post(this.getDto()).subscribe({
+    this.usuarioSrv
+      .post(this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
       next: () => {
         this.notif.create('success', '<strong>Éxito</strong>', 'Usuario registrado.');
         this.form.reset();
-        this.guardarLoading = false;
       },
       error: (e) => {
         console.error('Error al registrar usuario', e);
         this.httpErrorHandler.process(e);
-        this.guardarLoading = false;
       }
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
-    this.usuarioSrv.put(Number.parseInt(this.idusuario), this.getDto()).subscribe({
+    this.usuarioSrv
+      .put(Number.parseInt(this.idusuario), this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
       next: () => {
         this.notif.create('success', '<strong>Éxito</strong>', 'Usuario editado.');
-        this.guardarLoading = false;
       },
       error: (e) => {
         console.error('Error al modificar usuario', e);
         this.httpErrorHandler.process(e);
-        this.guardarLoading = false;
       }
     });    
   }
 
   public generarId() {
     this.lastIdLoading = true;
-    this.usuarioSrv.getLastId().subscribe({
-      next: (lastid) => {
-        this.form.controls.id.setValue(lastid + 1);
-        this.lastIdLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al cargar el ultimo ID de Usuario', e);
-        this.httpErrorHandler.process(e);
-        this.lastIdLoading = false;
+    this.usuarioSrv
+      .getLastId()
+      .pipe(finalize(() => this.lastIdLoading = false))
+      .subscribe({
+        next: (lastid) => this.form.controls.id.setValue(lastid + 1),
+        error: (e) => {
+          console.error('Error al cargar el ultimo ID de Usuario', e);
+          this.httpErrorHandler.process(e);
       }
     })
   }
