@@ -30,6 +30,7 @@ import { FormFiltroReclamosComponent } from './form-filtro-reclamos/form-filtro-
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { IdsuscripcionToEstadoPipe } from '../pipes/idsuscripcion-to-estado.pipe';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     VistaReclamosComponent,
     DetalleReclamoComponent,
     BuscadorMotivosComponent,
-    FormFiltroReclamosComponent
+    FormFiltroReclamosComponent,
+    IdsuscripcionToEstadoPipe
   ],
   imports: [
     CommonModule,
