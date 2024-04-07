@@ -138,7 +138,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   cargarResponsables(){
     const params = new HttpParams()
     .append('eliminado', false)
-    .append('sort', '+razonsocial');
+    .append('sort', '+razonsocial')
+    .append('idrol', 9);
     this.loadingResponsables = true;
     this.usuariosSrv
       .get(params)
