@@ -106,7 +106,7 @@ export class DetalleMotivoComponent implements OnInit {
     this.motivosSrv
       .getLastId()
       .pipe(finalize(() => this.generandoId = false))
-      .subscribe((lastid) => this.form.controls.id.setValue(lastid == 0 ? 10 : lastid + 1))
+      .subscribe((lastid) => this.form.controls.id.setValue(lastid == 0 || lastid == null ? 10 : lastid + 1));
   }
 
 }
