@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Cliente } from '../../../dto/cliente-dto';
-import { Suscripcion } from '../../../dto/suscripcion-dto';
-import { SuscripcionesService } from '../../../servicios/suscripciones.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { ClientesService } from '../../../servicios/clientes.service';
+import { Cliente } from '@dto/cliente-dto';
+import { Suscripcion } from '@dto/suscripcion-dto';
+import { ClientesService } from '@servicios/clientes.service';
+import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { forkJoin, mergeMap, of } from 'rxjs';
+
 
 @Component({
   selector: 'app-cuotas-suscripciones',
@@ -26,35 +28,31 @@ export class CuotasSuscripcionesComponent implements OnInit {
 
   ngOnInit(): void {
     const idsus: string | null = this.aroute.snapshot.paramMap.get('idsuscripcion');
-    if (idsus) {
-      this.idsuscripcion = +idsus;
-      this.cargarSuscripcion();
-    }
+    this.idsuscripcion = Number.isInteger(Number(idsus)) ? Number(idsus) : null;
+    this.cargarSuscripcionCliente();
   }
 
-  private cargarSuscripcion(){
-    if(this.idsuscripcion){
-      this.suscripcionesSrv.getPorId(this.idsuscripcion).subscribe((response: Suscripcion)=>{
-        this.suscripcion = response;
-        this.cargarCliente();
-      }, (e)=>{
-        console.log(`Error al cargar suscripcion con codigo ${this.idsuscripcion}`);
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
-  }
+  private cargarSuscripcionCliente(){
+    if(this.idsuscripcion == null) return;
 
-  private cargarCliente(){
-    if(this.suscripcion?.idcliente){
-      this.clientesSrv.getPorId(this.suscripcion.idcliente).subscribe((resp: Cliente)=>{
-        this.cliente = resp;
-      }, (e)=>{
-        console.log(`Error al cargar cliente con codigo ${this.suscripcion?.idcliente}`);
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
+    this.suscripcionesSrv
+      .getPorId(this.idsuscripcion)
+      .pipe(mergeMap(susc => {
+        return forkJoin({
+          suscripcion: of(susc),
+          cliente: this.clientesSrv.getPorId(susc.idcliente ?? -1)
+        })
+      }))
+      .subscribe({
+      next: (response) => {
+        this.suscripcion = response.suscripcion;
+        this.cliente = response.cliente;
+      },
+      error: (e) => {
+        console.log(`Error al cargar`, e);          
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
 }
