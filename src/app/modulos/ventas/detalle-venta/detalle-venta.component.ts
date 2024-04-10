@@ -101,9 +101,8 @@ export class DetalleVentaComponent implements OnInit {
             this.nroFacturaDesactivado = false;
           },
           error: (e) => {
-            console.log('Error al cargar timbrado por id');
-            console.log(e);
-            this.httpErrorHandler.handle(e, "cargar último número de factura");
+            console.log('Error al cargar timbrado por id', e);
+            this.httpErrorHandler.process(e);
           }
         });
       } else {
@@ -199,7 +198,7 @@ export class DetalleVentaComponent implements OnInit {
       },
       error: (e) => {
         console.error('Error al cargar venta por id', e)
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
       }
     })
   }
@@ -230,9 +229,8 @@ export class DetalleVentaComponent implements OnInit {
         this.actualizarControlNroFacturaSeleccionado();
       },
       error: (e) => {
-        console.log('Error al consultar timbrados');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.log('Error al consultar timbrados', e);
+        this.httpErrorHandler.process(e);
       }
     });
   }

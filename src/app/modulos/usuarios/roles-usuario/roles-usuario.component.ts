@@ -72,7 +72,9 @@ export class RolesUsuarioComponent implements OnInit {
     this.usuario.idroles = Array.from(this.rolesSeleccionados);
     this.guardando = true;
     this.usuarioSrv
-      .put(this.usuario.id, this.usuario)
+    .editRolesByUsuario(this.usuario.id, this.usuario.idroles)
+    /*this.usuarioSrv
+      .put(this.usuario.id, this.usuario)*/
       .pipe(finalize(() => this.guardando = false))
       .subscribe({
       next: () => {

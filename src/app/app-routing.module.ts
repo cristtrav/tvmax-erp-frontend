@@ -1,58 +1,156 @@
-import { NgModule, inject } from '@angular/core';
-import { Routes, RouterModule, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './util/auth.guard';
 import { AppComponent } from './app.component';
-import { Extra } from '@util/extra';
 import { SortearComponent } from './modulos/sorteos/sortear/sortear.component';
 import { GanadoresComponent } from './modulos/sorteos/ganadores/ganadores.component';
-import { SesionService } from '@servicios/sesion.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-
-const accesoRealizarSorteosGuardFn = (
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
-) => {
-  if(!inject(SesionService).permisos.has(407)){
-    inject(NzNotificationService).create(
-      'warning',
-      '<strong>No autorizado</strong>',
-      'El usuario no tiene permisos para realizar Sorteos'
-    )
-    return false;
-  } else return true;
-}
+import { canAccessFn } from '@global-auth/can-access-fn.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/app/dashboard' },
-  { path: 'sortear/:idsorteo', component: SortearComponent, canActivate: [accesoRealizarSorteosGuardFn] },
+  {
+    path: 'sortear/:idsorteo',
+    data: { idfuncionalidad: 407, name: 'Realizar Sorteos'},
+    canActivate: [canAccessFn],
+    component: SortearComponent,
+  },
   { path: 'sortear/:idsorteo/ganadores', component: GanadoresComponent },
   { path: 'login', loadChildren: () => import('./modulos/login/login.module').then(m => m.LoginModule), canActivate: [AuthGuard] },
   {
     path: 'app', component: AppComponent, canActivate: [AuthGuard], children: [
-      {path: 'grupos', loadChildren: () => import('./modulos/grupos/grupos.module').then(m => m.GruposModule), canActivate: [Extra.getCanEnterModuleFn(5)]},
-      { path: 'servicios', loadChildren: () => import('./modulos/servicios/servicios.module').then(m => m.ServiciosModule), canActivate: [Extra.getCanEnterModuleFn(24)] },
       { path: 'dashboard', loadChildren: () => import('./modulos/dashboard/dashboard.module').then(m=> m.DashboardModule) },
-      { path: 'departamentos', loadChildren: () => import('./modulos/departamentos/departamentos.module').then(m => m.DepartamentosModule), canActivate: [Extra.getCanEnterModuleFn(44)] },
-      { path: 'distritos', loadChildren: () => import('./modulos/distritos/distritos.module').then(m => m.DistritosModule), canActivate: [Extra.getCanEnterModuleFn(64)] },
-      { path: 'barrios', loadChildren: () => import('./modulos/barrios/barrios.module').then(m => m.BarriosModule), canActivate: [Extra.getCanEnterModuleFn(84)] },
-      { path: 'clientes', loadChildren: () => import('./modulos/clientes/clientes.module').then(m => m.ClientesModule), canActivate: [Extra.getCanEnterModuleFn(184)] },
-      { path: 'usuarios', loadChildren: () => import('./modulos/usuarios/usuarios.module').then(m => m.UsuariosModule), canActivate: [Extra.getCanEnterModuleFn(124)] },
-      { path: 'suscripciones', loadChildren: () => import('./modulos/suscripciones/suscripciones.module').then(m => m.SuscripcionesModule), canActivate: [Extra.getCanEnterModuleFn(165)] },
-      { path: 'ventas', loadChildren: () => import ('./modulos/ventas/ventas.module').then(m => m.VentasModule), canActivate: [Extra.getCanEnterModuleFn(266)]},
-      { path: 'timbrados', loadChildren: () => import ('./modulos/timbrados/timbrados.module').then(m => m.TimbradosModule), canActivate: [Extra.getCanEnterModuleFn(244)] },
-      { path: 'auditoria', loadChildren: () => import('./modulos/auditoria/auditoria.module').then(m => m.AuditoriaModule), canActivate: [Extra.getCanEnterModuleFn(321)] },
-      //{ path: 'cobros', loadChildren: () => import('./modulos/cobros/cobros.module').then(m => m.CobrosModule), canActivate: [Extra.getCanEnterModuleFn(361)]},
-      { path: 'roles', loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule), canActivate: [Extra.getCanEnterModuleFn(144)]},
-      { path: 'formatosfacturas', loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule), canActivate: [Extra.getCanEnterModuleFn(344)]},
-      { path: 'pos', loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)},
-      { path: 'sorteos', loadChildren: () => import('./modulos/sorteos/sorteos.module').then(m => m.SorteosModule)},
-      { path: 'domicilios', loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)},
-      { path: 'gruposmateriales', loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)},
-      { path: 'materiales', loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)},
-      { path: 'movimientosmateriales', loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)},
-      { path: 'usuariosdepositos', loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)},
-      { path: 'motivosreclamos', loadChildren: () => import('./modulos/reclamos/motivos/motivos.module').then(m => m.MotivosModule) },
-      { path: 'reclamos', loadChildren: () => import('./modulos/reclamos/reclamos/reclamos.module').then(m => m.ReclamosModule)}
+      { 
+        path:'grupos',
+        data: { idfuncionalidad: 5, name: 'Grupos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/grupos/grupos.module').then(m => m.GruposModule)
+      },
+      {
+        path: 'servicios',
+        data: { idfuncionalidad: 24, name: 'Servicios'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/servicios/servicios.module').then(m => m.ServiciosModule)
+      },
+      {
+        path: 'departamentos',
+        data: { idfuncionalidad: 44, name: 'Departamentos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/departamentos/departamentos.module').then(m => m.DepartamentosModule)
+      },
+      {
+        path: 'distritos',
+        data: { idfuncionalidad: 64, name: 'Distritos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/distritos/distritos.module').then(m => m.DistritosModule)
+      },
+      {
+        path: 'barrios',
+        data: { idfuncionalidad: 84, name: 'Barrios'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/barrios/barrios.module').then(m => m.BarriosModule)
+      },
+      {
+        path: 'clientes',
+        data: { idfuncionalidad: 184, name: 'Clientes'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/clientes/clientes.module').then(m => m.ClientesModule)
+      },
+      {
+        path: 'usuarios',
+        data: { idfuncionalidad: 124, name: 'Usuarios'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/usuarios/usuarios.module').then(m => m.UsuariosModule)
+      },
+      {
+        path: 'suscripciones',
+        data: { idfuncionalidad: 165, name: 'Suscripciones'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/suscripciones/suscripciones.module').then(m => m.SuscripcionesModule)
+      },
+      {
+        path: 'ventas',
+        data: { idfuncionalidad: 266, name: 'Ventas'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import ('./modulos/ventas/ventas.module').then(m => m.VentasModule)
+      },
+      {
+        path: 'timbrados',
+        data: { idfuncionalidad: 244, name: 'Timbrados'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import ('./modulos/timbrados/timbrados.module').then(m => m.TimbradosModule)
+      },
+      {
+        path: 'auditoria',
+        data: { idfuncionalidad: 321, name: 'Auditoría'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/auditoria/auditoria.module').then(m => m.AuditoriaModule)
+      },
+      {
+        path: 'roles',
+        data: { idfuncionalidad: 144, name: 'Roles'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/roles/roles.module').then(m => m.RolesModule)
+      },
+      {
+        path: 'formatosfacturas',
+        data: { idfuncionalidad: 344, name: 'Formatos de Facturas'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/formatos-facturas/formatos-facturas.module').then(m => m.FormatosFacturasModule),
+      },
+      {
+        path: 'pos',
+        data: { idfuncionalidad: 380, name: 'Punto de Venta (POS)'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/pos/pos.module').then(m => m.PosModule)
+      },
+      {
+        path: 'sorteos',
+        data: { idfuncionalidad: 400, name: 'Sorteos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/sorteos/sorteos.module').then(m => m.SorteosModule)
+      },
+      {
+        path: 'domicilios',
+        data: { idfuncionalidad: 200, name: 'Domicilios'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/domicilios/domicilios.module').then(m => m.DomiciliosModule)
+      },
+      {
+        path: 'gruposmateriales',
+        data: { idfuncionalidad: 600, name: 'Tipos de Materiales'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)
+      },
+      {
+        path: 'materiales',
+        data: { idfuncionalidad: 680, name: 'Materiales'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/materiales/materiales.module').then(m => m.MaterialesModule)
+      },
+      {
+        path: 'movimientosmateriales',
+        data: { idfuncionalidad: 640, name: 'Movimientos de Materiales'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)
+      },
+      {
+        path: 'usuariosdepositos',
+        data: { idfuncionalidad: 720, name: 'Usuarios de Depósitos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)
+      },
+      {
+        path: 'motivosreclamos',
+        data: { idfuncionalidad: 760, name: 'Motivos de Reclamos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/reclamos/motivos/motivos.module').then(m => m.MotivosModule)
+      },
+      {
+        path: 'reclamos',
+        data: { idfuncionalidad: 800, name: 'Reclamos'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modulos/reclamos/reclamos/reclamos.module').then(m => m.ReclamosModule)
+      }
     ]
   },
 ];

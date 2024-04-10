@@ -167,9 +167,8 @@ export class FormFiltrosVentasComponent implements OnInit {
         this.lstCobradoresFiltro = usuarios;
       },
       error: (e) => {
-        console.log('Error al cargar cobradores filtro');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+        console.log('Error al cargar cobradores filtro', e);        
+        this.httpErrorHandler.process(e);
       }
     });
   }
@@ -185,7 +184,7 @@ export class FormFiltrosVentasComponent implements OnInit {
       error: (e) => {
         console.log('Error al cargar usuarios del filtro');
         console.log(e);
-        this.httpErrorHandler.handle(e);
+        this.httpErrorHandler.process(e);
       }
     });
   }

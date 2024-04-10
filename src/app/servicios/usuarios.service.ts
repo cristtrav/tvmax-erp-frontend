@@ -52,4 +52,8 @@ export class UsuariosService {
   getRolesByUsuario(idusuario: number): Observable<RolDTO[]>{
     return this.http.get<RolDTO[]>(`${this.url}/${idusuario}/roles`, AppSettings.getHttpOptionsAuth());
   }
+
+  editRolesByUsuario(idusuario: number, idroles: number[]): Observable<any>{
+    return this.http.put(`${this.url}/${idusuario}/roles`, { idroles }, AppSettings.getHttpOptionsAuth());
+  }
 }

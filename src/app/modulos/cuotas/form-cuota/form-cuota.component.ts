@@ -99,6 +99,10 @@ export class FormCuotaComponent implements OnInit {
           }
         });
         this.opcionesServicios = opciones;
+      },
+      error: (e) => {
+        console.log('Error al cargar servicios', e);
+        this.httpErrorHandler.process(e);
       }
     })
   }

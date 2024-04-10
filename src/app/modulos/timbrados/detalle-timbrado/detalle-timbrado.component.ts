@@ -1,16 +1,15 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Timbrado } from '@dto/timbrado.dto';
-import { Extra } from '@util/extra';
 import { TimbradosService } from '@servicios/timbrados.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
-import { FormatoFacturaA } from '../../impresion/factura-preimpresa-venta/formato-factura-a';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
 import { HttpParams } from '@angular/common/http';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-timbrado',
@@ -123,25 +122,7 @@ export class DetalleTimbradoComponent implements OnInit {
         this.httpErrorHandler.process(e);
         this.formLoading = false;
       }
-    })
-    /*this.timbradosSrv.getPorId(Number(this.idtimbrado)).subscribe((data: Timbrado) => {
-      this.form.get('id')?.setValue(data.id);
-      this.form.get('codEstablecimiento')?.setValue(data.codestablecimiento);
-      this.form.get('codPuntoEmision')?.setValue(data.codpuntoemision);
-      this.form.get('timbrado')?.setValue(data.nrotimbrado);
-      this.form.get('nroInicial')?.setValue(data.nroinicio);
-      this.form.get('nroFinal')?.setValue(data.nrofin);
-      this.form.get('ultNroUsado')?.setValue(data.ultimonrousado);
-      if (data.fechavencimiento) this.form.get('vencimiento')?.setValue(Extra.dateStrToDate(data.fechavencimiento));
-      if(data.fechainicio) this.form.get('iniciovigencia')?.setValue(Extra.dateStrToDate(data.fechainicio));
-      this.form.get('activo')?.setValue(data.activo);
-      this.formLoading = false;
-    }, (e) => {
-      console.log('Error al cargar datos por id');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.formLoading = false;
-    });*/
+    });
   }
 
   guardar() {
@@ -157,30 +138,34 @@ export class DetalleTimbradoComponent implements OnInit {
 
   private editar() {
     this.guardarLoading = true;
-    this.timbradosSrv.put(Number(this.idtimbrado), this.getDto()).subscribe(() => {
-      this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al editar timbrado');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardarLoading = false;
-    });
+    this.timbradosSrv
+      .put(Number(this.idtimbrado), this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
+        },
+        error: (e) => {
+          console.log('Error al editar timbrado', e);
+        this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   private registrar() {
     this.guardarLoading = true;
-    this.timbradosSrv.post(this.getDto()).subscribe({
-      next: () => {
-        this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
-        this.form.reset();
-        this.guardarLoading = false;
-      }, 
-      error: (e) => {
-        console.error('Error al registrar timbrado', e);
-        this.httpErrorHandler.process(e);
-        this.guardarLoading = false;
-      }
+    this.timbradosSrv
+      .post(this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
+          this.form.reset();
+        }, 
+        error: (e) => {
+          console.error('Error al registrar timbrado', e);
+          this.httpErrorHandler.process(e);
+        }
     });
   }
 
@@ -207,17 +192,18 @@ export class DetalleTimbradoComponent implements OnInit {
 
   generarId(){
     this.lastidLoading = true;
-    this.timbradosSrv.getUltimoId().subscribe({
-      next: (lastid) => {
-        this.form.controls.id.setValue(lastid + 1);
-        this.lastidLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al consultar ultimo ID de timbrado', e);
-        this.httpErrorHandler.process(e);
-        this.lastidLoading = false;
-      }
-    })
+    this.timbradosSrv
+      .getUltimoId()
+      .pipe(finalize(() => this.lastidLoading = false))
+      .subscribe({
+        next: (lastid) => {
+          this.form.controls.id.setValue(lastid + 1);
+        },
+        error: (e) => {
+          console.error('Error al consultar ultimo ID de timbrado', e);
+          this.httpErrorHandler.process(e);
+        }
+    });
   }
 
 }

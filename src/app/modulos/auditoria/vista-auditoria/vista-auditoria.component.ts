@@ -6,7 +6,7 @@ import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-auditoria',
@@ -60,16 +60,16 @@ export class VistaAuditoriaComponent implements OnInit {
     forkJoin({
       eventos: this.auditoriaSrv.getEventos(this.getHttpQueryParams()),
       total: this.auditoriaSrv.getTotalEventos(this.getHttpQueryParams())
-    }).subscribe({
+    })
+    .pipe(finalize(() => this.tableLoading = false))
+    .subscribe({
       next: (resp) => {
         this.lstEventos = resp.eventos;
         this.totalRegistros = resp.total;
-        this.tableLoading = false;
       },
       error: (e) => {
         console.error('Error al cargar eventos de auditoria', e);        
-        this.httpErrorHandler.handle(e);
-        this.tableLoading = false;
+        this.httpErrorHandler.process(e);
       }
     });
   }

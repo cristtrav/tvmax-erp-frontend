@@ -47,6 +47,9 @@
       ],
       "@global-dtos/*":[
         "./src/global/dtos/*"
+      ],
+      "@global-auth/*": [
+        "./src/global/auth/*"
       ]
     },
     "useDefineForClassFields": false

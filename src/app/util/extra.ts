@@ -1,8 +1,5 @@
-import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from "@angular/router";
 import { DetalleVenta } from "@dto/detalle-venta-dto";
 import { Venta } from "@dto/venta.dto";
-import { SesionService } from "@servicios/sesion.service";
 
 export class Extra {
 
@@ -114,12 +111,5 @@ export class Extra {
         detalle2.idsuscripcion = 100000;
         detalles.push(detalle2);
         return detalles;
-    }
-
-    public static getCanEnterModuleFn = (idfuncionalidad: number) => {
-        return (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
-            if (inject(SesionService).permisos.has(idfuncionalidad)) return true;
-            else return inject(Router).createUrlTree(['app', 'dashboard']);
-        }
     }
 }

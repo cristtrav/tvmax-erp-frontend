@@ -1,27 +1,17 @@
-import { NgModule, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { VistaServiciosComponent } from './vista-servicios/vista-servicios.component';
 import { DetalleServicioComponent } from './detalle-servicio/detalle-servicio.component';
-import { SesionService } from '@servicios/sesion.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-
-const guardFn: CanActivateFn = (
-  next: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
-) => {
-  if(!inject(SesionService).permisos.has(25)){
-    inject(NzNotificationService).create(
-      'warning',
-      '<strong>No autorizado</strong>',
-      'El usuario no tiene permisos para acceder al formulario de Servicios'
-    );
-    return false;
-  }else return true;
-}
+import { canAccessFn } from '@global-auth/can-access-fn.guard';
 
 const routes: Routes = [
-  {path: '', component: VistaServiciosComponent},
-  {path: ':id', component: DetalleServicioComponent, canActivate: [guardFn]}
+  { path: '', component: VistaServiciosComponent },
+  {
+    path: ':id',
+    component: DetalleServicioComponent,
+    data: { idfuncionalidad: 25, name: 'Formulario de Servicios' },
+    canActivate: [canAccessFn]
+  }
 ];
 
 @NgModule({
