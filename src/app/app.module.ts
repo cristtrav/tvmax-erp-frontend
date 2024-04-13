@@ -25,6 +25,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { UsuariosModule } from './modulos/usuarios/usuarios.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
 registerLocaleData(es);
 
@@ -50,7 +51,8 @@ registerLocaleData(es);
     NzModalModule,
     UsuariosModule,
     NzButtonModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzDrawerModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: es_ES },

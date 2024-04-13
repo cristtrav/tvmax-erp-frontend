@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
-import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
-import { ReclamosService } from '@global-services/reclamos/reclamos.service';
+import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
+import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
+import { ReclamosService } from 'src/app/global/services/reclamos/reclamos.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { TableHeaderInterface } from '@util/table-utils/table-header.interface';
 import { TableUtils } from '@util/table-utils/table-utils';

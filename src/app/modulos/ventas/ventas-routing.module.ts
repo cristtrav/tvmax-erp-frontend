@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { VistaVentasComponent } from './vista-ventas/vista-ventas.component';
 import { DetalleVentaComponent } from './detalle-venta/detalle-venta.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   { path: '', component: VistaVentasComponent },

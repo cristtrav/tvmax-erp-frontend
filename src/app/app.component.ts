@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { FormCambioPasswordComponent } from './modulos/usuarios/form-cambio-password/form-cambio-password.component';
@@ -7,6 +7,7 @@ import { ISubmenu } from '@util/interfaces/isubmenu.interface';
 import { AppSettings } from '@util/app-settings';
 import { IMenuButton } from '@util/interfaces/imenu-button.interface';
 import { environment } from '@environments/environment';
+import { Subscription } from 'rxjs';
 
 interface IPreferenciaColorAvatar{
   idusuario: number;
@@ -50,11 +51,22 @@ export class AppComponent implements OnInit{
   colorAvatarUsuario: string = this.obtenerColorAleatorio();
   devMode: boolean = !environment.production;
 
+  private logoutSubscription!: Subscription;
+  
+  private readonly ANCHO_PANTALLA_MOVIL = 576
+  isPantallaMovil: boolean = false;
+
   constructor(
     public sesionSrv: SesionService,
     private notif: NzNotificationService,
     private router: Router
   ){}
+
+  @HostListener('window:resize', ['$event.target.innerWidth'])
+  private onResize(width: number){
+    if(width <= this.ANCHO_PANTALLA_MOVIL) this.isPantallaMovil = true;
+    else this.isPantallaMovil = false;
+  }
 
   ngOnInit(): void {
     this.sesionSrv.nombreObs.subscribe((value)=>{
@@ -65,6 +77,7 @@ export class AppComponent implements OnInit{
       }
     });
     this.cargarPreferenciasColorAvatar();
+    this.onResize(window.innerWidth);
   }
 
   doLogout(): void {
@@ -98,6 +111,11 @@ export class AppComponent implements OnInit{
       localStorage.setItem(PREF_COLOR_AVATAR_KEY, JSON.stringify(preferenciasColor));
     }
     this.colorAvatarUsuario = prefColorUsuario.color;
+  }
+
+  onClickMenuItem(){
+    console.log('onclick menu item, is pantalla movil:', this.isPantallaMovil)
+    if(this.isPantallaMovil) this.isCollapsed = true;
   }
 }
 

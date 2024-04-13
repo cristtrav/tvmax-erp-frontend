@@ -1,5 +1,5 @@
 import { Directive, Input } from '@angular/core';
-import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveSizes } from 'src/app/global/utils/responsive/responsive-sizes.interface';
 import { NzColDirective } from 'ng-zorro-antd/grid';
 
 @Directive({

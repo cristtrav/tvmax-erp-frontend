@@ -11,7 +11,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { NzColResponsiveSizesDirective } from 'src/app/global/directives/responsive/nz-col-responsive-sizes.directive';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';

@@ -9,7 +9,7 @@ import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-client
 import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
 import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
 import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },

@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dto';
-import { MotivosReclamosService } from '@global-services/reclamos/motivos-reclamos.service';
+import { MotivoReclamoDTO } from 'src/app/global/dtos/reclamos/motivo-reclamo.dto';
+import { MotivosReclamosService } from 'src/app/global/services/reclamos/motivos-reclamos.service';
 import { Observable, Subscription, debounceTime, finalize, of, tap } from 'rxjs';
 
 @Component({

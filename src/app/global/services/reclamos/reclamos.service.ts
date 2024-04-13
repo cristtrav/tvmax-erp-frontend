@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
-import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
-import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
-import { HttpUtilsService } from '@global-services/http-utils/http-utils.service';
+import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
+import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
+import { HttpUtilsService } from 'src/app/global/services/http-utils/http-utils.service';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';
 

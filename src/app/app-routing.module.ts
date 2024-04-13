@@ -4,7 +4,7 @@ import { AuthGuard } from './util/auth.guard';
 import { AppComponent } from './app.component';
 import { SortearComponent } from './modulos/sorteos/sortear/sortear.component';
 import { GanadoresComponent } from './modulos/sorteos/ganadores/ganadores.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/app/dashboard' },

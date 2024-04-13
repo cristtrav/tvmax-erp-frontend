@@ -13,7 +13,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { LoadingStatusPipe } from '@util/pipes/loading-status.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { NzColResponsiveSizesDirective } from 'src/app/global/directives/responsive/nz-col-responsive-sizes.directive';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 

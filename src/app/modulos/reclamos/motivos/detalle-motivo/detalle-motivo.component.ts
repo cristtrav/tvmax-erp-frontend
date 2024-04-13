@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MotivoReclamoDTO } from '@global-dtos/reclamos/motivo-reclamo.dto';
-import { MotivosReclamosService } from '@global-services/reclamos/motivos-reclamos.service';
-import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
+import { MotivoReclamoDTO } from 'src/app/global/dtos/reclamos/motivo-reclamo.dto';
+import { MotivosReclamosService } from 'src/app/global/services/reclamos/motivos-reclamos.service';
+import { ResponsiveUtils } from 'src/app/global/utils/responsive/responsive-utils';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { EMPTY, Observable, Subscription, finalize, of, tap } from 'rxjs';
 

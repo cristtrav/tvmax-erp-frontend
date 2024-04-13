@@ -1,17 +1,27 @@
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="lg" [(nzCollapsed)]="isCollapsed"
+  <nz-sider
+    class="menu-sidebar"
+    [nzCollapsedWidth]="isPantallaMovil ? 0 : 80"
+    nzCollapsible
+    nzBreakpoint="lg"
+    [nzWidth]="isPantallaMovil ? '100%' : 256"
+    [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
     <div class="sidebar-logo">
       <a [routerLink]="'/app/dashboard'">
-        <img *ngIf="!isCollapsed" src="/assets/img/logo-tvmax-ERP-dark-baground.svg" alt="logo">
-        <img *ngIf="isCollapsed" src="/assets/img/logo-MAX.svg" alt="logo">        
+        <img [ngClass]="isCollapsed ? 'logo-collapsed' : 'logo-full'" alt="logo">
+      </a>
+      
+      <a *ngIf="isPantallaMovil" class="btn-cerrar-menu" (click)="isCollapsed = !isCollapsed">
+        <i nz-icon nzType="menu-fold" nzTheme="outline"></i>
       </a>
     </div>
+    
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="dashboard">Inicio</a>
+            <a (click)="onClickMenuItem()" routerLink="dashboard">Inicio</a>
           </li>
         </ul>
       </li>
@@ -20,7 +30,7 @@
           <ul>
             <ng-container *ngFor="let menu of submenu.children">
               <li *ngIf="sesionSrv.permisos.has(menu.id)" nz-menu-item nzMatchRouter style="display: flex; justify-content: space-between;">
-                <a [routerLink]="menu.routerLink" [queryParams]="menu.queryParams">{{ menu.name }}</a>
+                <a (click)="onClickMenuItem()" [routerLink]="menu.routerLink" [queryParams]="menu.queryParams">{{ menu.name }}</a>
                 <button nz-button nzType="link" (click)="sesionSrv.switchMenuFav(menu.id)">
                   <i *ngIf="!(sesionSrv.menuFavsObs| async)?.includes(menu.id)" 
                     nz-icon nzType="star" 
@@ -48,7 +58,7 @@
         <div nz-col nzFlex="auto">
           <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
             <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
-          </span>          
+          </span>
         </div>
         <div nz-col>
           <a>
@@ -74,12 +84,18 @@
       <router-outlet></router-outlet>
     </nz-content>
   </nz-layout>
+  <nz-modal
+    [nzContent]="formCambioPass"
+    [nzTitle]="'Cambiar Contraseña'"
+    [(nzVisible)]="isCambiarPassModalVisible"
+    (nzOnCancel)="isCambiarPassModalVisible = false"
+    (nzOnOk)="formCambioPasswordComp.guardar()"
+    [nzOkLoading]="guardarLoading">
+    <ng-template #formCambioPass>
+      <app-form-cambio-password
+        (guardado)="isCambiarPassModalVisible = false"
+        (guardarLoading)="guardarLoading = $event">
+      </app-form-cambio-password>
+    </ng-template>
+  </nz-modal>
 </nz-layout>
-<nz-modal [nzContent]="formCambioPass" [nzTitle]="'Cambiar Contraseña'" [(nzVisible)]="isCambiarPassModalVisible"
-  (nzOnCancel)="isCambiarPassModalVisible = false" (nzOnOk)="formCambioPasswordComp.guardar()"
-  [nzOkLoading]="guardarLoading">
-  <ng-template #formCambioPass>
-    <app-form-cambio-password (guardado)="isCambiarPassModalVisible = false"
-      (guardarLoading)="guardarLoading = $event"></app-form-cambio-password>
-  </ng-template>
-</nz-modal>

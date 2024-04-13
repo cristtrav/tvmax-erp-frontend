@@ -4,7 +4,7 @@ import { VistaUsuariosComponent } from './vista-usuarios/vista-usuarios.componen
 import { DetalleUsuarioComponent } from './detalle-usuario/detalle-usuario.component';
 import { PermisosUsuarioComponent } from './permisos-usuario/permisos-usuario.component';
 import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   { path: '', component: VistaUsuariosComponent },

@@ -6,7 +6,7 @@ import { VistaPremiosComponent } from './vista-premios/vista-premios.component';
 import { DetallePremioComponent } from './detalle-premio/detalle-premio.component';
 import { ParticipantesComponent } from './participantes/participantes.component';
 import { ExclusionesComponent } from './exclusiones/exclusiones.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   {

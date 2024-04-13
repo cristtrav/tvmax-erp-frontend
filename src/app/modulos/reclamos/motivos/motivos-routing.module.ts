@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { VistaMotivosComponent } from './vista-motivos/vista-motivos.component';
 import { DetalleMotivoComponent } from './detalle-motivo/detalle-motivo.component';
-import { canAccessFn } from '@global-auth/can-access-fn.guard';
+import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
   {

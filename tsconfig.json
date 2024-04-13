@@ -37,19 +37,19 @@
         "./src/environments/*"
       ],
       "@global-utils/*": [
-        "./src/global/utils/*"
+        "src/app/global/utils/*"
       ],
       "@global-directives/*" :[
-        "./src/global/directives/*"
+        "src/app/global/directives/*"
       ],
       "@global-services/*":[
-        "./src/global/services/*"
+        "src/app/global/services/*"
       ],
       "@global-dtos/*":[
-        "./src/global/dtos/*"
+        "src/app/global/dtos/*"
       ],
       "@global-auth/*": [
-        "./src/global/auth/*"
+        "src/app/global/auth/*"
       ]
     },
     "useDefineForClassFields": false
