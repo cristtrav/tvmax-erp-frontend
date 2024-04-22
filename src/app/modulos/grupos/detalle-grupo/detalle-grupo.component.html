@@ -1,52 +1,55 @@
-<div class="inner-content">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/grupos">Grupos</a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                {{ idgrupo | titlecase }}
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div nz-row nzJustify="center" nzAlign="top">
-            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
-                <nz-spin [nzSpinning]="formLoading">
-                    <form nz-form [formGroup]="fg">
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código">
-                                <nz-input-group style="width: 50%;" [nzAddOnAfter]="btnCargarId" nzSearch>
-                                    <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading" nzSearch>
-                                    </nz-input-number>
-                                </nz-input-group>
-                            </nz-form-control> 
-                            <ng-template #btnCargarId>
-                                <button nz-button nzType="primary" nz-tooltip [nzTooltipTitle]="'Generar código'" nzSearch [nzLoading]="lastIdLoading" (click)="cargarId()">
-                                    <i nz-icon nzType="sync" nzTheme="outline"></i>
-                                </button>
-                            </ng-template>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Ingrese una descripción. Máx. 80 carácteres.">
-                                <input nz-input formControlName="descripcion">
-                            </nz-form-control>
-                        </nz-form-item>
-                        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                                <i nz-icon nzType="save"></i>
-                                {{ idgrupo === 'nuevo' ? 'Registrar' : 'Editar'}}
+<app-workspace [isBackgroundVisible]="false" [isContentPadded]="false">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/grupos">Grupos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idgrupo | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row nzJustify="center" nzAlign="top">
+        <div nz-col class="module-content" [appNzColResponsiveSizes]="FORM_SIZES">
+            <nz-spin [nzSpinning]="formLoading">
+                <form nz-form [formGroup]="fg">
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Código</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código">
+                            <div nz-row>
+                                <div nz-col [appNzColResponsiveSizes]="ID_CONTROL_SIZES">
+                                    <nz-input-group style="width: 100%;" [nzAddOnAfter]="btnCargarId" nzSearch>
+                                        <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading" nzSearch>
+                                        </nz-input-number>
+                                    </nz-input-group>
+                                </div>
+                            </div>
+                        </nz-form-control> 
+                        <ng-template #btnCargarId>
+                            <button nz-button nzType="primary" nz-tooltip [nzTooltipTitle]="'Generar código'" nzSearch [nzLoading]="lastIdLoading" (click)="cargarId()">
+                                <i nz-icon nzType="sync" nzTheme="outline"></i>
                             </button>
-                        </div>
-                    </form>
-                </nz-spin>
-            </div>
+                        </ng-template>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                            nzErrorTip="Ingrese una descripción. Máx. 80 carácteres.">
+                            <input nz-input formControlName="descripcion">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <div nz-col [appNzColResponsiveSizes]="ACTIONS_SIZES" style="text-align: right;">
+                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                            <i nz-icon nzType="save"></i>
+                            {{ idgrupo === 'nuevo' ? 'Registrar' : 'Editar'}}
+                        </button>
+                    </div>
+                </form>
+            </nz-spin>
         </div>
     </div>
-</div>
+
+</app-workspace>

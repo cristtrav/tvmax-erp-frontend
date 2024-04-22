@@ -19,6 +19,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { SharedModule } from '../shared/shared.module';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzGridModule,
     NzDividerModule,
     NzSpinModule,
-    NzSpaceModule
+    NzSpaceModule,
+    SharedModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class GruposModule { }

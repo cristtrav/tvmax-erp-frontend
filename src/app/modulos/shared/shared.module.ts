@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContentComponent } from './content/content.component';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-
-
+import { WorkspaceComponent } from './workspace/workspace.component';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [
-    ContentComponent
+    WorkspaceComponent
   ],
   imports: [
     CommonModule,
-    NzGridModule
-  ]
+    NzGridModule,
+    NzColResponsiveSizesDirective
+  ],
+  exports: [WorkspaceComponent]
 })
 export class SharedModule { }
