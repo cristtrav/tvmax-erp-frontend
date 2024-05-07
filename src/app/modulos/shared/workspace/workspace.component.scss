@@ -4,12 +4,20 @@
 }
 
 .workspace-spacing {
-    gap: 5px;
+    gap: 8px;
     padding: 8px 24px 24px 24px;
 }
 
+.workspace-header{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-content: center;
+}
+
 .breadcrumb{
-    padding: 4px;
+    flex-grow: 1;
+    align-content: center;
 }
 
 .workspace-content-padding{
@@ -26,7 +34,7 @@
     }
 
     .workspace-spacing {
-        gap: 3px;
-        padding: 2px 8px 0px 8px;        
+        gap: 5px;
+        padding: 4px 8px 0px 8px;        
     }
 }

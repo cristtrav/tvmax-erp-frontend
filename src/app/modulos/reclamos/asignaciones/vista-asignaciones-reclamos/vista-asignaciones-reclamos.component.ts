@@ -1,0 +1,109 @@
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
+import { ReclamosService } from '@global-services/reclamos/reclamos.service';
+import { SesionService } from '@servicios/sesion.service';
+import { concatMap, finalize, forkJoin, from, mergeMap, of, toArray } from 'rxjs';
+
+@Component({
+  selector: 'app-vista-asignaciones-reclamos',
+  templateUrl: './vista-asignaciones-reclamos.component.html',
+  styleUrls: ['./vista-asignaciones-reclamos.component.scss']
+})
+export class VistaAsignacionesReclamosComponent implements OnInit {
+
+  loadingReclamos: boolean = false;
+  lstReclamos: ReclamoDTO[] = [];
+  vista: 'asignado' | 'noasignado' = 'asignado';
+  loadingMore: boolean = false;
+  totalRegistros: number = 0;
+
+  constructor(
+    private reclamosSrv: ReclamosService,
+    private sesionSrv: SesionService
+  ){}
+
+  ngOnInit(): void {
+    this.cargarReclamos();
+  }
+
+  cargarReclamos(){
+    this.loadingReclamos = true;
+    forkJoin({
+      reclamos: this.reclamosSrv.get(this.getHttpParams()),
+      total: this.reclamosSrv.getTotal(this.getHttpParams())
+    })
+    .pipe(
+      mergeMap(resp => {
+        return forkJoin({
+          total: of(resp.total),
+          reclamos:
+            from(resp.reclamos)
+            .pipe(
+              concatMap(reclamo => {
+                const detalleParams = new HttpParams().append('eliminado', false);
+                return this.reclamosSrv.getDetallesByReclamo(reclamo.id ?? -1, detalleParams)
+                  .pipe(
+                    concatMap(detalles => {
+                      reclamo.detalles = detalles;
+                      return of(reclamo);
+                    })
+                  );
+              }),
+              toArray()
+            )
+        })
+      }),
+      finalize(() => this.loadingReclamos = false)
+    )
+    .subscribe((resp) => {
+      this.totalRegistros = resp.total;
+      const reclamosEnProceso = resp.reclamos.filter(r => r.estado == 'PRO');
+      const reclamosPendientes = resp.reclamos.filter(r => r.estado == 'PEN');
+      const reclamosPospuestos = resp.reclamos.filter(r => r.estado == 'POS');
+      this.lstReclamos = [...reclamosEnProceso, ...reclamosPendientes, ...reclamosPospuestos];      
+    });
+  }
+
+  private getHttpParams(): HttpParams{
+    let params = new HttpParams();
+    params = params.append('eliminado', false);
+    params = params.append('estado', 'PEN');
+    params = params.append('estado', 'PRO');
+    params = params.append('estado', 'POS');
+    if(this.vista == 'asignado') params = params.append('idusuarioresponsable', this.sesionSrv.idusuario);
+    else params = params.append('responsableasignado', false);
+    params = params.append('limit', 10);
+    params = params.append('offset', 0);
+    params = params.append('sort', '+id');
+    return params;
+  }
+
+  cambiarVista(vista: 'asignado' | 'noasignado'){
+    this.vista = vista;
+    this.cargarReclamos();
+  }
+
+  cargarMas(){
+    this.loadingMore = true;
+    let params = new HttpParams();
+    params = params.append(`eliminado`, false);
+    params = params.append(`estado`, `PEN`);
+    params = params.append(`estado`, `PRO`);
+    params = params.append(`estado`, `POS`);
+    params = params.append('responsableasignado', this.vista == 'asignado');
+    params = params.append('limit', 10);
+    params = params.append('offset', this.lstReclamos.length);
+    params = params.append('sort', '+id');
+    forkJoin({
+      reclamos: this.reclamosSrv.get(params),
+      total: this.reclamosSrv.getTotal(params)
+    })
+      .pipe(finalize(() => this.loadingMore = false))
+      .subscribe((resp) => {
+        this.totalRegistros = resp.total;
+        this.lstReclamos = this.lstReclamos.concat(resp.reclamos);
+      })
+  }
+
+}

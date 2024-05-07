@@ -1,0 +1,82 @@
+<app-workspace>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Asignaciones de reclamos
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-button-group header-extra>
+        <button
+            nz-button
+            nzSize="small"
+            [nzType]="vista == 'asignado' ? 'primary' : 'default'"
+            [disabled]="loadingReclamos"
+            (click)="cambiarVista('asignado')">
+            <i nz-icon nzType="pushpin" nzTheme="outline"></i>
+            Mis reclamos
+        </button>
+        <button
+            nz-button
+            nzSize="small"
+            [nzType]="vista == 'noasignado' ? 'primary' : 'default'"
+            [disabled]="loadingReclamos"
+            (click)="cambiarVista('noasignado')">
+            <i nz-icon nzType="solution" nzTheme="outline"></i>
+            Sin asignar
+        </button>
+    </nz-button-group>
+
+    <nz-list [nzLoading]="loadingReclamos">
+        <nz-list-item *ngFor="let reclamo of lstReclamos" [routerLink]="[reclamo.id]" style="cursor: pointer;">
+            <nz-list-item-meta [nzDescription]="descripcion" [nzAvatar]="avatar">
+                <nz-list-item-meta-title>
+                    {{ reclamo.detalles | detallesReclamosToText }}
+                </nz-list-item-meta-title>
+            </nz-list-item-meta>
+            <ng-template #descripcion>
+                <div>
+                    <div><strong>{{ reclamo.servicio | uppercase }}</strong></div>
+                    <div><span>{{ reclamo.cliente | uppercase }}</span></div>
+                </div>
+                
+            </ng-template>
+            <ng-template #avatar>
+                <div class="avatar-lista">
+                    <nz-tag
+                        *ngIf="reclamo.idusuarioresponsable"
+                        [nzColor]="'#00C853'"
+                        class="tag-avatar">
+                        {{ reclamo.id }}
+                    </nz-tag>
+                    <nz-tag
+                        *ngIf="!reclamo.idusuarioresponsable"
+                        [nzColor]="'#F44336'"
+                        class="tag-avatar">
+                        {{ reclamo.id }}
+                    </nz-tag>
+
+                    <nz-tag class="tag-avatar">{{ reclamo.fecha | date:'dd/MM/yy' }}</nz-tag>
+                    
+                    <nz-tag *ngIf="reclamo.estado == 'PEN'" nzColor="red" class="tag-avatar">Pendiente</nz-tag>
+                    <nz-tag *ngIf="reclamo.estado == 'PRO'" nzColor="orange" class="tag-avatar">En Proceso</nz-tag>
+                    <nz-tag *ngIf="reclamo.estado == 'POS'" nzColor="magenta" class="tag-avatar">Postergado</nz-tag>
+                    <nz-tag *ngIf="reclamo.estado == 'FIN'" nzColor="green" class="tag-avatar">Finalizado</nz-tag>
+                    <nz-tag *ngIf="reclamo.estado == 'OTR'" nzColor="purple" class="tag-avatar">{{ reclamo.observacionestado ?? 'Otro' }}</nz-tag>
+                    
+                </div>
+            </ng-template>
+        </nz-list-item>
+        <nz-list-empty *ngIf="lstReclamos.length == 0"></nz-list-empty>
+        <div *ngIf="totalRegistros > this.lstReclamos.length" nz-list-load-more style="text-align: center;">
+            <button nz-button nzType="default" [nzLoading]="loadingMore" (click)="cargarMas()">
+                <i nz-icon nzType="sync" nzTheme="outline"></i>
+                Cargar más
+            </button>
+        </div>
+    </nz-list>
+
+</app-workspace>

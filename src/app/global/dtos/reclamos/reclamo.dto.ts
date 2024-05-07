@@ -11,9 +11,17 @@ export interface ReclamoDTO {
     idusuarioresponsable?: number;
     usuarioresponsable?: string;
     idsuscripcion: number;
+    iddomicilio?: number;
+    direccion?: string;
+    latitud?: number;
+    longitud?: number;
+    idbarrio?: number;
+    barrio?: string;
+    obsdomicilio?: string;
     idservicio?: number;
     servicio?: string;
     monto?: number;
+    obssuscripcion?: string;
     idcliente?: number;
     cliente?: string;
     eliminado: boolean;

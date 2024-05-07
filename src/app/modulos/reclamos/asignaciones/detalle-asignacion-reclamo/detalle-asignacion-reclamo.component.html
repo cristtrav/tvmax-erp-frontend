@@ -1,0 +1,160 @@
+<app-workspace [isBackgroundVisible]="false" [isContentPadded]="false">
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/asignacionesreclamos">Asignaciones de reclamos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idreclamo }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <nz-spin [nzSpinning]="loadingReclamo">
+                
+                <div class="panel">
+                    <nz-descriptions nzSize="small">
+                        <nz-descriptions-item [nzTitle]="tituloCodigo">
+                            <ng-template #tituloCodigo><strong>Nro. Reclamo</strong></ng-template>
+                            <nz-tag *ngIf="reclamo && reclamo.idusuarioresponsable" [nzColor]="'#00C853'">{{ reclamo.id }}</nz-tag>
+                            <nz-tag *ngIf="reclamo && !reclamo.idusuarioresponsable" [nzColor]="'#F44336'">{{ reclamo.id }}</nz-tag>
+                            
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloEstado">
+                            <ng-template #tituloEstado><strong>Estado</strong></ng-template>
+                            <nz-tag *ngIf="reclamo?.estado == 'PEN'" nzColor="red">Pendiente</nz-tag>
+                            <nz-tag *ngIf="reclamo?.estado == 'PRO'" nzColor="orange">En Proceso</nz-tag>
+                            <nz-tag *ngIf="reclamo?.estado == 'POS'" nzColor="magenta">Postergado</nz-tag>
+                            <nz-tag *ngIf="reclamo?.estado == 'FIN'" nzColor="green">Finalizado</nz-tag>
+                            <nz-tag *ngIf="reclamo?.estado == 'OTR'" nzColor="purple">{{ reclamo?.observacionestado ?? 'Otro' }}</nz-tag>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                </div>
+            </nz-spin>
+        </div>
+        <div nz-col nzSpan="24">
+            <nz-spin [nzSpinning]="loadingReclamo">
+                <div class="panel">
+                    <nz-descriptions nzSize="small">
+                        <nz-descriptions-item [nzTitle]="tituloCliente">
+                            <ng-template #tituloCliente><strong>Cliente</strong></ng-template>
+                            {{ reclamo?.cliente }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloServicio">
+                            <ng-template #tituloServicio><strong>Servicio</strong></ng-template>
+                            {{ reclamo?.servicio | uppercase }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloObssuscripcion">
+                            <ng-template #tituloObssuscripcion><strong>Obs. suscripción</strong></ng-template>
+                            <span nz-typography nzType="secondary" *ngIf="!reclamo?.obssuscripcion">(sin observación)</span>
+                            <span *ngIf="reclamo?.obssuscripcion">{{ reclamo?.obssuscripcion }}</span>
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloDireccion">
+                            <ng-template #tituloDireccion><strong>Dirección</strong></ng-template>
+                            {{ reclamo?.direccion }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloBarrio">
+                            <ng-template #tituloBarrio><strong>Barrio</strong></ng-template>
+                            {{ reclamo?.barrio }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloUbicacion">
+                            <ng-template #tituloUbicacion><strong>Ubicación</strong></ng-template>
+                            <span *ngIf="!reclamo?.latitud && !reclamo?.longitud" nz-typography nzType="secondary">(sin ubicación)</span>
+                            <a *ngIf="reclamo?.latitud && reclamo?.longitud"
+                                routerLink="ubicacion">
+                                <i nz-icon nzType="environment" nzTheme="outline"></i>
+                                {{ [reclamo?.latitud ?? -1, reclamo?.longitud ?? -1] | openLocationCode }}
+                            </a>
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloObsdomicilio">
+                            <ng-template #tituloObsdomicilio><strong>Obs. domicilio</strong></ng-template>
+                            <span *ngIf="!reclamo?.obsdomicilio" nz-typography nzType="secondary">(sin observación)</span>
+                            <span *ngIf="reclamo?.obsdomicilio">{{ reclamo?.obsdomicilio }}</span>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                </div>
+            </nz-spin>
+        </div>
+        <div nz-col nzSpan="24">
+            <div class="panel">
+                <ng-template #tituloMotivos><strong>Motivos</strong></ng-template>
+                
+                <nz-list [nzLoading]="loadingDetalles" [nzHeader]="tituloMotivos">
+                    
+                    <nz-list-item *ngFor="let detalle of lstDetallesReclamo">
+                        <nz-list-item-meta>
+                            <nz-list-item-meta-title>{{ detalle.motivo }}</nz-list-item-meta-title>
+                        </nz-list-item-meta>
+                        <span nz-typography nzType="secondary">{{ detalle.observacion }}</span>
+                    </nz-list-item>
+
+                </nz-list>
+                <nz-list-empty *ngIf="lstDetallesReclamo.length == 0"></nz-list-empty>
+            </div>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <div class="panel">
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col *ngIf="!reclamo?.idusuarioresponsable">
+                        <button
+                            *ngIf="reclamo"
+                            nz-button
+                            nzType="primary"
+                            [nzLoading]="loadingAsignacion"
+                            (click)="confirmarAsignacion(reclamo)">
+                            <i nz-icon nzType="pushpin" nzTheme="outline"></i>
+                            Tomar
+                        </button>
+                    </div>
+                    <div nz-col *ngIf="reclamo?.estado == 'PRO' && reclamo?.idusuarioresponsable">
+                        <button nz-button nzType="primary" [routerLink]="['finalizar']">
+                            <i nz-icon nzType="check" nzTheme="outline"></i>
+                            Finalizar
+                        </button>
+                    </div>                
+                    <div
+                        nz-col
+                        *ngIf="(reclamo?.estado == 'PEN' || reclamo?.estado == 'POS') && reclamo?.idusuarioresponsable">
+                        <button
+                            *ngIf="reclamo"
+                            nz-button
+                            nzType="primary"
+                            [nzLoading]="loadingProcesar"
+                            (click)="verificarProceso()">
+                            <i nz-icon nzType="setting" nzTheme="outline"></i>
+                            Procesar
+                        </button>
+                    </div>
+                    <div
+                        nz-col
+                        *ngIf="(reclamo?.estado == 'PRO' || reclamo?.estado == 'PEN') && reclamo?.idusuarioresponsable">
+                        <button
+                            *ngIf="reclamo"
+                            nz-button
+                            nzType="default"
+                            [nzLoading]="loadingPostergar"
+                            (click)="confirmarPostergacion(reclamo)">
+                            <i nz-icon nzType="history" nzTheme="outline"></i>
+                            Postergar
+                        </button>
+                    </div>  
+                    <div nz-col *ngIf="reclamo?.estado == 'PEN' && reclamo?.idusuarioresponsable">
+                        <button
+                            *ngIf="reclamo"
+                            nz-button
+                            nzType="default"
+                            [nzLoading]="loadingAsignacion"
+                            (click)="confirmarLiberacion(reclamo)">
+                            <i nz-icon nzType="export" nzTheme="outline"></i>
+                            Liberar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-workspace>

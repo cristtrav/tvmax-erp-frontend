@@ -11,6 +11,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Observable, Subscription, debounceTime, forkJoin, of, tap } from 'rxjs';
+import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 
 interface DataInterface{
   reclamos: ReclamoDTO[],
@@ -40,7 +41,8 @@ export class VistaReclamosComponent implements OnInit {
   pageSize: number = 10;
 
   expandSet = new Set<number>();
-  mapDetallesReclamos = new Map<number, Observable<DetalleReclamoDTO[]>>
+  mapDetallesReclamos = new Map<number, Observable<DetalleReclamoDTO[]>>();
+  mapMaterialesUtilizados = new Map<number, Observable<MaterialUtilizadoDTO[]>>();
 
   drawerFiltrosVisible: boolean = false;
   parametrosFiltros: IParametroFiltro = {};
@@ -61,7 +63,12 @@ export class VistaReclamosComponent implements OnInit {
   }
 
   onExpandChange(id: number, checked: boolean){
-    if(checked) this.expandSet.add(id);
+    if(checked){
+      this.expandSet.add(id);
+      const params = new HttpParams().append('eliminado', false);
+      this.mapDetallesReclamos.set(id, this.reclamosSrv.getDetallesByReclamo(id, params));
+      this.mapMaterialesUtilizados.set(id, this.reclamosSrv.getMaterialesUtilizados(id, params));
+    }
     else this.expandSet.delete(id);
   }
 
@@ -78,16 +85,7 @@ export class VistaReclamosComponent implements OnInit {
     this.reclamos$ = forkJoin({
       reclamos: this.reclamosSrv.get(this.getHttpParams()),
       total: this.reclamosSrv.getTotal(this.getHttpParams())
-    })
-    .pipe(
-      tap(resp => {
-        this.mapDetallesReclamos.clear();
-        resp.reclamos.forEach(reclamo => {
-          const params = new HttpParams().append('eliminado', false);
-          this.mapDetallesReclamos.set(reclamo.id ?? -1, this.reclamosSrv.getDetallesByReclamo(reclamo.id ?? -1, params));
-        })
-      })
-    );
+    });
   }
 
   limpiarBusqueda(){ this.busquedaCtrl.reset() }

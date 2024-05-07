@@ -1,0 +1,10 @@
+.panel{
+    background-color: white;
+    padding: 20px;
+}
+
+@media only screen and (max-width: 576px) {
+    .panel{
+        padding: 10px;
+    }
+}

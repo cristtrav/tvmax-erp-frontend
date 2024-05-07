@@ -150,6 +150,10 @@ const routes: Routes = [
         data: { idfuncionalidad: 800, name: 'Reclamos'},
         canActivate: [canAccessFn],
         loadChildren: () => import('./modulos/reclamos/reclamos/reclamos.module').then(m => m.ReclamosModule)
+      },
+      {
+        path: 'asignacionesreclamos',
+        loadChildren: () => import('./modulos/reclamos/asignaciones/asignaciones.module').then(m => m.AsignacionesModule)
       }
     ]
   },

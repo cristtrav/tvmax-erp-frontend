@@ -1,0 +1,33 @@
+<app-workspace [isContentPadded]="true" [isBackgroundVisible]="true">
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/asignacionesreclamos">Asignaciones de reclamos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app/asignacionesreclamos', idreclamo]">{{ idreclamo }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Ubicación
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <app-ubicacion
+                [soloLectura]="true"
+                [ubicacion]="reclamo && reclamo.latitud && reclamo.longitud ? [reclamo.latitud, reclamo.longitud] : null">
+            </app-ubicacion>
+        </div>
+        <div nz-col nzSpan="24" *ngIf="reclamo?.latitud && reclamo?.longitud">
+            <button nz-button nzType="primary" (click)="abrirAppMapas()">
+                <i nz-icon nzType="environment" nzTheme="outline"></i>
+                Abrir con Google Maps
+            </button>
+        </div>
+    </div>
+    
+    
+</app-workspace>

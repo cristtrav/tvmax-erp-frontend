@@ -117,6 +117,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       detalles: this.reclamosSrv.getDetallesByReclamo(idreclamo, paramsDetalles)
     })
     .subscribe(resp => {
+      console.log(resp.reclamo)
       this.formCabecera.controls.fecha.setValue(resp.reclamo.fecha);
       this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
       this.formCabecera.controls.idcliente.setValue(resp.reclamo.idcliente);

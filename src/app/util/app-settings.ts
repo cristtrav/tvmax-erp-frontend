@@ -159,6 +159,11 @@ export class AppSettings {
           id: 800,
           name: 'Reclamos',
           routerLink: '/app/reclamos'
+        },
+        {
+          id: 880,
+          name: 'Asignaciones',
+          routerLink: '/app/asignacionesreclamos'
         }
       ]
     },

@@ -1,6 +1,11 @@
 <div class="workspace workspace-spacing">
-    <div class="breadcrumb">
-        <ng-content select="[breadcrumb]"></ng-content>
+    <div class="workspace-header">
+        <div class="breadcrumb">
+            <ng-content select="[breadcrumb]"></ng-content>
+        </div>
+        <div class="workspace-header-extra">
+            <ng-content select="[header-extra]"></ng-content>
+        </div>
     </div>
     <div
         class="workspace-content"
