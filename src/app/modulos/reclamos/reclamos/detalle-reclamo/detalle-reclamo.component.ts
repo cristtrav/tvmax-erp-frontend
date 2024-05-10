@@ -39,7 +39,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     idusuarioresponsable: new FormControl<number | null>(null),
     estado: new FormControl<string | null>(null),
     observacionestado: new FormControl<string | null>(null),
-    fechahoracambioestado: new FormControl<Date | null>(null)
+    fechahoracambioestado: new FormControl<Date | null>(null),
+    observacion: new FormControl<string | null>(null, [Validators.maxLength(100)])
   });
 
   lstClientes: Cliente[] = [];  
@@ -125,6 +126,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
       this.formCabecera.controls.observacionestado.setValue(resp.reclamo.observacionestado);
       this.formCabecera.controls.idusuarioresponsable.setValue(resp.reclamo.idusuarioresponsable);
+      this.formCabecera.controls.observacion.setValue(resp.reclamo.observacion);
       if(!this.lstClientes.find(cli => cli.id == resp.reclamo.idcliente)) this.agregarClienteLista(resp.reclamo.idcliente ?? -1);
       this.lstDetallesReclamos = resp.detalles;
     });
@@ -299,6 +301,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       idusuarioresponsable: this.formCabecera.controls.idusuarioresponsable.value,
       detalles: this.lstDetallesReclamos,
       observacionestado: this.formCabecera.controls.observacionestado.value,
+      observacion: this.formCabecera.controls.observacion.value,
       eliminado: false
     }
   }

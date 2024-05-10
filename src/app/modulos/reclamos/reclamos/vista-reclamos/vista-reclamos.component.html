@@ -131,6 +131,13 @@
                                     </tr>
                                     <tr [nzExpand]="expandSet.has(reclamo.id)">
                                         <nz-descriptions>
+                                            <nz-descriptions-item [nzTitle]="tituloObservacion">
+                                                <ng-template #tituloObservacion>
+                                                    <strong>Observación</strong>
+                                                </ng-template>
+                                                <span *ngIf="reclamo.observacion">{{ reclamo.observacion }}</span>
+                                                <span *ngIf="!reclamo.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                            </nz-descriptions-item>
                                             <nz-descriptions-item [nzTitle]="tituloUsuarioReg">
                                                 <ng-template #tituloUsuarioReg>
                                                     <strong>Registrado por</strong>
