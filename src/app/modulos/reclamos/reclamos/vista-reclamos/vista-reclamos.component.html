@@ -152,59 +152,55 @@
                                         </nz-descriptions>
                                         <nz-tabset>
                                             <nz-tab nzTitle="Motivos">
-                                                <ng-container *ngIf="mapDetallesReclamos.get(reclamo.id) as detalleObs">
-                                                    <ng-container *ngIf="detalleObs | loadingStatus | async as dataDetalle">
-                                                        <nz-table
-                                                            #tablaDetalle
-                                                            [nzData]="dataDetalle.value ?? tablaDetalle.data"
-                                                            [nzLoading]="dataDetalle.loading"
-                                                            nzSize="small"
-                                                            style="width: 100%;">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Motivo</th>
-                                                                    <th>Observacion</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr *ngFor="let detalle of tablaDetalle.data">
-                                                                    <td>{{ detalle.motivo }}</td>
-                                                                    <td>
-                                                                        <span *ngIf="!detalle.observacion" nz-typography nzType="secondary">(sin observación)</span>
-                                                                        <span *ngIf="detalle.observacion">{{ detalle.observacion }}</span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </nz-table>
-                                                    </ng-container>
+                                                <ng-container *ngIf="mapDetallesReclamos.get(reclamo.id) as detallesData">
+                                                    <nz-table
+                                                        #tablaDetalle
+                                                        [nzData]="detallesData.detalles"
+                                                        [nzLoading]="detallesData.loading"
+                                                        nzSize="small"
+                                                        style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Motivo</th>
+                                                                <th>Observacion</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let detalle of tablaDetalle.data">
+                                                                <td>{{ detalle.motivo }}</td>
+                                                                <td>
+                                                                    <span *ngIf="!detalle.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                    <span *ngIf="detalle.observacion">{{ detalle.observacion }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </nz-table>
                                                 </ng-container>
                                             </nz-tab>
                                             <nz-tab nzTitle="Materiales utilizados">
-                                                <ng-container *ngIf="mapMaterialesUtilizados.get(reclamo.id) as materialesObs">
-                                                    <ng-container *ngIf="materialesObs | loadingStatus | async as dataMateriales">
-                                                        <nz-table
-                                                            #tablaMaterialesUtilizados
-                                                            [nzLoading]="dataMateriales.loading"
-                                                            [nzData]="dataMateriales.value ?? tablaMaterialesUtilizados.data"    
-                                                            nzSize="small">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Material</th>
-                                                                    <th>Cantidad</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr *ngFor="let matUtil of tablaMaterialesUtilizados.data">
-                                                                    <td>{{ matUtil.descripcion }}</td>
-                                                                    <td>
-                                                                        {{ matUtil.cantidad | number }}
-                                                                        <span *ngIf="matUtil.unidadmedida == 'MT'">mts.</span>
-                                                                        <span *ngIf="matUtil.unidadmedida == 'UD'">uds.</span>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </nz-table>
-                                                    </ng-container>
+                                                <ng-container *ngIf="mapMaterialesUtilizados.get(reclamo.id) as materialesData">
+                                                    <nz-table
+                                                        #tablaMaterialesUtilizados
+                                                        [nzLoading]="materialesData.loading"
+                                                        [nzData]="materialesData.materiales"    
+                                                        nzSize="small">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Material</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let matUtil of tablaMaterialesUtilizados.data">
+                                                                <td>{{ matUtil.descripcion }}</td>
+                                                                <td>
+                                                                    {{ matUtil.cantidad | number }}
+                                                                    <span *ngIf="matUtil.unidadmedida == 'MT'">mts.</span>
+                                                                    <span *ngIf="matUtil.unidadmedida == 'UD'">uds.</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </nz-table>
                                                 </ng-container>
                                             </nz-tab>
                                         </nz-tabset>

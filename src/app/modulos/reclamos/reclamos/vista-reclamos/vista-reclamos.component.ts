@@ -10,7 +10,7 @@ import { TableUtils } from '@util/table-utils/table-utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Observable, Subscription, debounceTime, forkJoin, of, tap } from 'rxjs';
+import { Observable, Subscription, debounceTime, finalize, forkJoin, of, tap } from 'rxjs';
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 
 interface DataInterface{
@@ -41,8 +41,8 @@ export class VistaReclamosComponent implements OnInit {
   pageSize: number = 10;
 
   expandSet = new Set<number>();
-  mapDetallesReclamos = new Map<number, Observable<DetalleReclamoDTO[]>>();
-  mapMaterialesUtilizados = new Map<number, Observable<MaterialUtilizadoDTO[]>>();
+  mapDetallesReclamos = new Map<number, { loading: boolean, detalles: DetalleReclamoDTO[]}>();
+  mapMaterialesUtilizados = new Map<number, { loading: boolean, materiales: MaterialUtilizadoDTO[]}>();
 
   drawerFiltrosVisible: boolean = false;
   parametrosFiltros: IParametroFiltro = {};
@@ -66,8 +66,11 @@ export class VistaReclamosComponent implements OnInit {
     if(checked){
       this.expandSet.add(id);
       const params = new HttpParams().append('eliminado', false);
-      this.mapDetallesReclamos.set(id, this.reclamosSrv.getDetallesByReclamo(id, params));
-      this.mapMaterialesUtilizados.set(id, this.reclamosSrv.getMaterialesUtilizados(id, params));
+      //this.mapDetallesReclamos.set(id, this.reclamosSrv.getDetallesByReclamo(id, params));
+      //this.mapMaterialesUtilizados.set(id, this.reclamosSrv.getMaterialesUtilizados(id, params));
+      this.cargarDetalles(id);
+      this.cargarMateriales(id);
+      
     }
     else this.expandSet.delete(id);
   }
@@ -86,6 +89,36 @@ export class VistaReclamosComponent implements OnInit {
       reclamos: this.reclamosSrv.get(this.getHttpParams()),
       total: this.reclamosSrv.getTotal(this.getHttpParams())
     });
+  }
+
+  private cargarDetalles(idreclamo: number) {
+    const detallesData = this.mapDetallesReclamos.get(idreclamo);
+    this.mapDetallesReclamos.set(idreclamo, {loading: true, detalles: detallesData?.detalles ?? []});
+    this.reclamosSrv
+      .getDetallesByReclamo(idreclamo, new HttpParams().append('eliminado', false))
+      .pipe(finalize(() => {
+        const detallesData = this.mapDetallesReclamos.get(idreclamo);
+        if(detallesData) this.mapDetallesReclamos.set(idreclamo, {loading: false, detalles: detallesData.detalles});
+      }))
+      .subscribe((detalles) => {
+        const detallesData = this.mapDetallesReclamos.get(idreclamo);
+        if(detallesData) this.mapDetallesReclamos.set(idreclamo, {loading: detallesData.loading, detalles});
+      })
+  }
+
+  private cargarMateriales(idreclamo: number) {
+    const materialesData = this.mapMaterialesUtilizados.get(idreclamo);
+    this.mapMaterialesUtilizados.set(idreclamo, { loading: true, materiales: materialesData?.materiales ?? []});
+    this.reclamosSrv
+      .getMaterialesUtilizados(idreclamo, new HttpParams().append('eliminado', false))
+      .pipe(finalize(() => {
+        const materialesData = this.mapMaterialesUtilizados.get(idreclamo);
+        if(materialesData) this.mapMaterialesUtilizados.set(idreclamo, { loading: false, materiales: materialesData.materiales })
+      }))
+    .subscribe((materiales) => {
+      const materialesData = this.mapMaterialesUtilizados.get(idreclamo);
+      if(materialesData) this.mapMaterialesUtilizados.set(idreclamo, { loading: materialesData.loading, materiales: materiales});
+    })
   }
 
   limpiarBusqueda(){ this.busquedaCtrl.reset() }
