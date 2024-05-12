@@ -130,88 +130,102 @@
                                         </td>
                                     </tr>
                                     <tr [nzExpand]="expandSet.has(reclamo.id)">
-                                        <nz-descriptions>
-                                            <nz-descriptions-item [nzTitle]="tituloObservacion">
-                                                <ng-template #tituloObservacion>
-                                                    <strong>Observación</strong>
-                                                </ng-template>
-                                                <span *ngIf="reclamo.observacion">{{ reclamo.observacion }}</span>
-                                                <span *ngIf="!reclamo.observacion" nz-typography nzType="secondary">(sin observación)</span>
-                                            </nz-descriptions-item>
-                                            <nz-descriptions-item [nzTitle]="tituloUsuarioReg">
-                                                <ng-template #tituloUsuarioReg>
-                                                    <strong>Registrado por</strong>
-                                                </ng-template>
-                                                {{ reclamo.usuarioregistro }}
-                                            </nz-descriptions-item>
-                                            <nz-descriptions-item [nzTitle]="tituloFechaCambioEstado">
-                                                <ng-template #tituloFechaCambioEstado>
-                                                    <strong>
-                                                        <span *ngIf="reclamo.estado == 'PEN'">Pendiente desde</span>
-                                                        <span *ngIf="reclamo.estado == 'PRO'">En Proceso desde</span>
-                                                        <span *ngIf="reclamo.estado == 'FIN'">Finalizado</span>
-                                                        <span *ngIf="reclamo.estado == 'POS'">Postergado desde</span>
-                                                        <span *ngIf="reclamo.estado == 'OTR'">Ultimo cambio de estado</span>
-                                                    </strong>
-                                                </ng-template>
-                                                {{ (reclamo.fechahoracambioestado | date:'dd/MM/yyyy HH:mm') + ' hs.' }}
-                                            </nz-descriptions-item>
-                                        </nz-descriptions>
-                                        <nz-tabset>
-                                            <nz-tab nzTitle="Motivos">
-                                                <ng-container *ngIf="mapDetallesReclamos.get(reclamo.id) as detallesData">
-                                                    <nz-table
-                                                        #tablaDetalle
-                                                        [nzData]="detallesData.detalles"
-                                                        [nzLoading]="detallesData.loading"
-                                                        nzSize="small"
-                                                        style="width: 100%;">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Motivo</th>
-                                                                <th>Observacion</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let detalle of tablaDetalle.data">
-                                                                <td>{{ detalle.motivo }}</td>
-                                                                <td>
-                                                                    <span *ngIf="!detalle.observacion" nz-typography nzType="secondary">(sin observación)</span>
-                                                                    <span *ngIf="detalle.observacion">{{ detalle.observacion }}</span>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </nz-table>
-                                                </ng-container>
-                                            </nz-tab>
-                                            <nz-tab nzTitle="Materiales utilizados">
-                                                <ng-container *ngIf="mapMaterialesUtilizados.get(reclamo.id) as materialesData">
-                                                    <nz-table
-                                                        #tablaMaterialesUtilizados
-                                                        [nzLoading]="materialesData.loading"
-                                                        [nzData]="materialesData.materiales"    
-                                                        nzSize="small">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Material</th>
-                                                                <th>Cantidad</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let matUtil of tablaMaterialesUtilizados.data">
-                                                                <td>{{ matUtil.descripcion }}</td>
-                                                                <td>
-                                                                    {{ matUtil.cantidad | number }}
-                                                                    <span *ngIf="matUtil.unidadmedida == 'MT'">mts.</span>
-                                                                    <span *ngIf="matUtil.unidadmedida == 'UD'">uds.</span>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </nz-table>
-                                                </ng-container>
-                                            </nz-tab>
-                                        </nz-tabset>
-                                        
+                                        <div nz-row [nzGutter]="[16,16]">
+                                            <div nz-col [appNzColResponsiveSizes]="detalleSizes">
+                                                <nz-collapse>
+                                                    <nz-collapse-panel nzHeader="Detalles" [nzActive]="true" [nzDisabled]="true">
+                                                        <nz-descriptions [nzColumn]="1">
+                                                            <nz-descriptions-item [nzTitle]="tituloTelefono">
+                                                                <ng-template #tituloTelefono><strong>Teléf. reclamo</strong></ng-template>
+                                                                <span *ngIf="reclamo.telefono">{{ reclamo.telefono }}</span>
+                                                                <span *ngIf="!reclamo.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
+                                                            </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloObservacion">
+                                                                <ng-template #tituloObservacion>
+                                                                    <strong>Observación</strong>
+                                                                </ng-template>
+                                                                <span *ngIf="reclamo.observacion">{{ reclamo.observacion }}</span>
+                                                                <span *ngIf="!reclamo.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                            </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloUsuarioReg">
+                                                                <ng-template #tituloUsuarioReg>
+                                                                    <strong>Registrado por</strong>
+                                                                </ng-template>
+                                                                {{ reclamo.usuarioregistro }}
+                                                            </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloFechaCambioEstado">
+                                                                <ng-template #tituloFechaCambioEstado>
+                                                                    <strong>
+                                                                        <span *ngIf="reclamo.estado == 'PEN'">Pendiente desde</span>
+                                                                        <span *ngIf="reclamo.estado == 'PRO'">En Proceso desde</span>
+                                                                        <span *ngIf="reclamo.estado == 'FIN'">Finalizado</span>
+                                                                        <span *ngIf="reclamo.estado == 'POS'">Postergado desde</span>
+                                                                        <span *ngIf="reclamo.estado == 'OTR'">Ultimo cambio de estado</span>
+                                                                    </strong>
+                                                                </ng-template>
+                                                                {{ (reclamo.fechahoracambioestado | date:'dd/MM/yyyy HH:mm') + ' hs.' }}
+                                                            </nz-descriptions-item>
+                                                        </nz-descriptions>
+                                                    </nz-collapse-panel>
+                                                </nz-collapse>
+                                            </div>
+                                            <div nz-col [appNzColResponsiveSizes]="tabsDetallesSizes">
+                                                <nz-tabset>
+                                                    <nz-tab nzTitle="Motivos">
+                                                        <ng-container *ngIf="mapDetallesReclamos.get(reclamo.id) as detallesData">
+                                                            <nz-table
+                                                                #tablaDetalle
+                                                                [nzData]="detallesData.detalles"
+                                                                [nzLoading]="detallesData.loading"
+                                                                nzSize="small"
+                                                                style="width: 100%;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Motivo</th>
+                                                                        <th>Observacion</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let detalle of tablaDetalle.data">
+                                                                        <td>{{ detalle.motivo }}</td>
+                                                                        <td>
+                                                                            <span *ngIf="!detalle.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                            <span *ngIf="detalle.observacion">{{ detalle.observacion }}</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </nz-table>
+                                                        </ng-container>
+                                                    </nz-tab>
+                                                    <nz-tab nzTitle="Materiales utilizados">
+                                                        <ng-container *ngIf="mapMaterialesUtilizados.get(reclamo.id) as materialesData">
+                                                            <nz-table
+                                                                #tablaMaterialesUtilizados
+                                                                [nzLoading]="materialesData.loading"
+                                                                [nzData]="materialesData.materiales"    
+                                                                nzSize="small">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Material</th>
+                                                                        <th>Cantidad</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let matUtil of tablaMaterialesUtilizados.data">
+                                                                        <td>{{ matUtil.descripcion }}</td>
+                                                                        <td>
+                                                                            {{ matUtil.cantidad | number }}
+                                                                            <span *ngIf="matUtil.unidadmedida == 'MT'">mts.</span>
+                                                                            <span *ngIf="matUtil.unidadmedida == 'UD'">uds.</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </nz-table>
+                                                        </ng-container>
+                                                    </nz-tab>
+                                                </nz-tabset>
+                                            </div>
+                                        </div>
                                     </tr>
                                 </ng-container>
                             </tbody>

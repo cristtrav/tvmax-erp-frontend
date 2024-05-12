@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
@@ -7,8 +7,11 @@ import { ReclamosService } from '@global-services/reclamos/reclamos.service';
 import { SesionService } from '@servicios/sesion.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { finalize, forkJoin, mergeMap, of } from 'rxjs';
+import { finalize } from 'rxjs';
+
+const NAVIGATOR = new InjectionToken<Navigator>('Navigator object', {
+  factory: () => navigator
+})
 
 @Component({
   selector: 'app-detalle-asignacion-reclamo',
@@ -27,11 +30,11 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
   loadingPostergar: boolean = false;
 
   constructor(
+    @Inject(NAVIGATOR) private navigator: Navigator,
     private reclamosSrv: ReclamosService,
     private aroute: ActivatedRoute,
     private router: Router,
     private sesionSrv: SesionService,
-    private notif: NzNotificationService,
     private modal: NzModalService,
     private message: NzMessageService
   ){}
@@ -98,7 +101,6 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
       .pipe(finalize(() => this.loadingAsignacion = false))
       .subscribe(() => {
         this.message.success('Reclamo liberado');
-        //this.notif.success(`<strong>Éxito</strong>`, 'Reclamo liberado');
         this.cargarReclamo(idreclamo);
       })
   }
@@ -107,11 +109,11 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
     this.modal.confirm({
       nzTitle: '¿Desea poner el reclamo En Proceso?',
       nzOkText: 'Procesar',
-      nzOnOk: () => this.procesar(reclamo.id ?? -1)
+      nzOnOk: () => this.verificarProceso(reclamo.id ?? -1)
     })
   }
 
-  verificarProceso(){
+  verificarProceso(idreclamo: number){
     this.loadingProcesar = true;
     let params = new HttpParams();
     params = params.append('eliminado', false);
@@ -123,7 +125,7 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
         if(reclamos.length > 0){
           this.message.error(`El reclamo #${reclamos[0].id} aún está en proceso.`);
           this.loadingProcesar = false;
-        } else this.procesar(Number(this.idreclamo));
+        } else this.procesar(idreclamo);
       },
       error: (e) => this.loadingProcesar = false
     });
@@ -136,30 +138,6 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
         this.message.success('Reclamo en proceso');
         this.cargarReclamo(idreclamo);
       });
-   /* let params = new HttpParams();
-    params = params.append('eliminado', false);
-    params = params.append('idusuarioresponsable', this.sesionSrv.idusuario);
-    params = params.append('estado', 'PRO');
-    this.reclamosSrv.get(params)
-      .pipe(
-        mergeMap(reclamos => {
-          if(reclamos.length == 0) return forkJoin({
-            reclamos: of(reclamos),
-            cambioEstado: this.reclamosSrv.cambiarEstado(idreclamo, 'PRO')
-          });
-          else return forkJoin({
-            reclamos: of(reclamos)
-          })
-        }),
-        finalize(() => this.loadingProcesar = false)
-      )
-      .subscribe((resp) => {
-        if(resp.reclamos.length > 0) this.message.error(`El reclamo #${resp.reclamos[0].id} aún está en proceso.`);
-        else {
-          this.message.success('Reclamo en proceso');
-          this.cargarReclamo(idreclamo);
-        }
-      });*/
   }
 
   confirmarPostergacion(reclamo: ReclamoDTO){
@@ -176,9 +154,15 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
       .pipe(finalize(() => this.loadingPostergar = false))
       .subscribe(() => {
         this.message.success('Reclamo postergado');
-        //this.notif.success(`<strong>Éxito</strong>`, 'Reclamo Postergado.');
         this.cargarReclamo(idreclamo);
       });
+  }
+
+  copiarTelefono(){
+    if(!this.reclamo?.telefono) return;
+    
+    this.navigator.clipboard.writeText(this.reclamo.telefono);
+    this.message.success('Teléfono copiado');
   }
 
 }

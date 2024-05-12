@@ -2,7 +2,6 @@ import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/c
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
-import { LatLngTuple } from 'leaflet';
 import { finalize } from 'rxjs';
 import { UbicacionComponent } from 'src/app/modulos/domicilios/ubicacion/ubicacion.component';
 

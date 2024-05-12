@@ -10,8 +10,9 @@ import { TableUtils } from '@util/table-utils/table-utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Observable, Subscription, debounceTime, finalize, forkJoin, of, tap } from 'rxjs';
+import { Observable, Subscription, debounceTime, finalize, forkJoin, of } from 'rxjs';
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 
 interface DataInterface{
   reclamos: ReclamoDTO[],
@@ -24,6 +25,9 @@ interface DataInterface{
   styleUrls: ['./vista-reclamos.component.scss']
 })
 export class VistaReclamosComponent implements OnInit {
+
+  detalleSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 10, nzXXl: 10 };
+  tabsDetallesSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 14, nzXXl: 14 };
 
   tableHeaders: TableHeaderInterface[] = [
     { key: 'id', description: 'Código', sortFn: true, sortOrder: 'descend' },

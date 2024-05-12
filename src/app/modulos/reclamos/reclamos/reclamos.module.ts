@@ -32,6 +32,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { IdsuscripcionToEstadoPipe } from '../pipes/idsuscripcion-to-estado.pipe';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 
 @NgModule({
@@ -71,7 +72,9 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     NzDrawerModule,
     NzBadgeModule,
     NzSpaceModule,
-    NzTabsModule
+    NzTabsModule,
+    NzCollapseModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class ReclamosModule { }

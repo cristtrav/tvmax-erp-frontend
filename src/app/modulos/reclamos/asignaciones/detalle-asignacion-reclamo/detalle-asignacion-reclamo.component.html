@@ -21,7 +21,6 @@
                             <ng-template #tituloCodigo><strong>Nro. Reclamo</strong></ng-template>
                             <nz-tag *ngIf="reclamo && reclamo.idusuarioresponsable" [nzColor]="'#00C853'">{{ reclamo.id }}</nz-tag>
                             <nz-tag *ngIf="reclamo && !reclamo.idusuarioresponsable" [nzColor]="'#F44336'">{{ reclamo.id }}</nz-tag>
-                            
                         </nz-descriptions-item>
                         <nz-descriptions-item [nzTitle]="tituloEstado">
                             <ng-template #tituloEstado><strong>Estado</strong></ng-template>
@@ -30,6 +29,12 @@
                             <nz-tag *ngIf="reclamo?.estado == 'POS'" nzColor="magenta">Postergado</nz-tag>
                             <nz-tag *ngIf="reclamo?.estado == 'FIN'" nzColor="green">Finalizado</nz-tag>
                             <nz-tag *ngIf="reclamo?.estado == 'OTR'" nzColor="purple">{{ reclamo?.observacionestado ?? 'Otro' }}</nz-tag>
+                        </nz-descriptions-item>
+                        
+                        <nz-descriptions-item [nzTitle]="tituloObservacionReclamo">
+                            <ng-template #tituloObservacionReclamo><strong>Observación</strong></ng-template>
+                            <span *ngIf="reclamo?.observacion">{{ reclamo?.observacion }}</span>
+                            <span *ngIf="!reclamo?.observacion" nz-typography nzType="secondary">(sin observación)</span>
                         </nz-descriptions-item>
                     </nz-descriptions>
                 </div>
@@ -42,6 +47,14 @@
                         <nz-descriptions-item [nzTitle]="tituloCliente">
                             <ng-template #tituloCliente><strong>Cliente</strong></ng-template>
                             {{ reclamo?.cliente }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloTelefono">
+                            <ng-template #tituloTelefono><strong>Teléfono</strong></ng-template>
+                            <a *ngIf="reclamo?.telefono"(click)="copiarTelefono()">
+                                <i nz-icon nzType="phone" nzTheme="outline"></i>
+                                {{ reclamo?.telefono }}
+                            </a>
+                            <span *ngIf="!reclamo?.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
                         </nz-descriptions-item>
                         <nz-descriptions-item [nzTitle]="tituloServicio">
                             <ng-template #tituloServicio><strong>Servicio</strong></ng-template>
@@ -124,7 +137,7 @@
                             nz-button
                             nzType="primary"
                             [nzLoading]="loadingProcesar"
-                            (click)="verificarProceso()">
+                            (click)="confirmarProceso(reclamo)">
                             <i nz-icon nzType="setting" nzTheme="outline"></i>
                             Procesar
                         </button>

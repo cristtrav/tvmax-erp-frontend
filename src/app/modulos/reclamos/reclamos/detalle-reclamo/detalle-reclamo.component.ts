@@ -40,7 +40,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     estado: new FormControl<string | null>(null),
     observacionestado: new FormControl<string | null>(null),
     fechahoracambioestado: new FormControl<Date | null>(null),
-    observacion: new FormControl<string | null>(null, [Validators.maxLength(100)])
+    observacion: new FormControl<string | null>(null, [Validators.maxLength(100)]),
+    telefono: new FormControl<string | null>(null, [Validators.maxLength(20)])
   });
 
   lstClientes: Cliente[] = [];  
@@ -104,10 +105,13 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     this.idclienteSuscription = this.formCabecera.controls.idcliente.valueChanges.subscribe(value => {
       if(this.validandoForm) return;
 
-      this.formCabecera.controls.idcliente.value
       this.formCabecera.controls.idsuscripcion.reset();
-      if (value == null) this.lstSuscripciones = []
-      else this.cargarSuscripciones(value);
+      if (value == null) this.lstSuscripciones = [];
+      else {
+        const cliente = this.lstClientes.find(c => c.id == value);
+        this.formCabecera.controls.telefono.setValue(cliente?.telefono1 ?? cliente?.telefono2);
+        this.cargarSuscripciones(value);
+      }
     });
   }
 
@@ -127,6 +131,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       this.formCabecera.controls.observacionestado.setValue(resp.reclamo.observacionestado);
       this.formCabecera.controls.idusuarioresponsable.setValue(resp.reclamo.idusuarioresponsable);
       this.formCabecera.controls.observacion.setValue(resp.reclamo.observacion);
+      this.formCabecera.controls.telefono.setValue(resp.reclamo.telefono);
       if(!this.lstClientes.find(cli => cli.id == resp.reclamo.idcliente)) this.agregarClienteLista(resp.reclamo.idcliente ?? -1);
       this.lstDetallesReclamos = resp.detalles;
     });
@@ -302,6 +307,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       detalles: this.lstDetallesReclamos,
       observacionestado: this.formCabecera.controls.observacionestado.value,
       observacion: this.formCabecera.controls.observacion.value,
+      telefono: this.formCabecera.controls.telefono.value,
       eliminado: false
     }
   }

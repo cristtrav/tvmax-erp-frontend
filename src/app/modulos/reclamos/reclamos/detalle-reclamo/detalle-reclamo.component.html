@@ -182,6 +182,22 @@
                         </nz-form-item>
                         <nz-form-item>
                             <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                Teléfono
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Máx. 20 carácteres.">
+                                <input nz-input formControlName="telefono">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                Observación
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Máx. 100 carácteres.">
+                                <input nz-input formControlName="observacion">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
                                 Responsable
                             </nz-form-label>
                             <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes">
@@ -197,14 +213,6 @@
                                         [nzLabel]="responsable.razonsocial ?? ''">
                                     </nz-option>
                                 </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
-                                Observación
-                            </nz-form-label>
-                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Máx. 100 carácteres.">
-                                <input nz-input formControlName="observacion">
                             </nz-form-control>
                         </nz-form-item>
                         <div nz-row [nzGutter]="[8,8]" nzJustify="end">
