@@ -18,6 +18,8 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
   loadingMore: boolean = false;
   totalRegistros: number = 0;
 
+  finalizadosVisible: boolean = false;
+
   constructor(
     private reclamosSrv: ReclamosService,
     private sesionSrv: SesionService
@@ -58,19 +60,31 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
     )
     .subscribe((resp) => {
       this.totalRegistros = resp.total;
-      const reclamosEnProceso = resp.reclamos.filter(r => r.estado == 'PRO');
-      const reclamosPendientes = resp.reclamos.filter(r => r.estado == 'PEN');
-      const reclamosPospuestos = resp.reclamos.filter(r => r.estado == 'POS');
-      this.lstReclamos = [...reclamosEnProceso, ...reclamosPendientes, ...reclamosPospuestos];      
+      if(!this.finalizadosVisible){
+        const reclamosEnProceso = resp.reclamos.filter(r => r.estado == 'PRO');
+        const reclamosPendientes = resp.reclamos.filter(r => r.estado == 'PEN');
+        const reclamosPospuestos = resp.reclamos.filter(r => r.estado == 'POS');
+        this.lstReclamos = [...reclamosEnProceso, ...reclamosPendientes, ...reclamosPospuestos];      
+      }else this.lstReclamos = resp.reclamos;
     });
+  }
+
+  private addParametroEstado(finalizadosVisible: boolean, params: HttpParams): HttpParams{
+    if(finalizadosVisible){
+      params = params.append('estado', 'FIN');
+      params = params.append('estado', 'OTR');
+    }else{
+      params = params.append('estado', 'PEN');
+      params = params.append('estado', 'PRO');
+      params = params.append('estado', 'POS');
+    }
+    return params;
   }
 
   private getHttpParams(): HttpParams{
     let params = new HttpParams();
     params = params.append('eliminado', false);
-    params = params.append('estado', 'PEN');
-    params = params.append('estado', 'PRO');
-    params = params.append('estado', 'POS');
+    params = this.addParametroEstado(this.finalizadosVisible, params);
     if(this.vista == 'asignado') params = params.append('idusuarioresponsable', this.sesionSrv.idusuario);
     else params = params.append('responsableasignado', false);
     params = params.append('limit', 10);
@@ -81,6 +95,7 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
 
   cambiarVista(vista: 'asignado' | 'noasignado'){
     this.vista = vista;
+    if(vista == 'noasignado') this.finalizadosVisible = false;
     this.cargarReclamos();
   }
 
@@ -88,9 +103,7 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
     this.loadingMore = true;
     let params = new HttpParams();
     params = params.append(`eliminado`, false);
-    params = params.append(`estado`, `PEN`);
-    params = params.append(`estado`, `PRO`);
-    params = params.append(`estado`, `POS`);
+    params = this.addParametroEstado(this.finalizadosVisible, params);
     params = params.append('responsableasignado', this.vista == 'asignado');
     params = params.append('limit', 10);
     params = params.append('offset', this.lstReclamos.length);
@@ -104,6 +117,10 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
         this.totalRegistros = resp.total;
         this.lstReclamos = this.lstReclamos.concat(resp.reclamos);
       })
+  }
+
+  mostrarFinalizados(){    
+    this.cargarReclamos();
   }
 
 }

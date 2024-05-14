@@ -30,6 +30,15 @@
         </button>
     </nz-button-group>
 
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzFlex="auto" *ngIf="vista == 'asignado'">
+            <nz-space>
+                <nz-switch *nzSpaceItem [(ngModel)]="finalizadosVisible" (ngModelChange)="mostrarFinalizados()" ></nz-switch>
+                <label *nzSpaceItem>Finalizados</label>
+            </nz-space>
+        </div>
+    </div>
+    
     <nz-list [nzLoading]="loadingReclamos">
         <nz-list-item *ngFor="let reclamo of lstReclamos" [routerLink]="[reclamo.id]" style="cursor: pointer;">
             <nz-list-item-meta [nzDescription]="descripcion" [nzAvatar]="avatar">
@@ -42,7 +51,6 @@
                     <div><strong>{{ reclamo.servicio | uppercase }}</strong></div>
                     <div><span>{{ reclamo.cliente | uppercase }}</span></div>
                 </div>
-                
             </ng-template>
             <ng-template #avatar>
                 <div class="avatar-lista">

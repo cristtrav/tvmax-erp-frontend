@@ -28,9 +28,11 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { MaterialToNumberStepsPipe } from '../pipes/material-to-number-steps.pipe';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UbicacionReclamoComponent } from './ubicacion-reclamo/ubicacion-reclamo.component';
 import { DomiciliosModule } from '../../domicilios/domicilios.module';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,10 @@ import { DomiciliosModule } from '../../domicilios/domicilios.module';
     NzInputNumberModule,
     MaterialToNumberStepsPipe,
     ReactiveFormsModule,
-    DomiciliosModule
+    DomiciliosModule,
+    NzSwitchModule,
+    NzSpaceModule,
+    FormsModule
   ]
 })
 export class AsignacionesModule { }
