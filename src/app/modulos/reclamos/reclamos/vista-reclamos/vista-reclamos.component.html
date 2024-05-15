@@ -228,6 +228,33 @@
                                                             </nz-table>
                                                         </ng-container>
                                                     </nz-tab>
+                                                    <nz-tab nzTitle="Estados">
+                                                        <ng-container *ngIf="mapEventosCambiosEstados.get(reclamo.id) as eventosData">
+                                                            <nz-table
+                                                                #tablaEventosCambiosEstados
+                                                                [nzData]="eventosData.eventos"
+                                                                [nzLoading]="eventosData.loading"
+                                                                nzSize="small">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Estado</th>
+                                                                        <th>Fecha/hora</th>
+                                                                        <th>Observación</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let evento of tablaEventosCambiosEstados.data">
+                                                                        <td>{{ evento.estado | estadoToText }}</td>
+                                                                        <td>{{ evento.fechahora | date:'dd/MM/yyyy HH:mm'}}</td>
+                                                                        <td>
+                                                                            <span *ngIf="evento.observacion">{{ evento.observacion }}</span>
+                                                                            <span *ngIf="!evento.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </nz-table>
+                                                        </ng-container>
+                                                    </nz-tab>
                                                 </nz-tabset>
                                             </div>
                                         </div>

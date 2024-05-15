@@ -33,6 +33,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { IdsuscripcionToEstadoPipe } from '../pipes/idsuscripcion-to-estado.pipe';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { EstadoToTextPipe } from '../pipes/estado-to-text.pipe';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
     NzSpaceModule,
     NzTabsModule,
     NzCollapseModule,
-    NzColResponsiveSizesDirective
+    NzColResponsiveSizesDirective,
+    EstadoToTextPipe
   ]
 })
 export class ReclamosModule { }

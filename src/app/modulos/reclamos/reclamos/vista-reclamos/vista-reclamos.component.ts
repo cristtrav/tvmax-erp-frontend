@@ -13,6 +13,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Observable, Subscription, debounceTime, finalize, forkJoin, of } from 'rxjs';
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
 
 interface DataInterface{
   reclamos: ReclamoDTO[],
@@ -47,6 +48,7 @@ export class VistaReclamosComponent implements OnInit {
   expandSet = new Set<number>();
   mapDetallesReclamos = new Map<number, { loading: boolean, detalles: DetalleReclamoDTO[]}>();
   mapMaterialesUtilizados = new Map<number, { loading: boolean, materiales: MaterialUtilizadoDTO[]}>();
+  mapEventosCambiosEstados = new Map<number, {loading: boolean, eventos: EventoCambioEstadoDTO[]}>();
 
   drawerFiltrosVisible: boolean = false;
   parametrosFiltros: IParametroFiltro = {};
@@ -74,7 +76,7 @@ export class VistaReclamosComponent implements OnInit {
       //this.mapMaterialesUtilizados.set(id, this.reclamosSrv.getMaterialesUtilizados(id, params));
       this.cargarDetalles(id);
       this.cargarMateriales(id);
-      
+      this.cargarEventosCambiosEstados(id);
     }
     else this.expandSet.delete(id);
   }
@@ -100,6 +102,7 @@ export class VistaReclamosComponent implements OnInit {
     this.expandSet.forEach(idreclamo => {
       this.cargarDetalles(idreclamo);
       this.cargarMateriales(idreclamo);
+      this.cargarEventosCambiosEstados(idreclamo);
     })
   }
 
@@ -131,6 +134,21 @@ export class VistaReclamosComponent implements OnInit {
       const materialesData = this.mapMaterialesUtilizados.get(idreclamo);
       if(materialesData) this.mapMaterialesUtilizados.set(idreclamo, { loading: materialesData.loading, materiales: materiales});
     })
+  }
+
+  private cargarEventosCambiosEstados(idreclamo: number) {
+    const eventoData = this.mapEventosCambiosEstados.get(idreclamo);
+    this.mapEventosCambiosEstados.set(idreclamo, {loading: true, eventos: eventoData?.eventos ?? []});
+    this.reclamosSrv
+      .getEventosCambiosEstados(idreclamo)
+      .pipe(finalize(() => {
+        const eventosData = this.mapEventosCambiosEstados.get(idreclamo);
+        if(eventosData) this.mapEventosCambiosEstados.set(idreclamo, { loading: false, eventos: eventosData.eventos})
+      }))
+      .subscribe((eventos) => {
+        const eventosData = this.mapEventosCambiosEstados.get(idreclamo);
+        if(eventosData) this.mapEventosCambiosEstados.set(idreclamo, { loading: eventosData.loading, eventos});
+      })
   }
 
   limpiarBusqueda(){ this.busquedaCtrl.reset() }
