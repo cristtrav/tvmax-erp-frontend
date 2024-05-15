@@ -56,8 +56,8 @@ export class ReclamosService {
     return this.httpUtilSrv.delete(`${this.url}/${idreclamo}/liberarresponsable`, AppSettings.getHttpOptionsAuth());
   }
 
-  cambiarEstado(idreclamo: number, estado: string): Observable<any>{
-    return this.httpUtilSrv.put(`${this.url}/${idreclamo}/estado`, { estado }, AppSettings.getHttpOptionsAuth());
+  cambiarEstado(idreclamo: number, estado: string, observacion?: string | null): Observable<any>{
+    return this.httpUtilSrv.put(`${this.url}/${idreclamo}/estado`, { estado, observacion }, AppSettings.getHttpOptionsAuth());
   }
 
   finalizarReclamo(idreclamo: number, finalizacion: FinalizacionReclamoDTO): Observable<any>{

@@ -23,7 +23,7 @@
                                     </button>
                                 </div>
                                 <div nz-col>
-                                    <button nz-button nzType="default" (click)="cargarDatos()">
+                                    <button nz-button nzType="default" (click)="recargarDatos()">
                                         <i nz-icon nzType="reload" nzTheme="outline"></i>
                                         Recargar
                                     </button>
@@ -164,6 +164,11 @@
                                                                     </strong>
                                                                 </ng-template>
                                                                 {{ (reclamo.fechahoracambioestado | date:'dd/MM/yyyy HH:mm') + ' hs.' }}
+                                                            </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloMotivoPostergacion">
+                                                                <ng-template #tituloMotivoPostergacion><strong>Motivo de postergación</strong></ng-template>
+                                                                <span *ngIf="reclamo.motivopostergacion">{{ reclamo.motivopostergacion }}</span>
+                                                                <span *ngIf="!reclamo.motivopostergacion" nz-typography nzType="secondary">(ninguno)</span>
                                                             </nz-descriptions-item>
                                                         </nz-descriptions>
                                                     </nz-collapse-panel>

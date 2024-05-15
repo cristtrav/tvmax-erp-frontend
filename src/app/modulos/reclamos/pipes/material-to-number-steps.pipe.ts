@@ -11,7 +11,7 @@ export class MaterialToNumberStepsPipe implements PipeTransform {
     if(idmaterial == null) return 1;
     const material = materiales.find(m => m.id == idmaterial);
     if(!material) return 1;
-    if(!material.identificable) return 0.01;
+    if(material.unidadmedida == 'MT') return 0.01;
     else return 1;
   }
 

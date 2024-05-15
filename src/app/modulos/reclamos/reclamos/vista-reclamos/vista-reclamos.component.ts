@@ -95,6 +95,14 @@ export class VistaReclamosComponent implements OnInit {
     });
   }
 
+  recargarDatos(){
+    this.cargarDatos();
+    this.expandSet.forEach(idreclamo => {
+      this.cargarDetalles(idreclamo);
+      this.cargarMateriales(idreclamo);
+    })
+  }
+
   private cargarDetalles(idreclamo: number) {
     const detallesData = this.mapDetallesReclamos.get(idreclamo);
     this.mapDetallesReclamos.set(idreclamo, {loading: true, detalles: detallesData?.detalles ?? []});

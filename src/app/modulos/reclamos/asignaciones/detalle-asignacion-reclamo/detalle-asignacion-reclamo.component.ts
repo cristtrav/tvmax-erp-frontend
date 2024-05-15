@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
@@ -28,6 +29,9 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
   loadingAsignacion: boolean = false;
   loadingProcesar: boolean = false;
   loadingPostergar: boolean = false;
+
+  isModalMotivoPosVisible: boolean = false;
+  motivoPostergacionCtrl = new FormControl<null | string>(null, [Validators.maxLength(45)]);
 
   constructor(
     @Inject(NAVIGATOR) private navigator: Navigator,
@@ -140,22 +144,20 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
       });
   }
 
-  confirmarPostergacion(reclamo: ReclamoDTO){
-    this.modal.confirm({
-      nzTitle: '¿Desea postergar el reclamo?',
-      nzOkText: `Postergar`,
-      nzOnOk: () => this.postergar(reclamo.id ?? -1)
-    });
-  }
-
   postergar(idreclamo: number){
-    this.loadingPostergar = true;
-    this.reclamosSrv.cambiarEstado(idreclamo, 'POS')
+    this.motivoPostergacionCtrl.markAsDirty();
+    this.motivoPostergacionCtrl.updateValueAndValidity();
+
+    if(this.motivoPostergacionCtrl.valid){
+      this.loadingPostergar = true;
+      this.reclamosSrv.cambiarEstado(idreclamo, 'POS', this.motivoPostergacionCtrl.value)
       .pipe(finalize(() => this.loadingPostergar = false))
       .subscribe(() => {
         this.message.success('Reclamo postergado');
         this.cargarReclamo(idreclamo);
       });
+      this.cerrarModalMotivoPos();
+    }
   }
 
   copiarTelefono(){
@@ -163,6 +165,14 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
     
     this.navigator.clipboard.writeText(this.reclamo.telefono);
     this.message.success('Teléfono copiado');
+  }
+
+  mostrarModalMotivoPos(){
+    this.isModalMotivoPosVisible = true;
+  }
+
+  cerrarModalMotivoPos(){
+    this.isModalMotivoPosVisible = false;
   }
 
 }

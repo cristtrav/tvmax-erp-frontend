@@ -127,7 +127,13 @@
                             <i nz-icon nzType="check" nzTheme="outline"></i>
                             Finalizar
                         </button>
-                    </div>                
+                    </div>
+                    <div nz-col *ngIf="(reclamo?.estado == 'FIN' || reclamo?.estado == 'OTR') && reclamo?.idusuarioresponsable">
+                        <button nz-button nzType="primary" [routerLink]="['finalizar']">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                            Editar
+                        </button>
+                    </div>
                     <div
                         nz-col
                         *ngIf="(reclamo?.estado == 'PEN' || reclamo?.estado == 'POS') && reclamo?.idusuarioresponsable">
@@ -149,7 +155,7 @@
                             nz-button
                             nzType="default"
                             [nzLoading]="loadingPostergar"
-                            (click)="confirmarPostergacion(reclamo)">
+                            (click)="mostrarModalMotivoPos()">
                             <i nz-icon nzType="history" nzTheme="outline"></i>
                             Postergar
                         </button>
@@ -170,3 +176,16 @@
         </div>
     </div>
 </app-workspace>
+
+<nz-modal
+    [nzContent]="contenidoModalMotivoPos"
+    [nzTitle]="'Postergar reclamo'"
+    [nzOkText]="'Postergar'"
+    [(nzVisible)]="isModalMotivoPosVisible"
+    (nzOnCancel)="cerrarModalMotivoPos()"
+    (nzOnOk)="postergar(+idreclamo)">
+    <ng-template #contenidoModalMotivoPos>
+        <input nz-input placeholder="Motivo" [formControl]="motivoPostergacionCtrl" [nzStatus]="!motivoPostergacionCtrl.valid ? 'error' : ''">
+        <label *ngIf="!motivoPostergacionCtrl.valid" nz-typography nzType="danger">Máx. 60 carácteres.</label>
+    </ng-template>
+</nz-modal>

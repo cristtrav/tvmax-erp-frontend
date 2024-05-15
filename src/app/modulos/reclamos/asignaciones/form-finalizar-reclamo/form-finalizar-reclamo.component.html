@@ -48,24 +48,26 @@
                         </button>
                     </div>
                     <div nz-col nzSpan="24">
-                        <nz-list>
-                            <nz-list-item *ngFor="let materialUtilizado of lstMaterialUtilizado">
-                                <nz-list-item-meta>
-                                    <nz-list-item-meta-title>{{ materialUtilizado.descripcion }}</nz-list-item-meta-title>
-                                    <nz-list-item-meta-description>
-                                        {{ materialUtilizado.cantidad | number }}
-                                        <span *ngIf="materialUtilizado.unidadmedida == 'UD'">uds.</span>
-                                        <span *ngIf="materialUtilizado.unidadmedida == 'MT'">mts.</span>
-                                    </nz-list-item-meta-description>
-                                </nz-list-item-meta>
-                                <nz-list-item-extra>
-                                    <button nz-button nzType="primary" nzDanger (click)="confirmarEliminarMaterialUtilizado(materialUtilizado)">
-                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
-                                    </button>
-                                </nz-list-item-extra>
-                            </nz-list-item>
-                            <nz-list-empty *ngIf="lstMaterialUtilizado.length == 0"></nz-list-empty>
-                        </nz-list>
+                        <nz-spin [nzSpinning]="loadingMateriales">
+                            <nz-list>
+                                <nz-list-item *ngFor="let materialUtilizado of lstMaterialUtilizado">
+                                    <nz-list-item-meta>
+                                        <nz-list-item-meta-title>{{ materialUtilizado.descripcion }}</nz-list-item-meta-title>
+                                        <nz-list-item-meta-description>
+                                            {{ materialUtilizado.cantidad | number }}
+                                            <span *ngIf="materialUtilizado.unidadmedida == 'UD'">uds.</span>
+                                            <span *ngIf="materialUtilizado.unidadmedida == 'MT'">mts.</span>
+                                        </nz-list-item-meta-description>
+                                    </nz-list-item-meta>
+                                    <nz-list-item-extra>
+                                        <button nz-button nzType="primary" nzDanger (click)="confirmarEliminarMaterialUtilizado(materialUtilizado)">
+                                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                        </button>
+                                    </nz-list-item-extra>
+                                </nz-list-item>
+                                <nz-list-empty *ngIf="lstMaterialUtilizado.length == 0"></nz-list-empty>
+                            </nz-list>
+                        </nz-spin>                        
                     </div>
                 </div>
                 
