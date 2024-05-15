@@ -30,6 +30,12 @@
                             <nz-tag *ngIf="reclamo?.estado == 'OTR'" nzColor="purple">{{ reclamo?.observacionestado ?? 'Otro' }}</nz-tag>
                         </nz-descriptions-item>
                         
+                        <nz-descriptions-item [nzTitle]="tituloMotivoPostergacion">
+                            <ng-template #tituloMotivoPostergacion><strong>Motivo postergación</strong></ng-template>
+                            <span *ngIf="reclamo?.motivopostergacion">{{ reclamo?.motivopostergacion }}</span>
+                            <span *ngIf="!reclamo?.motivopostergacion" nz-typography nzType="secondary">(ninguno)</span>
+                        </nz-descriptions-item>
+                        
                         <nz-descriptions-item [nzTitle]="tituloObservacionReclamo">
                             <ng-template #tituloObservacionReclamo><strong>Observación</strong></ng-template>
                             <span *ngIf="reclamo?.observacion">{{ reclamo?.observacion }}</span>
