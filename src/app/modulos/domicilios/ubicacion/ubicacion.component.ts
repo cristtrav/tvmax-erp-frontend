@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { Icon, LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, marker, tileLayer } from 'leaflet';
+import { Icon, LatLngTuple, LeafletMouseEvent, Map, Marker, TileLayer, canvas, marker, tileLayer } from 'leaflet';
 
 @Component({
   selector: 'app-ubicacion',
@@ -49,6 +49,7 @@ export class UbicacionComponent implements AfterViewInit {
     if(!this.soloLectura) this.map.on('click', (e: LeafletMouseEvent) => {      
       this.setUbicacion([e.latlng.lat, e.latlng.lng]);
     });
+    this.map.invalidateSize(); //Para corregir error de carga inicial en Firefox
   }
 
   setUbicacion(ubi: LatLngTuple){
