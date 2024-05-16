@@ -29,4 +29,5 @@ export interface ReclamoDTO {
     observacion?: string;
     telefono?: string;
     motivopostergacion?: string;
+    nroreiteraciones?: number;
 }

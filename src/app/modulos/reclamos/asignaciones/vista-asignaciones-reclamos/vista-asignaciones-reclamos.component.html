@@ -77,6 +77,10 @@
                     
                 </div>
             </ng-template>
+            <nz-tag *ngIf="reclamo.nroreiteraciones && reclamo.nroreiteraciones > 0" [nzColor]="'volcano'">
+                <i nz-icon nzType="sync" nzTheme="outline"></i>
+                {{ reclamo.nroreiteraciones | number }}
+            </nz-tag>
         </nz-list-item>
         <nz-list-empty *ngIf="lstReclamos.length == 0"></nz-list-empty>
         <div *ngIf="totalRegistros > this.lstReclamos.length" nz-list-load-more style="text-align: center;">

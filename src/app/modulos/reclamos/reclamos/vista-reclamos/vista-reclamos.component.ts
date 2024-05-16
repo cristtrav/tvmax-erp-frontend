@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
 import { ReclamosService } from 'src/app/global/services/reclamos/reclamos.service';
@@ -14,6 +14,8 @@ import { Observable, Subscription, debounceTime, finalize, forkJoin, of } from '
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
+import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
+import { ReiteracionesService } from '@global-services/reclamos/reiteraciones.service';
 
 interface DataInterface{
   reclamos: ReclamoDTO[],
@@ -36,7 +38,8 @@ export class VistaReclamosComponent implements OnInit {
     { key: 'cliente', description: 'Cliente', sortFn: true, sortOrder: null },
     { key: 'idsuscripcion', description: 'Suscripción', sortFn: true, sortOrder: null},
     { key: 'estado', description: 'Estado', sortFn: true, sortOrder: null },
-    { key: 'usuarioresponsable', description: 'Responsable', sortFn: true, sortOrder: null }    
+    { key: 'usuarioresponsable', description: 'Responsable', sortFn: true, sortOrder: null },
+    { key: 'nroreiteraciones', description: 'Reiteraciones', sortFn: true, sortOrder: null }
   ];
 
   reclamos$: Observable<DataInterface> = of({reclamos: [], total: 0});
@@ -49,15 +52,21 @@ export class VistaReclamosComponent implements OnInit {
   mapDetallesReclamos = new Map<number, { loading: boolean, detalles: DetalleReclamoDTO[]}>();
   mapMaterialesUtilizados = new Map<number, { loading: boolean, materiales: MaterialUtilizadoDTO[]}>();
   mapEventosCambiosEstados = new Map<number, {loading: boolean, eventos: EventoCambioEstadoDTO[]}>();
+  mapReiteraciones = new Map<number, {loading: boolean, reiteraciones: ReiteracionDTO[]}>();
 
   drawerFiltrosVisible: boolean = false;
   parametrosFiltros: IParametroFiltro = {};
   cantidadFiltros: number = 0;
+
+  isModalReiteracionVisible: boolean = false;
+  observacionReiteracionCtrl = new FormControl<string | null>(null, [Validators.maxLength(60)]);
+  idreclamoReiterar?: number;
   
   constructor(
     private reclamosSrv: ReclamosService,
     private modal: NzModalService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private reiteracionSrv: ReiteracionesService
   ){}
 
   ngOnInit(): void {
@@ -71,12 +80,10 @@ export class VistaReclamosComponent implements OnInit {
   onExpandChange(id: number, checked: boolean){
     if(checked){
       this.expandSet.add(id);
-      const params = new HttpParams().append('eliminado', false);
-      //this.mapDetallesReclamos.set(id, this.reclamosSrv.getDetallesByReclamo(id, params));
-      //this.mapMaterialesUtilizados.set(id, this.reclamosSrv.getMaterialesUtilizados(id, params));
       this.cargarDetalles(id);
       this.cargarMateriales(id);
       this.cargarEventosCambiosEstados(id);
+      this.cargarReiteraciones(id);
     }
     else this.expandSet.delete(id);
   }
@@ -89,6 +96,14 @@ export class VistaReclamosComponent implements OnInit {
   abrirDrawerFiltros(){ this.drawerFiltrosVisible = true }
 
   cerrarDrawerFiltros(){ this.drawerFiltrosVisible = false }
+
+  abrirModalReiteracion(idreclamo: number){
+    this.observacionReiteracionCtrl.reset();
+    this.idreclamoReiterar = idreclamo;
+    this.isModalReiteracionVisible = true;
+  }
+
+  cerrarModalReiteracion() { this.isModalReiteracionVisible = false }
 
   cargarDatos(){
     this.reclamos$ = forkJoin({
@@ -103,6 +118,7 @@ export class VistaReclamosComponent implements OnInit {
       this.cargarDetalles(idreclamo);
       this.cargarMateriales(idreclamo);
       this.cargarEventosCambiosEstados(idreclamo);
+      this.cargarReiteraciones(idreclamo)
     })
   }
 
@@ -151,6 +167,28 @@ export class VistaReclamosComponent implements OnInit {
       })
   }
 
+  private cargarReiteraciones(idreclamo: number){
+    this.mapReiteraciones.set(
+      idreclamo,
+      { loading: true, reiteraciones: this.mapReiteraciones.get(idreclamo)?.reiteraciones ?? []}
+    );
+    const params = new HttpParams().append('eliminado', false).append('sort', '-id');
+    this.reclamosSrv
+      .getReiteraciones(idreclamo, params)
+      .pipe(finalize(() => {
+        this.mapReiteraciones.set(
+          idreclamo,
+          { loading: false, reiteraciones: this.mapReiteraciones.get(idreclamo)?.reiteraciones ?? []}
+        );
+      }))
+      .subscribe(reiteraciones => {
+        this.mapReiteraciones.set(
+          idreclamo,
+          { loading: this.mapReiteraciones.get(idreclamo)?.loading ?? false, reiteraciones }
+        );
+      })
+  }
+
   limpiarBusqueda(){ this.busquedaCtrl.reset() }
 
   getHttpParams(): HttpParams{
@@ -182,6 +220,25 @@ export class VistaReclamosComponent implements OnInit {
       this.notif.success('<strong>Éxito</strong>', 'Reclamo eliminado.');
       this.cargarDatos();
     })
+  }
+
+  reiterarReclamo(){
+    if(this.idreclamoReiterar == null) return;
+    
+    const reiteracion: ReiteracionDTO = {
+      idreclamo: this.idreclamoReiterar,
+      observacion: this.observacionReiteracionCtrl.value ?? undefined,
+      fechahora: new Date().toISOString(),
+      eliminado: false
+    }
+
+    this.reiteracionSrv
+      .post(reiteracion)
+      .subscribe(() => {
+        this.notif.success(`<strong>Éxito</strong>`, `Reclamo #${this.idreclamoReiterar} reiterado.`);
+        this.recargarDatos();
+      });
+    this.cerrarModalReiteracion();
   }
 
 }

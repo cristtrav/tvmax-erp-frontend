@@ -114,8 +114,22 @@
                                             <span *ngIf="reclamo.usuarioresponsable">{{ reclamo.usuarioresponsable }}</span>
                                             <span *ngIf="!reclamo.usuarioresponsable" nz-typography nzType="secondary">(Sin responsable)</span>
                                         </td>
+                                        <td nzAlign="center">
+                                            <nz-tag [nzColor]="reclamo.nroreiteraciones > 0 ? 'orange' : 'green'">{{ reclamo.nroreiteraciones | number }}</nz-tag>
+                                        </td>
                                         <td>
                                             <div nz-row [nzGutter]="[8,8]" [nzJustify]="'center'">
+                                                <div nz-col>
+                                                    <button
+                                                        nz-tooltip
+                                                        nzTooltipTitle="Reiterar reclamo"
+                                                        nz-button
+                                                        nzType="default"
+                                                        [disabled]="reclamo.estado != 'PEN' && reclamo.estado != 'POS'"
+                                                        (click)="abrirModalReiteracion(reclamo.id)">
+                                                        <i nz-icon nzType="notification" nzTheme="outline"></i>
+                                                    </button>
+                                                </div>
                                                 <div nz-col>
                                                     <button nz-button nzType="primary" [routerLink]="[reclamo.id]">
                                                         <i nz-icon nzType="edit" nzTheme="outline"></i>
@@ -255,6 +269,31 @@
                                                             </nz-table>
                                                         </ng-container>
                                                     </nz-tab>
+                                                    <nz-tab nzTitle="Reiteraciones">
+                                                        <ng-container *ngIf="mapReiteraciones.get(reclamo.id) as reiteracionesData">
+                                                            <nz-table
+                                                            #tablaReiteraciones
+                                                            [nzData]="reiteracionesData.reiteraciones"
+                                                            [nzLoading]="reiteracionesData.loading"
+                                                            nzSize="small">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Fecha/Hora</th>
+                                                                        <th>Observación</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let reiteracion of tablaReiteraciones.data">
+                                                                        <td>{{ reiteracion.fechahora | date:'dd/MM/yyyy HH:mm' }} hs.</td>
+                                                                        <td>
+                                                                            <span *ngIf="reiteracion.observacion">{{ reiteracion.observacion }}</span>
+                                                                            <span *ngIf="!reiteracion.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </nz-table>
+                                                        </ng-container>
+                                                    </nz-tab>
                                                 </nz-tabset>
                                             </div>
                                         </div>
@@ -284,3 +323,22 @@
         </app-form-filtro-reclamos>
     </ng-template>
 </nz-drawer>
+
+<nz-modal
+    [nzTitle]="'Reiterar reclamo'"
+    [nzContent]="contenidoModalReiteracion"
+    [nzVisible]="isModalReiteracionVisible"
+    [nzOkText]="'Reiterar'"
+    [nzOkDisabled]="!observacionReiteracionCtrl.valid"
+    (nzOnCancel)="cerrarModalReiteracion()"
+    (nzOnOk)="reiterarReclamo()">
+    <ng-template #contenidoModalReiteracion>
+        <input
+            nz-input
+            placeholder="Observación"
+            [formControl]="observacionReiteracionCtrl"
+            [nzStatus]="!observacionReiteracionCtrl.valid ? 'error' : ''">
+        <label *ngIf="!observacionReiteracionCtrl.valid" nz-typography nzType="danger">Máx. 60 carácteres.</label>
+    </ng-template>
+
+</nz-modal>

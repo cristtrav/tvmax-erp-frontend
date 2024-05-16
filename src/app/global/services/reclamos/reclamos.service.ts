@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { FinalizacionReclamoDTO } from '@global-dtos/reclamos/finalizacion-reclamo.dto';
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
+import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,10 @@ export class ReclamosService {
 
   getEventosCambiosEstados(idreclamo: number): Observable<EventoCambioEstadoDTO[]>{
     return this.httpUtilSrv.get(`${this.url}/${idreclamo}/cambiosestados`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getReiteraciones(idreclamo: number, params: HttpParams): Observable<ReiteracionDTO[]>{
+    return this.httpUtilSrv.get(`${this.url}/${idreclamo}/reiteraciones`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
   
 
