@@ -41,7 +41,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     observacionestado: new FormControl<string | null>(null),
     fechahoracambioestado: new FormControl<Date | null>(null),
     observacion: new FormControl<string | null>(null, [Validators.maxLength(100)]),
-    telefono: new FormControl<string | null>(null, [Validators.maxLength(20)])
+    telefono: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(20)])
   });
 
   lstClientes: Cliente[] = [];  
