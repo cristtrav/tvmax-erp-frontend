@@ -10,6 +10,7 @@ import { FinalizacionReclamoDTO } from '@global-dtos/reclamos/finalizacion-recla
 import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
 import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
 import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
+import { UsuarioDTO } from '@dto/usuario.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,14 @@ export class ReclamosService {
 
   getReiteraciones(idreclamo: number, params: HttpParams): Observable<ReiteracionDTO[]>{
     return this.httpUtilSrv.get(`${this.url}/${idreclamo}/reiteraciones`, AppSettings.getHttpOptionsAuthWithParams(params));
+  }
+
+  getUsuarios(tipo: 'registro' | 'responsable', params?: HttpParams): Observable<UsuarioDTO[]>{
+    const endpoint = tipo == 'registro' ? 'usuariosregistro' : 'usuariosresponsables'
+    return this.httpUtilSrv.get(
+      `${this.url}/${endpoint}`,
+      params ? AppSettings.getHttpOptionsAuthWithParams(params) : AppSettings.getHttpOptionsAuth()
+    );
   }
   
 

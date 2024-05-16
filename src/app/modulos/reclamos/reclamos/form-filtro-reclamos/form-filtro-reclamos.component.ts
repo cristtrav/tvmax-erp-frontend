@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { UsuarioDTO } from '@dto/usuario.dto';
+import { ReclamosService } from '@global-services/reclamos/reclamos.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
@@ -34,7 +35,8 @@ export class FormFiltroReclamosComponent implements OnInit {
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
-    private usuariosSrv: UsuariosService
+    private usuariosSrv: UsuariosService,
+    private reclamosSrv: ReclamosService
   ){}
 
   ngOnInit(): void {
@@ -47,19 +49,18 @@ export class FormFiltroReclamosComponent implements OnInit {
       .append('eliminado', false)
       .append('sort', '+razonsocial');
     this.loadingUsuariosResponsables = true;
-    this.usuariosSrv
-      .get(params)
+    this.reclamosSrv
+      .getUsuarios('responsable', params)
       .pipe(finalize(() => this.loadingUsuariosResponsables = false))
       .subscribe((usuarios) => this.lstUsuariosResponsables = usuarios);
   }
 
   cargarUsuariosRegistro(){
     let params = new HttpParams()
-      .append('eliminado', false)
       .append('sort', '+razonsocial');
     this.loadingUsuariosRegistro = true;
-    this.usuariosSrv
-      .get(params)
+    this.reclamosSrv
+      .getUsuarios('registro', params)
       .pipe(finalize(() => this.loadingUsuariosRegistro = false))
       .subscribe((usuariosRegistro) => this.lstUsuariosRegistro = usuariosRegistro);
   }
