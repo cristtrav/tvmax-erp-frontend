@@ -44,6 +44,9 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     telefono: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(20)])
   });
 
+  loadingDatos: boolean = false;
+  reclamo?: ReclamoDTO;
+
   lstClientes: Cliente[] = [];  
   loadingClientes: boolean = false;
 
@@ -116,13 +119,15 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   }
 
   cargarDatos(idreclamo: number){
+    this.loadingDatos = true;
     const paramsDetalles = new HttpParams().append('eliminado', false);
     forkJoin({
       reclamo: this.reclamosSrv.getPorId(idreclamo),
       detalles: this.reclamosSrv.getDetallesByReclamo(idreclamo, paramsDetalles)
     })
+    .pipe(finalize(() => this.loadingDatos = false))
     .subscribe(resp => {
-      console.log(resp.reclamo)
+      this.reclamo = resp.reclamo;
       this.formCabecera.controls.fecha.setValue(resp.reclamo.fecha);
       this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
       this.formCabecera.controls.idcliente.setValue(resp.reclamo.idcliente);
@@ -132,15 +137,25 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       this.formCabecera.controls.idusuarioresponsable.setValue(resp.reclamo.idusuarioresponsable);
       this.formCabecera.controls.observacion.setValue(resp.reclamo.observacion);
       this.formCabecera.controls.telefono.setValue(resp.reclamo.telefono);
-      if(!this.lstClientes.find(cli => cli.id == resp.reclamo.idcliente)) this.agregarClienteLista(resp.reclamo.idcliente ?? -1);
+      if(!this.loadingClientes && resp.reclamo.idcliente && !this.lstClientes.find(cli => cli.id == resp.reclamo.idcliente))
+        this.agregarClienteLista(resp.reclamo.idcliente);
+      if(!this.loadingResponsables && resp.reclamo.idusuarioresponsable && !this.lstResponsables.find(u => u.id == resp.reclamo.idusuarioresponsable ?? -1))
+        this.agregarResponsableLista(resp.reclamo.idusuarioresponsable);
       this.lstDetallesReclamos = resp.detalles;
     });
   }
 
-  agregarClienteLista(idcliente: number){
+  private agregarClienteLista(idcliente: number){
     this.clientesSrv
       .getPorId(idcliente)
       .subscribe((cliente) => this.lstClientes = this.lstClientes.concat([cliente]));
+  }
+
+  private agregarResponsableLista(idusuario: number){
+    this.usuariosSrv.getPorId(idusuario)
+      .subscribe(usuario => {
+        this.lstResponsables = this.lstResponsables.concat([usuario]);
+      })
   }
 
   cargarResponsables(){
@@ -153,7 +168,12 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       .get(params)
       .pipe(finalize(() => this.loadingResponsables = false))
       .subscribe({
-        next: (usuarios) => this.lstResponsables = usuarios,
+        next: (usuarios) => {
+          this.lstResponsables = usuarios;
+          const idusuarioResponsable = this.formCabecera.controls.idusuarioresponsable.value;
+          if(!this.loadingDatos && idusuarioResponsable && !this.lstResponsables.find(u => u.id == idusuarioResponsable ))
+            this.agregarResponsableLista(idusuarioResponsable);
+        },
         error: (e) => {
           console.error('Error al cargar responsables', e);
           this.httpErrorHandler.process(e);
@@ -167,9 +187,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       .getSuscripcionesPorCliente(idcliente, this.getHttpParamsSuscripciones())
       .pipe(finalize(() => this.loadingSuscripciones = false))
       .subscribe({
-        next: (suscripciones) => {
-          this.lstSuscripciones = suscripciones;
-        },
+        next: suscripciones => this.lstSuscripciones = suscripciones,
         error: (e) => {
           console.error('Error al cargar suscripciones por cliente', e);
           this.httpErrorHandler.process(e);
@@ -182,8 +200,13 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     this.clientesSrv.get(this.getHttpParamsClientes())
     .pipe(finalize(() => this.loadingClientes = false))
     .subscribe({
-      next: (clientes) => {
+      next: clientes => {
         this.lstClientes = clientes;
+        if(
+          !this.loadingDatos &&
+          this.formCabecera.controls.idcliente.value &&
+          !this.lstClientes.find(c => c.id == this.formCabecera.controls.idcliente.value)
+        ) this.agregarClienteLista(this.formCabecera.controls.idcliente.value);
       },
       error: (e) => {
         console.error('Error al cargar clientes', e);
@@ -252,10 +275,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   }
 
   guardar(){
-    if(this.esValido()){
-      if(this.idreclamo == 'nuevo') this.registrar();
-      else this.editar();
-    }
+    if(this.esValido() && this.idreclamo == 'nuevo') this.registrar();
+    if(this.esValido() && this.idreclamo != 'nuevo') this.editar();
   }
 
   esValido(): boolean{
@@ -270,6 +291,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   }
 
   limpiar(){
+    this.reclamo = undefined;
     this.formCabecera.reset();
     this.lstDetallesReclamos = [];
     this.alertaDetallesVisible = false;
@@ -298,7 +320,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   }
 
   getDto(): ReclamoDTO{
-    return {
+    const reclamoDto = {
       id: this.idreclamo != 'nuevo' ? Number(this.idreclamo) : undefined,
       fecha: this.formCabecera.controls.fecha.value,
       idsuscripcion: this.formCabecera.controls.idsuscripcion.value,
@@ -310,6 +332,8 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       telefono: this.formCabecera.controls.telefono.value,
       eliminado: false
     }
+    if(this.reclamo) return { ...this.reclamo, ...reclamoDto}
+    else return reclamoDto;
   }
 
 }
