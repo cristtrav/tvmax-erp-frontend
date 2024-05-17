@@ -184,6 +184,11 @@
                                                                 <span *ngIf="reclamo.motivopostergacion">{{ reclamo.motivopostergacion }}</span>
                                                                 <span *ngIf="!reclamo.motivopostergacion" nz-typography nzType="secondary">(ninguno)</span>
                                                             </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloMotivoReiteracion">
+                                                                <ng-template #tituloMotivoReiteracion><strong>Motivo de reiteración</strong></ng-template>
+                                                                <span *ngIf="reclamo.motivoreiteracion">{{ reclamo.motivoreiteracion }}</span>
+                                                                <span *ngIf="!reclamo.motivoreiteracion" nz-typography nzType="secondary">(ninguno)</span>
+                                                            </nz-descriptions-item>
                                                         </nz-descriptions>
                                                     </nz-collapse-panel>
                                                 </nz-collapse>

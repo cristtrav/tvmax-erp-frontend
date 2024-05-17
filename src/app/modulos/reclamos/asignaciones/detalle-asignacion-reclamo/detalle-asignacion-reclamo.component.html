@@ -30,16 +30,24 @@
                             <nz-tag *ngIf="reclamo?.estado == 'OTR'" nzColor="purple">{{ reclamo?.observacionestado ?? 'Otro' }}</nz-tag>
                         </nz-descriptions-item>
                         
-                        <nz-descriptions-item [nzTitle]="tituloMotivoPostergacion">
+                        <nz-descriptions-item [nzTitle]="tituloMotivoPostergacion" *ngIf="reclamo?.motivopostergacion">
                             <ng-template #tituloMotivoPostergacion><strong>Motivo postergación</strong></ng-template>
-                            <span *ngIf="reclamo?.motivopostergacion">{{ reclamo?.motivopostergacion }}</span>
-                            <span *ngIf="!reclamo?.motivopostergacion" nz-typography nzType="secondary">(ninguno)</span>
+                            <span>{{ reclamo?.motivopostergacion }}</span>
                         </nz-descriptions-item>
                         
-                        <nz-descriptions-item [nzTitle]="tituloObservacionReclamo">
+                        <nz-descriptions-item [nzTitle]="tituloObservacionReclamo" *ngIf="reclamo?.observacion">
                             <ng-template #tituloObservacionReclamo><strong>Observación</strong></ng-template>
-                            <span *ngIf="reclamo?.observacion">{{ reclamo?.observacion }}</span>
-                            <span *ngIf="!reclamo?.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                            <span>{{ reclamo?.observacion }}</span>
+                        </nz-descriptions-item>
+
+                        <nz-descriptions-item [nzTitle]="tituloNroReiteraciones" *ngIf="(reclamo?.nroreiteraciones ?? 0) > 0">
+                            <ng-template #tituloNroReiteraciones><strong>Nro. reiteraciones</strong></ng-template>
+                            {{ reclamo?.nroreiteraciones | number }}
+                        </nz-descriptions-item>
+
+                        <nz-descriptions-item [nzTitle]="tituloMotivoReiteracion" *ngIf="reclamo?.motivoreiteracion">
+                            <ng-template #tituloMotivoReiteracion><strong>Motivo de reiteración</strong></ng-template>
+                            {{ reclamo?.motivoreiteracion }}
                         </nz-descriptions-item>
                     </nz-descriptions>
                 </div>
@@ -53,22 +61,14 @@
                             <ng-template #tituloCliente><strong>Cliente</strong></ng-template>
                             {{ reclamo?.cliente }}
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloTelefono">
-                            <ng-template #tituloTelefono><strong>Teléfono</strong></ng-template>
-                            <a *ngIf="reclamo?.telefono"(click)="copiarTelefono()">
-                                <i nz-icon nzType="phone" nzTheme="outline"></i>
-                                {{ reclamo?.telefono }}
-                            </a>
-                            <span *ngIf="!reclamo?.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
-                        </nz-descriptions-item>
+                        
                         <nz-descriptions-item [nzTitle]="tituloServicio">
                             <ng-template #tituloServicio><strong>Servicio</strong></ng-template>
                             {{ reclamo?.servicio | uppercase }}
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloObssuscripcion">
+                        <nz-descriptions-item [nzTitle]="tituloObssuscripcion" *ngIf="reclamo?.obssuscripcion">
                             <ng-template #tituloObssuscripcion><strong>Obs. suscripción</strong></ng-template>
-                            <span nz-typography nzType="secondary" *ngIf="!reclamo?.obssuscripcion">(sin observación)</span>
-                            <span *ngIf="reclamo?.obssuscripcion">{{ reclamo?.obssuscripcion }}</span>
+                            <span>{{ reclamo?.obssuscripcion }}</span>
                         </nz-descriptions-item>
                         <nz-descriptions-item [nzTitle]="tituloDireccion">
                             <ng-template #tituloDireccion><strong>Dirección</strong></ng-template>
@@ -77,6 +77,18 @@
                         <nz-descriptions-item [nzTitle]="tituloBarrio">
                             <ng-template #tituloBarrio><strong>Barrio</strong></ng-template>
                             {{ reclamo?.barrio }}
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloObsdomicilio" *ngIf="reclamo?.obsdomicilio">
+                            <ng-template #tituloObsdomicilio><strong>Obs. domicilio</strong></ng-template>
+                            <span>{{ reclamo?.obsdomicilio }}</span>
+                        </nz-descriptions-item>
+                        <nz-descriptions-item [nzTitle]="tituloTelefono">
+                            <ng-template #tituloTelefono><strong>Teléfono</strong></ng-template>
+                            <a *ngIf="reclamo?.telefono"(click)="copiarTelefono()">
+                                <i nz-icon nzType="phone" nzTheme="outline"></i>
+                                {{ reclamo?.telefono }}
+                            </a>
+                            <span *ngIf="!reclamo?.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
                         </nz-descriptions-item>
                         <nz-descriptions-item [nzTitle]="tituloUbicacion">
                             <ng-template #tituloUbicacion><strong>Ubicación</strong></ng-template>
@@ -87,11 +99,6 @@
                                 {{ [reclamo?.latitud ?? -1, reclamo?.longitud ?? -1] | openLocationCode }}
                             </a>
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloObsdomicilio">
-                            <ng-template #tituloObsdomicilio><strong>Obs. domicilio</strong></ng-template>
-                            <span *ngIf="!reclamo?.obsdomicilio" nz-typography nzType="secondary">(sin observación)</span>
-                            <span *ngIf="reclamo?.obsdomicilio">{{ reclamo?.obsdomicilio }}</span>
-                        </nz-descriptions-item>
                     </nz-descriptions>
                 </div>
             </nz-spin>
@@ -101,15 +108,14 @@
                 <ng-template #tituloMotivos><strong>Motivos</strong></ng-template>
                 
                 <nz-list [nzLoading]="loadingDetalles" [nzHeader]="tituloMotivos">
-                    
                     <nz-list-item *ngFor="let detalle of lstDetallesReclamo">
                         <nz-list-item-meta>
                             <nz-list-item-meta-title>{{ detalle.motivo }}</nz-list-item-meta-title>
                         </nz-list-item-meta>
                         <span nz-typography nzType="secondary">{{ detalle.observacion }}</span>
                     </nz-list-item>
-
                 </nz-list>
+
                 <nz-list-empty *ngIf="lstDetallesReclamo.length == 0"></nz-list-empty>
             </div>
         </div>

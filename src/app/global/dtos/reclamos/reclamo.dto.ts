@@ -30,4 +30,5 @@ export interface ReclamoDTO {
     telefono?: string;
     motivopostergacion?: string;
     nroreiteraciones?: number;
+    motivoreiteracion?: string;
 }
