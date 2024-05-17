@@ -66,7 +66,9 @@
                             <ng-template #tituloServicio><strong>Servicio</strong></ng-template>
                             {{ reclamo?.servicio | uppercase }}
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloObssuscripcion" *ngIf="reclamo?.obssuscripcion">
+                        <nz-descriptions-item
+                            *ngIf="reclamo?.obssuscripcion && ['PRO', 'FIN', 'OTR'].includes(reclamo?.estado ?? '')"
+                            [nzTitle]="tituloObssuscripcion">
                             <ng-template #tituloObssuscripcion><strong>Obs. suscripción</strong></ng-template>
                             <span>{{ reclamo?.obssuscripcion }}</span>
                         </nz-descriptions-item>
@@ -78,11 +80,15 @@
                             <ng-template #tituloBarrio><strong>Barrio</strong></ng-template>
                             {{ reclamo?.barrio }}
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloObsdomicilio" *ngIf="reclamo?.obsdomicilio">
+                        <nz-descriptions-item
+                            *ngIf="reclamo?.obsdomicilio && ['PRO', 'FIN', 'OTR'].includes(reclamo?.estado ?? '')"
+                            [nzTitle]="tituloObsdomicilio">
                             <ng-template #tituloObsdomicilio><strong>Obs. domicilio</strong></ng-template>
                             <span>{{ reclamo?.obsdomicilio }}</span>
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloTelefono">
+                        <nz-descriptions-item
+                            *ngIf="['PRO', 'FIN', 'OTR'].includes(reclamo?.estado ?? '')"
+                            [nzTitle]="tituloTelefono">
                             <ng-template #tituloTelefono><strong>Teléfono</strong></ng-template>
                             <a *ngIf="reclamo?.telefono"(click)="copiarTelefono()">
                                 <i nz-icon nzType="phone" nzTheme="outline"></i>
@@ -90,7 +96,9 @@
                             </a>
                             <span *ngIf="!reclamo?.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
                         </nz-descriptions-item>
-                        <nz-descriptions-item [nzTitle]="tituloUbicacion">
+                        <nz-descriptions-item
+                            *ngIf="reclamo?.latitud && reclamo?.longitud && ['PRO', 'FIN', 'OTR'].includes(reclamo?.estado ?? '')"
+                            [nzTitle]="tituloUbicacion">
                             <ng-template #tituloUbicacion><strong>Ubicación</strong></ng-template>
                             <span *ngIf="!reclamo?.latitud && !reclamo?.longitud" nz-typography nzType="secondary">(sin ubicación)</span>
                             <a *ngIf="reclamo?.latitud && reclamo?.longitud"
