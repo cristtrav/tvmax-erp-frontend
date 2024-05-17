@@ -114,7 +114,6 @@ export class AppComponent implements OnInit{
   }
 
   onClickMenuItem(){
-    console.log('onclick menu item, is pantalla movil:', this.isPantallaMovil)
     if(this.isPantallaMovil) this.isCollapsed = true;
   }
 }
