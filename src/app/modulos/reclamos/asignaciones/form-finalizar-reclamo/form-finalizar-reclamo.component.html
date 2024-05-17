@@ -29,9 +29,15 @@
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item *ngIf="formEstado.controls.estado.value == 'OTR'">
-                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Descripción</nz-form-label>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
                         <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese la descripción del estado. Max. 30 carácteres.">
                             <input nz-input placeholder="Ingresar estado." formControlName="observacionestado">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Recibido por</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese el nombre y apellido. Máx. 50 carácteres.">
+                            <input nz-input placeholder="Ej.: Juan Perez" formControlName="personarecepciontecnico">
                         </nz-form-control>
                     </nz-form-item>
                 </form>

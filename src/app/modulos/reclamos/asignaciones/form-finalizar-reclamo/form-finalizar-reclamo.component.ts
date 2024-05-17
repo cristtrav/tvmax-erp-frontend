@@ -38,7 +38,8 @@ export class FormFinalizarReclamoComponent implements OnInit, OnDestroy {
   
   formEstado = new FormGroup({
     estado: new FormControl<string | null>(null, [Validators.required]),
-    observacionestado: new FormControl<string | null>(null, [Validators.maxLength(30)])
+    observacionestado: new FormControl<string | null>(null, [Validators.maxLength(30)]),
+    personarecepciontecnico: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)])
   })
 
   formMaterial = new FormGroup({
@@ -85,6 +86,7 @@ export class FormFinalizarReclamoComponent implements OnInit, OnDestroy {
         if(reclamo.estado == 'FIN' || reclamo.estado == 'OTR'){          
           this.formEstado.controls.estado.setValue(reclamo.estado);
           this.formEstado.controls.observacionestado.setValue(reclamo.observacionestado ?? null);
+          this.formEstado.controls.personarecepciontecnico.setValue(reclamo.personarecepciontecnico ?? null)
         }
     });
     const params = new HttpParams().append('eliminado', false);
@@ -200,11 +202,10 @@ export class FormFinalizarReclamoComponent implements OnInit, OnDestroy {
   }
 
   private getDto(): FinalizacionReclamoDTO{
-    const estado = this.formEstado.controls.estado.value ?? 'FIN';
-    const observacionestado = this.formEstado.controls.observacionestado.value ?? undefined;
     return {
-      estado,
-      observacionestado,
+      estado: this.formEstado.controls.estado.value ?? 'FIN',
+      observacionestado: this.formEstado.controls.observacionestado.value ?? undefined,
+      personarecepciontecnico: this.formEstado.controls.personarecepciontecnico.value ?? '',
       materialesutilizados: this.lstMaterialUtilizado
     }
   }

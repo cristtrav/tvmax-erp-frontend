@@ -189,6 +189,11 @@
                                                                 <span *ngIf="reclamo.motivoreiteracion">{{ reclamo.motivoreiteracion }}</span>
                                                                 <span *ngIf="!reclamo.motivoreiteracion" nz-typography nzType="secondary">(ninguno)</span>
                                                             </nz-descriptions-item>
+                                                            <nz-descriptions-item [nzTitle]="tituloPersonaRecepcion">
+                                                                <ng-template #tituloPersonaRecepcion><strong>Técnico recibido por</strong></ng-template>
+                                                                <span *ngIf="reclamo.personarecepciontecnico">{{ reclamo.personarecepciontecnico }}</span>
+                                                                <span *ngIf="!reclamo.personarecepciontecnico" nz-typography nzType="secondary">(nadie)</span>
+                                                            </nz-descriptions-item>
                                                         </nz-descriptions>
                                                     </nz-collapse-panel>
                                                 </nz-collapse>
