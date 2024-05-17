@@ -127,7 +127,7 @@
                                                         nzType="default"
                                                         [disabled]="reclamo.estado != 'PEN' && reclamo.estado != 'POS'"
                                                         (click)="abrirModalReiteracion(reclamo.id)">
-                                                        <i nz-icon nzType="notification" nzTheme="outline"></i>
+                                                        <i nz-icon nzType="sync" nzTheme="outline"></i>
                                                     </button>
                                                 </div>
                                                 <div nz-col>
@@ -269,7 +269,7 @@
                                                                 <tbody>
                                                                     <tr *ngFor="let evento of tablaEventosCambiosEstados.data">
                                                                         <td>{{ evento.estado | estadoToText }}</td>
-                                                                        <td>{{ evento.fechahora | date:'dd/MM/yyyy HH:mm'}}</td>
+                                                                        <td>{{ evento.fechahora | date:'dd/MM/yyyy HH:mm'}} hs.</td>
                                                                         <td>
                                                                             <span *ngIf="evento.observacion">{{ evento.observacion }}</span>
                                                                             <span *ngIf="!evento.observacion" nz-typography nzType="secondary">(sin observación)</span>
