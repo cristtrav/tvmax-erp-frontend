@@ -75,8 +75,8 @@ export class ReclamosService {
     return this.httpUtilSrv.get(`${this.url}/${idreclamo}/materiales`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getEventosCambiosEstados(idreclamo: number): Observable<EventoCambioEstadoDTO[]>{
-    return this.httpUtilSrv.get(`${this.url}/${idreclamo}/cambiosestados`, AppSettings.getHttpOptionsAuth());
+  getEventosCambiosEstados(idreclamo: number, params: HttpParams): Observable<EventoCambioEstadoDTO[]>{
+    return this.httpUtilSrv.get(`${this.url}/${idreclamo}/cambiosestados`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getReiteraciones(idreclamo: number, params: HttpParams): Observable<ReiteracionDTO[]>{

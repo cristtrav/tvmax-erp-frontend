@@ -47,11 +47,9 @@
             [(ngModel)]="estadosSeleccionados"
             (ngModelChange)="filtrar()"
             nzAllowClear>
-            <nz-option [nzLabel]="'Pendiente'" [nzValue]="'PEN'"></nz-option>
-            <nz-option [nzLabel]="'En Proceso'" [nzValue]="'PRO'"></nz-option>
-            <nz-option [nzLabel]="'Postergado'" [nzValue]="'POS'"></nz-option>
-            <nz-option [nzLabel]="'Finalizado'" [nzValue]="'FIN'"></nz-option>
-            <nz-option [nzLabel]="'Otro'" [nzValue]="'OTR'"></nz-option>
+            <nz-option *ngFor="let estado of estadosReclamos" [nzLabel]="estado | estadoToDescription" [nzValue]="estado" nzCustomContent>
+                <app-tag-estados [estado]="estado"></app-tag-estados>
+            </nz-option>
         </nz-select>
     </div>
     <div nz-col nzSpan="24">

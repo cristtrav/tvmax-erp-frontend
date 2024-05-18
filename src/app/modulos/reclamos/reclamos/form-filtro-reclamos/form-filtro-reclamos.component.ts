@@ -6,6 +6,7 @@ import { ReclamosService } from '@global-services/reclamos/reclamos.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
+import { ESTADOS_RECLAMOS_LIST } from '../../constants/estados-reclamos.list';
 
 @Component({
   selector: 'app-form-filtro-reclamos',
@@ -13,6 +14,8 @@ import { finalize } from 'rxjs';
   styleUrls: ['./form-filtro-reclamos.component.scss']
 })
 export class FormFiltroReclamosComponent implements OnInit {
+
+  readonly estadosReclamos = ESTADOS_RECLAMOS_LIST;
 
   @Output()
   paramsFiltrosChange = new EventEmitter<IParametroFiltro>();

@@ -106,13 +106,7 @@
                                             <span nz-tooltip [nzTooltipTitle]="'Código de suscripción: '+reclamo.idsuscripcion">{{ reclamo.servicio }}</span>
                                         </td>
                                         <td>
-                                            <nz-tag *ngIf="reclamo.estado == 'PEN'" nzColor="red">Pendiente</nz-tag>
-                                            <nz-tag *ngIf="reclamo.estado == 'PRO'" nzColor="orange">En Proceso</nz-tag>
-                                            <nz-tag *ngIf="reclamo.estado == 'POS'" nzColor="magenta">Postergado</nz-tag>
-                                            <nz-tag *ngIf="reclamo.estado == 'FIN'" nzColor="green">Finalizado</nz-tag>
-                                            <nz-tag *ngIf="reclamo.estado == 'OTR'" nzColor="purple">
-                                                {{ reclamo.observacionestado ?? 'Otro' }}
-                                            </nz-tag>
+                                            <app-tag-estados [estado]="reclamo.estado" [observacionEstado]="reclamo.observacionestado"></app-tag-estados>
                                         </td>
                                         <td>
                                             <span *ngIf="reclamo.usuarioresponsable">{{ reclamo.usuarioresponsable }}</span>
@@ -129,7 +123,7 @@
                                                         nzTooltipTitle="Reiterar reclamo"
                                                         nz-button
                                                         nzType="default"
-                                                        [disabled]="reclamo.estado != 'PEN' && reclamo.estado != 'POS'"
+                                                        [disabled]="!estadosReiteracion.includes(reclamo.estado)"
                                                         (click)="abrirModalReiteracion(reclamo.id)">
                                                         <i nz-icon nzType="notification" nzTheme="outline"></i>
                                                     </button>
@@ -185,11 +179,7 @@
                                                             <nz-descriptions-item [nzTitle]="tituloFechaCambioEstado">
                                                                 <ng-template #tituloFechaCambioEstado>
                                                                     <strong>
-                                                                        <span *ngIf="reclamo.estado == 'PEN'">Pendiente desde</span>
-                                                                        <span *ngIf="reclamo.estado == 'PRO'">En Proceso desde</span>
-                                                                        <span *ngIf="reclamo.estado == 'FIN'">Finalizado</span>
-                                                                        <span *ngIf="reclamo.estado == 'POS'">Postergado desde</span>
-                                                                        <span *ngIf="reclamo.estado == 'OTR'">Ultimo cambio de estado</span>
+                                                                        {{ reclamo.estado | estadoToDescription}} desde
                                                                     </strong>
                                                                 </ng-template>
                                                                 {{ (reclamo.fechahoracambioestado | date:'dd/MM/yyyy HH:mm') + ' hs.' }}
@@ -283,7 +273,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr *ngFor="let evento of tablaEventosCambiosEstados.data">
-                                                                        <td>{{ evento.estado | estadoToText }}</td>
+                                                                        <td>{{ evento.estado | estadoToDescription }}</td>
                                                                         <td>{{ evento.fechahora | date:'dd/MM/yyyy HH:mm'}} hs.</td>
                                                                         <td>
                                                                             <span *ngIf="evento.observacion">{{ evento.observacion }}</span>

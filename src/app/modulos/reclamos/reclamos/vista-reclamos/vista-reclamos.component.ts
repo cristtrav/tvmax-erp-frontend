@@ -30,6 +30,8 @@ interface DataInterface{
 })
 export class VistaReclamosComponent implements OnInit {
 
+  readonly estadosReiteracion = ['PEN', 'POS', 'ASI'];
+
   detalleSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 10, nzXXl: 10 };
   tabsDetallesSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 14, nzXXl: 14 };
 
@@ -160,7 +162,7 @@ export class VistaReclamosComponent implements OnInit {
     const eventoData = this.mapEventosCambiosEstados.get(idreclamo);
     this.mapEventosCambiosEstados.set(idreclamo, {loading: true, eventos: eventoData?.eventos ?? []});
     this.reclamosSrv
-      .getEventosCambiosEstados(idreclamo)
+      .getEventosCambiosEstados(idreclamo, new HttpParams().append('sort', '-id'))
       .pipe(finalize(() => {
         const eventosData = this.mapEventosCambiosEstados.get(idreclamo);
         if(eventosData) this.mapEventosCambiosEstados.set(idreclamo, { loading: false, eventos: eventosData.eventos})

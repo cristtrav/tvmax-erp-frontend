@@ -90,20 +90,8 @@
                                         formControlName="estado"
                                         nzPlaceHolder="Seleccionar..."
                                         nzAllowClear>
-                                        <nz-option [nzLabel]="'Pendiente'" [nzValue]="'PEN'" nzCustomContent>
-                                            <nz-tag nzColor="red">Pendiente</nz-tag>
-                                        </nz-option>
-                                        <nz-option [nzLabel]="'En Proceso'" [nzValue]="'PRO'" nzCustomContent>
-                                            <nz-tag nzColor="orange">En Proceso</nz-tag>
-                                        </nz-option>
-                                        <nz-option [nzLabel]="'Postergado'" [nzValue]="'POS'" nzCustomContent>
-                                            <nz-tag nzColor="orange">Postergado</nz-tag>
-                                        </nz-option>
-                                        <nz-option [nzLabel]="'Finalizado'" [nzValue]="'FIN'" nzCustomContent>
-                                            <nz-tag nzColor="green">Finalizado</nz-tag>
-                                        </nz-option>
-                                        <nz-option [nzLabel]="'Otro'" [nzValue]="'OTR'" nzCustomContent>
-                                            <nz-tag nzColor="purple">Otro</nz-tag>
+                                        <nz-option *ngFor="let e of estados" [nzLabel]="e | estadoToDescription" [nzValue]="e" nzCustomContent>
+                                            <app-tag-estados [estado]="e"></app-tag-estados>
                                         </nz-option>
                                     </nz-select>
                                 </nz-form-control>
@@ -200,14 +188,17 @@
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                <nz-form-label
+                                    [appNzColResponsiveSizes]="formCabeceraLabelSizes"
+                                    [nzRequired]="formCabecera.controls.idusuarioresponsable.hasValidator(requiredValidator)">
                                     Responsable
                                 </nz-form-label>
-                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes">
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Seleccione el responsable">
                                     <nz-select
                                         formControlName="idusuarioresponsable"
                                         nzPlaceHolder="Seleccionar..."
                                         [nzLoading]="loadingResponsables"
+                                        [nzDisabled]="formCabecera.controls.estado.value == 'PEN'"
                                         nzAllowClear
                                         nzShowSearch>
                                         <nz-option

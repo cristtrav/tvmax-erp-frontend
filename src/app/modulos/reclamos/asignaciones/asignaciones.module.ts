@@ -33,6 +33,7 @@ import { UbicacionReclamoComponent } from './ubicacion-reclamo/ubicacion-reclamo
 import { DomiciliosModule } from '../../domicilios/domicilios.module';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     DomiciliosModule,
     NzSwitchModule,
     NzSpaceModule,
-    FormsModule
+    FormsModule,
+    TagEstadosModule
   ]
 })
 export class AsignacionesModule { }

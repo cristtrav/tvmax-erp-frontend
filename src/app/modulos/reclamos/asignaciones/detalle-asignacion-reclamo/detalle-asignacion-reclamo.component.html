@@ -23,11 +23,7 @@
                         </nz-descriptions-item>
                         <nz-descriptions-item [nzTitle]="tituloEstado">
                             <ng-template #tituloEstado><strong>Estado</strong></ng-template>
-                            <nz-tag *ngIf="reclamo?.estado == 'PEN'" nzColor="red">Pendiente</nz-tag>
-                            <nz-tag *ngIf="reclamo?.estado == 'PRO'" nzColor="orange">En Proceso</nz-tag>
-                            <nz-tag *ngIf="reclamo?.estado == 'POS'" nzColor="magenta">Postergado</nz-tag>
-                            <nz-tag *ngIf="reclamo?.estado == 'FIN'" nzColor="green">Finalizado</nz-tag>
-                            <nz-tag *ngIf="reclamo?.estado == 'OTR'" nzColor="purple">{{ reclamo?.observacionestado ?? 'Otro' }}</nz-tag>
+                            <app-tag-estados [estado]="reclamo?.estado" [observacionEstado]="reclamo?.observacionestado"></app-tag-estados>
                         </nz-descriptions-item>
                         
                         <nz-descriptions-item [nzTitle]="tituloMotivoPostergacion" *ngIf="reclamo?.motivopostergacion">
@@ -156,7 +152,7 @@
                     </div>
                     <div
                         nz-col
-                        *ngIf="(reclamo?.estado == 'PEN' || reclamo?.estado == 'POS') && reclamo?.idusuarioresponsable">
+                        *ngIf="(reclamo?.estado == 'ASI' || reclamo?.estado == 'PEN' || reclamo?.estado == 'POS') && reclamo?.idusuarioresponsable">
                         <button
                             *ngIf="reclamo"
                             nz-button
@@ -169,7 +165,7 @@
                     </div>
                     <div
                         nz-col
-                        *ngIf="(reclamo?.estado == 'PRO' || reclamo?.estado == 'PEN') && reclamo?.idusuarioresponsable">
+                        *ngIf="(reclamo?.estado == 'PRO' || reclamo?.estado == 'ASI') && reclamo?.idusuarioresponsable">
                         <button
                             *ngIf="reclamo"
                             nz-button
@@ -180,7 +176,7 @@
                             Postergar
                         </button>
                     </div>  
-                    <div nz-col *ngIf="reclamo?.estado == 'PEN' && reclamo?.idusuarioresponsable">
+                    <div nz-col *ngIf="reclamo?.estado == 'ASI'">
                         <button
                             *ngIf="reclamo"
                             nz-button

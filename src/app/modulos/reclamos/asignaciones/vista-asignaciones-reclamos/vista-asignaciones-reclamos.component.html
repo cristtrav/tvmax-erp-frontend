@@ -68,17 +68,12 @@
                     </nz-tag>
 
                     <nz-tag class="tag-avatar">{{ reclamo.fecha | date:'dd/MM/yy' }}</nz-tag>
-                    
-                    <nz-tag *ngIf="reclamo.estado == 'PEN'" nzColor="red" class="tag-avatar">Pendiente</nz-tag>
-                    <nz-tag *ngIf="reclamo.estado == 'PRO'" nzColor="orange" class="tag-avatar">En Proceso</nz-tag>
-                    <nz-tag *ngIf="reclamo.estado == 'POS'" nzColor="magenta" class="tag-avatar">Postergado</nz-tag>
-                    <nz-tag *ngIf="reclamo.estado == 'FIN'" nzColor="green" class="tag-avatar">Finalizado</nz-tag>
-                    <nz-tag *ngIf="reclamo.estado == 'OTR'" nzColor="purple" class="tag-avatar">{{ reclamo.observacionestado ?? 'Otro' }}</nz-tag>
+                    <app-tag-estados [estado]="reclamo.estado" [fullWidth]="true" [centeredText]="true"></app-tag-estados>
                     
                 </div>
             </ng-template>
             <nz-tag *ngIf="reclamo.nroreiteraciones && reclamo.nroreiteraciones > 0" [nzColor]="'volcano'">
-                <i nz-icon nzType="sync" nzTheme="outline"></i>
+                <i nz-icon nzType="notification" nzTheme="outline"></i>
                 {{ reclamo.nroreiteraciones | number }}
             </nz-tag>
         </nz-list-item>

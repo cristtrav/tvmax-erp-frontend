@@ -33,7 +33,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { IdsuscripcionToEstadoPipe } from '../pipes/idsuscripcion-to-estado.pipe';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { EstadoToTextPipe } from '../pipes/estado-to-text.pipe';
+import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
+import { EstadoToDescriptionModule } from '../pipes/estado-to-description/estado-to-description.module';
 
 
 @NgModule({
@@ -76,7 +77,9 @@ import { EstadoToTextPipe } from '../pipes/estado-to-text.pipe';
     NzTabsModule,
     NzCollapseModule,
     NzColResponsiveSizesDirective,
-    EstadoToTextPipe
+    EstadoToDescriptionModule,
+    TagEstadosModule,
+    TagEstadosModule
   ]
 })
 export class ReclamosModule { }

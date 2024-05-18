@@ -63,8 +63,9 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
       if(!this.finalizadosVisible){
         const reclamosEnProceso = resp.reclamos.filter(r => r.estado == 'PRO');
         const reclamosPendientes = resp.reclamos.filter(r => r.estado == 'PEN');
+        const reclamosAsignados = resp.reclamos.filter(r => r.estado == 'ASI');
         const reclamosPospuestos = resp.reclamos.filter(r => r.estado == 'POS');
-        this.lstReclamos = [...reclamosEnProceso, ...reclamosPendientes, ...reclamosPospuestos];      
+        this.lstReclamos = [...reclamosEnProceso, ...reclamosPendientes, ...reclamosAsignados, ...reclamosPospuestos];      
       }else this.lstReclamos = resp.reclamos;
     });
   }
@@ -75,6 +76,7 @@ export class VistaAsignacionesReclamosComponent implements OnInit {
       params = params.append('estado', 'OTR');
     }else{
       params = params.append('estado', 'PEN');
+      params = params.append('estado', 'ASI');
       params = params.append('estado', 'PRO');
       params = params.append('estado', 'POS');
     }

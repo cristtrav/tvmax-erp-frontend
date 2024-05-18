@@ -1,0 +1,1 @@
+export const ESTADOS_RECLAMOS_LIST = ['PEN', 'ASI', 'PRO', 'POS', 'FIN', 'OTR'];

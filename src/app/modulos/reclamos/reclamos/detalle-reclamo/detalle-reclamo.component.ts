@@ -16,6 +16,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription, finalize, forkJoin } from 'rxjs';
+import { ESTADOS_RECLAMOS_LIST } from '../../constants/estados-reclamos.list';
 
 @Component({
   selector: 'app-detalle-reclamo',
@@ -23,6 +24,8 @@ import { Subscription, finalize, forkJoin } from 'rxjs';
   styleUrls: ['./detalle-reclamo.component.scss']
 })
 export class DetalleReclamoComponent implements OnInit, OnDestroy {
+
+  readonly estados = ESTADOS_RECLAMOS_LIST;
 
   detalleSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 13, nzLg: 14, nzXl: 14, nzXXl: 14 };
   cabeceraSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 11, nzLg: 10, nzXl: 10, nzXXl: 10 };
@@ -69,6 +72,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
 
   alertaDetallesVisible: boolean = false;
   buscandoPorCi: boolean = false;
+  readonly requiredValidator = Validators.required;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -102,6 +106,10 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
         this.formCabecera.controls.observacionestado.removeValidators(Validators.required);
         this.formCabecera.controls.observacionestado.reset();
       }
+      if(val == null || val == 'PEN') this.formCabecera.controls.idusuarioresponsable.removeValidators(Validators.required);
+      else this.formCabecera.controls.idusuarioresponsable.addValidators(Validators.required);
+
+      if(val == 'PEN') this.formCabecera.controls.idusuarioresponsable.setValue(null);
     });
     
     this.cargarClientes();
