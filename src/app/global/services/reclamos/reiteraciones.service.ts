@@ -19,4 +19,8 @@ export class ReiteracionesService {
   post(reiteracion: ReiteracionDTO): Observable<any>{
     return this.httpUtilSrv.post(this.url, reiteracion, AppSettings.getHttpOptionsAuth());
   }
+
+  delete(id: number): Observable<any>{
+    return this.httpUtilSrv.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  }
 }

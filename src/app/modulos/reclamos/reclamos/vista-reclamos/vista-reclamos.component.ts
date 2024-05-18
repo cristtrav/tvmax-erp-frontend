@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
@@ -16,6 +16,7 @@ import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.inter
 import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
 import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
 import { ReiteracionesService } from '@global-services/reclamos/reiteraciones.service';
+import { formatDate } from '@angular/common';
 
 interface DataInterface{
   reclamos: ReclamoDTO[],
@@ -63,6 +64,8 @@ export class VistaReclamosComponent implements OnInit {
   idreclamoReiterar?: number;
   
   constructor(
+    @Inject(LOCALE_ID)
+    private locale: string,
     private reclamosSrv: ReclamosService,
     private modal: NzModalService,
     private notif: NzNotificationService,
@@ -239,6 +242,28 @@ export class VistaReclamosComponent implements OnInit {
         this.recargarDatos();
       });
     this.cerrarModalReiteracion();
+  }
+
+  confirmarEliminacionReiteracion(reiteracion: ReiteracionDTO){
+    let confimationContent = `${formatDate(reiteracion.fechahora ?? new Date(), 'dd/MM/yyyy HH:mm', this.locale)} hs.`;
+    if(reiteracion.observacion) confimationContent = confimationContent + ` | ${reiteracion.observacion}`;
+    
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar la reiteración?',
+      nzContent: confimationContent,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.eliminarReiteracion(reiteracion.id ?? -1)
+    })
+  }
+
+  eliminarReiteracion(idreiteracion: number){
+    this.reiteracionSrv
+      .delete(idreiteracion)
+      .subscribe(() => {
+        this.notif.success(`<strong>Éxito</strong>`, 'Reiteración eliminada');        
+        this.recargarDatos();
+      })
   }
 
 }

@@ -127,16 +127,27 @@
                                                         nzType="default"
                                                         [disabled]="reclamo.estado != 'PEN' && reclamo.estado != 'POS'"
                                                         (click)="abrirModalReiteracion(reclamo.id)">
-                                                        <i nz-icon nzType="sync" nzTheme="outline"></i>
+                                                        <i nz-icon nzType="notification" nzTheme="outline"></i>
                                                     </button>
                                                 </div>
                                                 <div nz-col>
-                                                    <button nz-button nzType="primary" [routerLink]="[reclamo.id]">
+                                                    <button
+                                                        nz-tooltip
+                                                        nzTooltipTitle="Editar reclamo"
+                                                        nz-button
+                                                        nzType="primary"
+                                                        [routerLink]="[reclamo.id]">
                                                         <i nz-icon nzType="edit" nzTheme="outline"></i>
                                                     </button>
                                                 </div>
                                                 <div nz-col>
-                                                    <button nz-button nzType="primary" nzDanger (click)="confirmarEliminacion(reclamo)">
+                                                    <button
+                                                        nz-tooltip
+                                                        nzTooltipTitle="Eliminar reclamo"
+                                                        nz-button
+                                                        nzType="primary"
+                                                        nzDanger
+                                                        (click)="confirmarEliminacion(reclamo)">
                                                         <i nz-icon nzType="delete" nzTheme="outline"></i>
                                                     </button>
                                                 </div>
@@ -290,6 +301,7 @@
                                                                     <tr>
                                                                         <th>Fecha/Hora</th>
                                                                         <th>Observación</th>
+                                                                        <th></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -298,6 +310,17 @@
                                                                         <td>
                                                                             <span *ngIf="reiteracion.observacion">{{ reiteracion.observacion }}</span>
                                                                             <span *ngIf="!reiteracion.observacion" nz-typography nzType="secondary">(sin observación)</span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button
+                                                                                nz-tooltip
+                                                                                nzTooltipTitle="Eliminar reiteración"
+                                                                                nz-button
+                                                                                nzType="primary"
+                                                                                (click)="confirmarEliminacionReiteracion(reiteracion)"
+                                                                                nzDanger>
+                                                                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
