@@ -33,8 +33,9 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   idreclamo: string = 'nuevo';
 
   formCabecera: FormGroup = new FormGroup({
-    fecha: new FormControl(new Date, [Validators.required]),    
+    fecha: new FormControl(new Date, [Validators.required]),
     idcliente: new FormControl(null, [Validators.required]),
+    ci: new FormControl(null),
     idsuscripcion: new FormControl(null, [Validators.required]),
     idusuarioresponsable: new FormControl<number | null>(null),
     estado: new FormControl<string | null>(null),
@@ -67,6 +68,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
   validandoForm: boolean = false;
 
   alertaDetallesVisible: boolean = false;
+  buscandoPorCi: boolean = false;
 
   constructor(
     private aroute: ActivatedRoute,
@@ -113,6 +115,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       else {
         const cliente = this.lstClientes.find(c => c.id == value);
         this.formCabecera.controls.telefono.setValue(cliente?.telefono1 ?? cliente?.telefono2);
+        if(this.formCabecera.controls.ci.value != cliente?.ci) this.formCabecera.controls.ci.setValue(cliente?.ci);
         this.cargarSuscripciones(value);
       }
     });
@@ -131,6 +134,7 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       this.formCabecera.controls.fecha.setValue(resp.reclamo.fecha);
       this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
       this.formCabecera.controls.idcliente.setValue(resp.reclamo.idcliente);
+      this.formCabecera.controls.ci.setValue(resp.reclamo.ci);
       this.formCabecera.controls.idsuscripcion.setValue(resp.reclamo.idsuscripcion);
       this.formCabecera.controls.estado.setValue(resp.reclamo.estado);
       this.formCabecera.controls.observacionestado.setValue(resp.reclamo.observacionestado);
@@ -334,6 +338,34 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
     }
     if(this.reclamo) return { ...this.reclamo, ...reclamoDto}
     else return reclamoDto;
+  }
+
+  buscarClientePorCi(event: Event){
+    if(this.formCabecera.controls.ci.value.length == 0){
+      this.notif.error(`<strong>Error al buscar por CI</strong>`, 'Ingrese un número');
+      return;
+    }
+    console.log(this.formCabecera.controls.ci.value);
+    this.buscandoPorCi = true;
+    const params = new HttpParams().append('eliminado', false).append('ci', this.formCabecera.controls.ci.value)
+    this.clientesSrv
+      .get(params)
+      .pipe(finalize(() => this.buscandoPorCi = false))
+      .subscribe({
+        next: (clientes) => {
+          if(clientes.length > 0){
+            const cliente = clientes[0];
+            if(!this.lstClientes.find(cli => cli.id == cliente.id)) this.lstClientes = this.lstClientes.concat([cliente]);
+            this.formCabecera.controls.idcliente.setValue(cliente.id);
+          }else{
+            this.notif.error(`<strong>Sin resultados</strong>`, `No se encontró ningun cliente con el nro de doc.: «${this.formCabecera.controls.ci.value}»`);
+          }
+        },
+        error: (e) => {
+          console.log('Error al buscar cliente por ci', e);
+          this.httpErrorHandler.process(e);
+        }
+      })
   }
 
 }

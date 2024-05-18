@@ -24,6 +24,7 @@ export interface ReclamoDTO {
     obssuscripcion?: string;
     idcliente?: number;
     cliente?: string;
+    ci?: string;
     eliminado: boolean;
     detalles: DetalleReclamoDTO[];
     observacion?: string;

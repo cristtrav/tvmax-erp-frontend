@@ -36,7 +36,7 @@
                                     <nz-input-group nzPrefixIcon="search" [nzSuffix]="suffixIconClearSearch">
                                         <input nz-input placeholder="Buscar..." [formControl]="busquedaCtrl">
                                         <ng-template #suffixIconClearSearch>
-                                            <i *ngIf="busquedaCtrl.value != ''"
+                                            <i *ngIf="busquedaCtrl.value"
                                                 nz-icon nzType="close-circle"
                                                 nzTheme="fill"
                                                 class="ant-input-clear-icon"
@@ -94,7 +94,11 @@
                                         <td>{{ reclamo.id }}</td>
                                         <td>{{ reclamo.fecha | date: 'dd/MM/yyyy' }}</td>
                                         <td>
-                                            <span nz-tooltip [nzTooltipTitle]="'Código de Cliente: '+reclamo.idcliente">
+                                            <span *ngIf="reclamo.ci">{{ reclamo.ci | number }}</span>
+                                            <span *ngIf="!reclamo.ci" nz-typography nzType="secondary">(ninguno)</span>
+                                        </td>
+                                        <td>
+                                            <span nz-tooltip [nzTooltipTitle]="'Código de Cliente:' + reclamo.idcliente">
                                                 {{ reclamo.cliente }}
                                             </span>
                                         </td>

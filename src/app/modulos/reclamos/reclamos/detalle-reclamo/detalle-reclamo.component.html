@@ -19,7 +19,6 @@
                     <div nz-row [nzGutter]="[8,8]">
                         <div nz-col nzSpan="24">
                             <app-buscador-motivos (motivoSeleccionadoChange)="agregarDetalle($event)"></app-buscador-motivos>
-                            
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-table
@@ -66,7 +65,7 @@
             <div nz-col [appNzColResponsiveSizes]="cabeceraSizes">
                 <div class="module-content">
                     <nz-spin [nzSpinning]="loadingDatos">
-                        <form nz-form [formGroup]="formCabecera">
+                        <form nz-form [formGroup]="formCabecera" (keydown.enter)="$event.preventDefault()">
                             <nz-form-item>
                                 <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>Fecha</nz-form-label>
                                 <nz-form-control
@@ -115,6 +114,16 @@
                                 </nz-form-label>
                                 <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese el estado. Máx. 30 carácteres.">
                                     <input nz-input formControlName="observacionestado">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                    CI/RUC
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes">
+                                    <nz-input-group [nzSuffixIcon]="buscandoPorCi ? 'loading' : 'search'">
+                                        <input nz-input formControlName="ci" (keydown.enter)="buscarClientePorCi($event)">
+                                    </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>

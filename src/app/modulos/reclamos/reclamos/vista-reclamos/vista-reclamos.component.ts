@@ -36,11 +36,12 @@ export class VistaReclamosComponent implements OnInit {
   tableHeaders: TableHeaderInterface[] = [
     { key: 'id', description: 'Código', sortFn: true, sortOrder: 'descend' },
     { key: 'fecha', description: 'Fecha', sortFn: true, sortOrder: null },
+    { key: 'ci', description: 'Nro. Doc.', sortFn: true, sortOrder: null },
     { key: 'cliente', description: 'Cliente', sortFn: true, sortOrder: null },
     { key: 'idsuscripcion', description: 'Suscripción', sortFn: true, sortOrder: null},
     { key: 'estado', description: 'Estado', sortFn: true, sortOrder: null },
     { key: 'usuarioresponsable', description: 'Responsable', sortFn: true, sortOrder: null },
-    { key: 'nroreiteraciones', description: 'Reiteraciones', sortFn: true, sortOrder: null }
+    { key: 'nroreiteraciones', description: 'Reit.', sortFn: true, sortOrder: null }
   ];
 
   reclamos$: Observable<DataInterface> = of({reclamos: [], total: 0});
@@ -265,5 +266,5 @@ export class VistaReclamosComponent implements OnInit {
         this.recargarDatos();
       })
   }
-
+  
 }
