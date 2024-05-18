@@ -31,7 +31,7 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
   loadingPostergar: boolean = false;
 
   isModalMotivoPosVisible: boolean = false;
-  motivoPostergacionCtrl = new FormControl<null | string>(null, [Validators.maxLength(45)]);
+  motivoPostergacionCtrl = new FormControl<null | string>(null, [Validators.required, Validators.minLength(4), Validators.maxLength(45)]);
 
   constructor(
     @Inject(NAVIGATOR) private navigator: Navigator,
@@ -49,6 +49,7 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
     else this.router.navigate(['/app/asignacionesreclamos']);
     this.cargarReclamo(Number(strIdreclamo));
     this.cargarDetalles(Number(strIdreclamo));
+    this.motivoPostergacionCtrl.dirty
   }
 
   cargarReclamo(idreclamo: number){
@@ -86,7 +87,6 @@ export class DetalleAsignacionReclamoComponent implements OnInit {
       .pipe(finalize(() => this.loadingAsignacion = false))
       .subscribe(() => {
         this.message.success('Reclamo asignado');
-        //this.notif.success(`<strong>Éxito</strong>`, 'Reclamo asignado');
         this.cargarReclamo(idreclamo);
       })
   }

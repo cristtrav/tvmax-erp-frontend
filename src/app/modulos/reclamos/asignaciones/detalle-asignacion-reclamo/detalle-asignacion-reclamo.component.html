@@ -205,7 +205,7 @@
     (nzOnCancel)="cerrarModalMotivoPos()"
     (nzOnOk)="postergar(+idreclamo)">
     <ng-template #contenidoModalMotivoPos>
-        <input nz-input placeholder="Motivo" [formControl]="motivoPostergacionCtrl" [nzStatus]="!motivoPostergacionCtrl.valid ? 'error' : ''">
-        <label *ngIf="!motivoPostergacionCtrl.valid" nz-typography nzType="danger">Máx. 60 carácteres.</label>
+        <input nz-input placeholder="Motivo" [formControl]="motivoPostergacionCtrl" [nzStatus]="!motivoPostergacionCtrl.valid && motivoPostergacionCtrl.dirty ? 'error' : ''">
+        <label *ngIf="!motivoPostergacionCtrl.valid && motivoPostergacionCtrl.dirty" nz-typography nzType="danger">Ingrese el motivo. Entre 4 y 60 carácteres.</label>
     </ng-template>
 </nz-modal>
