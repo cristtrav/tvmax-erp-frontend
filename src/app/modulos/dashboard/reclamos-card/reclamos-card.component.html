@@ -1,0 +1,23 @@
+<nz-card class="card-container" [nzSize]="cardSize">
+    <div nz-typography nzType="secondary" style="display: inline;">Reclamos</div>
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col>
+            <nz-statistic [nzValue]="enProceso" [nzSuffix]="etiquetaEnProceso"></nz-statistic>
+            <ng-template #etiquetaEnProceso>
+                <span class="etiqueta">en proceso</span>
+            </ng-template>
+        </div>
+        <div nz-col>
+            <nz-statistic [nzValue]="pendientes" [nzSuffix]="etiquetaPendientes"></nz-statistic>
+            <ng-template #etiquetaPendientes>
+                <span class="etiqueta">pendientes</span>
+            </ng-template>                
+        </div>
+        <div nz-col>
+            <nz-statistic [nzValue]="postergados" [nzSuffix]="etiquetaPostergados"></nz-statistic>
+            <ng-template #etiquetaPostergados>
+                <span class="etiqueta">postergados</span>
+            </ng-template>                
+        </div>
+    </div>
+</nz-card>

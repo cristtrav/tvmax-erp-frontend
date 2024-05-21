@@ -12,10 +12,13 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { SharedModule } from '../shared/shared.module';
+import { ReclamosCardComponent } from './reclamos-card/reclamos-card.component';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 
 @NgModule({
   declarations: [
-    VistaDashboardComponent
+    VistaDashboardComponent,
+    ReclamosCardComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,8 @@ import { SharedModule } from '../shared/shared.module';
     NzTypographyModule,
     NzBadgeModule,
     NzAvatarModule,
-    SharedModule
+    SharedModule,
+    NzStatisticModule
   ]
 })
 export class DashboardModule { }
