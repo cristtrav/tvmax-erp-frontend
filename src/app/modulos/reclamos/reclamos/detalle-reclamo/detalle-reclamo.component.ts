@@ -119,7 +119,10 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
       if(this.validandoForm) return;
 
       this.formCabecera.controls.idsuscripcion.reset();
-      if (value == null) this.lstSuscripciones = [];
+      if (value == null){
+        this.lstSuscripciones = [];
+        this.formCabecera.controls.ci.reset();
+      }
       else {
         const cliente = this.lstClientes.find(c => c.id == value);
         this.formCabecera.controls.telefono.setValue(cliente?.telefono1 ?? cliente?.telefono2);
