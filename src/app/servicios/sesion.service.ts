@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AppSettings } from '../util/app-settings';
 import { IPreferenciaDashboard } from '@util/interfaces/ipreferencia-dashboard';
 import { environment } from '@environments/environment';
+import { RolDTO } from '@dto/rol.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,7 @@ export class SesionService {
   serverOnline: boolean = true;
   private modalNotifOffline!: NzModalRef | null;
   permisos = new Set<number>();
+  roles = new Set<number>();
 
   constructor(
     private http: HttpClient,
@@ -37,7 +39,6 @@ export class SesionService {
     const atoken = localStorage.getItem('accessToken');
     if(atoken) this.loadMenuFavs(this.getIdUsuario(atoken));
   }
-
 
   public get idusuario(): number {
     return this.idusuarioBehavior.value;
@@ -50,6 +51,10 @@ export class SesionService {
   private getPermisosUsuario(idusuario: number): Observable<Funcionalidad[]>{
     const params = new HttpParams().append('eliminado', 'false');
     return this.http.get<Funcionalidad[]>(`${this.url}/permisos/${idusuario}`, { params });
+  }
+
+  private getRolesUsuario(idusuario: number): Observable<RolDTO[]>{
+    return this.http.get<RolDTO[]>(`${this.url}/roles/${idusuario}`);
   }
 
   private loadMenuFavs(idusuario: number){
@@ -77,12 +82,14 @@ export class SesionService {
       .pipe(
         mergeMap(ses => forkJoin({
           permisos: this.getPermisosUsuario(this.getIdUsuario(ses.accessToken)),
+          roles: this.getRolesUsuario(this.getIdUsuario(ses.accessToken)),
           session: of(ses)
         })),
         map(resp => {
           for(let permiso of resp.permisos){
             this.permisos.add(permiso.id ?? -1);
           }
+          this.roles = new Set<number>(resp.roles.map(r => r.id));
           const atoken = resp.session.accessToken;
           const rtoken = resp.session.refreshToken;
           this.nombreBehavior.next(resp.session.nombreUsuario);
@@ -101,6 +108,7 @@ export class SesionService {
       .pipe(
         mergeMap(ses => forkJoin({
           permisos: this.getPermisosUsuario(this.getIdUsuario(ses.accessToken)),
+          roles: this.getRolesUsuario(this.getIdUsuario(ses.accessToken)),
           session: of(ses)
         })),
         map((resp) => {
@@ -108,6 +116,7 @@ export class SesionService {
           for(let permiso of resp.permisos){
             this.permisos.add(permiso.id ?? -1);
           }
+          this.roles = new Set<number>(resp.roles.map(r => r.id));
           localStorage.setItem('accessToken', resp.session.accessToken);
           this.nombreBehavior.next(resp.session.nombreUsuario);
           this.actualizarDatosUsuario(resp.session.accessToken);
@@ -130,6 +139,7 @@ export class SesionService {
       .pipe(
         map(res => {
           this.permisos.clear();
+          this.roles.clear();
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           this.idusuarioBehavior.next(-1);
@@ -196,6 +206,10 @@ export class SesionService {
     setTimeout(() => {
       this.checkServer();
     }, millis);
+  }
+
+  hasRol(idrol: number): boolean{
+    return this.roles.has(idrol);
   }
 }
 

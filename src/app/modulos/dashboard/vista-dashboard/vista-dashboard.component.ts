@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { SesionService } from '@servicios/sesion.service';
-import { UsuariosService } from '@servicios/usuarios.service';
 import { AppSettings } from '@util/app-settings';
 
 @Component({
@@ -18,20 +17,12 @@ export class VistaDashboardComponent implements OnInit {
   mapSubmenu = AppSettings.mapButtonSubmenu;
 
   constructor(
-    public sesionSrv: SesionService,
-    private usuariosSrv: UsuariosService
+    public sesionSrv: SesionService
   ) { }
 
   ngOnInit(): void {
     this.onWindowResize();
     this.sesionSrv.nombreObs.subscribe(value => this.nombreUsuario = value);
-    this.usuariosSrv
-      .getRolesByUsuario(this.sesionSrv.idusuario)
-      .subscribe(roles => {
-        console.log(roles);
-        if(roles.find(r => r.id == 9)) this.showCardReclamos = true;
-        else this.showCardReclamos = false;
-      })
   }
 
   @HostListener('window:resize')

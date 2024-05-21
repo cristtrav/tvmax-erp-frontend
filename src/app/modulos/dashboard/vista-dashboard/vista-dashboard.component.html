@@ -17,7 +17,7 @@
                         <nz-statistic [nzTitle]="'Bienvenido...'" [nzValue]="nombreUsuario"></nz-statistic>
                     </nz-card>
                 </div>
-                <div nz-col *ngIf="showCardReclamos">
+                <div nz-col *ngIf="sesionSrv.hasRol(9)">
                     <app-reclamos-card></app-reclamos-card>
                 </div>
             </div>

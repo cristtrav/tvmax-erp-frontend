@@ -30,12 +30,17 @@
         </button>
     </nz-button-group>
 
-    <div nz-row [nzGutter]="[8,8]">
+    <div nz-row [nzGutter]="[8,8]" nzAlign="middle">
         <div nz-col nzFlex="auto" *ngIf="vista == 'asignado'">
             <nz-space>
                 <nz-switch *nzSpaceItem [(ngModel)]="finalizadosVisible" (ngModelChange)="mostrarFinalizados()" ></nz-switch>
                 <label *nzSpaceItem>Finalizados</label>
             </nz-space>
+        </div>
+        <div nz-col>
+            <button nz-button nzType="default" (click)="cargarReclamos()">
+                <i nz-icon nzType="reload" nzTheme="outline"></i>
+            </button>
         </div>
     </div>
     
