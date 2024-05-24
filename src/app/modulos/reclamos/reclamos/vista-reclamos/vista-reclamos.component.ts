@@ -32,8 +32,8 @@ export class VistaReclamosComponent implements OnInit {
 
   readonly estadosReiteracion = ['PEN', 'POS', 'ASI'];
 
-  detalleSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 10, nzXXl: 10 };
-  tabsDetallesSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 24, nzXl: 14, nzXXl: 14 };
+  detalleSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 24, xl: 10, xxl: 10 };
+  tabsDetallesSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 24, xl: 14, xxl: 14 };
 
   tableHeaders: TableHeaderInterface[] = [
     { key: 'id', description: 'Código', sortFn: true, sortOrder: 'descend' },

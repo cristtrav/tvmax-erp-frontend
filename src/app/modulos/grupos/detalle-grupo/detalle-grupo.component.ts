@@ -20,7 +20,7 @@ export class DetalleGrupoComponent implements OnInit {
   readonly LABEL_SIZES = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
   readonly CONTROL_SIZES = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
   readonly ACTIONS_SIZES = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
-  readonly ID_CONTROL_SIZES: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 12, nzLg: 12, nzXl: 12, nzXXl: 12 };
+  readonly ID_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 };
 
   idgrupo = 'nuevo';
   fg: FormGroup = new FormGroup({

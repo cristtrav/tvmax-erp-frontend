@@ -27,11 +27,11 @@ export class DetalleReclamoComponent implements OnInit, OnDestroy {
 
   readonly estados = ESTADOS_RECLAMOS_LIST;
 
-  detalleSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 13, nzLg: 14, nzXl: 14, nzXXl: 14 };
-  cabeceraSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 11, nzLg: 10, nzXl: 10, nzXXl: 10 };
-  formCabeceraLabelSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 7, nzXl: 7, nzXXl: 7 };
-  formCabeceraControlSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 15, nzXl: 15, nzXXl: 15 };
-  formCabeceraAccionesSizes: ResponsiveSizes = { nzXs: 24, nzSm: 24, nzMd: 24, nzLg: 22, nzXl: 22, nzXXl: 22 };
+  detalleSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 13, lg: 14, xl: 14, xxl: 14 };
+  cabeceraSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 11, lg: 10, xl: 10, xxl: 10 };
+  formCabeceraLabelSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 7, xl: 7, xxl: 7 };
+  formCabeceraControlSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 15, xl: 15, xxl: 15 };
+  formCabeceraAccionesSizes: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 22, xl: 22, xxl: 22 };
   
   idreclamo: string = 'nuevo';
 
