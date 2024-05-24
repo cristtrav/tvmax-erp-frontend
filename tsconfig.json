@@ -50,6 +50,9 @@
       ],
       "@global-auth/*": [
         "src/app/global/auth/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
       ]
     },
     "useDefineForClassFields": false

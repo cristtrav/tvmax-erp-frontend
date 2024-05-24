@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { GruposRoutingModule } from './grupos-routing.module';
 import { VistaGruposComponent } from './vista-grupos/vista-grupos.component';
 import { NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb'
@@ -19,7 +18,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { SharedModule } from '../shared/shared.module';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
@@ -44,8 +43,8 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
     NzDividerModule,
     NzSpinModule,
     NzSpaceModule,
-    SharedModule,
-    NzColResponsiveSizesDirective
+    NzColResponsiveSizesDirective,
+    WorkspaceLayoutModule
   ]
 })
 export class GruposModule { }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AsignacionesRoutingModule } from './asignaciones-routing.module';
 import { VistaAsignacionesReclamosComponent } from './vista-asignaciones-reclamos/vista-asignaciones-reclamos.component';
-import { SharedModule } from '../../shared/shared.module';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzListModule } from 'ng-zorro-antd/list';
@@ -34,6 +33,7 @@ import { DomiciliosModule } from '../../domicilios/domicilios.module';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,6 @@ import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
   imports: [
     CommonModule,
     AsignacionesRoutingModule,
-    SharedModule,
     IconsProviderModule,
     NzBreadCrumbModule,
     NzListModule,
@@ -74,7 +73,8 @@ import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
     NzSwitchModule,
     NzSpaceModule,
     FormsModule,
-    TagEstadosModule
+    TagEstadosModule,
+    WorkspaceLayoutModule
   ]
 })
 export class AsignacionesModule { }

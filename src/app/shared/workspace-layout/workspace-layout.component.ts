@@ -1,11 +1,11 @@
 import { Component, HostListener, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-workspace',
-  templateUrl: './workspace.component.html',
-  styleUrls: ['./workspace.component.scss']
+  selector: 'app-workspace-layout',
+  templateUrl: './workspace-layout.component.html',
+  styleUrls: ['./workspace-layout.component.scss']
 })
-export class WorkspaceComponent {
+export class WorkspaceLayoutComponent {
 
   @Input()
   isContentPadded: boolean = true;
