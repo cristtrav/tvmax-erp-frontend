@@ -3,21 +3,8 @@
     flex-direction: column;
 }
 
-.workspace-spacing {
-    gap: 8px;
+.workspace-padding{
     padding: 8px 24px 24px 24px;
-}
-
-.workspace-header{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    align-content: center;
-}
-
-.breadcrumb{
-    flex-grow: 1;
-    align-content: center;
 }
 
 .workspace-content-padding{
@@ -32,9 +19,8 @@
     .workspace-content-padding{
         padding: 10px;        
     }
-
-    .workspace-spacing {
-        gap: 5px;
-        padding: 4px 8px 0px 8px;        
+    
+    .workspace-padding {
+        padding: 4px 8px 0px 8px;
     }
 }

@@ -1,16 +1,36 @@
-<div class="workspace workspace-spacing">
-    <div class="workspace-header">
-        <div class="breadcrumb">
-            <ng-content select="[breadcrumb]"></ng-content>
+
+<div class="workspace-padding">
+    <div nz-row [nzGutter]="[WORKSPACE_HORIZONTAL_GUTTER, WORKSPACE_VERTICAL_GUTTER]">
+
+        <div nz-col nzSpan="24">
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <ng-content select="[breadcrumb]"></ng-content>
+                </div>
+                <div nz-col>
+                    <ng-content select="[header-extra]"></ng-content>
+                </div>
+            </div>
         </div>
-        <div class="workspace-header-extra">
-            <ng-content select="[header-extra]"></ng-content>
+
+        <div nz-col nzSpan="24">
+            <div nz-row nzJustify="center">
+                <div *ngIf="!isForm" nz-col nzSpan="24">
+                    <ng-container [ngTemplateOutlet]="contentTpl"></ng-container>
+                </div>
+                <div *ngIf="isForm" nz-col [appNzColResponsiveSizes]="formSizes">
+                    <ng-container [ngTemplateOutlet]="contentTpl"></ng-container>
+                </div>
+            </div>
         </div>
     </div>
+
+</div>
+
+<ng-template #contentTpl>
     <div
-        class="workspace-content"
         [class.workspace-content-padding]="isContentPadded"
         [class.workspace-content-background]="isBackgroundVisible">
         <ng-content></ng-content>
     </div>
-</div>
+</ng-template>
