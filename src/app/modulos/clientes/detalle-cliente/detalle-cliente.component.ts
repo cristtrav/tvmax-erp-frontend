@@ -8,6 +8,8 @@ import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -16,6 +18,11 @@ import { UsuariosService } from '@servicios/usuarios.service';
 })
 export class DetalleClienteComponent implements OnInit {
 
+  //readonly FORM_SIZES: ResponsiveSizes = { nzXXl:12, nzXl:14, nzLg:16, nzMd:18, nzSm:20 };
+  readonly FORM_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAUT_FORM_SIZES;
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  
   idcliente = 'nuevo';
   guardarLoading: boolean = false;
   formLoading: boolean = false;
