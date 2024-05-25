@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Barrio } from './../../../dto/barrio-dto';
-import { Distrito } from './../../../dto/distrito-dto';
-import { DistritosService } from './../../../servicios/distritos.service';
-import { BarriosService } from './../../../servicios/barrios.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { Barrio } from '@dto/barrio-dto';
+import { Distrito } from '@dto/distrito-dto';
+import { BarriosService } from '@servicios/barrios.service';
+import { DistritosService } from '@servicios/distritos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-barrio',
@@ -16,19 +19,24 @@ import { HttpErrorResponseHandlerService } from '../../../util/http-error-respon
 })
 export class DetalleBarrioComponent implements OnInit {
 
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ID_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 };
+
   idbarrio = 'nuevo';
-  form: UntypedFormGroup = this.fb.group({
-    id: [null, [Validators.required]],
-    descripcion: [null, [Validators.required, Validators.maxLength(150)]],
-    iddistrito: [null, [Validators.required]]
+  
+  form = new FormGroup({
+    id: new FormControl<null | number>(null, [Validators.required]),
+    descripcion: new FormControl<null | string>(null, [Validators.required, Validators.maxLength(150)]),
+    iddistrito: new FormControl<null | string>(null, [Validators.required])
   });
+
   lstDistritos: Distrito[] = [];
   formLoading: boolean = false;
   guardarLoading: boolean = false;
   lastIdLoading: boolean = false;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private distSrv: DistritosService,
     private notif: NzNotificationService,
     private barrioSrv: BarriosService,
@@ -38,45 +46,28 @@ export class DetalleBarrioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.aroute.snapshot.paramMap.get('id');
-    if (id !== null) {
-      this.idbarrio = id;
-      if (id !== 'nuevo') {
-        this.cargarDatos();
-      }
-    }
+    const idStr = this.aroute.snapshot.paramMap.get('id');
+    this.idbarrio = idStr != null ? idStr : 'nuevo';
+    if(Number.isInteger(Number(idStr))) this.cargarDatos();
     this.cargarDistritos();
   }
 
   private cargarDatos(): void {
     this.formLoading = true;
-    this.barrioSrv.getPorId(+this.idbarrio).subscribe((data) => {
-      this.form.get('id')?.setValue(data.id);
-      this.form.get('descripcion')?.setValue(data.descripcion);
-      this.form.get('iddistrito')?.setValue(data.iddistrito);
-      this.formLoading = false;
-    }, (e) => {
-      console.log('Error al cargar datos del barrio');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      //this.notif.create('error', 'Error al cargar datos del barrio', e.error);
-      this.formLoading = false;
-    });
-  }
-
-  private validado(): boolean {
-    let val = true;
-    Object.keys(this.form.controls).forEach((key) => {
-      const ctrl = this.form.get(key);
-      if (ctrl !== null) {
-        ctrl.markAsDirty();
-        ctrl.updateValueAndValidity();
-        if (!ctrl.disabled) {
-          val = val && ctrl.valid;
+    this.barrioSrv
+      .getPorId(Number(this.idbarrio))
+      .pipe(finalize(() => this.formLoading = false))
+      .subscribe({
+        next: (data) => {
+          this.form.controls.id.setValue(data.id);
+          this.form.controls.descripcion.setValue(data.descripcion);
+          this.form.controls.iddistrito.setValue(data.iddistrito);       
+        },
+        error: (e) => {
+          console.error('Error al cargar datos del barrio', e);
+          this.httpErrorHandler.process(e);
         }
-      }
-    });
-    return val;
+      });
   }
 
   cargarDistritos(): void {
@@ -92,51 +83,52 @@ export class DetalleBarrioComponent implements OnInit {
   }
 
   guardar(): void {
-    if (this.validado()) {
-      if (this.idbarrio === 'nuevo') {
-        this.registrar();
-      } else {
-        this.modificar();
-      }
-    }
+    if (this.form.valid && this.idbarrio == 'nuevo') this.registrar();
+    if (this.form.valid && Number.isInteger(Number(this.idbarrio))) this.modificar();
   }
 
   private getDto(): Barrio {
     const b: Barrio = new Barrio();
-    b.id = this.form.get('id')?.value;
-    b.descripcion = this.form.get('descripcion')?.value;
-    b.iddistrito = this.form.get('iddistrito')?.value;
+    b.id = this.form.controls.id.value;
+    b.descripcion = this.form.controls.descripcion.value;
+    b.iddistrito = this.form.controls.iddistrito.value;
     return b;
   }
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.barrioSrv.post(this.getDto()).subscribe(() => {
-      this.form.reset();
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al registrar barrio');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardarLoading = false;
-    });
+    this.barrioSrv
+      .post(this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.form.reset();
+          this.notif.success('Guardado correctamente', '');
+        },
+        error: (e) => {
+          console.error('Error al registrar barrio', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
     const b: Barrio = this.getDto();
-    this.barrioSrv.put(+this.idbarrio, b).subscribe(() => {
-      this.notif.create('success', 'Guardado correctamente', '');
-      this.idbarrio = `${b.id}`;
-      this.router.navigate([b.id], {relativeTo: this.aroute.parent});
-      this.guardarLoading = false;
-    }, (e) => {
-      console.log('Error al modificar barrio');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-      this.guardarLoading = false;
-    });
+    this.barrioSrv
+      .put(Number(this.idbarrio), b)
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.notif.success('Guardado correctamente', '');
+          this.idbarrio = `${b.id}`;
+          this.router.navigate([b.id], {relativeTo: this.aroute.parent});          
+        },
+        error: (e) => {
+          console.error('Error al modificar barrio', e);      
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   getHttpParamsDistrito(): HttpParams{
@@ -146,18 +138,18 @@ export class DetalleBarrioComponent implements OnInit {
 
   cargarId(): void{
     this.lastIdLoading = true;
-    this.barrioSrv.getLastId().subscribe({
-      next: (id) => {
-        this.form.get('id')?.setValue(id+1);
-        this.lastIdLoading = false;
-      },
-      error: (e) => {
-        console.log('Error al consultar ultimo id de barrios');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-        this.lastIdLoading = false;
-      }
-    });
+    this.barrioSrv
+      .getLastId()
+      .pipe(finalize(() => this.lastIdLoading = false))
+      .subscribe({
+        next: (id) => {
+          this.form.get('id')?.setValue(id+1);        
+        },
+        error: (e) => {
+          console.error('Error al consultar ultimo id de barrios', e);        
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
 }

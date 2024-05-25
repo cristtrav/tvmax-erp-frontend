@@ -15,7 +15,6 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
@@ -24,6 +23,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { FormFiltroBarriosComponent } from './form-filtro-barrios/form-filtro-barrios.component';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent, FormFiltroBarriosComponent],
@@ -49,7 +49,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzDrawerModule,
     NzBadgeModule,
     WorkspaceLayoutModule,
-    NzModalModule
+    NzModalModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class BarriosModule { }
