@@ -1,7 +1,7 @@
 import { NgModule, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
-import { VistaBarriosComponent } from './vista-barrios/vista-barrios.component';
-import { DetalleBarrioComponent } from './detalle-barrio/detalle-barrio.component';
+import { VistaBarriosComponent } from './pages/vista-barrios/vista-barrios.component';
+import { DetalleBarrioComponent } from './pages/detalle-barrio/detalle-barrio.component';
 import { SesionService } from '@servicios/sesion.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
