@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cliente } from 'src/app/dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
@@ -10,6 +9,7 @@ import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
+import { ClientesService } from '@servicios/clientes.service';
 
 @Component({
   selector: 'app-detalle-cliente',

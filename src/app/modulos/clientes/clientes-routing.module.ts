@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaClientesComponent } from './../../modulos/clientes/vista-clientes/vista-clientes.component';
-import { DetalleClienteComponent } from './../../modulos/clientes/detalle-cliente/detalle-cliente.component';
-import { DomiciliosClienteComponent } from './domicilios-cliente/domicilios-cliente.component';
-import { DetalleDomicilioClienteComponent } from './detalle-domicilio-cliente/detalle-domicilio-cliente.component';
-import { SuscripcionesClienteComponent } from './suscripciones-cliente/suscripciones-cliente.component';
-import { DetalleSuscripcionClienteComponent } from './detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
-import { CuotasSuscripcionClienteComponent } from './cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
-import { DetalleCuotasSuscripcionClienteComponent } from './detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
-import { PagosClienteComponent } from './pagos-cliente/pagos-cliente.component';
+import { VistaClientesComponent } from './pages/vista-clientes/vista-clientes.component';
+import { DetalleDomicilioClienteComponent } from './pages/detalle-domicilio-cliente/detalle-domicilio-cliente.component';
+import { PagosClienteComponent } from './pages/pagos-cliente/pagos-cliente.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
+import { DomiciliosClienteComponent } from './pages/domicilios-cliente/domicilios-cliente.component';
+import { SuscripcionesClienteComponent } from './pages/suscripciones-cliente/suscripciones-cliente.component';
+import { DetalleSuscripcionClienteComponent } from './pages/detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
+import { DetalleCuotasSuscripcionClienteComponent } from './pages/detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
+import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente.component';
+import { CuotasSuscripcionClienteComponent } from './pages/cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
 
 const routes: Routes = [
   { path: '', component: VistaClientesComponent },

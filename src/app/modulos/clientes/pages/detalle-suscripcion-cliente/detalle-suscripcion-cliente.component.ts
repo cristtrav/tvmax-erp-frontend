@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Cliente } from '@dto/cliente-dto';
+import { ClientesService } from '@servicios/clientes.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cliente } from './../../../dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
 
 @Component({
-  selector: 'app-domicilios-cliente',
-  templateUrl: './domicilios-cliente.component.html',
-  styleUrls: ['./domicilios-cliente.component.scss']
+  selector: 'app-detalle-suscripcion-cliente',
+  templateUrl: './detalle-suscripcion-cliente.component.html',
+  styleUrls: ['./detalle-suscripcion-cliente.component.scss']
 })
-export class DomiciliosClienteComponent implements OnInit {
+export class DetalleSuscripcionClienteComponent implements OnInit {
 
+  idsuscripcion = 'nueva';
   idcliente: number | null = null;
   cliente: Cliente | null = null;
 
@@ -22,17 +23,22 @@ export class DomiciliosClienteComponent implements OnInit {
 
   ngOnInit(): void {
     const idcli = this.aroute.snapshot.paramMap.get('idcliente');
-    if (idcli) {
+    if(idcli){
       this.idcliente = +idcli;
-      this.cargarDatosCliente();
+      this.cargarCliente();
     }
+    const idsus = this.aroute.snapshot.paramMap.get('idsuscripcion');
+    if(idsus){
+      this.idsuscripcion = idsus;
+    }
+
   }
 
-  cargarDatosCliente(): void {
-    if (this.idcliente) {
-      this.cliSrv.getPorId(this.idcliente).subscribe((data) => {
+  private cargarCliente(): void{
+    if(this.idcliente){
+      this.cliSrv.getPorId(this.idcliente).subscribe((data)=>{
         this.cliente = data;
-      }, (e) => {
+      }, (e)=>{
         console.log('Error al cargar datos del cliente');
         console.log(e);
         this.notif.create('error', 'Error al cargar datos del cliente', e.error);

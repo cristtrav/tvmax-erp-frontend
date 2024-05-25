@@ -1,17 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Cliente } from '@dto/cliente-dto';
+import { ClientesService } from '@servicios/clientes.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cliente } from './../../../dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
 
 @Component({
-  selector: 'app-suscripciones-cliente',
-  templateUrl: './suscripciones-cliente.component.html',
-  styleUrls: ['./suscripciones-cliente.component.scss']
+  selector: 'app-domicilios-cliente',
+  templateUrl: './domicilios-cliente.component.html',
+  styleUrls: ['./domicilios-cliente.component.scss']
 })
-export class SuscripcionesClienteComponent implements OnInit {
+export class DomiciliosClienteComponent implements OnInit {
 
-  @Input()
   idcliente: number | null = null;
   cliente: Cliente | null = null;
 
@@ -29,7 +28,7 @@ export class SuscripcionesClienteComponent implements OnInit {
     }
   }
 
-  private cargarDatosCliente(): void {
+  cargarDatosCliente(): void {
     if (this.idcliente) {
       this.cliSrv.getPorId(this.idcliente).subscribe((data) => {
         this.cliente = data;

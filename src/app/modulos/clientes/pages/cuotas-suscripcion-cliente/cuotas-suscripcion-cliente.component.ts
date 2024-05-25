@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Cliente } from '@dto/cliente-dto';
+import { Suscripcion } from '@dto/suscripcion-dto';
+import { ClientesService } from '@servicios/clientes.service';
+import { SuscripcionesService } from '@servicios/suscripciones.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cliente } from './../../../dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
-import { SuscripcionesService } from './../../../servicios/suscripciones.service';
-import { Suscripcion } from './../../../dto/suscripcion-dto';
 
 @Component({
   selector: 'app-cuotas-suscripcion-cliente',

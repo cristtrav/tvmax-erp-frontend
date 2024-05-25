@@ -2,16 +2,16 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Cliente } from './../../../dto/cliente-dto';
-import { ClientesService } from './../../../servicios/clientes.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { Extra } from '../../../util/extra';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
-import { UbicacionComponent } from '../../domicilios/ubicacion/ubicacion.component';
+import { Cliente } from '@dto/cliente-dto';
+import { ClientesService } from '@servicios/clientes.service';
+import { Extra } from '@util/extra';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { UbicacionComponent } from 'src/app/modulos/domicilios/ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-vista-clientes',
