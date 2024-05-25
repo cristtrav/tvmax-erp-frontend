@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { BarriosRoutingModule } from './barrios-routing.module';
 import { VistaBarriosComponent } from './vista-barrios/vista-barrios.component';
 import { DetalleBarrioComponent } from './detalle-barrio/detalle-barrio.component';
-
 import { IconsProviderModule } from './../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -24,6 +22,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { FormFiltroBarriosComponent } from './form-filtro-barrios/form-filtro-barrios.component';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [VistaBarriosComponent, DetalleBarrioComponent, FormFiltroBarriosComponent],
@@ -43,12 +43,13 @@ import { FormFiltroBarriosComponent } from './form-filtro-barrios/form-filtro-ba
     ReactiveFormsModule,
     IconsProviderModule,
     NzNotificationModule,
-    NzPopconfirmModule,
     NzToolTipModule,
     NzSpinModule,
     NzSpaceModule,
     NzDrawerModule,
-    NzBadgeModule
+    NzBadgeModule,
+    WorkspaceLayoutModule,
+    NzModalModule
   ]
 })
 export class BarriosModule { }

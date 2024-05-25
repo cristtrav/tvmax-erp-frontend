@@ -1,12 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Barrio } from './../../../dto/barrio-dto';
-import { BarriosService } from './../../../servicios/barrios.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { forkJoin } from 'rxjs';
+import { Barrio } from '@dto/barrio-dto';
+import { BarriosService } from '@servicios/barrios.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-vista-barrios',
@@ -32,7 +33,8 @@ export class VistaBarriosComponent implements OnInit {
   constructor(
     private barrioSrv: BarriosService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
@@ -58,17 +60,27 @@ export class VistaBarriosComponent implements OnInit {
     });
   }
 
-  eliminar(id: number | null): void{
-    if(id !== null) {
-      this.barrioSrv.delete(id).subscribe(()=>{
+  confirmarEliminacion(barrio: Barrio){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el barrio?',
+      nzContent: `${barrio.id} - ${barrio.descripcion} (${barrio.departamento})`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => this.eliminar(barrio.id ?? -1)
+    })
+  }
+
+  eliminar(id: number): void{
+    this.barrioSrv.delete(id).subscribe({
+      next: () => {
         this.notif.create('success', 'Eliminado correctamente', '');
         this.cargarDatos();
-      }, (e)=>{
-        console.log('Error al eliminar barrios');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
+      },
+      error: (e) => {
+        console.error('Error al eliminar barrios', e);      
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
   onTableQueryParamsChange(params: NzTableQueryParams){
