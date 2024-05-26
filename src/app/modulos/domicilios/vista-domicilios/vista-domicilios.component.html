@@ -1,19 +1,14 @@
-<div class="inner-content">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                Domicilios
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div class="module-content">
-            <div nz-col nzSpan="24">
-                <app-contenido-vista-domicilios></app-contenido-vista-domicilios>
-            </div>
-        </div>
-    </div>
-</div>
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Domicilios
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <app-contenido-vista-domicilios></app-contenido-vista-domicilios>
+
+</app-workspace-layout>

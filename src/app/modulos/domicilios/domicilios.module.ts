@@ -31,6 +31,8 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { UbicacionComponent } from './ubicacion/ubicacion.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent, DetalleDomicilioComponent, UbicacionComponent],
@@ -61,7 +63,9 @@ import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
     NzBreadCrumbModule,
     NzRadioModule,
     NzAlertModule,
-    OpenLocationCodePipe
+    OpenLocationCodePipe,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ],
   exports: [ContenidoVistaDomiciliosComponent, FormDomicilioComponent, UbicacionComponent] 
 })
