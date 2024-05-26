@@ -20,6 +20,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [VistaDepartamentosComponent, DetalleDepartamentoComponent],
@@ -42,7 +43,8 @@ import { WorkspaceLayoutModule } from '@shared/workspace-layout';
     NzSpinModule,
     NzToolTipModule,
     NzSpaceModule,
-    WorkspaceLayoutModule
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class DepartamentosModule { }
