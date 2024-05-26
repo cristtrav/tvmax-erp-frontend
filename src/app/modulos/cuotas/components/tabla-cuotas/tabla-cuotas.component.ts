@@ -2,12 +2,12 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CuotaDTO } from '@dto/cuota-dto';
-import { CuotasService } from './../../../servicios/cuotas.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Extra } from '../../../util/extra';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
 import { forkJoin } from 'rxjs';
+import { CuotasService } from '@servicios/cuotas.service';
+import { Extra } from '@util/extra';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 
 @Component({

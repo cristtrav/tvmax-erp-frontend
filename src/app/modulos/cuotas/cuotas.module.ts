@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TablaCuotasComponent } from './tabla-cuotas/tabla-cuotas.component';
-import { ContenidoVistaCuotasComponent } from './contenido-vista-cuotas/contenido-vista-cuotas.component';
-import { FormCuotaComponent } from './form-cuota/form-cuota.component';
+import { ContenidoVistaCuotasComponent } from './components/contenido-vista-cuotas/contenido-vista-cuotas.component';
+import { FormCuotaComponent } from './components/form-cuota/form-cuota.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { IconsProviderModule } from './../../icons-provider.module';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -24,6 +23,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { TablaCuotasComponent } from './components/tabla-cuotas/tabla-cuotas.component';
 
 @NgModule({
   declarations: [TablaCuotasComponent, ContenidoVistaCuotasComponent, FormCuotaComponent],
