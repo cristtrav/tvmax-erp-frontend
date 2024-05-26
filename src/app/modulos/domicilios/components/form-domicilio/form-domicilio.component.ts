@@ -11,9 +11,9 @@ import { Domicilio } from '@dto/domicilio-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Cliente } from '@dto/cliente-dto';
 import { finalize } from 'rxjs';
-import { UbicacionComponent } from '../ubicacion/ubicacion.component';
 import { LatLngTuple } from 'leaflet';
 import OpenLocationCode, { CodeArea } from 'open-location-code-typescript';
+import { UbicacionComponent } from '../ubicacion/ubicacion.component';
 
 const ValidateOpenLocationCode = (control: AbstractControl) => {
   if(!control.value) return null;

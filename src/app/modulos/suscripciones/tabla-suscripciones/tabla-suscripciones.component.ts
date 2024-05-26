@@ -11,7 +11,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 import { formatNumber } from '@angular/common';
 import { LatLngTuple } from 'leaflet';
-import { UbicacionComponent } from '../../domicilios/ubicacion/ubicacion.component';
+import { UbicacionComponent } from '../../domicilios/components/ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-tabla-suscripciones',

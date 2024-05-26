@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DomiciliosRoutingModule } from './domicilios-routing.module';
-import { VistaDomiciliosComponent } from './vista-domicilios/vista-domicilios.component';
-import { ContenidoVistaDomiciliosComponent } from './contenido-vista-domicilios/contenido-vista-domicilios.component';
+import { VistaDomiciliosComponent } from './pages/vista-domicilios/vista-domicilios.component';
 import { IconsProviderModule } from './../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { FormDomicilioComponent } from './form-domicilio/form-domicilio.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -26,16 +23,24 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { DetalleDomicilioComponent } from './detalle-domicilio/detalle-domicilio.component';
+import { DetalleDomicilioComponent } from './pages/detalle-domicilio/detalle-domicilio.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
-import { UbicacionComponent } from './ubicacion/ubicacion.component';
+import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { FormDomicilioComponent } from './components/form-domicilio/form-domicilio.component';
+import { ContenidoVistaDomiciliosComponent } from './components/contenido-vista-domicilios/contenido-vista-domicilios.component';
 
 @NgModule({
-  declarations: [VistaDomiciliosComponent, ContenidoVistaDomiciliosComponent, FormDomicilioComponent, DetalleDomicilioComponent, UbicacionComponent],
+  declarations: [
+    VistaDomiciliosComponent,
+    ContenidoVistaDomiciliosComponent,
+    FormDomicilioComponent,
+    DetalleDomicilioComponent,
+    UbicacionComponent
+  ],
   imports: [
     CommonModule,
     DomiciliosRoutingModule,

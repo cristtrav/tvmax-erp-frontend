@@ -11,7 +11,7 @@ import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@servicios/clientes.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { UbicacionComponent } from 'src/app/modulos/domicilios/ubicacion/ubicacion.component';
+import { UbicacionComponent } from 'src/app/modulos/domicilios/components/ubicacion/ubicacion.component';
 
 @Component({
   selector: 'app-vista-clientes',

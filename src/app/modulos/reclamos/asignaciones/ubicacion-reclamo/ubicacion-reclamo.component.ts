@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
 import { finalize } from 'rxjs';
-import { UbicacionComponent } from 'src/app/modulos/domicilios/ubicacion/ubicacion.component';
+import { UbicacionComponent } from 'src/app/modulos/domicilios/components/ubicacion/ubicacion.component';
 
 const WINDOW = new InjectionToken<Window>('Global window object', {
   factory: () => window
