@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DepartamentosRoutingModule } from './departamentos-routing.module';
-import { VistaDepartamentosComponent } from './vista-departamentos/vista-departamentos.component';
-import { DetalleDepartamentoComponent } from './detalle-departamento/detalle-departamento.component';
+import { VistaDepartamentosComponent } from './pages/vista-departamentos/vista-departamentos.component';
+import { DetalleDepartamentoComponent } from './pages/detalle-departamento/detalle-departamento.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from './../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';

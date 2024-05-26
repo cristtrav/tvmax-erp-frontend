@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Departamento } from '@dto/departamento-dto';
+import { DepartamentosService } from '@servicios/departamentos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Departamento } from './../../../dto/departamento-dto';
-import { DepartamentosService } from './../../../servicios/departamentos.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-departamento',
