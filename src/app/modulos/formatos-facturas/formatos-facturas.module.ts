@@ -21,6 +21,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzInputNumberModule,
     FormsModule,
     NzSpinModule,
-    NzModalModule
+    NzModalModule,
+    WorkspaceLayoutModule
   ]
 })
 export class FormatosFacturasModule { }
