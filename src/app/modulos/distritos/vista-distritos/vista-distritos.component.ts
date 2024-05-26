@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Distrito } from './../../../dto/distrito-dto';
-import { DistritosService } from './../../../servicios/distritos.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
-import { NzTableQueryParams, NzTableSortOrder } from 'ng-zorro-antd/table';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Extra } from '@util/extra';
+import { Distrito } from '@dto/distrito-dto';
+import { DistritosService } from '@servicios/distritos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-vista-distritos',
@@ -24,14 +26,15 @@ export class VistaDistritosComponent implements OnInit {
   constructor(
     private distSrv: DistritosService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
     //this.cargarDatos();
   }
 
-  private cargarDatos(): void {
+  cargarDatos(): void {
     this.tableLoading = true;
     forkJoin({
       distritos: this.distSrv.get(this.getHttpParams()),
@@ -47,6 +50,16 @@ export class VistaDistritosComponent implements OnInit {
         this.httpErrorHandler.process(e);
         this.tableLoading = false;
       }
+    });
+  }
+  
+  confirmarEliminacion(distrito: Distrito){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el distrito?',
+      nzContent: `${distrito.id} - ${distrito.descripcion} (${distrito.departamento})`,
+      nzOkText: 'Eliminar',
+      nzOkDanger: true,
+      nzOnOk: () => this.eliminar(distrito.id) 
     });
   }
 
@@ -67,27 +80,17 @@ export class VistaDistritosComponent implements OnInit {
   onQueryParamsChange(params: NzTableQueryParams) {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
-    this.sortStr = this.getSortStr(params.sort);
+    this.sortStr = Extra.buildSortString(params.sort);
     this.cargarDatos();
   }
 
   getHttpParams(): HttpParams {
     var params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    if (this.sortStr) {
-      params = params.append('sort', this.sortStr);
-    }
+    if (this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('limit', `${this.pageSize}`);
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     return params;
-  }
-
-  getSortStr(sort: { key: string, value: NzTableSortOrder }[]): string | null {
-    for (let srt of sort) {
-      if (srt.value === 'ascend') return `+${srt.key}`;
-      if (srt.value === 'descend') return `-${srt.key}`;
-    }
-    return null;
   }
 
 }

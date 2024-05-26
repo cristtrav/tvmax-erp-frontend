@@ -20,6 +20,9 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 @NgModule({
@@ -43,7 +46,10 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzPopconfirmModule,
     NzToolTipModule,
     NzSpinModule,
-    NzSpaceModule
+    NzSpaceModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective,
+    NzModalModule
   ]
 })
 export class DistritosModule { }
