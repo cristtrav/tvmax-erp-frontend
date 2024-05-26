@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Departamento } from './../../../dto/departamento-dto';
-import { DepartamentosService } from './../../../servicios/departamentos.service';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { HttpParams } from '@angular/common/http';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { forkJoin, Observable } from 'rxjs';
+import { finalize, forkJoin, Observable } from 'rxjs';
+import { Departamento } from '@dto/departamento-dto';
+import { DepartamentosService } from '@servicios/departamentos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { Extra } from '@util/extra';
 
 @Component({
   selector: 'app-vista-departamentos',
@@ -32,58 +33,51 @@ export class VistaDepartamentosComponent implements OnInit {
     //this.cargarDatos();
   }
 
-  private cargarDatos(): void{
+  cargarDatos(): void{
     this.tableLoading = true;
     forkJoin({
       departamentos: this.depSrv.get(this.getRequestParams()),
       total: this.depSrv.getTotal(this.getRequestParams())
-    }).subscribe({
+    })
+    .pipe(finalize(() => this.tableLoading = false))
+    .subscribe({
       next: (resp) =>{
         this.lstDepartamentos = resp.departamentos;
         this.totalRegisters = resp.total;
-        this.tableLoading = false;
       }, 
       error: (e)=>{
-        this.tableLoading = false;
-        console.log('Error al cargar departamentos');
-        console.log(e);
+        console.error('Error al cargar departamentos', e);
         this.httpErrorHandler.process(e);
       }
     });
   }
 
   eliminar(id: string | null): void {
-    this.depSrv.delete(id).subscribe(()=>{
-      this.notif.create('success', 'Eliminado correctamente', '');
-      this.cargarDatos();
-    }, (e)=>{
-      console.log('Error al eliminar departamento');
-      console.log(e);
-      this.httpErrorHandler.handle(e);
-    });
+    this.depSrv
+      .delete(id)
+      .subscribe({
+        next: () => {
+          this.notif.create('success', 'Eliminado correctamente', '');
+          this.cargarDatos();
+        },
+        error: (e) => {
+          console.error('Error al eliminar departamento', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.pageSize = params.pageSize;
     this.pageIndex = params.pageIndex;
-    this.sortStr = this.getSortStr(params.sort);
+    this.sortStr = Extra.buildSortString(params.sort);
     this.cargarDatos();
-  }
-
-  getSortStr(sortArray: {key: string, value: any}[]): string | null{
-    for(let srt of sortArray){
-      if(srt.value === 'ascend') return `+${srt.key}`;
-      if(srt.value === 'descend') return `-${srt.key}`;
-    }
-    return null;
   }
 
   getRequestParams(): HttpParams {
     var params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
-    if(this.sortStr){
-      params = params.append('sort', this.sortStr);
-    }
+    if(this.sortStr) params = params.append('sort', this.sortStr);
     params = params.append('limit', `${this.pageSize}`);
     params = params.append('offset', `${(this.pageIndex-1)*this.pageSize}`);
     return params;

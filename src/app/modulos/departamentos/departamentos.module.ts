@@ -19,6 +19,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 @NgModule({
   declarations: [VistaDepartamentosComponent, DetalleDepartamentoComponent],
@@ -40,7 +41,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
     NzPopconfirmModule,
     NzSpinModule,
     NzToolTipModule,
-    NzSpaceModule
+    NzSpaceModule,
+    WorkspaceLayoutModule
   ]
 })
 export class DepartamentosModule { }
