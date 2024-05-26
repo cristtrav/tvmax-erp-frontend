@@ -5,7 +5,7 @@ import { PortalOutlet } from "@angular/cdk/portal";
 import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { ImpresionService } from '@servicios/impresion.service';
 import { TablaSuscripcionesComponent } from '../tabla-suscripciones/tabla-suscripciones.component';
-import { ContenidoEstadisticasSuscripcionesComponent } from '../../estadisticas/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
+import { ContenidoEstadisticasSuscripcionesComponent } from '../../estadisticas/components/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
 
 
 @Component({
