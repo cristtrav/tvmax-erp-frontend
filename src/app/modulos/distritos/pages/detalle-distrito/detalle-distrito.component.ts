@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { DepartamentosService } from './../../../servicios/departamentos.service';
-import { Departamento } from './../../../dto/departamento-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Distrito } from './../../../dto/distrito-dto';
-import { DistritosService } from './../../../servicios/distritos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
+import { Departamento } from '@dto/departamento-dto';
+import { Distrito } from '@dto/distrito-dto';
+import { DepartamentosService } from '@servicios/departamentos.service';
+import { DistritosService } from '@servicios/distritos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-distrito',

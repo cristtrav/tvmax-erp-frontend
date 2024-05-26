@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DistritosRoutingModule } from './distritos-routing.module';
-import { VistaDistritosComponent } from './vista-distritos/vista-distritos.component';
-import { DetalleDistritoComponent } from './detalle-distrito/detalle-distrito.component';
+import { VistaDistritosComponent } from './pages/vista-distritos/vista-distritos.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from './../../icons-provider.module';
@@ -23,6 +21,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { DetalleDistritoComponent } from './pages/detalle-distrito/detalle-distrito.component';
 
 
 @NgModule({
