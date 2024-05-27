@@ -16,7 +16,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription, finalize, forkJoin } from 'rxjs';
-import { ESTADOS_RECLAMOS_LIST } from '../../constants/estados-reclamos.list';
+import { ESTADOS_RECLAMOS_LIST } from '../../../../shared/constants/estados-reclamos.list';
 
 @Component({
   selector: 'app-detalle-reclamo',

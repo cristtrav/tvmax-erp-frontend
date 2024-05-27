@@ -6,7 +6,7 @@ import { ReclamosService } from '@global-services/reclamos/reclamos.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
-import { ESTADOS_RECLAMOS_LIST } from '../../constants/estados-reclamos.list';
+import { ESTADOS_RECLAMOS_LIST } from '../../../../shared/constants/estados-reclamos.list';
 
 @Component({
   selector: 'app-form-filtro-reclamos',

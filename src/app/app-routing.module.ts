@@ -143,17 +143,17 @@ const routes: Routes = [
         path: 'motivosreclamos',
         data: { idfuncionalidad: 760, name: 'Motivos de Reclamos'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modulos/reclamos/motivos/motivos.module').then(m => m.MotivosModule)
+        loadChildren: () => import('./modulos/reclamos/modules/motivos/motivos.module').then(m => m.MotivosModule)
       },
       {
         path: 'reclamos',
         data: { idfuncionalidad: 800, name: 'Reclamos'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modulos/reclamos/reclamos/reclamos.module').then(m => m.ReclamosModule)
+        loadChildren: () => import('./modulos/reclamos/modules/reclamos/reclamos.module').then(m => m.ReclamosModule)
       },
       {
         path: 'asignacionesreclamos',
-        loadChildren: () => import('./modulos/reclamos/asignaciones/asignaciones.module').then(m => m.AsignacionesModule)
+        loadChildren: () => import('./modulos/reclamos/modules/asignaciones/asignaciones.module').then(m => m.AsignacionesModule)
       }
     ]
   },

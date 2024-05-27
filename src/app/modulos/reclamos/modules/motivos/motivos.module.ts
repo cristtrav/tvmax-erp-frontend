@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MotivosRoutingModule } from './motivos-routing.module';
-import { VistaMotivosComponent } from './vista-motivos/vista-motivos.component';
-import { DetalleMotivoComponent } from './detalle-motivo/detalle-motivo.component';
+import { VistaMotivosComponent } from './pages/vista-motivos/vista-motivos.component';
+import { DetalleMotivoComponent } from './pages/detalle-motivo/detalle-motivo.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';

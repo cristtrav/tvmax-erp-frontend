@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ReclamosRoutingModule } from './reclamos-routing.module';
-import { VistaReclamosComponent } from './vista-reclamos/vista-reclamos.component';
-import { DetalleReclamoComponent } from './detalle-reclamo/detalle-reclamo.component';
+import { VistaReclamosComponent } from './pages/vista-reclamos/vista-reclamos.component';
+import { DetalleReclamoComponent } from './pages/detalle-reclamo/detalle-reclamo.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -21,20 +21,20 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { BuscadorMotivosComponent } from './detalle-reclamo/buscador-motivos/buscador-motivos.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
-import { FormFiltroReclamosComponent } from './form-filtro-reclamos/form-filtro-reclamos.component';
+import { FormFiltroReclamosComponent } from './components/form-filtro-reclamos/form-filtro-reclamos.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { IdsuscripcionToEstadoPipe } from '../pipes/idsuscripcion-to-estado.pipe';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { TagEstadosModule } from '../components/tag-estados/tag-estados.module';
-import { EstadoToDescriptionModule } from '../pipes/estado-to-description/estado-to-description.module';
+import { EstadoToDescriptionModule } from '../../shared/pipes/estado-to-description/estado-to-description.module';
+import { IdsuscripcionToEstadoPipe } from '../../shared/pipes/idsuscripcion-to-estado.pipe';
+import { TagEstadosModule } from '../../shared/components/tag-estados/tag-estados.module';
+import { BuscadorMotivosComponent } from './components/buscador-motivos/buscador-motivos.component';
 
 
 @NgModule({

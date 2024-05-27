@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaAsignacionesReclamosComponent } from './vista-asignaciones-reclamos/vista-asignaciones-reclamos.component';
-import { DetalleAsignacionReclamoComponent } from './detalle-asignacion-reclamo/detalle-asignacion-reclamo.component';
-import { FormFinalizarReclamoComponent } from './form-finalizar-reclamo/form-finalizar-reclamo.component';
+import { VistaAsignacionesReclamosComponent } from './pages/vista-asignaciones-reclamos/vista-asignaciones-reclamos.component';
+import { DetalleAsignacionReclamoComponent } from './pages/detalle-asignacion-reclamo/detalle-asignacion-reclamo.component';
+import { FormFinalizarReclamoComponent } from './pages/form-finalizar-reclamo/form-finalizar-reclamo.component';
 import { canAccessFn } from '@global-auth/can-access-fn.guard';
-import { UbicacionReclamoComponent } from './ubicacion-reclamo/ubicacion-reclamo.component';
+import { UbicacionReclamoComponent } from './pages/ubicacion-reclamo/ubicacion-reclamo.component';
 
 const routes: Routes = [
   { path: '', component: VistaAsignacionesReclamosComponent },
