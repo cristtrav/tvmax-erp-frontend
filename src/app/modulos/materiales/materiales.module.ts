@@ -23,6 +23,8 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -53,7 +55,9 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     NzDrawerModule,
     NzBadgeModule,
     NzTabsModule,
-    NzDescriptionsModule
+    NzDescriptionsModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class MaterialesModule { }

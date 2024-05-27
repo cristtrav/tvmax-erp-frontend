@@ -4,6 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MaterialDTO } from '@dto/material.dto';
 import { TipoMaterialDTO } from '@dto/tipo-material.dto';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { MaterialesService } from '@servicios/materiales.service';
 import { TiposMaterialesService } from '@servicios/tipos-materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -16,6 +18,10 @@ import { finalize } from 'rxjs';
   styleUrls: ['./detalle-material.component.scss']
 })
 export class DetalleMaterialComponent implements OnInit {
+
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly ACTION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
   
   idmaterial: string = 'nuevo';
   loadingLastId: boolean = false;
