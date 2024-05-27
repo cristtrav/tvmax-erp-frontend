@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service'
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { finalize } from 'rxjs';
 import { Grupo } from '@dto/grupo-dto';
 import { GruposService } from '@servicios/grupos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-grupos',

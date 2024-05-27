@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaGruposComponent } from './vista-grupos/vista-grupos.component';
-import { DetalleGrupoComponent } from './detalle-grupo/detalle-grupo.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
+import { DetalleGrupoComponent } from './pages/detalle-grupo/detalle-grupo.component';
+import { VistaGruposComponent } from './pages/vista-grupos/vista-grupos.component';
 
 const routes: Routes = [
   { path: '', component: VistaGruposComponent },

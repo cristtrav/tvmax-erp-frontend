@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GruposRoutingModule } from './grupos-routing.module';
-import { VistaGruposComponent } from './vista-grupos/vista-grupos.component';
 import { NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb'
 import { IconsProviderModule } from '../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { DetalleGrupoComponent } from './detalle-grupo/detalle-grupo.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,10 +18,16 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { DetalleGrupoComponent } from './pages/detalle-grupo/detalle-grupo.component';
+import { VistaGruposComponent } from './pages/vista-grupos/vista-grupos.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 @NgModule({
-  declarations: [VistaGruposComponent, DetalleGrupoComponent],
+  declarations: [
+    VistaGruposComponent,
+    DetalleGrupoComponent
+  ],
   imports: [
     CommonModule,
     GruposRoutingModule,
@@ -44,7 +48,8 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
     NzSpinModule,
     NzSpaceModule,
     NzColResponsiveSizesDirective,
-    WorkspaceLayoutModule
+    WorkspaceLayoutModule,
+    NzModalModule
   ]
 })
 export class GruposModule { }

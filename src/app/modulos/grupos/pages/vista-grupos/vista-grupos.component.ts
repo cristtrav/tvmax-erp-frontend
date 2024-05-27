@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Grupo } from '../../../dto/grupo-dto';
-import { GruposService } from '../../../servicios/grupos.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { HttpErrorResponseHandlerService } from '../../../util/http-error-response-handler.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
+import { Grupo } from '@dto/grupo-dto';
+import { GruposService } from '@servicios/grupos.service';
+import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Extra } from '@util/extra';
 
 @Component({
   selector: 'app-vista-grupos',
@@ -26,14 +28,15 @@ export class VistaGruposComponent implements OnInit {
   constructor(
     private grupoSrv: GruposService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
     //this.cargarDatos();
   }
 
-  private cargarDatos() {
+  cargarDatos() {
     this.loadingData = true;
     forkJoin({
       grupos: this.grupoSrv.getGrupos(this.getQueryHttpParams()),
@@ -52,38 +55,43 @@ export class VistaGruposComponent implements OnInit {
     });
   }
 
-  eliminar(id: any): void {
-    this.grupoSrv.deleteGrupo(<number>id).subscribe(() => {
-      this.cargarDatos();
-      this.notif.create('success', 'Eliminado correctamente', '');
-    }, (e) => {
-      console.error(e);
-      this.httpErrorHandler.handle(e);
-    });
+  confirmarEliminacion(grupo: Grupo){
+    this.modal.confirm({
+      nzTitle: `¿Desea eliminar el grupo?`,
+      nzContent: `${grupo.id} - ${grupo.descripcion}`,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.eliminar(grupo.id ?? -1)
+    })
+  }
+
+  eliminar(id: number): void {
+    this.grupoSrv
+      .deleteGrupo(id)
+      .subscribe({
+        next: () => {
+          this.cargarDatos();
+          this.notif.create('success', 'Eliminado correctamente', '');
+        },
+        error: (e) => {
+          console.error('Error al eliminar grupo', e);
+          this.httpErrorHandler.process(e);
+        }, 
+      });
   }
 
   onQueryParamsChange(params: NzTableQueryParams) {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
-    this.sort = this.buildSort(params.sort);
+    this.sort = Extra.buildSortString(params.sort);
     this.cargarDatos();
-  }
-
-  buildSort(filters: { key: string, value: any }[]): string | null {
-    for (var f of filters) {
-      if (f.value === 'ascend') return `+${f.key}`;
-      if (f.value === 'descend') return `-${f.key}`;
-    }
-    return null;
   }
 
   getQueryHttpParams(): HttpParams {
     var params: HttpParams = new HttpParams().append('eliminado', 'false');
     params = params.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     params = params.append('limit', `${this.pageSize}`);
-    if (this.sort) {
-      params = params.append('sort', this.sort);
-    }
+    if (this.sort) params = params.append('sort', this.sort);
     if(this.textoBusqueda) params = params.append('search', this.textoBusqueda);
     return params;
   }
