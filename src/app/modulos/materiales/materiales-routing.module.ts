@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaMaterialesComponent } from './vista-materiales/vista-materiales.component';
-import { DetalleMaterialComponent } from './detalle-material/detalle-material.component';
+import { VistaMaterialesComponent } from './pages/vista-materiales/vista-materiales.component';
+import { DetalleMaterialComponent } from './pages/detalle-material/detalle-material.component';
 import { canAccessFn } from '@global-auth/can-access-fn.guard';
 
 const routes: Routes = [
