@@ -28,6 +28,8 @@ import { BuscadorMaterialesComponent } from './detalle-movimiento-material/busca
 import { FormFiltroMovimientosComponent } from './form-filtro-movimientos/form-filtro-movimientos.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -64,7 +66,9 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzDescriptionsModule,
     NzRadioModule,
     NzDrawerModule,
-    NzBadgeModule
+    NzBadgeModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class MovimientosMaterialesModule { }
