@@ -10,8 +10,8 @@ import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize, forkJoin } from 'rxjs';
-import { TablaDetallesMovimientosComponent } from './tabla-detalles-movimientos/tabla-detalles-movimientos.component';
-import { BuscadorMaterialesComponent } from './buscador-materiales/buscador-materiales.component';
+import { TablaDetallesMovimientosComponent } from '../../components/tabla-detalles-movimientos/tabla-detalles-movimientos.component';
+import { BuscadorMaterialesComponent } from '../../components/buscador-materiales/buscador-materiales.component';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { ImpresionService } from '@servicios/impresion.service';
 
