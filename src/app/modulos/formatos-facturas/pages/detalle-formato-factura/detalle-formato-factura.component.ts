@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
@@ -8,9 +8,7 @@ import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { FacturaPreimpresaVentaComponent } from '../../impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
-import { FormatoFacturaA } from '../../impresion/factura-preimpresa-venta/formato-factura-a';
-import { FormularioFormatoPreAComponent } from './formulario-formato-pre-a/formulario-formato-pre-a.component';
+import { FormatoFacturaA } from 'src/app/modulos/impresion/factura-preimpresa-venta/formato-factura-a';
 
 @Component({
   selector: 'app-detalle-formato-factura',
