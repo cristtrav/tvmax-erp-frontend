@@ -41,7 +41,7 @@
                         </button>
                         <button nz-button nz-tooltip nz-popconfirm nzType="primary" nzDanger="" *nzSpaceItem
                         nzTooltipTitle="Eliminar" nzPopconfirmTitle="¿Desea eliminar la cuota?" nzPopconfirmPlacement="bottom" nzOkText="Eliminar"
-                        (nzOnConfirm)="eliminar(c.id)">
+                        (nzOnConfirm)="eliminar(c.id ?? -1)">
                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                         </button>
                     </nz-space>

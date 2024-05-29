@@ -9,9 +9,8 @@ import { ServiciosService } from "@servicios/servicios.service";
 import { SuscripcionesService } from "@servicios/suscripciones.service";
 import { HttpErrorResponseHandlerService } from "@util/http-error-response-handler.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import { mergeMap, forkJoin, of } from "rxjs";
+import { mergeMap, forkJoin, of, finalize } from "rxjs";
 import { formatDate } from "@angular/common";
-
 
 @Component({
   selector: 'app-form-cuota',
@@ -19,6 +18,11 @@ import { formatDate } from "@angular/common";
   styleUrls: ['./form-cuota.component.scss']
 })
 export class FormCuotaComponent implements OnInit {
+
+  @Input()
+  idsuscripcion: number | null = null;
+  @Input()
+  idcuota = 'nueva';
 
   opcionesServicios: { value: number, label: string, isLeaf: boolean, children?: { value: number, label: string, isLeaf: boolean }[] }[] = [];
 
@@ -30,12 +34,9 @@ export class FormCuotaComponent implements OnInit {
     observacion: new FormControl(null, [Validators.maxLength(150)])
   });
 
+  cuotaEditar?: CuotaDTO;
   guardarLoading: boolean = false;
   formLoading: boolean = false;
-  @Input()
-  idsuscripcion: number | null = null;
-  @Input()
-  idcuota = 'nueva';
   lstServicios: Servicio[] = [];
   suscripcionActual: Suscripcion | null = null;
   private validandoFormulario: boolean = false;
@@ -53,7 +54,6 @@ export class FormCuotaComponent implements OnInit {
     this.cargarGruposServicios();
     if (this.idcuota && this.idcuota !== 'nueva') this.cargarDatos();
     this.form.get('idservicio')?.valueChanges.subscribe((value: number[]) => {
-      console.log(value);
       if (value && value.length > 0) {
         const idservicio = value[value.length - 1];
         if(!this.validandoFormulario)
@@ -108,18 +108,21 @@ export class FormCuotaComponent implements OnInit {
   }
 
   private getDto(): CuotaDTO {
-    const c: CuotaDTO = new CuotaDTO();
-    if (this.idcuota !== 'nueva') c.id = Number(this.idcuota);
     const idservicioIndex = this.form.controls.idservicio.value.length - 1;
-    c.idservicio = this.form.get('idservicio')?.value[idservicioIndex];
-    c.monto = this.form.get('monto')?.value;
-    c.nrocuota = this.form.get('nrocuota')?.value;
-    const obs = this.form.get('observacion')?.value;
-    if (obs) c.observacion = obs === '' ? null : obs;
-    const fv = this.form.get('fechavencimiento')?.value;
-    if (fv) c.fechavencimiento = formatDate(fv, 'yyyy-MM-dd', this.locale);
-    c.idsuscripcion = this.idsuscripcion;
-    return c;
+    const fechavencimiento = this.form.get('fechavencimiento')?.value;
+
+    const c: CuotaDTO = {
+      id: this.idcuota!= 'nueva' ? Number(this.idcuota) : undefined,
+      idservicio: this.form.controls.idservicio.value[idservicioIndex],
+      monto: this.form.controls.monto.value,
+      nrocuota: this.form.controls.nrocuota.value,
+      observacion: this.form.controls.observacion.value,
+      fechavencimiento: fechavencimiento ? formatDate(fechavencimiento, 'yyyy-MM-dd', this.locale) : undefined,
+      idsuscripcion: this.idsuscripcion ?? undefined,
+    };
+
+    if(this.cuotaEditar) return { ...this.cuotaEditar, ...c};
+    else return c;
   }
 
   guardar(): void {
@@ -129,65 +132,67 @@ export class FormCuotaComponent implements OnInit {
       this.form.get(ctrlName)?.updateValueAndValidity();
     });
     this.validandoFormulario = false;
-    if (this.form.valid) {
-      if (this.idcuota === 'nueva') this.registrar();
-      else this.modificar();
-    }
+    if (this.form.valid && this.idcuota == 'nueva') this.registrar();
+    if (this.form.valid && Number.isInteger(Number(this.idcuota))) this.modificar();
   }
 
   private registrar(): void {
     this.guardarLoading = true;
-    this.cuotaSrv.post(this.getDto()).subscribe({
-      next: () => {
-        this.notif.create('success', '<strong>Éxito</strong>', 'Cuota registrada');
-        this.form.reset();
-        this.guardarLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al registrar cuota', e);
-        this.httpErrorHandler.process(e);
-        this.guardarLoading = false;
-      }
+    this.cuotaSrv
+      .post(this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.notif.create('success', '<strong>Éxito</strong>', 'Cuota registrada');
+          this.form.reset();
+        },
+        error: (e) => {
+          console.error('Error al registrar cuota', e);
+          this.httpErrorHandler.process(e);
+        }
     });
   }
 
   private modificar(): void {
     this.guardarLoading = true;
-    const cuota = this.getDto();
-    this.cuotaSrv.put(Number(this.idcuota), cuota).subscribe({
-      next: () => {
-        this.notif.create('success', '<strong>Éxito</strong>', 'Cuota editada');
-        this.guardarLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al editar cuota', e);
-        this.httpErrorHandler.process(e);
-        this.guardarLoading = false;
-      }
+    this.cuotaSrv
+      .put(Number(this.idcuota), this.getDto())
+      .pipe(finalize(() => this.guardarLoading = false))
+      .subscribe({
+        next: () => {
+          this.notif.create('success', '<strong>Éxito</strong>', 'Cuota editada');
+        },
+        error: (e) => {
+          console.error('Error al editar cuota', e);
+          this.httpErrorHandler.process(e);
+        }
     });
   }
 
   private cargarDatos() {
     this.formLoading = true;
-    this.cuotaSrv.getPorId(Number(this.idcuota)).pipe(
+    this.cuotaSrv
+    .getPorId(Number(this.idcuota))
+    .pipe(
       mergeMap(cuota => forkJoin({
         cuota: of(cuota),
         servicio: this.serviciosSrv.getServicioPorId(Number(cuota.idservicio))
-      }))
-    ).subscribe({
+      })),
+      finalize(() => this.formLoading = false)
+    )
+    .subscribe({
       next: (resp) => {
+        this.cuotaEditar = resp.cuota;
         if(resp.servicio.suscribible) this.form.get('idservicio')?.setValue([resp.servicio.id]);
         else this.form.get('idservicio')?.setValue([resp.servicio.idgrupo ,resp.servicio.id]);
         this.form.get('fechavencimiento')?.setValue(resp.cuota.fechavencimiento);
         this.form.get('monto')?.setValue(resp.cuota.monto);
         this.form.get('nrocuota')?.setValue(resp.cuota.nrocuota);
         this.form.get('observacion')?.setValue(resp.cuota.observacion);
-        this.formLoading = false;
       },
       error: (e) => {
         console.error('Error al cargar datos de la cuota o el servicio', e);
         this.httpErrorHandler.process(e);
-        this.formLoading = false;
       }
     });
   }

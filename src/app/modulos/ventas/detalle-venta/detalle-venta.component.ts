@@ -371,12 +371,12 @@ export class DetalleVentaComponent implements OnInit {
   agregarCuotaDetalle(cuota: CuotaDTO) {
     const dfv: DetalleVenta = new DetalleVenta();
     dfv.cantidad = 1;
-    dfv.monto = cuota.monto;
+    dfv.monto = cuota.monto ?? 0;
     dfv.subtotal = dfv.monto * dfv.cantidad;
     dfv.porcentajeiva = Number(cuota.porcentajeiva);
-    dfv.idsuscripcion = cuota.idsuscripcion;
-    dfv.idservicio = cuota.idservicio;
-    dfv.idcuota = cuota.id;
+    dfv.idsuscripcion = cuota.idsuscripcion ?? -1;
+    dfv.idservicio = cuota.idservicio ?? -1;
+    dfv.idcuota = cuota.id ?? -1;
     dfv.montoiva = Math.round((dfv.subtotal * dfv.porcentajeiva) / (100 + dfv.porcentajeiva));
     const vencStr: string = cuota.fechavencimiento ? formatDate(cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
     dfv.descripcion = `CUOTA ${vencStr} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();

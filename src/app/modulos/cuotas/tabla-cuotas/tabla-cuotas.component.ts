@@ -123,7 +123,7 @@ export class TablaCuotasComponent implements OnInit {
       error: (e) => {
         for (let cuota of this.lstCuotas) {
           if (cuota.id == idcuota) {
-            cuota.cobro = null;
+            cuota.cobro = undefined;
             break;
           }
         }
