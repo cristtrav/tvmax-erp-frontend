@@ -32,6 +32,8 @@ import { HideCiPipe } from '@util/pipes/hide-ci.pipe';
 import { GanadoresComponent } from './ganadores/ganadores.component';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { ExclusionesComponent } from './pages/exclusiones/exclusiones.component';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -70,7 +72,9 @@ import { ExclusionesComponent } from './pages/exclusiones/exclusiones.component'
     PaddingZerosPipe,
     NzAlertModule,
     HideCiPipe,
-    NzListModule
+    NzListModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class SorteosModule { }

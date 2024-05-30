@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PremioDTO } from '@dto/premio.dto';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { PremiosService } from '@servicios/premios.service';
 import { SorteosService } from '@servicios/sorteos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -14,6 +16,11 @@ import { finalize } from 'rxjs';
   styleUrls: ['./detalle-premio.component.scss']
 })
 export class DetallePremioComponent implements OnInit {
+
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 } as const;
 
   idsorteo: string | null = null;
   descripcionSorteo: string = '(sin nombre)'
