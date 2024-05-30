@@ -1,63 +1,57 @@
-<div class="inner-content">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/roles">Roles</a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                {{ idrol | titlecase }}
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div nz-row nzJustify="center" nzAlign="top">
-            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
-                <nz-spin [nzSpinning]="formLoading">
-                    <form nz-form [formGroup]="form">
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired> Código</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-                                <nz-input-group [nzAddOnAfter]="generarIdBtn" nzSearch style="width: 50%;">
-                                    <nz-input-number
-                                    [nzStep]="1"
-                                    [nzMin]="0"
-                                    style="width: 100%;"
-                                    formControlName="id">
-                                </nz-input-number>
-                                </nz-input-group>
-                                <ng-template #generarIdBtn>
-                                    <button
-                                        nz-button
-                                        nzType="primary"
-                                        nzSearch
-                                        nz-tooltip
-                                        nzTooltipTitle="Generar código"
-                                        [nzLoading]="lastIdLoading"
-                                        (click)="generarId()">
-                                        <i nz-icon nzType="sync"></i>
-                                    </button>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 30 carácteres.">
-                                <input nz-input formControlName="descripcion">
-                            </nz-form-control>
-                        </nz-form-item>
-                        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                            <button nz-button nzType="primary" (click)="guardar()">
-                                <i nz-icon nzType="save"></i>
-                                {{ idrol === 'nuevo' ? 'Registrar' : 'Editar' }}
-                            </button>
-                        </div>
-                    </form>
-                </nz-spin>
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/roles">Roles</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idrol | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="formLoading">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired> Código</nz-form-label>
+                <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+                    <nz-input-group [nzAddOnAfter]="generarIdBtn" nzSearch style="width: 50%;">
+                        <nz-input-number
+                        [nzStep]="1"
+                        [nzMin]="0"
+                        style="width: 100%;"
+                        formControlName="id">
+                    </nz-input-number>
+                    </nz-input-group>
+                    <ng-template #generarIdBtn>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            nzSearch
+                            nz-tooltip
+                            nzTooltipTitle="Generar código"
+                            [nzLoading]="lastIdLoading"
+                            (click)="generarId()">
+                            <i nz-icon nzType="sync"></i>
+                        </button>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Descripción</nz-form-label>
+                <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una descripción. Máx. 30 carácteres.">
+                    <input nz-input formControlName="descripcion">
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                <button nz-button nzType="primary" (click)="guardar()">
+                    <i nz-icon nzType="save"></i>
+                    {{ idrol === 'nuevo' ? 'Registrar' : 'Editar' }}
+                </button>
             </div>
-        </div>
-        
-    </div>
-</div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

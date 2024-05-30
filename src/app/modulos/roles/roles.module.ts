@@ -15,9 +15,9 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 
 @NgModule({
@@ -41,7 +41,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzNotificationModule,
     NzModalModule,
     NzToolTipModule,
-    FormsModule
+    FormsModule,
+    WorkspaceLayoutModule
   ]
 })
 export class RolesModule { }
