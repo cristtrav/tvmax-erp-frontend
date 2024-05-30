@@ -2,9 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImpresionService } from '@servicios/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { TablaVentasComponent } from '../tabla-ventas/tabla-ventas.component';
-import { TablaDetalleVentasCobrosComponent } from '../../cobros/tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';
-import { ContenidoEstadisticasVentasComponent } from '../../estadisticas/components/ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
+import { TablaVentasComponent } from '../../components/tabla-ventas/tabla-ventas.component';
+import { TablaDetalleVentasCobrosComponent } from '../../../cobros/tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';
+import { ContenidoEstadisticasVentasComponent } from '../../../estadisticas/components/ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
 
 @Component({
   selector: 'app-vista-ventas',

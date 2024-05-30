@@ -16,7 +16,7 @@ import { VentasService } from '@servicios/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@servicios/sesion.service';
-import { CuotasPendientesComponent } from './cuotas-pendientes/cuotas-pendientes.component';
+import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
 import { finalize, forkJoin } from 'rxjs';
 import { ImpresionService } from '@servicios/impresion.service';
 
