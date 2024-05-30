@@ -1,4 +1,163 @@
-<div class="inner-component">
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="../">Timbrados</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idtimbrado | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="formLoading">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Código</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-group [nzAddOnAfter]="btnGenerarId" nzSearch>
+                            <nz-input-number style="width: 100%;" [nzMin]="1" [nzStep]="1"
+                                formControlName="id">
+                            </nz-input-number>
+                            <ng-template #btnGenerarId>
+                                <button nz-button nzType="primary" [nzLoading]="lastidLoading"
+                                    (click)="generarId()">
+                                    <i nz-icon nzType="sync"></i>
+                                </button>
+                            </ng-template>
+                        </nz-input-group>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Timbrado</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese el timbrado. Máx. 8 dígitos.">
+                    <nz-input-number style="width: 100%;" [nzMin]="1" [nzMax]="99999999" [nzStep]="1"
+                        formControlName="timbrado">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Cód. Establecimiento</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el códígo de establecimiento. Máx. 3 dígitos.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-number nzPlaceHolder="Ej.: 001" [nzFormatter]="formatterNroPrefijo"
+                            [nzParser]="parserNroPrefijo" [nzMin]="1" [nzMax]="999" [nzStep]="1"
+                            style="width: 100%;" formControlName="codEstablecimiento">
+                        </nz-input-number>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Cód. Punto Emisión</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el códígo de punto de emision. Máx. 3 dígitos.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-number nzPlaceHolder="Ej.: 001" [nzFormatter]="formatterNroPrefijo"
+                            [nzParser]="parserNroPrefijo" [nzMin]="1" [nzMax]="999" [nzStep]="1"
+                            style="width: 100%;" formControlName="codPuntoEmision">
+                        </nz-input-number>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" [nzXs]="24">Inicio vigencia</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese la fecha de inicio de vigencia del timbrado.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-date-picker style="width: 100%;" [nzFormat]="'dd/MM/yyyy'"
+                            formControlName="iniciovigencia"></nz-date-picker>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Vencimiento</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese la fecha de vencimiento del timbrado.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-date-picker style="width: 100%;" [nzFormat]="'dd/MM/yyyy'"
+                            formControlName="vencimiento"></nz-date-picker>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Nro. Inicial</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el número inicial. Máx. 7 dígitos.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-number style="width: 100%;" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                            [nzFormatter]="formatterNroFactura" [nzParser]="parserNroFactura"
+                            formControlName="nroInicial">
+                        </nz-input-number>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Nro. Final</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el número final. Máx. 7 dígitos y mayor al nro. inicial.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-number style="width: 100%;" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                            [nzFormatter]="formatterNroFactura" [nzParser]="parserNroFactura"
+                            formControlName="nroFinal" nzPlaceHolder="Por defecto: 9999999">
+                        </nz-input-number>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES"> Ult. num. usado</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Debe estar entre el nro. inicial y el nro. final.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-number style="width: 100%;" [nzMax]="9999999" [nzStep]="1"
+                            formControlName="ultNroUsado" [nzFormatter]="formatterNroFactura"
+                            [nzParser]="parserNroFactura">
+                        </nz-input-number>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                    Formato de impresión
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <nz-select nzPlaceHolder="Seleccionar..." formControlName="idformato" nzAllowClear>
+                        <nz-option
+                            *ngFor="let formato of lstFormatos"
+                            [nzValue]="formato.id"
+                            [nzLabel]="formato.descripcion+' | Preimpreso | '+formato.plantilla">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="activo">Activo</label>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                    <i nz-icon nzType="save"></i>
+                    {{ idtimbrado === 'nuevo' ? 'Registrar' : 'Editar'}}
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>
+<!--<div class="inner-component">
     <div class="main-breadcrumb">
         <nz-breadcrumb>
             <nz-breadcrumb-item>
@@ -163,4 +322,4 @@
         </div>
 
     </div>
-</div>
+</div>-->

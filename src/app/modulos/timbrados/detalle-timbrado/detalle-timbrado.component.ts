@@ -10,6 +10,8 @@ import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 
 @Component({
   selector: 'app-detalle-timbrado',
@@ -17,6 +19,11 @@ import { finalize } from 'rxjs';
   styleUrls: ['./detalle-timbrado.component.scss']
 })
 export class DetalleTimbradoComponent implements OnInit {
+
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 } as const;
 
   formatterNroPrefijo = (value: number): string => `${value ? value.toString().padStart(3, '0') : ''}`;
   parserNroPrefijo = (value: string): string => `${value ? Number(value) : ''}`;
@@ -147,7 +154,7 @@ export class DetalleTimbradoComponent implements OnInit {
         },
         error: (e) => {
           console.log('Error al editar timbrado', e);
-        this.httpErrorHandler.process(e);
+          this.httpErrorHandler.process(e);
         }
       });
   }

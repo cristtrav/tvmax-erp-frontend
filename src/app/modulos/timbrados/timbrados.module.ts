@@ -24,6 +24,8 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     NzTypographyModule,
     NzTagModule,
     NzModalModule,
-    NzSelectModule
+    NzSelectModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class TimbradosModule { }
