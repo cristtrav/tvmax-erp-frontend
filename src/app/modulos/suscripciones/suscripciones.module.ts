@@ -43,8 +43,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
 import { DomiciliosModule } from '../domicilios/domicilios.module';
-import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent, VistaSuscripcionesComponent, DetalleSuscripcionComponent, CuotasSuscripcionesComponent, DetalleCuotasSuscripcionesComponent, FormFiltroSuscripcionesComponent, TablaSuscripcionesComponent ],
@@ -85,7 +86,9 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
     NzTypographyModule,
     OpenLocationCodePipe,
     DomiciliosModule,
-    NzCollapseModule
+    NzCollapseModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ],
   exports: [ContenidoVistaSuscripcionesComponent, FormSuscripcionComponent]
 })

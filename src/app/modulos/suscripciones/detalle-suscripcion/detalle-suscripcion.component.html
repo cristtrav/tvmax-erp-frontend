@@ -1,22 +1,21 @@
-<div class="inner-content">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/suscripciones">Suscripciones</a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                {{ idsuscripcion | titlecase}}
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div nz-row nzJustify="center" nzAlign="top">
-            <div nz-col class="module-content" [nzXXl]="14" [nzXl]="16" [nzLg]="18" [nzMd]="20" [nzSm]="22">
-                <app-form-suscripcion [(idsuscripcion)]="idsuscripcion" [mostrarCliente]="true" [navigateOnSaveDest]="'nuevasuscripciongeneral'"></app-form-suscripcion>
-            </div>
-        </div>
-    </div>
-</div>
+<app-workspace-layout [isForm]="true" [formSizes]="FORM_SIZES">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/suscripciones">Suscripciones</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idsuscripcion | titlecase}}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <app-form-suscripcion
+        [(idsuscripcion)]="idsuscripcion"
+        [mostrarCliente]="true"
+        [navigateOnSaveDest]="'nuevasuscripciongeneral'">
+    </app-form-suscripcion>
+
+</app-workspace-layout>
