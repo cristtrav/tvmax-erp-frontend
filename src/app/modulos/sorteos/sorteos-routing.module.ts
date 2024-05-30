@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaSorteosComponent } from './vista-sorteos/vista-sorteos.component';
-import { DetalleSorteoComponent } from './detalle-sorteo/detalle-sorteo.component';
-import { VistaPremiosComponent } from './vista-premios/vista-premios.component';
-import { DetallePremioComponent } from './detalle-premio/detalle-premio.component';
-import { ParticipantesComponent } from './participantes/participantes.component';
-import { ExclusionesComponent } from './exclusiones/exclusiones.component';
+import { VistaSorteosComponent } from './pages/vista-sorteos/vista-sorteos.component';
+import { DetalleSorteoComponent } from './pages/detalle-sorteo/detalle-sorteo.component';
+import { VistaPremiosComponent } from './pages/vista-premios/vista-premios.component';
+import { DetallePremioComponent } from './pages/detalle-premio/detalle-premio.component';
+import { ParticipantesComponent } from './pages/participantes/participantes.component';
+import { ExclusionesComponent } from './pages/exclusiones/exclusiones.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [

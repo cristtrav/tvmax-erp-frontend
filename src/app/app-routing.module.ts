@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './util/auth.guard';
 import { AppComponent } from './app.component';
-import { SortearComponent } from './modulos/sorteos/sortear/sortear.component';
+import { SortearComponent } from './modulos/sorteos/pages/sortear/sortear.component';
 import { GanadoresComponent } from './modulos/sorteos/ganadores/ganadores.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
