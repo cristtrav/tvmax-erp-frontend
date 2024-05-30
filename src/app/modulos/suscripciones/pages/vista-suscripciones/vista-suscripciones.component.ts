@@ -1,11 +1,9 @@
-import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { PortalOutlet } from "@angular/cdk/portal";
-import { ReporteSuscripcionesComponent } from '../../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { ImpresionService } from '@servicios/impresion.service';
-import { TablaSuscripcionesComponent } from '../tabla-suscripciones/tabla-suscripciones.component';
-import { ContenidoEstadisticasSuscripcionesComponent } from '../../estadisticas/components/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
+import { ContenidoEstadisticasSuscripcionesComponent } from '../../../estadisticas/components/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
+import { TablaSuscripcionesComponent } from '../../components/tabla-suscripciones/tabla-suscripciones.component';
 
 
 @Component({

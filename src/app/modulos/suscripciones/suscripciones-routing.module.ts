@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaSuscripcionesComponent } from './vista-suscripciones/vista-suscripciones.component';
-import { DetalleSuscripcionComponent } from './detalle-suscripcion/detalle-suscripcion.component';
-import { CuotasSuscripcionesComponent } from './cuotas-suscripciones/cuotas-suscripciones.component';
-import { DetalleCuotasSuscripcionesComponent } from './detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
+import { VistaSuscripcionesComponent } from './pages/vista-suscripciones/vista-suscripciones.component';
+import { DetalleSuscripcionComponent } from './pages/detalle-suscripcion/detalle-suscripcion.component';
+import { CuotasSuscripcionesComponent } from './pages/cuotas-suscripciones/cuotas-suscripciones.component';
+import { DetalleCuotasSuscripcionesComponent } from './pages/detalle-cuotas-suscripciones/detalle-cuotas-suscripciones.component';
 import { ReporteSuscripcionesComponent } from '../impresion/reporte-suscripciones/reporte-suscripciones.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
