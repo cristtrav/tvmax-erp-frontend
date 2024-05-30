@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaUsuariosComponent } from './vista-usuarios/vista-usuarios.component';
-import { DetalleUsuarioComponent } from './detalle-usuario/detalle-usuario.component';
-import { PermisosUsuarioComponent } from './permisos-usuario/permisos-usuario.component';
-import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
+import { VistaUsuariosComponent } from './pages/vista-usuarios/vista-usuarios.component';
+import { DetalleUsuarioComponent } from './pages/detalle-usuario/detalle-usuario.component';
+import { PermisosUsuarioComponent } from './pages/permisos-usuario/permisos-usuario.component';
+import { RolesUsuarioComponent } from './pages/roles-usuario/roles-usuario.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [
