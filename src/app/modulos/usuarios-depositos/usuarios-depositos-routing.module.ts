@@ -1,7 +1,7 @@
 import { NgModule, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
-import { VistaUsuariosDepositosComponent } from './vista-usuarios-depositos/vista-usuarios-depositos.component';
-import { DetalleUsuarioDepositoComponent } from './detalle-usuario-deposito/detalle-usuario-deposito.component';
+import { VistaUsuariosDepositosComponent } from './pages/vista-usuarios-depositos/vista-usuarios-depositos.component';
+import { DetalleUsuarioDepositoComponent } from './pages/detalle-usuario-deposito/detalle-usuario-deposito.component';
 import { SesionService } from '@servicios/sesion.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 

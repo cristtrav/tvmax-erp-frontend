@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsuariosDepositosRoutingModule } from './usuarios-depositos-routing.module';
-import { DetalleUsuarioDepositoComponent } from './detalle-usuario-deposito/detalle-usuario-deposito.component';
-import { VistaUsuariosDepositosComponent } from './vista-usuarios-depositos/vista-usuarios-depositos.component';
+import { DetalleUsuarioDepositoComponent } from './pages/detalle-usuario-deposito/detalle-usuario-deposito.component';
+import { VistaUsuariosDepositosComponent } from './pages/vista-usuarios-depositos/vista-usuarios-depositos.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzGridModule } from 'ng-zorro-antd/grid';
