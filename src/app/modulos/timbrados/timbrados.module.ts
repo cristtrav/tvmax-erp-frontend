@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TimbradosRoutingModule } from './timbrados-routing.module';
-import { VistaTimbradosComponent } from './vista-timbrados/vista-timbrados.component';
-import { DetalleTimbradoComponent } from './detalle-timbrado/detalle-timbrado.component';
+import { VistaTimbradosComponent } from './pages/vista-timbrados/vista-timbrados.component';
+import { DetalleTimbradoComponent } from './pages/detalle-timbrado/detalle-timbrado.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from '../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
