@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TipoMaterialDTO } from '@dto/tipo-material.dto';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { TiposMaterialesService } from '@servicios/tipos-materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,6 +15,11 @@ import { finalize } from 'rxjs';
   styleUrls: ['./detalle-tipo-material.component.scss']
 })
 export class DetalleTipoMaterialComponent implements OnInit {
+
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 } as const;
 
   idtipomaterial: string = 'nuevo';
   guardando: boolean = false;

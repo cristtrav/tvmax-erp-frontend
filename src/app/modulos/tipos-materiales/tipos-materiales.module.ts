@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { TiposMaterialesRoutingModule } from './tipos-materiales-routing.module';
 import { VistaTiposMaterialesComponent } from './vista-tipos-materiales/vista-tipos-materiales.component';
 import { DetalleTipoMaterialComponent } from './detalle-tipo-material/detalle-tipo-material.component';
@@ -15,6 +14,8 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -36,7 +37,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     FormsModule,
     ReactiveFormsModule,
     NzToolTipModule,
-    NzModalModule
+    NzModalModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class TiposMaterialesModule { }
