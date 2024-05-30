@@ -1,136 +1,131 @@
-<div class="inner-content">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/usuarios">Usuarios</a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                {{ idusuario | titlecase }}
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div nz-row nzJustify="center" nzAlign="top">
-            <div nz-col class="module-content" [nzXXl]="12" [nzXl]="14" [nzLg]="16" [nzMd]="18" [nzSm]="20">
-                <nz-spin [nzSpinning]="formLoading">
-                    <form nz-form [formGroup]="form">
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
-                                <div nz-col nzSpan="12">
-                                    <nz-input-group [nzAddOnAfter]="generarIdBtn" nzSearch>
-                                        <ng-template #generarIdBtn>
-                                            <button
-                                                nz-button
-                                                nzType="primary"
-                                                nzSearch
-                                                nz-tooltip
-                                                nzTooltipTitle="Generar código"
-                                                [nzLoading]="lastIdLoading"
-                                                (click)="generarId()">
-                                                <i nz-icon nzType="sync"></i>
-                                            </button>
-                                        </ng-template>
-                                        <nz-input-number
-                                            [nzMin]="0"
-                                            [nzStep]="1"
-                                            formControlName="id"
-                                            style="width: 100%;">
-                                        </nz-input-number>
-                                    </nz-input-group>
-                                </div>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Nombres</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Ingrese un nombre. Máx. 80 carácteres.">
-                                <input nz-input formControlName="nombres">
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24">Apellidos</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Máx. 80 carácteres.">
-                                <input nz-input formControlName="apellidos">
-                            </nz-form-control>
-                        </nz-form-item>
-                        
-                        <nz-form-item>
-                            <nz-form-label
-                                [nzSm]="7" [nzXs]="24"
-                                [nzRequired]="form.controls.accesosistema.value">
-                                Nro. Documento
-                            </nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Ingrese el nro. de documento de identidad. Máx. 10 carácteres.">
-                                <div nz-col nzSpan="12">
-                                    <input nz-input formControlName="ci">
-                                </div>
-                            </nz-form-control>
-                        </nz-form-item>
-                        
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24">Email</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Ingrese un email correcto. Máx. 120 carácteres.">
-                                <input nz-input formControlName="email">
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24">Teléfono</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 20 carácteres.">
-                                <input nz-input formControlName="telefono">
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <nz-form-label [nzSm]="7" [nzXs]="24" [nzRequired]="pwdRequired">Contraseña</nz-form-label>
-                            <nz-form-control [nzSm]="15" [nzXs]="24"
-                                nzErrorTip="Ingrese una contraseña. Min. 5 carácteres.">
-                                <nz-input-group [nzSuffix]="verPwd">
-                                    <input nz-input [type]="pwdVisible?'text':'password'" formControlName="password"
-                                        [placeholder]="idusuario!=='nuevo'?'(Sin cambios)':''">
-                                </nz-input-group>
-                                <ng-template #verPwd>
-                                    <i nz-icon [nzType]="pwdVisible?'eye-invisible':'eye'"
-                                        (click)="pwdVisible=!pwdVisible"></i>
-                                </ng-template>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <nz-form-item>
-                            <span nz-col [nzSm]="7" [nzXs]="24"></span>
-                            <nz-form-control [nzSm]="15" [nzXs]="24">
-                                <label nz-checkbox formControlName="accesosistema">Acceso al sistema</label>
-                            </nz-form-control>
-                        </nz-form-item>
-                        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-                            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
-                                <div nz-col *ngIf="idusuario!='nuevo'">
-                                    <button nz-button nzType="default" [routerLink]="['roles']">
-                                        <i nz-icon nzType="tags" nzTheme="outline"></i>
-                                        Roles
-                                    </button>
-                                </div>
-                                <div nz-col *ngIf="idusuario!=='nuevo'">
-                                    <button nz-button nzType="default" [routerLink]="'permisos'">
-                                        <i nz-icon nzType="key" nzTheme="outline"></i>
-                                        Permisos
-                                    </button>
-                                </div>
-                                <div nz-col>
-                                    <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                                        <i nz-icon nzType="save"></i>
-                                        {{ idusuario === 'nuevo' ? 'Registrar' : 'Editar' }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </nz-spin>
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/usuarios">Usuarios</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idusuario | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="formLoading">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Código</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-group [nzAddOnAfter]="generarIdBtn" nzSearch>
+                            <ng-template #generarIdBtn>
+                                <button
+                                    nz-button
+                                    nzType="primary"
+                                    nzSearch
+                                    nz-tooltip
+                                    nzTooltipTitle="Generar código"
+                                    [nzLoading]="lastIdLoading"
+                                    (click)="generarId()">
+                                    <i nz-icon nzType="sync"></i>
+                                </button>
+                            </ng-template>
+                            <nz-input-number
+                                [nzMin]="0"
+                                [nzStep]="1"
+                                formControlName="id"
+                                style="width: 100%;">
+                            </nz-input-number>
+                        </nz-input-group>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Nombres</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese un nombre. Máx. 80 carácteres.">
+                    <input nz-input formControlName="nombres">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Apellidos</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Máx. 80 carácteres.">
+                    <input nz-input formControlName="apellidos">
+                </nz-form-control>
+            </nz-form-item>
+            
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    [nzRequired]="form.controls.accesosistema.value">
+                    Nro. Documento
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el nro. de documento de identidad. Máx. 10 carácteres.">
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <input nz-input formControlName="ci">
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Email</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese un email correcto. Máx. 120 carácteres.">
+                    <input nz-input formControlName="email">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Teléfono</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Máx. 20 carácteres.">
+                    <input nz-input formControlName="telefono">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" [nzRequired]="pwdRequired">Contraseña</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese una contraseña. Min. 5 carácteres.">
+                    <nz-input-group [nzSuffix]="verPwd">
+                        <input nz-input [type]="pwdVisible?'text':'password'" formControlName="password"
+                            [placeholder]="idusuario!=='nuevo'?'(Sin cambios)':''">
+                    </nz-input-group>
+                    <ng-template #verPwd>
+                        <i nz-icon [nzType]="pwdVisible?'eye-invisible':'eye'"
+                            (click)="pwdVisible=!pwdVisible"></i>
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="accesosistema">Acceso al sistema</label>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                    <div nz-col *ngIf="idusuario!='nuevo'">
+                        <button nz-button nzType="default" [routerLink]="['roles']">
+                            <i nz-icon nzType="tags" nzTheme="outline"></i>
+                            Roles
+                        </button>
+                    </div>
+                    <div nz-col *ngIf="idusuario!=='nuevo'">
+                        <button nz-button nzType="default" [routerLink]="'permisos'">
+                            <i nz-icon nzType="key" nzTheme="outline"></i>
+                            Permisos
+                        </button>
+                    </div>
+                    <div nz-col>
+                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                            <i nz-icon nzType="save"></i>
+                            {{ idusuario === 'nuevo' ? 'Registrar' : 'Editar' }}
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

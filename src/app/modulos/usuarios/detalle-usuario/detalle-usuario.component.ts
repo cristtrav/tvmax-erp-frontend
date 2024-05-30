@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { RolesService } from '@servicios/roles.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { Subscription, finalize, forkJoin } from 'rxjs';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 
 @Component({
   selector: 'app-detalle-usuario',
@@ -14,6 +15,11 @@ import { Subscription, finalize, forkJoin } from 'rxjs';
   styleUrls: ['./detalle-usuario.component.scss']
 })
 export class DetalleUsuarioComponent implements OnInit, OnDestroy {
+
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 24, xxl: 25 } as const;
 
   idusuario = 'nuevo';
   form: FormGroup = new FormGroup({

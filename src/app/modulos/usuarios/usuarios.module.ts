@@ -30,9 +30,17 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
-  declarations: [VistaUsuariosComponent, DetalleUsuarioComponent, PermisosUsuarioComponent, FormCambioPasswordComponent, RolesUsuarioComponent],
+  declarations: [
+    VistaUsuariosComponent,
+    DetalleUsuarioComponent,
+    PermisosUsuarioComponent,
+    FormCambioPasswordComponent,
+    RolesUsuarioComponent
+  ],
   imports: [
     CommonModule,
     UsuariosRoutingModule,
@@ -61,7 +69,9 @@ import { RolesUsuarioComponent } from './roles-usuario/roles-usuario.component';
     NzAlertModule,
     NzListModule,
     NzEmptyModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ],
   exports: [FormCambioPasswordComponent]
 })
