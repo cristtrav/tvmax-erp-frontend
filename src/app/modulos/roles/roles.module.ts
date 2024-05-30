@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RolesRoutingModule } from './roles-routing.module';
-import { DetalleRolComponent } from './detalle-rol/detalle-rol.component';
-import { VistaRolesComponent } from './vista-roles/vista-roles.component';
+import { DetalleRolComponent } from './pages/detalle-rol/detalle-rol.component';
+import { VistaRolesComponent } from './pages/vista-roles/vista-roles.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';

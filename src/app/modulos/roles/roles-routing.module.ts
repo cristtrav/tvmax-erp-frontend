@@ -1,7 +1,7 @@
 import { NgModule, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
-import { DetalleRolComponent } from './detalle-rol/detalle-rol.component';
-import { VistaRolesComponent } from './vista-roles/vista-roles.component';
+import { DetalleRolComponent } from './pages/detalle-rol/detalle-rol.component';
+import { VistaRolesComponent } from './pages/vista-roles/vista-roles.component';
 import { SesionService } from '@servicios/sesion.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
