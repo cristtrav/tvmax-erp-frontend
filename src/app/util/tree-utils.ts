@@ -28,7 +28,7 @@ export class TreeUtils {
         const grupos: Grupo[] = [];
         servicios.forEach(srv => {
             if (!grupos.find(g => g.id == srv.idgrupo))
-                grupos.push({ id: srv.idgrupo, descripcion: srv.grupo });
+                grupos.push({ id: srv.idgrupo ?? null, descripcion: srv.grupo ?? null });
         });
         return grupos;
     }

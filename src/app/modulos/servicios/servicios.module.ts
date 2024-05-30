@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServiciosRoutingModule } from './servicios-routing.module';
-import { VistaServiciosComponent } from './vista-servicios/vista-servicios.component';
-import { DetalleServicioComponent } from './detalle-servicio/detalle-servicio.component';
+import { VistaServiciosComponent } from './pages/vista-servicios/vista-servicios.component';
+import { DetalleServicioComponent } from './pages/detalle-servicio/detalle-servicio.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from './../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -16,7 +16,6 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSpaceModule} from 'ng-zorro-antd/space';

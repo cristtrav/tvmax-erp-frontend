@@ -41,7 +41,7 @@
                             </ng-container>
                         </nz-space>
                     </ng-template>
-                    <app-tabla-cuotas [idsuscripcion]="idsuscripcion" [idservicio]="s.id"></app-tabla-cuotas>
+                    <app-tabla-cuotas [idsuscripcion]="idsuscripcion" [idservicio]="s.id ?? -1"></app-tabla-cuotas>
                 </nz-tab>
             </nz-tabset>
         </nz-spin>

@@ -57,8 +57,8 @@ export class ServiciosComponent implements OnInit {
         servicios.forEach(servicio => {
           if (!gruposTmp.find(grupo => grupo.id == servicio.idgrupo)) {
             gruposTmp.push({
-              id: servicio.idgrupo,
-              descripcion: servicio.grupo
+              id: servicio.idgrupo ?? null,
+              descripcion: servicio.grupo ?? null
             });
             this.mapGruposServicios.set(servicio.idgrupo ?? -1, servicios.filter(servicioFilter => servicioFilter.idgrupo === servicio.idgrupo))
           }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { VistaServiciosComponent } from './vista-servicios/vista-servicios.component';
-import { DetalleServicioComponent } from './detalle-servicio/detalle-servicio.component';
+import { VistaServiciosComponent } from './pages/vista-servicios/vista-servicios.component';
+import { DetalleServicioComponent } from './pages/detalle-servicio/detalle-servicio.component';
 import { canAccessFn } from 'src/app/global/auth/can-access-fn.guard';
 
 const routes: Routes = [

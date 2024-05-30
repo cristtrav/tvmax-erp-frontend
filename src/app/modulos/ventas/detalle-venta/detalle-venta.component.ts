@@ -466,9 +466,9 @@ export class DetalleVentaComponent implements OnInit {
     const lstdt: DetalleVenta[] = this.lstDetallesVenta.slice();
     const dt: DetalleVenta = new DetalleVenta();
     dt.cantidad = 1;
-    dt.monto = srv.precio;
-    dt.idservicio = srv.id;
-    dt.subtotal = dt.monto * dt.cantidad;
+    dt.monto = srv.precio ?? null;
+    dt.idservicio = srv.id ?? null;
+    dt.subtotal = (dt.monto ?? 0) * dt.cantidad;
     dt.idsuscripcion = susc.id;
     dt.porcentajeiva = Number(srv.porcentajeiva);
     dt.montoiva = Math.round((dt.subtotal * dt.porcentajeiva) / (100 + dt.porcentajeiva));
