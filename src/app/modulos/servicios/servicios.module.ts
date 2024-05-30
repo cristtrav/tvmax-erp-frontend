@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ServiciosRoutingModule } from './servicios-routing.module';
 import { VistaServiciosComponent } from './vista-servicios/vista-servicios.component';
 import { DetalleServicioComponent } from './detalle-servicio/detalle-servicio.component';
@@ -25,6 +24,9 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [VistaServiciosComponent, DetalleServicioComponent],
@@ -45,14 +47,16 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     ReactiveFormsModule,
     NzTableModule,
     NzDividerModule,
-    NzPopconfirmModule,
     NzToolTipModule,
     NzSpinModule,
     NzSpaceModule,
     NzBadgeModule,
     NzDrawerModule,
     NzTypographyModule,
-    NzTagModule
+    NzTagModule,
+    WorkspaceLayoutModule,
+    NzModalModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class ServiciosModule { }

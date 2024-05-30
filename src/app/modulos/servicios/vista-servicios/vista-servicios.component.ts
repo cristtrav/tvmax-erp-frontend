@@ -9,6 +9,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Servicio } from '@dto/servicio-dto';
 import { ServiciosService } from '@servicios/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-vista-servicios',
@@ -52,7 +53,8 @@ export class VistaServiciosComponent implements OnInit {
     private httpErrorRespSrv: HttpErrorResponseHandlerService,
     private gruposSrv: GruposService,
     private aroute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
@@ -124,16 +126,28 @@ export class VistaServiciosComponent implements OnInit {
     });
   }
 
-  eliminar(id: number | null): void {
-    if (id !== null) this.serviciosSrv.deleteServicio(id).subscribe({
-      next: () => {
-        this.cargarServicios();
-        this.notif.create('success', 'Eliminado correctamente', '');
-      },
-      error: (e) => {
-        console.log('Error al eliminar Servicio', e);
-        this.httpErrorRespSrv.process(e);
-      }
+  confirmarEliminacion(servicio: Servicio){
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminr el Servicio?',
+      nzContent: `${servicio.id} - ${servicio.descripcion} (${servicio.grupo})`,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.eliminar(servicio.id ?? -1)
+    })
+  }
+
+  eliminar(id: number): void {
+    this.serviciosSrv
+      .deleteServicio(id)
+      .subscribe({
+        next: () => {
+          this.cargarServicios();
+          this.notif.create('success', 'Eliminado correctamente', '');
+        },
+        error: (e) => {
+          console.log('Error al eliminar Servicio', e);
+          this.httpErrorRespSrv.process(e);
+        }
     });
   }
 
