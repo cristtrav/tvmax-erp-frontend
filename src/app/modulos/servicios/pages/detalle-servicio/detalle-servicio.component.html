@@ -17,10 +17,14 @@
             <nz-form-item>
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Código</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código">
-                    <nz-input-group style="width: 50%" [nzAddOnAfter]="btnCargarId" nzSearch>
-                        <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading">
-                        </nz-input-number>
-                    </nz-input-group>
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <nz-input-group [nzAddOnAfter]="btnCargarId" nzSearch>
+                                <nz-input-number [nzMin]="1" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading">
+                                </nz-input-number>
+                            </nz-input-group>
+                        </div>
+                    </div>
                 </nz-form-control>
                 <ng-template #btnCargarId>
                     <button nz-button nzType="primary" nz-tooltip nzTooltipTitle="Generar código" (click)="cargarId()" [nzLoading]="lastIdLoading" nzSearch>
@@ -47,8 +51,12 @@
             <nz-form-item>
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Precio</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un monto.">
-                    <nz-input-number [nzMin]="0" [nzStep]="1" style="width: 50%;" formControlName="precio">
-                    </nz-input-number>
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <nz-input-number [nzMin]="0" [nzStep]="1" style="width: 100%;" formControlName="precio">
+                            </nz-input-number>
+                        </div>
+                    </div>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>

@@ -22,6 +22,7 @@ export class DetalleServicioComponent implements OnInit {
   readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
   readonly CONTROL_SIZES: ResponsiveUtils = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
   readonly ACCION_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm:24, md: 12, lg: 12, xl: 12, xxl: 12 } as const;
 
   idservicio = 'nuevo';
   lstGrupos: Grupo[] = [];
