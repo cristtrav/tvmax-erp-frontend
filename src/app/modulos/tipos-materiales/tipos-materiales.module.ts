@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TiposMaterialesRoutingModule } from './tipos-materiales-routing.module';
-import { VistaTiposMaterialesComponent } from './vista-tipos-materiales/vista-tipos-materiales.component';
-import { DetalleTipoMaterialComponent } from './detalle-tipo-material/detalle-tipo-material.component';
+import { VistaTiposMaterialesComponent } from './pages/vista-tipos-materiales/vista-tipos-materiales.component';
+import { DetalleTipoMaterialComponent } from './pages/detalle-tipo-material/detalle-tipo-material.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
