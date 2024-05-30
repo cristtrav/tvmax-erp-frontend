@@ -43,6 +43,8 @@ import { ServiciosComponent } from './detalle-venta/servicios/servicios.componen
 import { CobrosModule } from '../cobros/cobros.module';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
 import { PaddingZerosPipe } from "../../util/pipes/padding-zeros.pipe";
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
     declarations: [
@@ -92,7 +94,9 @@ import { PaddingZerosPipe } from "../../util/pipes/padding-zeros.pipe";
         NzDescriptionsModule,
         CobrosModule,
         HelperComponentsModule,
-        PaddingZerosPipe
+        PaddingZerosPipe,
+        WorkspaceLayoutModule,
+        NzColResponsiveSizesDirective
     ]
 })
 export class VentasModule { }
