@@ -29,7 +29,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { HideCiPipe } from '@util/pipes/hide-ci.pipe';
-import { GanadoresComponent } from './ganadores/ganadores.component';
+import { GanadoresComponent } from './pages/ganadores/ganadores.component';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { ExclusionesComponent } from './pages/exclusiones/exclusiones.component';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
