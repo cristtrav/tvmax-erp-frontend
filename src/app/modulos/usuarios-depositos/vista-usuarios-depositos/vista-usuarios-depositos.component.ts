@@ -8,7 +8,7 @@ import { HttpErrorResponseHandlerService } from '@util/http-error-response-handl
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { finalize, flatMap, forkJoin, from, map, merge, mergeMap, of, tap, toArray } from 'rxjs';
+import { finalize, forkJoin, from, map, mergeMap, of, toArray } from 'rxjs';
 
 interface RolesUsuarioInterface{
   roles: RolDTO[],

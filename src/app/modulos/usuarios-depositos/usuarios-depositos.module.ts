@@ -18,6 +18,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzSpinModule,
     NzModalModule,
     NzTypographyModule,
-    NzTagModule
+    NzTagModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class UsuariosDepositosModule { }

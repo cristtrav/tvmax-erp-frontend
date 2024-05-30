@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
+import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
+import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -13,6 +15,11 @@ import { finalize } from 'rxjs';
   styleUrls: ['./detalle-usuario-deposito.component.scss']
 })
 export class DetalleUsuarioDepositoComponent implements OnInit {
+
+  readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
+  readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTIONS_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
+  readonly SMALL_CONTROL_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12} as const;
 
   idusuario: string = 'nuevo';
   loadingId: boolean = false;
