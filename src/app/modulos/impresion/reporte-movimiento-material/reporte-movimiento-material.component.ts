@@ -1,11 +1,11 @@
 import { Component, Inject, LOCALE_ID, ViewEncapsulation } from '@angular/core';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
-import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { Observable, catchError, forkJoin, tap } from 'rxjs';
 import { formatDate } from '@angular/common';
+import { MovimientosMaterialesService } from '@global-services/depositos/movimientos-materiales.service';
 
 @Component({
   selector: 'app-reporte-movimiento-material',

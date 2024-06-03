@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MaterialDTO } from '@dto/material.dto';
-import { MaterialesService } from '@servicios/materiales.service';
+import { MaterialesService } from '@global-services/depositos/materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { finalize, forkJoin } from 'rxjs';
 

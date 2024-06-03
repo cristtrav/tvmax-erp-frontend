@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TipoMaterialDTO } from '@dto/tipo-material.dto';
-import { TiposMaterialesService } from '@servicios/tipos-materiales.service';
+import { TiposMaterialesService } from '@global-services/depositos/tipos-materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';

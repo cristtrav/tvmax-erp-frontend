@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
-import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
+import { MovimientosMaterialesService } from '@global-services/depositos/movimientos-materiales.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

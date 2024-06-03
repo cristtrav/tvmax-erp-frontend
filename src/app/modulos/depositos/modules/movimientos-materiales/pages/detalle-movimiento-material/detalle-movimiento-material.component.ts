@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { MovimientosMaterialesService } from '@servicios/movimientos-materiales.service';
 import { SesionService } from '@servicios/sesion.service';
 import { UsuariosService } from '@servicios/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -14,6 +13,7 @@ import { TablaDetallesMovimientosComponent } from '../../components/tabla-detall
 import { BuscadorMaterialesComponent } from '../../components/buscador-materiales/buscador-materiales.component';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { ImpresionService } from '@servicios/impresion.service';
+import { MovimientosMaterialesService } from '@global-services/depositos/movimientos-materiales.service';
 
 @Component({
   selector: 'app-detalle-movimiento-material',

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
 import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
 import { MaterialDTO } from '@dto/material.dto';
-import { MaterialesService } from '@servicios/materiales.service';
+import { MaterialesService } from '@global-services/depositos/materiales.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzStatus } from 'ng-zorro-antd/core/types';
 import { NzModalService } from 'ng-zorro-antd/modal';
