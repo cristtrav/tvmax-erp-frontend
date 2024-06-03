@@ -25,7 +25,7 @@
         "./src/app/global/dtos/*"
       ],
       "@util/*": [
-        "./src/app/util/*"
+        "./src/app/global/utils/*"
       ],
       "@services/*": [
         "./src/app/global/services/*"

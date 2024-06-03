@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
 
 @Component({
   selector: 'app-filtros-reporte',

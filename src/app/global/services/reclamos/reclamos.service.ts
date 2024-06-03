@@ -4,7 +4,7 @@ import { environment } from '@environments/environment';
 import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
 import { HttpUtilsService } from 'src/app/global/services/http-utils/http-utils.service';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
 import { FinalizacionReclamoDTO } from '@dto/reclamos/finalizacion-reclamo.dto';
 import { MaterialUtilizadoDTO } from '@dto/reclamos/material-utilizado.dto';

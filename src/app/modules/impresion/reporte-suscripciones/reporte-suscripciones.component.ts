@@ -16,8 +16,8 @@ import { ServiciosService } from '@services/servicios.service';
 import { SuscripcionesService } from '@services/suscripciones.service';
 import { UsuariosService } from '@services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
 
 @Component({

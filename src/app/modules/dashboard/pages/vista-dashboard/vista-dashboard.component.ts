@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { SesionService } from '@services/sesion.service';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 
 @Component({
   selector: 'app-vista-dashboard',

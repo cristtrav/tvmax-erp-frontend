@@ -5,7 +5,7 @@ import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
 import { FormatosFacturasService } from '@services/formatos-facturas.service';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { FormatoFacturaA } from '@modules/impresion/factura-preimpresa-venta/formato-factura-a';

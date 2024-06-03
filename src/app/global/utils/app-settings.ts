@@ -1,6 +1,6 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { ISubmenu } from './interfaces/isubmenu.interface';
-import { IMenuButton } from './interfaces/imenu-button.interface';
+import { ISubmenu } from '../interfaces/isubmenu.interface';
+import { IMenuButton } from '../interfaces/imenu-button.interface';
 
 export class AppSettings {
 

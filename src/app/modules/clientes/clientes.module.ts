@@ -20,7 +20,6 @@ import { DomiciliosModule } from '../domicilios/domicilios.module';
 import { DetalleDomicilioClienteComponent } from './pages/detalle-domicilio-cliente/detalle-domicilio-cliente.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { SuscripcionesModule } from '../suscripciones/suscripciones.module';
 import { CuotasModule } from '../cuotas/cuotas.module';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
@@ -40,11 +39,12 @@ import { OpenLocationCodePipe } from 'src/app/global/pipes/open-location-code.pi
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { SuscripcionesClienteComponent } from './pages/suscripciones-cliente/suscripciones-cliente.component';
-import { DomiciliosClienteComponent } from './pages/domicilios-cliente/domicilios-cliente.component';
 import { DetalleSuscripcionClienteComponent } from './pages/detalle-suscripcion-cliente/detalle-suscripcion-cliente.component';
 import { DetalleCuotasSuscripcionClienteComponent } from './pages/detalle-cuotas-suscripcion-cliente/detalle-cuotas-suscripcion-cliente.component';
-import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente.component';
 import { CuotasSuscripcionClienteComponent } from './pages/cuotas-suscripcion-cliente/cuotas-suscripcion-cliente.component';
+import { SuscripcionesModule } from '@modules/suscripciones/suscripciones.module';
+import { DomiciliosClienteComponent } from './pages/domicilios-cliente/domicilios-cliente.component';
+import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente.component';
 
 @NgModule({
     declarations: [

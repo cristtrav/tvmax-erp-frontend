@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TimbradosService } from '@services/timbrados.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { forkJoin } from 'rxjs';

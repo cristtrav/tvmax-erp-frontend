@@ -4,7 +4,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { Distrito } from '@dto/distrito-dto';
 import { DistritosService } from '@services/distritos.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';

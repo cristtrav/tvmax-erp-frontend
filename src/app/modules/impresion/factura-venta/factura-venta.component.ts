@@ -4,7 +4,7 @@ import { Venta } from '@dto/venta.dto';
 import { ClientesService } from '@services/clientes.service';
 import { VentasService } from '@services/ventas.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { NumberToWords } from '@util/number-to-words';
+import { NumberToWords } from '@global-utils/number-to-words';
 
 @Component({
   selector: 'app-factura-venta',

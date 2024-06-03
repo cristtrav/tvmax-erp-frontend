@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, ViewEncapsulation } from '@angular/core';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
 import { Observable, catchError, forkJoin, tap } from 'rxjs';
 import { formatDate } from '@angular/common';
 import { MovimientosMaterialesService } from '@services/depositos/movimientos-materiales.service';

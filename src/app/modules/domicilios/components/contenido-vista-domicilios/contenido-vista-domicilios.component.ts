@@ -2,14 +2,14 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
-import { Extra } from 'src/app/util/extra';
+import { Extra } from '@global-utils/extra';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
 import { Domicilio } from '@dto/domicilio-dto';
 import { DomiciliosService } from '@services/domicilios.service';
 import { UbicacionComponent } from '../ubicacion/ubicacion.component';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-contenido-vista-domicilios',

@@ -4,8 +4,8 @@ import { MaterialDTO } from '@dto/depositos/material.dto';
 import { TipoMaterialDTO } from '@dto/depositos/tipo-material.dto';
 import { MaterialesService } from '@services/depositos/materiales.service';
 import { TiposMaterialesService } from '@services/depositos/tipos-materiales.service';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { Observable, catchError, forkJoin, of, tap } from 'rxjs';
 
 @Component({

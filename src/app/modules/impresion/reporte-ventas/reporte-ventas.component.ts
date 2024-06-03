@@ -5,8 +5,8 @@ import { Venta } from '@dto/venta.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@services/usuarios.service';
 import { VentasService } from '@services/ventas.service';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 

@@ -5,7 +5,7 @@ import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { ClientesService } from '@services/clientes.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 
 @Component({
   selector: 'app-pagos-cliente',

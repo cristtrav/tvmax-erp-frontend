@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { BehaviorSubject, Observable, finalize } from 'rxjs';
 import { FacturaPreimpresaVentaComponent } from '../../modules/impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
 import { ReporteSuscripcionesComponent } from '../../modules/impresion/reporte-suscripciones/reporte-suscripciones.component';

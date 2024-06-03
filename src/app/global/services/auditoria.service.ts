@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { EventoAuditoria } from '@dto/evento-auditoria-dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
 import { environment } from '@environments/environment';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
+import { IFormFiltroSkel } from '@global-utils/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { UsuariosService } from '@services/usuarios.service';
 
 @Component({

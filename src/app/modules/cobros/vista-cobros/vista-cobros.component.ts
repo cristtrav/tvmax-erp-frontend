@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { TablaDetalleVentasCobrosComponent } from '../tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';
 import { ImpresionService } from '@services/impresion.service';
 

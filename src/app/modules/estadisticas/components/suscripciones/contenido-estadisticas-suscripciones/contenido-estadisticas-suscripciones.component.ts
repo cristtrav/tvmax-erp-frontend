@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { SuscripcionesService } from '@services/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { CardResumenCuotasPendientesComponent } from '../card-resumen-cuotas-pendientes/card-resumen-cuotas-pendientes.component';
 import { CardResumenEstadosComponent } from '../card-resumen-estados/card-resumen-estados.component';
 import { CardResumenSuscripcionesGruposServiciosComponent } from '../card-resumen-suscripciones-grupos-servicios/card-resumen-suscripciones-grupos-servicios.component';

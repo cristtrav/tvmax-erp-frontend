@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { UsuariosService } from '@services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { UsuarioDTO } from '@dto/usuario.dto';

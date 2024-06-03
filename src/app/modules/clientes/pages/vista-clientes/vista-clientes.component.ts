@@ -2,14 +2,14 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
 import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@services/clientes.service';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { UbicacionComponent } from '@modules/domicilios/components/ubicacion/ubicacion.component';
 

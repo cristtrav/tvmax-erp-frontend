@@ -4,12 +4,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Cliente } from '@dto/cliente-dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@services/usuarios.service';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { ClientesService } from '@services/clientes.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-cliente',

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { SorteosService } from './sorteos.service';
 import { PremioDTO } from '@dto/premio.dto';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
 
 @Injectable({

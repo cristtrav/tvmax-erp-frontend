@@ -2,10 +2,10 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { SuscripcionesService } from '@services/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { ResumenCuotasPendientesSuscripciones } from '@dto/resumen-cuotas-pendientes.dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { forkJoin } from 'rxjs';
 
 @Component({

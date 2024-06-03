@@ -3,7 +3,6 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 import { Barrio } from '@dto/barrio-dto';
 import { BarriosService } from '@services/barrios.service';
 import { DomiciliosService } from '@services/domicilios.service';
@@ -14,6 +13,7 @@ import { finalize } from 'rxjs';
 import { LatLngTuple } from 'leaflet';
 import OpenLocationCode, { CodeArea } from 'open-location-code-typescript';
 import { UbicacionComponent } from '../ubicacion/ubicacion.component';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 const ValidateOpenLocationCode = (control: AbstractControl) => {
   if(!control.value) return null;

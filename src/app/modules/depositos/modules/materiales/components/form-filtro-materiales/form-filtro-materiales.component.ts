@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TipoMaterialDTO } from '@dto/depositos/tipo-material.dto';
 import { TiposMaterialesService } from '@services/depositos/tipos-materiales.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
 
 @Component({

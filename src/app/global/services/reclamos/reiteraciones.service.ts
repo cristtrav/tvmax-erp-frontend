@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { ReiteracionDTO } from '@dto/reclamos/reiteracion.dto';
 import { HttpUtilsService } from '@services/http-utils/http-utils.service';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
 
 @Injectable({

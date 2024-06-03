@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@services/usuarios.service';

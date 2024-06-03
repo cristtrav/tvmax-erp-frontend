@@ -6,7 +6,7 @@ import { finalize, forkJoin, Observable } from 'rxjs';
 import { Departamento } from '@dto/departamento-dto';
 import { DepartamentosService } from '@services/departamentos.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 
 @Component({
   selector: 'app-vista-departamentos',

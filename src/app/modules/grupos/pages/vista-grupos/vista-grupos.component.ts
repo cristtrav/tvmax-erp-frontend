@@ -7,7 +7,7 @@ import { Grupo } from '@dto/grupo-dto';
 import { GruposService } from '@services/grupos.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 
 @Component({
   selector: 'app-vista-grupos',

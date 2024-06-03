@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ResumenCantMonto } from '@dto/resumen-cant-monto-dto';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { TablaResumenVentasGruposComponent } from './tabla-resumen-ventas-grupos/tabla-resumen-ventas-grupos.component';
 import { TablaResumenVentasServiciosComponent } from './tabla-resumen-ventas-servicios/tabla-resumen-ventas-servicios.component';
 

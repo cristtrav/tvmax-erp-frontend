@@ -5,7 +5,7 @@ import { Distrito } from '@dto/distrito-dto';
 import { DepartamentosService } from '@services/departamentos.service';
 import { DistritosService } from '@services/distritos.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 
 @Component({
   selector: 'app-form-filtro-barrios',

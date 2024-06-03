@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { DetalleMovimientoMaterialDTO } from '@dto/depositos/detalle-movimiento-material.dto';
 import { MovimientoMaterialDTO } from '@dto/depositos/movimiento-material.dto';
 import { environment } from '@environments/environment';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
 
 @Injectable({

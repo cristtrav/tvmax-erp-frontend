@@ -4,10 +4,10 @@ import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output, ViewChild }
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { ServiciosService } from '@services/servicios.service';
 import { UsuariosService } from '@services/usuarios.service';
-import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
+import { IFormFiltroSkel } from '@global-utils/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { TreeUtils } from '@util/tree-utils';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
+import { TreeUtils } from '@global-utils/tree-utils';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 

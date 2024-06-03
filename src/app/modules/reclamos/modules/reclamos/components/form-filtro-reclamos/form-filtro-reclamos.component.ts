@@ -4,7 +4,7 @@ import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@ang
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { ReclamosService } from '@services/reclamos/reclamos.service';
 import { UsuariosService } from '@services/usuarios.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
 import { ESTADOS_RECLAMOS_LIST } from '../../../../shared/constants/estados-reclamos.list';
 

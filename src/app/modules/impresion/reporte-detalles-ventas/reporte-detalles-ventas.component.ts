@@ -9,8 +9,8 @@ import { CobrosService } from '@services/cobros.service';
 import { GruposService } from '@services/grupos.service';
 import { ServiciosService } from '@services/servicios.service';
 import { UsuariosService } from '@services/usuarios.service';
-import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IFiltroReporte } from 'src/app/global/interfaces/ifiltros-reporte.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { Observable, catchError, forkJoin, of, tap } from 'rxjs';
 
 @Component({

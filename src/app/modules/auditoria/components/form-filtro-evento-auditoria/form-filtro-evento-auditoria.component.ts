@@ -5,7 +5,7 @@ import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
 import { AuditoriaService } from '@services/auditoria.service';
 import { UsuariosService } from '@services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 
 @Component({
   selector: 'app-form-filtro-evento-auditoria',

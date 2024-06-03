@@ -5,8 +5,8 @@ import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { AppSettings } from '../../util/app-settings';
-import { IPreferenciaDashboard } from '@util/interfaces/ipreferencia-dashboard';
+import { AppSettings } from '../utils/app-settings';
+import { IPreferenciaDashboard } from 'src/app/global/interfaces/ipreferencia-dashboard';
 import { environment } from '@environments/environment';
 import { RolDTO } from '@dto/rol.dto';
 

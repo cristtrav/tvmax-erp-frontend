@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NumberToWords } from '@util/number-to-words';
+import { NumberToWords } from '@global-utils/number-to-words';
 
 @Pipe({
   name: 'numeroALetras',

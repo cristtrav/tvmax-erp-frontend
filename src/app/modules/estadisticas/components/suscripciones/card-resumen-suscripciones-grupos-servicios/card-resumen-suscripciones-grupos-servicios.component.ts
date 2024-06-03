@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
+import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { TablaResumenSuscripcionesGruposComponent } from './tabla-resumen-suscripciones-grupos/tabla-resumen-suscripciones-grupos.component';
 import { TablaResumenSuscripcionesServiciosComponent } from './tabla-resumen-suscripciones-servicios/tabla-resumen-suscripciones-servicios.component';
 

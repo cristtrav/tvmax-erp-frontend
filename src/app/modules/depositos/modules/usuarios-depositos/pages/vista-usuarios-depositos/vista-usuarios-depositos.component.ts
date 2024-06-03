@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RolDTO } from '@dto/rol.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@services/usuarios.service';
-import { Extra } from '@util/extra';
+import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
