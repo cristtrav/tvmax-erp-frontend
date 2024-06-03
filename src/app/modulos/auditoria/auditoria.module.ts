@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AuditoriaRoutingModule } from './auditoria-routing.module';
 import { VistaAuditoriaComponent } from './vista-auditoria/vista-auditoria.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -22,6 +21,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { TablaDetalleEstadoComponent } from './tabla-detalle-estado/tabla-detalle-estado.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
+import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 
 
 @NgModule({
@@ -49,7 +50,9 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzSelectModule,
     NzDatePickerModule,
     NzCheckboxModule,
-    NzModalModule
+    NzModalModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class AuditoriaModule { }

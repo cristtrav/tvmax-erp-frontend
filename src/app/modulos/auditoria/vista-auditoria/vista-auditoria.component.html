@@ -1,16 +1,16 @@
-<div class="inner-component">
-    <div class="main-breadcrumb">
-        <nz-breadcrumb>
-            <nz-breadcrumb-item>
-                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
-            </nz-breadcrumb-item>
-            <nz-breadcrumb-item>
-                Auditoría
-            </nz-breadcrumb-item>
-        </nz-breadcrumb>
-    </div>
-    <div class="module-container">
-        <div class="module-content">
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Auditoría
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
             <div nz-row>
                 <div nz-col nzFlex="auto">
                     <button nz-button nzType="default" (click)="cargarDatos()">
@@ -19,55 +19,48 @@
                     </button>
                 </div>
                 <div nz-col>
-                    <nz-space>
-                        <nz-input-group *nzSpaceItem [nzSuffix]="inputClearTpl" [nzPrefixIcon]="'search'">
-                            <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
-                            <ng-template #inputClearTpl>
-                                <i
-                                  nz-icon
-                                  class="ant-input-clear-icon"
-                                  nzTheme="fill"
-                                  nzType="close-circle"
-                                  *ngIf="textoBusqueda"
-                                  (click)="limpiarBusqueda()"
-                                ></i>
-                              </ng-template>
-                        </nz-input-group>
-                        <nz-badge *nzSpaceItem [nzCount]="cantFiltrosAplicados">
-                            <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
-                                <i nz-icon nzType="filter" nzTheme="outline"></i>
-                            </button>
-                        </nz-badge>
-                    </nz-space>
-                </div>
-            </div>
-
-            <nz-drawer [nzContent]="contenidoFiltros" nzPlacement="right" nzTitle="Filtros" nzClosable="true" [nzVisible]="drawerFiltrosVisible" (nzOnClose)="drawerFiltrosVisible = false">
-                <ng-template #contenidoFiltros>
-                    <app-form-filtro-evento-auditoria (cantFiltrosChange)="cantFiltrosAplicados = $event" (paramsFiltrosChange)="paramsFiltros = $event"></app-form-filtro-evento-auditoria>
-                </ng-template>
-            </nz-drawer>
-
-            <nz-modal [nzWidth]="750" [nzFooter]="modalDetallesFooter" [(nzVisible)]="modalDeteallesVisisble" [nzTitle]="'Evento #'+ideventoSelec" (nzOnCancel)="cerrarDetalles()">
-                <ng-container *nzModalContent="">
-                    <div nz-row nzGutter="16">
-                        <div nz-col nzSpan="12">
-                            <app-tabla-detalle-estado [estado]="estadoAnteriorSelec" titulo="Estado anterior"></app-tabla-detalle-estado>
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <nz-input-group [nzSuffix]="inputClearTpl" [nzPrefixIcon]="'search'">
+                                <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                                <ng-template #inputClearTpl>
+                                    <i
+                                      nz-icon
+                                      class="ant-input-clear-icon"
+                                      nzTheme="fill"
+                                      nzType="close-circle"
+                                      *ngIf="textoBusqueda"
+                                      (click)="limpiarBusqueda()"
+                                    ></i>
+                                  </ng-template>
+                            </nz-input-group>
                         </div>
-                        <div nz-col nzSpan="12">
-                            <app-tabla-detalle-estado [estado]="estadoNuevoSelec" titulo="Estado nuevo"></app-tabla-detalle-estado> 
+                        <div nz-col>
+                            <nz-badge [nzCount]="cantFiltrosAplicados">
+                                <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Ver filtros" (click)="drawerFiltrosVisible = !drawerFiltrosVisible">
+                                    <i nz-icon nzType="filter" nzTheme="outline"></i>
+                                </button>
+                            </nz-badge>
                         </div>
                     </div>
-                </ng-container>
-                <ng-template #modalDetallesFooter>
-                    <button nz-button nzType="default" (click)="cerrarDetalles()">Cerrar</button>
-                  </ng-template>
-            </nz-modal>
-
-            <nz-table #tabla [nzTotal]="totalRegistros" [nzData]="lstEventos" [nzShowPagination]="true"
-                [nzShowSizeChanger]="true" [nzTotal]="totalRegistros" [nzFrontPagination]="false" [nzPageIndex]="pageIndex" [nzPageSize]="pageSize"
-                [nzLoading]="tableLoading" [nzFooter]="footer" (nzQueryParams)="onTableQueryParamsChange($event)"
-                nzSize="small" style="margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+        <div nz-col nzSpan="24">
+            <nz-table
+                #tabla
+                [nzTotal]="totalRegistros"
+                [nzData]="lstEventos"
+                [nzShowPagination]="true"
+                [nzShowSizeChanger]="true"
+                [nzTotal]="totalRegistros"
+                [nzFrontPagination]="false"
+                [nzPageIndex]="pageIndex"
+                [nzPageSize]="pageSize"
+                [nzLoading]="tableLoading"
+                [nzFooter]="footer"
+                (nzQueryParams)="onTableQueryParamsChange($event)"
+                nzSize="small">
                 <thead>
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
@@ -119,4 +112,47 @@
             </nz-table>
         </div>
     </div>
-</div>
+
+</app-workspace-layout>
+
+<nz-drawer
+    [nzContent]="contenidoFiltros"
+    nzPlacement="right"
+    nzTitle="Filtros"
+    nzClosable="true"
+    [nzVisible]="drawerFiltrosVisible"
+    (nzOnClose)="drawerFiltrosVisible = false">
+    <ng-template #contenidoFiltros>
+        <app-form-filtro-evento-auditoria
+            (cantFiltrosChange)="cantFiltrosAplicados = $event"
+            (paramsFiltrosChange)="paramsFiltros = $event">
+        </app-form-filtro-evento-auditoria>
+    </ng-template>
+</nz-drawer>
+
+<nz-modal
+    [nzWidth]="750"
+    [nzFooter]="modalDetallesFooter"
+    [(nzVisible)]="modalDeteallesVisisble"
+    [nzTitle]="'Evento #'+ideventoSelec"
+    (nzOnCancel)="cerrarDetalles()">
+    <ng-container *nzModalContent="">
+        <div nz-row nzGutter="16">
+            <div nz-col nzSpan="12">
+                <app-tabla-detalle-estado
+                    [estado]="estadoAnteriorSelec"
+                    titulo="Estado anterior">
+                </app-tabla-detalle-estado>
+            </div>
+            <div nz-col nzSpan="12">
+                <app-tabla-detalle-estado
+                [estado]="estadoNuevoSelec"
+                titulo="Estado nuevo">
+            </app-tabla-detalle-estado> 
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #modalDetallesFooter>
+        <button nz-button nzType="default" (click)="cerrarDetalles()">Cerrar</button>
+      </ng-template>
+</nz-modal>
