@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { FormCambioPasswordComponent } from './modulos/usuarios/components/form-cambio-password/form-cambio-password.component';
+import { FormCambioPasswordComponent } from './modules/usuarios/components/form-cambio-password/form-cambio-password.component';
 import { SesionService } from './global/services/sesion.service';
 import { ISubmenu } from '@util/interfaces/isubmenu.interface';
 import { AppSettings } from '@util/app-settings';

@@ -2,15 +2,15 @@ import { ElementRef, Injectable, ViewContainerRef } from '@angular/core';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { BehaviorSubject, Observable, finalize } from 'rxjs';
-import { FacturaPreimpresaVentaComponent } from '../../modulos/impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
-import { ReporteSuscripcionesComponent } from '../../modulos/impresion/reporte-suscripciones/reporte-suscripciones.component';
-import { ReporteVentasComponent } from '../../modulos/impresion/reporte-ventas/reporte-ventas.component';
+import { FacturaPreimpresaVentaComponent } from '../../modules/impresion/factura-preimpresa-venta/factura-preimpresa-venta.component';
+import { ReporteSuscripcionesComponent } from '../../modules/impresion/reporte-suscripciones/reporte-suscripciones.component';
+import { ReporteVentasComponent } from '../../modules/impresion/reporte-ventas/reporte-ventas.component';
 import { ClientesService } from './clientes.service';
 import { TimbradosService } from './timbrados.service';
 import { VentasService } from './ventas.service';
-import { ReporteDetallesVentasComponent } from '../../modulos/impresion/reporte-detalles-ventas/reporte-detalles-ventas.component';
-import { ReporteMovimientoMaterialComponent } from '../../modulos/impresion/reporte-movimiento-material/reporte-movimiento-material.component';
-import { ReporteMaterialesComponent } from '../../modulos/impresion/reporte-materiales/reporte-materiales.component';
+import { ReporteDetallesVentasComponent } from '../../modules/impresion/reporte-detalles-ventas/reporte-detalles-ventas.component';
+import { ReporteMovimientoMaterialComponent } from '../../modules/impresion/reporte-movimiento-material/reporte-movimiento-material.component';
+import { ReporteMaterialesComponent } from '../../modules/impresion/reporte-materiales/reporte-materiales.component';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({

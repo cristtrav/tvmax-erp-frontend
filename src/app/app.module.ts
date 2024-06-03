@@ -22,7 +22,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { UsuariosModule } from './modulos/usuarios/usuarios.module';
+import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
