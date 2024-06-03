@@ -5,8 +5,8 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { forkJoin } from 'rxjs';
 import { Barrio } from '@dto/barrio-dto';
-import { BarriosService } from '@global-services/barrios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { BarriosService } from '@services/barrios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({

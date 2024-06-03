@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResumenCobradoresVentas } from '@dto/resumen-cobradores-ventas.dto';
-import { VentasService } from '@global-services/ventas.service';
+import { VentasService } from '@services/ventas.service';
 import { Extra } from '@util/extra';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';

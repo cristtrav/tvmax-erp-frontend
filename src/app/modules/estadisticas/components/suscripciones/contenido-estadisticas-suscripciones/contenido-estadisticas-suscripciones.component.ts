@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { SuscripcionesService } from '@global-services/suscripciones.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { SuscripcionesService } from '@services/suscripciones.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { CardResumenCuotasPendientesComponent } from '../card-resumen-cuotas-pendientes/card-resumen-cuotas-pendientes.component';
 import { CardResumenEstadosComponent } from '../card-resumen-estados/card-resumen-estados.component';

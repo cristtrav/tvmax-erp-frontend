@@ -2,10 +2,10 @@ import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@ang
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@global-services/usuarios.service';
+import { UsuariosService } from '@services/usuarios.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-form-filtro-movimientos',

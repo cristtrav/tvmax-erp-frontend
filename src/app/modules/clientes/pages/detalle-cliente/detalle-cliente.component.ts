@@ -6,10 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@global-services/usuarios.service';
+import { UsuariosService } from '@services/usuarios.service';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
-import { ClientesService } from '@global-services/clientes.service';
+import { ClientesService } from '@services/clientes.service';
 
 @Component({
   selector: 'app-detalle-cliente',

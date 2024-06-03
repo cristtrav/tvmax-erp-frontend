@@ -11,13 +11,13 @@ import { FiltrosReporteComponent } from './filtros-reporte/filtros-reporte.compo
 import { ReporteVentasComponent } from './reporte-ventas/reporte-ventas.component';
 import { TablaReporteComponent } from './tabla-reporte/tabla-reporte.component';
 import { FacturaPreimpresaVentaComponent } from './factura-preimpresa-venta/factura-preimpresa-venta.component';
-import { PaddingZerosPipe } from '@util/pipes/padding-zeros.pipe';
-import { NumeroALetrasPipe } from '@util/pipes/numero-a-letras.pipe';
-import { StringToNumberPipe } from '@util/pipes/string-to-number.pipe';
+import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
+import { NumeroALetrasPipe } from 'src/app/global/pipes/numero-a-letras.pipe';
+import { StringToNumberPipe } from 'src/app/global/pipes/string-to-number.pipe';
 import { ReporteDetallesVentasComponent } from './reporte-detalles-ventas/reporte-detalles-ventas.component';
 import { ReporteMovimientoMaterialComponent } from './reporte-movimiento-material/reporte-movimiento-material.component';
 import { ReporteMaterialesComponent } from './reporte-materiales/reporte-materiales.component';
-import { JoinPipe } from '@util/pipes/join.pipe';
+import { JoinPipe } from 'src/app/global/pipes/join.pipe';
 
 @NgModule({
   declarations: [

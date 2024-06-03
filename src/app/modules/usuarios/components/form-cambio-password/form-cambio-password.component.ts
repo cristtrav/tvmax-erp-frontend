@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SesionService } from '@global-services/sesion.service';
-import { UsuariosService } from '@global-services/usuarios.service';
+import { SesionService } from '@services/sesion.service';
+import { UsuariosService } from '@services/usuarios.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 

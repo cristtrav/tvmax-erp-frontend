@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { EventoAuditoria } from '@dto/evento-auditoria-dto';
-import { AuditoriaService } from '@global-services/auditoria.service';
+import { AuditoriaService } from '@services/auditoria.service';
 import { Extra } from '@util/extra';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';

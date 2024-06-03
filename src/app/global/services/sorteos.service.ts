@@ -5,7 +5,7 @@ import { ParticipanteSorteoDTO } from '@dto/participante-sorteo.dto';
 import { SorteoDTO } from '@dto/sorteo.dto';
 import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { Observable, catchError, of } from 'rxjs';
 
 @Injectable({

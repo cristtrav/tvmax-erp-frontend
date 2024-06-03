@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RolDTO } from '@dto/rol.dto';
-import { RolesService } from '@global-services/roles.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { RolesService } from '@services/roles.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({

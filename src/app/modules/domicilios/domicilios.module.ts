@@ -27,7 +27,7 @@ import { DetalleDomicilioComponent } from './pages/detalle-domicilio/detalle-dom
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { UbicacionComponent } from './components/ubicacion/ubicacion.component';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
-import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
+import { OpenLocationCodePipe } from 'src/app/global/pipes/open-location-code.pipe';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { FormDomicilioComponent } from './components/form-domicilio/form-domicilio.component';

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { SuscripcionesService } from '@global-services/suscripciones.service';
+import { SuscripcionesService } from '@services/suscripciones.service';
 import { switchMap, forkJoin, of } from 'rxjs';
 import { Servicio } from '@dto/servicio-dto';
-import { ServiciosService } from '@global-services/servicios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ServiciosService } from '@services/servicios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-contenido-vista-cuotas',

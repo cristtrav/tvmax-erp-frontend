@@ -1,17 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TimbradosService } from '@global-services/timbrados.service';
+import { TimbradosService } from '@services/timbrados.service';
 import { HttpParams } from '@angular/common/http';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ClientesService } from '@global-services/clientes.service';
+import { ClientesService } from '@services/clientes.service';
 import { formatDate } from '@angular/common';
-import { VentasService } from '@global-services/ventas.service';
+import { VentasService } from '@services/ventas.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { SesionService } from '@global-services/sesion.service';
+import { SesionService } from '@services/sesion.service';
 import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
 import { finalize, forkJoin } from 'rxjs';
-import { ImpresionService } from '@global-services/impresion.service';
+import { ImpresionService } from '@services/impresion.service';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
@@ -19,6 +18,7 @@ import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { Timbrado } from '@dto/timbrado.dto';
 import { Venta } from '@dto/venta.dto';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-detalle-venta',

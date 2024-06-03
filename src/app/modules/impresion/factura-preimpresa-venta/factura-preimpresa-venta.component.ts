@@ -4,10 +4,10 @@ import { Cliente } from '@dto/cliente-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
-import { ClientesService } from '@global-services/clientes.service';
-import { TimbradosService } from '@global-services/timbrados.service';
-import { VentasService } from '@global-services/ventas.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ClientesService } from '@services/clientes.service';
+import { TimbradosService } from '@services/timbrados.service';
+import { VentasService } from '@services/ventas.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { catchError, EMPTY, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
 import { FormatoFacturaA } from './formato-factura-a';
 

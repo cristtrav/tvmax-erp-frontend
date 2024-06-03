@@ -1,9 +1,9 @@
 import { Component, Inject, LOCALE_ID, ViewEncapsulation } from '@angular/core';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { Observable, catchError, forkJoin, tap } from 'rxjs';
 import { formatDate } from '@angular/common';
-import { MovimientosMaterialesService } from '@global-services/depositos/movimientos-materiales.service';
+import { MovimientosMaterialesService } from '@services/depositos/movimientos-materiales.service';
 import { DetalleMovimientoMaterialDTO } from '@dto/depositos/detalle-movimiento-material.dto';
 import { MovimientoMaterialDTO } from '@dto/depositos/movimiento-material.dto';
 

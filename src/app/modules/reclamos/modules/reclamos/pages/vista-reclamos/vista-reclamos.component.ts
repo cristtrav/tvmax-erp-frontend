@@ -15,7 +15,7 @@ import { MaterialUtilizadoDTO } from '@dto/reclamos/material-utilizado.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { EventoCambioEstadoDTO } from '@dto/reclamos/evento-cambio-estado.dto';
 import { ReiteracionDTO } from '@dto/reclamos/reiteracion.dto';
-import { ReiteracionesService } from '@global-services/reclamos/reiteraciones.service';
+import { ReiteracionesService } from '@services/reclamos/reiteraciones.service';
 import { formatDate } from '@angular/common';
 
 interface DataInterface{

@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Departamento } from '@dto/departamento-dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
-import { DepartamentosService } from '@global-services/departamentos.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { DepartamentosService } from '@services/departamentos.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({

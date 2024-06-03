@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PremioDTO } from '@dto/premio.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
-import { PremiosService } from '@global-services/premios.service';
-import { SorteosService } from '@global-services/sorteos.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { PremiosService } from '@services/premios.service';
+import { SorteosService } from '@services/sorteos.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize } from 'rxjs';
 

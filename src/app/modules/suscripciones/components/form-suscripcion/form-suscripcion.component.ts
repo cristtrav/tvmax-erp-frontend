@@ -7,11 +7,11 @@ import { Cliente } from "@dto/cliente-dto";
 import { Domicilio } from "@dto/domicilio-dto";
 import { Servicio } from "@dto/servicio-dto";
 import { Suscripcion } from "@dto/suscripcion-dto";
-import { ClientesService } from "@global-services/clientes.service";
-import { DomiciliosService } from "@global-services/domicilios.service";
-import { ServiciosService } from "@global-services/servicios.service";
-import { SuscripcionesService } from "@global-services/suscripciones.service";
-import { HttpErrorResponseHandlerService } from "@util/http-error-response-handler.service";
+import { ClientesService } from "@services/clientes.service";
+import { DomiciliosService } from "@services/domicilios.service";
+import { ServiciosService } from "@services/servicios.service";
+import { SuscripcionesService } from "@services/suscripciones.service";
+import { HttpErrorResponseHandlerService } from "@services/http-utils/http-error-response-handler.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { finalize } from "rxjs";
 

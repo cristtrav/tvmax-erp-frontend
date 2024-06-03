@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { SesionService } from '@global-services/sesion.service';
+import { SesionService } from '@services/sesion.service';
 import { AppSettings } from '@util/app-settings';
 
 @Component({

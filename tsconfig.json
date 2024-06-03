@@ -27,8 +27,8 @@
       "@util/*": [
         "./src/app/util/*"
       ],
-      "@servicios/*": [
-        "./src/app/servicios/*"
+      "@services/*": [
+        "./src/app/global/services/*"
       ],
       "@helper-componets/*": [
         "./src/app/helper-components/*"
@@ -41,9 +41,6 @@
       ],
       "@global-directives/*" :[
         "src/app/global/directives/*"
-      ],
-      "@global-services/*":[
-        "src/app/global/services/*"
       ],
       "@global-auth/*": [
         "src/app/global/auth/*"

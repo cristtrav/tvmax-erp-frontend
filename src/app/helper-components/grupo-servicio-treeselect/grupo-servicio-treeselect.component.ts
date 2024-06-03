@@ -2,9 +2,9 @@ import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Grupo } from '@dto/grupo-dto';
 import { Servicio } from '@dto/servicio-dto';
-import { GruposService } from '@global-services/grupos.service';
-import { ServiciosService } from '@global-services/servicios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { GruposService } from '@services/grupos.service';
+import { ServiciosService } from '@services/servicios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 

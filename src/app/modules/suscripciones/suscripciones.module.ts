@@ -38,7 +38,7 @@ import { ImpresionModule } from '../impresion/impresion.module';
 import { PortalModule } from '@angular/cdk/portal'
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
-import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
+import { OpenLocationCodePipe } from 'src/app/global/pipes/open-location-code.pipe';
 import { DomiciliosModule } from '../domicilios/domicilios.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';

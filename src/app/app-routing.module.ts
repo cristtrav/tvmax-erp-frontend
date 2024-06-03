@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from './util/auth.guard';
+import { AuthGuard } from './global/auth/auth.guard';
 import { AppComponent } from './app.component';
 import { SortearComponent } from './modules/sorteos/pages/sortear/sortear.component';
 import { GanadoresComponent } from './modules/sorteos/pages/ganadores/ganadores.component';

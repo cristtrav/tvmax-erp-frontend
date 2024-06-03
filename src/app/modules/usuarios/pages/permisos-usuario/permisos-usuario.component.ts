@@ -1,11 +1,11 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PermisosService } from '@global-services/permisos.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { PermisosService } from '@services/permisos.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UsuariosService } from '@global-services/usuarios.service';
+import { UsuariosService } from '@services/usuarios.service';
 import { forkJoin } from 'rxjs';
 import { Funcionalidad } from '@dto/funcionalidad-dto';
 import { Modulo } from '@dto/modulo-dto';

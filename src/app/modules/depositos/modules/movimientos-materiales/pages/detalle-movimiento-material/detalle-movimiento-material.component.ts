@@ -3,15 +3,15 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewContainerR
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { SesionService } from '@global-services/sesion.service';
-import { UsuariosService } from '@global-services/usuarios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { SesionService } from '@services/sesion.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize, forkJoin } from 'rxjs';
 import { TablaDetallesMovimientosComponent } from '../../components/tabla-detalles-movimientos/tabla-detalles-movimientos.component';
 import { BuscadorMaterialesComponent } from '../../components/buscador-materiales/buscador-materiales.component';
-import { ImpresionService } from '@global-services/impresion.service';
-import { MovimientosMaterialesService } from '@global-services/depositos/movimientos-materiales.service';
+import { ImpresionService } from '@services/impresion.service';
+import { MovimientosMaterialesService } from '@services/depositos/movimientos-materiales.service';
 import { DetalleMovimientoMaterialDTO } from '@dto/depositos/detalle-movimiento-material.dto';
 import { MovimientoMaterialDTO } from '@dto/depositos/movimiento-material.dto';
 

@@ -36,7 +36,7 @@ import { CobrosModule } from "../cobros/cobros.module";
 import { VentasModule } from '../ventas/ventas.module';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { OpenLocationCodePipe } from '@util/pipes/open-location-code.pipe';
+import { OpenLocationCodePipe } from 'src/app/global/pipes/open-location-code.pipe';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { SuscripcionesClienteComponent } from './pages/suscripciones-cliente/suscripciones-cliente.component';

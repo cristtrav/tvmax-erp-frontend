@@ -10,9 +10,9 @@ import { MotivoReclamoDTO } from 'src/app/global/dtos/reclamos/motivo-reclamo.dt
 import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
 import { ReclamosService } from 'src/app/global/services/reclamos/reclamos.service';
 import { ResponsiveSizes } from 'src/app/global/utils/responsive/responsive-sizes.interface';
-import { ClientesService } from '@global-services/clientes.service';
-import { UsuariosService } from '@global-services/usuarios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ClientesService } from '@services/clientes.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Subscription, finalize, forkJoin } from 'rxjs';

@@ -3,12 +3,12 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Inject, LOCALE_ID, OnInit, ViewEncapsulation } from '@angular/core';
 import { Venta } from '@dto/venta.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@global-services/usuarios.service';
-import { VentasService } from '@global-services/ventas.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { VentasService } from '@services/ventas.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { catchError, forkJoin, Observable, of, tap } from 'rxjs';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 
 @Component({
   selector: 'app-reporte-ventas',

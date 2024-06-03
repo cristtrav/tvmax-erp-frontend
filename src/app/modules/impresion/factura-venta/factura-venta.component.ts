@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
 import { Venta } from '@dto/venta.dto';
-import { ClientesService } from '@global-services/clientes.service';
-import { VentasService } from '@global-services/ventas.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { ClientesService } from '@services/clientes.service';
+import { VentasService } from '@services/ventas.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NumberToWords } from '@util/number-to-words';
 
 @Component({

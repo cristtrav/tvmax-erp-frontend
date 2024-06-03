@@ -42,7 +42,7 @@ import { CuotasPendientesComponent } from './components/cuotas-pendientes/cuotas
 import { ServiciosComponent } from './components/servicios/servicios.component';
 import { CobrosModule } from '../cobros/cobros.module';
 import { HelperComponentsModule } from '@helper-componets/helper-components.module';
-import { PaddingZerosPipe } from "../../util/pipes/padding-zeros.pipe";
+import { PaddingZerosPipe } from "../../global/pipes/padding-zeros.pipe";
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 

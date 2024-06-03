@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RolDTO } from '@dto/rol.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { RolesService } from '@global-services/roles.service';
-import { UsuariosService } from '@global-services/usuarios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { RolesService } from '@services/roles.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize, forkJoin } from 'rxjs';
 

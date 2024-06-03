@@ -5,8 +5,8 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Extra } from '@util/extra';
-import { UsuariosService } from '@global-services/usuarios.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { UsuariosService } from '@services/usuarios.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { UsuarioDTO } from '@dto/usuario.dto';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ImpresionService } from '@global-services/impresion.service';
+import { ImpresionService } from '@services/impresion.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { TablaVentasComponent } from '../../components/tabla-ventas/tabla-ventas.component';
 import { TablaDetalleVentasCobrosComponent } from '../../../cobros/tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';

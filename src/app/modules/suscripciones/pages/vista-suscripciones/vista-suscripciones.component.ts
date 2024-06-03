@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { ImpresionService } from '@global-services/impresion.service';
+import { ImpresionService } from '@services/impresion.service';
 import { ContenidoEstadisticasSuscripcionesComponent } from '../../../estadisticas/components/suscripciones/contenido-estadisticas-suscripciones/contenido-estadisticas-suscripciones.component';
 import { TablaSuscripcionesComponent } from '../../components/tabla-suscripciones/tabla-suscripciones.component';
 

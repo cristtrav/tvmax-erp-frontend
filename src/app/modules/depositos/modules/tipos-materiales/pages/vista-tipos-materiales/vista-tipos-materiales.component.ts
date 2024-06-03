@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TipoMaterialDTO } from '@dto/depositos/tipo-material.dto';
-import { TiposMaterialesService } from '@global-services/depositos/tipos-materiales.service';
+import { TiposMaterialesService } from '@services/depositos/tipos-materiales.service';
 import { Extra } from '@util/extra';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';

@@ -2,9 +2,9 @@ import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
-import { DepartamentosService } from '@global-services/departamentos.service';
-import { DistritosService } from '@global-services/distritos.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { DepartamentosService } from '@services/departamentos.service';
+import { DistritosService } from '@services/distritos.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReclamoDTO } from '@dto/reclamos/reclamo.dto';
-import { ReclamosService } from '@global-services/reclamos/reclamos.service';
+import { ReclamosService } from '@services/reclamos/reclamos.service';
 import { finalize } from 'rxjs';
 import { UbicacionComponent } from '@modules/domicilios/components/ubicacion/ubicacion.component';
 

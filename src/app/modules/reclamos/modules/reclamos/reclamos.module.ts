@@ -15,7 +15,7 @@ import { NzColResponsiveSizesDirective } from 'src/app/global/directives/respons
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { LoadingStatusPipe } from '@util/pipes/loading-status.pipe';
+import { LoadingStatusPipe } from 'src/app/global/pipes/loading-status.pipe';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTableModule } from 'ng-zorro-antd/table';

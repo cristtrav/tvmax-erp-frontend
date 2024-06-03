@@ -8,9 +8,9 @@ import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
 import { Cliente } from '@dto/cliente-dto';
-import { ClientesService } from '@global-services/clientes.service';
+import { ClientesService } from '@services/clientes.service';
 import { Extra } from '@util/extra';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { UbicacionComponent } from '@modules/domicilios/components/ubicacion/ubicacion.component';
 
 @Component({

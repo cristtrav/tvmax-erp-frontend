@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter, LOCALE_ID, Inject } from '@angular/core';
-import { UsuariosService } from '@global-services/usuarios.service';
+import { UsuariosService } from '@services/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzMarks } from 'ng-zorro-antd/slider';
 import { formatDate } from '@angular/common';

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SuscripcionesService } from '@global-services/suscripciones.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { ClientesService } from '@global-services/clientes.service';
+import { SuscripcionesService } from '@services/suscripciones.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { ClientesService } from '@services/clientes.service';
 import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
 
