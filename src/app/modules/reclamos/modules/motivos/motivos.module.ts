@@ -16,6 +16,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzColResponsiveSizesDirective } from 'src/app/global/directives/responsive/nz-col-responsive-sizes.directive';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 
 @NgModule({
@@ -39,7 +40,9 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
     NzFormModule,
     NzColResponsiveSizesDirective,
     NzSpinModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    WorkspaceLayoutModule,
+    NzColResponsiveSizesDirective
   ]
 })
 export class MotivosModule { }
