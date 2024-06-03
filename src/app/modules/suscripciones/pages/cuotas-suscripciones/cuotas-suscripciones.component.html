@@ -1,0 +1,41 @@
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app', 'suscripciones']">Suscripciones</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app', 'suscripciones', idsuscripcion ]">{{ idsuscripcion }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Cuotas
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div *ngIf="suscripcion || cliente" header-extra>
+        <div nz-row>
+            <div *ngIf="suscripcion" nz-col>
+                <nz-tag [nzColor]="'magenta'">
+                    <strong>{{ suscripcion.servicio }}</strong>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    Gs.{{ suscripcion.monto | number }}/mes
+                </nz-tag>
+            </div>
+            <div *ngIf="cliente" nz-col>
+                <nz-tag [nzColor]="'magenta'">
+                    <strong>{{ cliente.razonsocial }}</strong>
+                    <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
+                    <span *ngIf="cliente.ci">
+                        {{ cliente.ci | number }}<span *ngIf="cliente.dvruc">-{{ cliente.dvruc }}</span>
+                    </span>
+                </nz-tag>
+            </div>
+        </div>
+    </div>
+
+    <app-contenido-vista-cuotas [idsuscripcion]="idsuscripcion"></app-contenido-vista-cuotas>
+
+</app-workspace-layout>

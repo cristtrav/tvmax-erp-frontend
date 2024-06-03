@@ -1,0 +1,86 @@
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Roles
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <div nz-row>
+                <div nz-col nzFlex="auto">
+                    <button nz-button nzType="primary" routerLink="nuevo">
+                        <i nz-icon nzType="plus"></i>
+                        Nuevo
+                    </button>
+                </div>
+                <div nz-col>
+                    <nz-input-group [nzSuffix]="suffixBusqueda">
+                        <input nz-input type="text" placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                    </nz-input-group>
+                    <ng-template #suffixBusqueda>
+                        <i *ngIf="!textoBusqueda" nz-icon nzType="search"></i>
+                        <i *ngIf="textoBusqueda" nz-icon nzType="close-circle" style="cursor: pointer;" (click)="limpiarBusqueda()"></i>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <nz-table
+                #tabla
+                [nzData]="listaRoles"
+                nzSize="small"
+                [nzLoading]="tableLoading"
+                [nzShowPagination]="true"
+                [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex"
+                [nzTotal]="totalRegisters"
+                nzShowSizeChanger
+                [nzFrontPagination]="false" (nzQueryParams)="onTableQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'descripcion'" [nzSortFn]="true">Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rol of tabla.data">
+                        <td>{{ rol.id }}</td>
+                        <td>{{ rol.descripcion }}</td>
+                        <td>
+                            <div nz-row [nzGutter]="[8, 0]">
+                                <div nz-col>
+                                    <button
+                                        [disabled]="rol.sololectura"
+                                        nz-button
+                                        nzType="primary"
+                                        [routerLink]="rol.id.toString()">
+                                        <i nz-icon nzType="edit"></i>
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button
+                                        [disabled]="rol.sololectura"
+                                        nz-button
+                                        nzType="primary"
+                                        nzDanger
+                                        (click)="confirmarEliminacion(rol)">
+                                        <i nz-icon nzType="delete"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+
+    </div>
+
+</app-workspace-layout>

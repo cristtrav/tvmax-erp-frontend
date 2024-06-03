@@ -4,12 +4,12 @@ import { environment } from '@environments/environment';
 import { DetalleReclamoDTO } from 'src/app/global/dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from 'src/app/global/dtos/reclamos/reclamo.dto';
 import { HttpUtilsService } from 'src/app/global/services/http-utils/http-utils.service';
-import { AppSettings } from '@util/app-settings';
+import { AppSettings } from '@global-utils/app-settings';
 import { Observable } from 'rxjs';
-import { FinalizacionReclamoDTO } from '@global-dtos/reclamos/finalizacion-reclamo.dto';
-import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
-import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
-import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
+import { FinalizacionReclamoDTO } from '@dto/reclamos/finalizacion-reclamo.dto';
+import { MaterialUtilizadoDTO } from '@dto/reclamos/material-utilizado.dto';
+import { EventoCambioEstadoDTO } from '@dto/reclamos/evento-cambio-estado.dto';
+import { ReiteracionDTO } from '@dto/reclamos/reiteracion.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
 
 @Injectable({

@@ -1,0 +1,481 @@
+<app-workspace-layout [isBackgroundVisible]="false" [isContentPadded]="false">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/reclamos">Reclamos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idreclamo | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[16,16]">
+        <div nz-col [appNzColResponsiveSizes]="detalleSizes">
+            <div class="module-content">
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col nzSpan="24">
+                        <app-buscador-motivos (motivoSeleccionadoChange)="agregarDetalle($event)"></app-buscador-motivos>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-table
+                            #tabla
+                            [nzData]="lstDetallesReclamos"
+                            [nzFooter]="pieTabla"
+                            [nzLoading]="loadingDatos"
+                            nzSize="small">
+                            <thead>
+                                <tr>
+                                    <th>Motivo</th>
+                                    <th>Observacion</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let detalle of tabla.data">
+                                    <td>{{ detalle.motivo }}</td>
+                                    <td>
+                                        <input nz-input placeholder="Ingresar observación" [(ngModel)]="detalle.observacion">
+                                    </td>
+                                    <td nzAlign="center">
+                                        <button
+                                            nz-tooltip
+                                            nzTooltipTitle="Quitar motivo."
+                                            nz-button
+                                            nzType="primary"
+                                            nzDanger
+                                            (click)="confirmarEliminacion(detalle)">
+                                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <ng-template #pieTabla>
+                                <strong>Total de registros: </strong>{{ lstDetallesReclamos.length | number }}
+                            </ng-template>
+                        </nz-table>
+                        <nz-alert *ngIf="alertaDetallesVisible" nzType="error" nzShowIcon nzMessage="Ingrese por lo menos un motivo."></nz-alert>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div nz-col [appNzColResponsiveSizes]="cabeceraSizes">
+            <div class="module-content">
+                <nz-spin [nzSpinning]="loadingDatos">
+                    <form nz-form [formGroup]="formCabecera" (keydown.enter)="$event.preventDefault()">
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>Fecha</nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                nzErrorTip="Ingrese la fecha del reclamo.">
+                                <nz-date-picker
+                                    [nzFormat]="'dd/MM/yyyy'"
+                                    formControlName="fecha"
+                                    nzPlaceHolder="Seleccionar..."
+                                    style="width: 100%;">
+                                </nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item *ngIf="idreclamo != 'nuevo'">
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Estado
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                nzErrorTip="Seleccione un estado.">
+                                <nz-select
+                                    formControlName="estado"
+                                    nzPlaceHolder="Seleccionar..."
+                                    nzAllowClear>
+                                    <nz-option *ngFor="let e of estados" [nzLabel]="e | estadoToDescription" [nzValue]="e" nzCustomContent>
+                                        <app-tag-estados [estado]="e"></app-tag-estados>
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item *ngIf="idreclamo != 'nuevo' && formCabecera.controls.estado.value == 'OTR'">
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Obs. Estado
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese el estado. Máx. 30 carácteres.">
+                                <input nz-input formControlName="observacionestado">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                CI/RUC
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes">
+                                <nz-input-group [nzSuffixIcon]="buscandoPorCi ? 'loading' : 'search'">
+                                    <input nz-input formControlName="ci" (keydown.enter)="buscarClientePorCi($event)">
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Cliente
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                nzErrorTip="Seleccione el cliente.">
+                                    <nz-select
+                                        formControlName="idcliente"
+                                        nzPlaceHolder="Seleccionar..."
+                                        [nzLoading]="loadingClientes"
+                                        (nzScrollToBottom)="cargarClientes()"
+                                        (nzOnSearch)="buscarCliente($event)"                                        
+                                        nzAllowClear
+                                        nzServerSearch
+                                        nzShowSearch>
+                                        <nz-option
+                                            *ngFor="let cliente of lstClientes"
+                                            [nzLabel]="cliente.razonsocial"
+                                            [nzValue]="cliente.id"
+                                            nzCustomContent>
+                                            <span>{{ cliente.razonsocial }} </span>
+                                            <nz-tag *ngIf="cliente.ci">
+                                                <span>{{ cliente.ci | number }}</span>
+                                                <span *ngIf="cliente.dvruc">- {{ cliente.dvruc }}</span>
+                                            </nz-tag>
+                                        </nz-option>
+                                    </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                Suscripción
+                            </nz-form-label>
+                            <nz-form-control
+                                [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                nzErrorTip="Seleccione la suscripción.">
+                                <nz-select
+                                    formControlName="idsuscripcion"
+                                    [nzDisabled]="!formCabecera.controls.idcliente.value"
+                                    [nzLoading]="loadingSuscripciones"
+                                    [nzCustomTemplate]="suscripcionTempl"
+                                    nzPlaceHolder="Seleccionar..."
+                                    nzAllowClear>
+                                    <nz-option
+                                        *ngFor="let suscripcion of lstSuscripciones"
+                                        [nzLabel]="suscripcion.servicio"
+                                        [nzValue]="suscripcion.id"
+                                        nzCustomContent>
+                                        <nz-tag>{{ suscripcion.id }}</nz-tag>
+                                        <span>{{ suscripcion.servicio }} </span>
+                                        <nz-tag *ngIf="suscripcion.estado == 'C'" nzColor="green">Con.</nz-tag>
+                                        <nz-tag *ngIf="suscripcion.estado == 'R'" nzColor="green">Recon.</nz-tag>
+                                        <nz-tag *ngIf="suscripcion.estado == 'D'" nzColor="red">Desc.</nz-tag>
+                                    </nz-option>
+                                </nz-select>
+                                <ng-template #suscripcionTempl let-selected>
+                                    {{ selected.nzLabel }}
+                                    <nz-tag>{{ selected.nzValue }}</nz-tag>
+                                    <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'C'" nzColor="green">Con.</nz-tag>
+                                    <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'R'" nzColor="green">Recon.</nz-tag>
+                                    <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'D'" nzColor="red">Desc.</nz-tag>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label nzRequired [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                Teléfono
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese un nro. de teléfono. Máx. 20 carácteres.">
+                                <input nz-input formControlName="telefono">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label
+                                [appNzColResponsiveSizes]="formCabeceraLabelSizes"
+                                [nzRequired]="formCabecera.controls.idusuarioresponsable.hasValidator(requiredValidator)">
+                                Responsable
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Seleccione el responsable">
+                                <nz-select
+                                    formControlName="idusuarioresponsable"
+                                    nzPlaceHolder="Seleccionar..."
+                                    [nzLoading]="loadingResponsables"
+                                    [nzDisabled]="formCabecera.controls.estado.value == 'PEN'"
+                                    nzAllowClear
+                                    nzShowSearch>
+                                    <nz-option
+                                        *ngFor="let responsable of lstResponsables"
+                                        [nzValue]="responsable.id"
+                                        [nzLabel]="responsable.razonsocial ?? ''">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item>
+                            <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                Observación
+                            </nz-form-label>
+                            <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Máx. 100 carácteres.">
+                                <input nz-input formControlName="observacion">
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                            <div nz-col>
+                                <button nz-button nzType="default" (click)="limpiar()">
+                                    <i *ngIf="idreclamo == 'nuevo'" nz-icon nzType="clear" nzTheme="outline"></i>
+                                    <i *ngIf="idreclamo != 'nuevo'" nz-icon nzType="plus" nzTheme="outline"></i>
+                                    {{ idreclamo == 'nuevo' ? 'Limpiar' : 'Nuevo' }}
+                                </button>
+                            </div>
+                            <div nz-col>
+                                <button nz-button nzType="primary" (click)="guardar()">
+                                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                                    {{ idreclamo == 'nuevo' ? 'Registrar' : 'Editar'}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </nz-spin>
+            </div>
+        </div>
+    </div>
+
+</app-workspace-layout>
+<!--<div class="inner-conntent">
+    <div class="main-breadcrumb">
+        <nz-breadcrumb>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                <a routerLink="/app/reclamos">Reclamos</a>
+            </nz-breadcrumb-item>
+            <nz-breadcrumb-item>
+                {{ idreclamo | titlecase }}
+            </nz-breadcrumb-item>
+        </nz-breadcrumb>
+    </div>
+    <div class="module-container">
+        <div nz-row [nzGutter]="[16,16]">
+            <div nz-col [appNzColResponsiveSizes]="detalleSizes">
+                <div class="module-content">
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col nzSpan="24">
+                            <app-buscador-motivos (motivoSeleccionadoChange)="agregarDetalle($event)"></app-buscador-motivos>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-table
+                                #tabla
+                                [nzData]="lstDetallesReclamos"
+                                [nzFooter]="pieTabla"
+                                [nzLoading]="loadingDatos"
+                                nzSize="small">
+                                <thead>
+                                    <tr>
+                                        <th>Motivo</th>
+                                        <th>Observacion</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let detalle of tabla.data">
+                                        <td>{{ detalle.motivo }}</td>
+                                        <td>
+                                            <input nz-input placeholder="Ingresar observación" [(ngModel)]="detalle.observacion">
+                                        </td>
+                                        <td nzAlign="center">
+                                            <button
+                                                nz-tooltip
+                                                nzTooltipTitle="Quitar motivo."
+                                                nz-button
+                                                nzType="primary"
+                                                nzDanger
+                                                (click)="confirmarEliminacion(detalle)">
+                                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <ng-template #pieTabla>
+                                    <strong>Total de registros: </strong>{{ lstDetallesReclamos.length | number }}
+                                </ng-template>
+                            </nz-table>
+                            <nz-alert *ngIf="alertaDetallesVisible" nzType="error" nzShowIcon nzMessage="Ingrese por lo menos un motivo."></nz-alert>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [appNzColResponsiveSizes]="cabeceraSizes">
+                <div class="module-content">
+                    <nz-spin [nzSpinning]="loadingDatos">
+                        <form nz-form [formGroup]="formCabecera" (keydown.enter)="$event.preventDefault()">
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>Fecha</nz-form-label>
+                                <nz-form-control
+                                    [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                    nzErrorTip="Ingrese la fecha del reclamo.">
+                                    <nz-date-picker
+                                        [nzFormat]="'dd/MM/yyyy'"
+                                        formControlName="fecha"
+                                        nzPlaceHolder="Seleccionar..."
+                                        style="width: 100%;">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngIf="idreclamo != 'nuevo'">
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                    Estado
+                                </nz-form-label>
+                                <nz-form-control
+                                    [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                    nzErrorTip="Seleccione un estado.">
+                                    <nz-select
+                                        formControlName="estado"
+                                        nzPlaceHolder="Seleccionar..."
+                                        nzAllowClear>
+                                        <nz-option *ngFor="let e of estados" [nzLabel]="e | estadoToDescription" [nzValue]="e" nzCustomContent>
+                                            <app-tag-estados [estado]="e"></app-tag-estados>
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item *ngIf="idreclamo != 'nuevo' && formCabecera.controls.estado.value == 'OTR'">
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                    Obs. Estado
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese el estado. Máx. 30 carácteres.">
+                                    <input nz-input formControlName="observacionestado">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                    CI/RUC
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes">
+                                    <nz-input-group [nzSuffixIcon]="buscandoPorCi ? 'loading' : 'search'">
+                                        <input nz-input formControlName="ci" (keydown.enter)="buscarClientePorCi($event)">
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                    Cliente
+                                </nz-form-label>
+                                <nz-form-control
+                                    [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                    nzErrorTip="Seleccione el cliente.">
+                                        <nz-select
+                                            formControlName="idcliente"
+                                            nzPlaceHolder="Seleccionar..."
+                                            [nzLoading]="loadingClientes"
+                                            (nzScrollToBottom)="cargarClientes()"
+                                            (nzOnSearch)="buscarCliente($event)"                                        
+                                            nzAllowClear
+                                            nzServerSearch
+                                            nzShowSearch>
+                                            <nz-option
+                                                *ngFor="let cliente of lstClientes"
+                                                [nzLabel]="cliente.razonsocial"
+                                                [nzValue]="cliente.id"
+                                                nzCustomContent>
+                                                <span>{{ cliente.razonsocial }} </span>
+                                                <nz-tag *ngIf="cliente.ci">
+                                                    <span>{{ cliente.ci | number }}</span>
+                                                    <span *ngIf="cliente.dvruc">- {{ cliente.dvruc }}</span>
+                                                </nz-tag>
+                                            </nz-option>
+                                        </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes" nzRequired>
+                                    Suscripción
+                                </nz-form-label>
+                                <nz-form-control
+                                    [appNzColResponsiveSizes]="formCabeceraControlSizes"
+                                    nzErrorTip="Seleccione la suscripción.">
+                                    <nz-select
+                                        formControlName="idsuscripcion"
+                                        [nzDisabled]="!formCabecera.controls.idcliente.value"
+                                        [nzLoading]="loadingSuscripciones"
+                                        [nzCustomTemplate]="suscripcionTempl"
+                                        nzPlaceHolder="Seleccionar..."
+                                        nzAllowClear>
+                                        <nz-option
+                                            *ngFor="let suscripcion of lstSuscripciones"
+                                            [nzLabel]="suscripcion.servicio"
+                                            [nzValue]="suscripcion.id"
+                                            nzCustomContent>
+                                            <nz-tag>{{ suscripcion.id }}</nz-tag>
+                                            <span>{{ suscripcion.servicio }} </span>
+                                            <nz-tag *ngIf="suscripcion.estado == 'C'" nzColor="green">Con.</nz-tag>
+                                            <nz-tag *ngIf="suscripcion.estado == 'R'" nzColor="green">Recon.</nz-tag>
+                                            <nz-tag *ngIf="suscripcion.estado == 'D'" nzColor="red">Desc.</nz-tag>
+                                        </nz-option>
+                                    </nz-select>
+                                    <ng-template #suscripcionTempl let-selected>
+                                        {{ selected.nzLabel }}
+                                        <nz-tag>{{ selected.nzValue }}</nz-tag>
+                                        <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'C'" nzColor="green">Con.</nz-tag>
+                                        <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'R'" nzColor="green">Recon.</nz-tag>
+                                        <nz-tag *ngIf="(selected.nzValue | idsuscripcionToEstado:lstSuscripciones) == 'D'" nzColor="red">Desc.</nz-tag>
+                                    </ng-template>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label nzRequired [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                    Teléfono
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Ingrese un nro. de teléfono. Máx. 20 carácteres.">
+                                    <input nz-input formControlName="telefono">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label
+                                    [appNzColResponsiveSizes]="formCabeceraLabelSizes"
+                                    [nzRequired]="formCabecera.controls.idusuarioresponsable.hasValidator(requiredValidator)">
+                                    Responsable
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Seleccione el responsable">
+                                    <nz-select
+                                        formControlName="idusuarioresponsable"
+                                        nzPlaceHolder="Seleccionar..."
+                                        [nzLoading]="loadingResponsables"
+                                        [nzDisabled]="formCabecera.controls.estado.value == 'PEN'"
+                                        nzAllowClear
+                                        nzShowSearch>
+                                        <nz-option
+                                            *ngFor="let responsable of lstResponsables"
+                                            [nzValue]="responsable.id"
+                                            [nzLabel]="responsable.razonsocial ?? ''">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label [appNzColResponsiveSizes]="formCabeceraLabelSizes">
+                                    Observación
+                                </nz-form-label>
+                                <nz-form-control [appNzColResponsiveSizes]="formCabeceraControlSizes" nzErrorTip="Máx. 100 carácteres.">
+                                    <input nz-input formControlName="observacion">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                                <div nz-col>
+                                    <button nz-button nzType="default" (click)="limpiar()">
+                                        <i *ngIf="idreclamo == 'nuevo'" nz-icon nzType="clear" nzTheme="outline"></i>
+                                        <i *ngIf="idreclamo != 'nuevo'" nz-icon nzType="plus" nzTheme="outline"></i>
+                                        {{ idreclamo == 'nuevo' ? 'Limpiar' : 'Nuevo' }}
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button nz-button nzType="primary" (click)="guardar()">
+                                        <i nz-icon nzType="save" nzTheme="outline"></i>
+                                        {{ idreclamo == 'nuevo' ? 'Registrar' : 'Editar'}}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </nz-spin>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->

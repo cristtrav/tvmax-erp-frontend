@@ -1,0 +1,175 @@
+<app-workspace-layout>
+    
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Usuarios
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <div nz-row [nzGutter]="[0, 8]">
+                <div nz-col nzFlex="auto">
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <button nz-button nzType="primary" routerLink="nuevo">
+                                <i nz-icon nzType="plus"></i>
+                                Nuevo
+                            </button>
+                        </div>
+                        <div nz-col>
+                            <button nz-button nzType="default" (click)="cargarDatos()">
+                                <i nz-icon nzType="reload" nzTheme="outline"></i>
+                                Recargar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col>
+                    <nz-input-group [nzSuffix]="suffixBusqueda">
+                        <input nz-input placeholder="Buscar..." [(ngModel)]="textoBusqueda" (ngModelChange)="buscar()">
+                        <ng-template #suffixBusqueda>
+                            <i nz-icon nzType="search" *ngIf="!textoBusqueda"></i>
+                            <i nz-icon nzType="close-circle" *ngIf="textoBusqueda" (click)="limpiarBusqueda()" style="cursor: pointer;"></i>
+                        </ng-template>
+                    </nz-input-group>
+                </div>
+            </div>
+        </div>
+        <div nz-col nzSpan="24">
+            <nz-table
+                #tbl
+                [nzData]="lstUsuarios"
+                [nzFrontPagination]="false"
+                [nzPageIndex]="pageIndex"
+                [nzPageSize]="pageSize"
+                [nzLoading]="tableLoading"
+                [nzTotal]="totalRegisters"
+                (nzQueryParams)="onTableParamsQueryChange($event)"
+                nzShowPagination
+                nzShowSizeChanger
+                nzSize="small">
+                <thead>
+                    <tr>
+                        <th nzWidth="60px"></th>
+                        <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'ascend'">Código</th>
+                        <th [nzColumnKey]="'nombres'" [nzSortFn]="true">Nombres</th>
+                        <th [nzColumnKey]="'apellidos'" [nzSortFn]="true">Apellidos</th>
+                        <th [nzColumnKey]="'ci'" [nzSortFn]="true">Nro. Documento</th>
+                        <th [nzColumnKey]="'accesosistema'" [nzSortFn]="true" nzAlign="center">Acceso</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let u of tbl.data">
+                        <tr>
+                            <td
+                                [nzExpand]="expandSet.has(u.id ? u.id : -1)"
+                                (nzExpandChange)="onExpandChange(u.id ? u.id : -1, $event)">
+                            </td>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.nombres }}</td>
+                            <td>
+                                {{ u.apellidos }}
+                                <span *ngIf="!u.apellidos" nz-typography nzType="secondary">(sin apellidos)</span>
+                            </td>
+                            <td>
+                                {{ u.ci | number}}
+                                <span *ngIf="u.ci == null" nz-typography nzType="secondary">(sin nro. doc.)</span>
+                            </td>
+                            <td nzAlign="center">
+                                <nz-tag *ngIf="u.accesosistema" nzColor="green">Sí</nz-tag>
+                                <nz-tag *ngIf="!u.accesosistema" nzColor="red">No</nz-tag>
+                            </td>
+                            <td>
+                                <div nz-row [nzGutter]="[8, 8]">
+                                    <div nz-col>
+                                        <button
+                                            nz-tooltip
+                                            nzTooltipTitle="Roles"
+                                            nz-button
+                                            nzType="default"
+                                            [routerLink]="[u.id, 'roles']"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="tags"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button
+                                            nz-button
+                                            nz-tooltip
+                                            nzTooltipTitle="Permisos del usuario"
+                                            nzType="default"
+                                            [routerLink]="u.id+'/permisos'"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="key" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button
+                                            nz-button
+                                            nz-tooltip
+                                            nzType="primary"
+                                            [routerLink]="u.id+''"
+                                            nzTooltipTitle="Editar"
+                                            [disabled]="u.sololectura">
+                                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button nz-button
+                                            nz-tooltip
+                                            nzType="primary"
+                                            nzTooltipTitle="Eliminar"
+                                            (click)="confirmarEliminacion(u)"
+                                            nzDanger
+                                            [disabled]="u.sololectura">
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(u.id ? u.id : -1)">
+                            <nz-descriptions>
+                                <nz-descriptions-item [nzTitle]="titleEmail">
+                                    <ng-template #titleEmail>
+                                        <strong>Email</strong>
+                                    </ng-template>
+                                    <span *ngIf="u.email">{{ u.email }}</span>
+                                    <span *ngIf="!u.email" nz-typography nzType="secondary">(sin email)</span>
+                                </nz-descriptions-item>
+                                <nz-descriptions-item [nzTitle]="titleTelefono">
+                                    <ng-template #titleTelefono>
+                                        <strong>Teléfono</strong>
+                                    </ng-template>
+                                    <span *ngIf="u.telefono"> {{ u.telefono }}</span>
+                                    <span *ngIf="!u.telefono" nz-typography nzType="secondary">(sin teléfono)</span>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
+                            <nz-table
+                                #tablaRol
+                                nzSize="small"
+                                [nzData]="u.roles ?? tablaRol.data">
+                                <thead>
+                                    <tr>
+                                        <th>Roles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let rol of tablaRol.data">
+                                        <td>{{ rol.descripcion }}</td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </tr>  
+                    </ng-container>
+                </tbody>
+            </nz-table>
+        </div>
+    </div>
+
+</app-workspace-layout>

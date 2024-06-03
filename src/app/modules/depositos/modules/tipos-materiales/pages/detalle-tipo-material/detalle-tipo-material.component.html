@@ -1,0 +1,56 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/gruposmateriales">Grupos de materiales</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idtipomaterial | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Código</nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código.">
+                <div nz-row>
+                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                        <nz-input-group nzSearch [nzAddOnAfter]="btnCargarCodigo" >
+                            <nz-input-number style="width: 100%;" formControlName="id"></nz-input-number>
+                        </nz-input-group>
+                    </div>
+                </div>
+                
+                <ng-template #btnCargarCodigo>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSearch 
+                        (click)="generarId()"
+                        [nzLoading]="loadingLastId"
+                        nz-tooltip
+                        nzTooltipTitle="Generar código">
+                        <i nz-icon nzType="sync" nzTheme="outline"></i>
+                    </button>
+                </ng-template>
+
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese una descripción. Máx. 45 carácteres.">
+                <input nz-input formControlName="descripcion">
+            </nz-form-control>
+        </nz-form-item>
+        <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+            <button nz-button nzType="primary" (click)="guardar()">
+                <i nz-icon nzType="save" nzTheme="outline"></i>
+                {{ idtipomaterial === 'nuevo' ? 'Registrar' : 'Editar' }}
+            </button>
+        </div>
+    </form>
+
+</app-workspace-layout>

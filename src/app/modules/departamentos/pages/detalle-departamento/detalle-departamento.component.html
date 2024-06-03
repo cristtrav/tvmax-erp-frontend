@@ -1,0 +1,39 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/departamentos">Departamentos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ iddepartamento | titlecase}}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="formLoading">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Código</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Ingrese un código">
+                    <nz-input-number [nzMin]="0" [nzMax]="99" [nzStep]="1" formControlName="id"
+                        style="width: 50%;" [nzFormatter]="formatterCod"></nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Ingrese una descripción. Máx. 80 carácteres.">
+                    <input nz-input formControlName="descripcion">
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [appNzColResponsiveSizes]="ACTIONS_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                    <i nz-icon nzType="save"></i>
+                    {{ iddepartamento === 'nuevo' ? 'Registrar' : 'Editar'}}
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

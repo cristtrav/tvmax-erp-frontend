@@ -1,0 +1,33 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/clientes">Clientes</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="'/app/clientes/'+idcliente">{{ idcliente }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="'/app/clientes/'+idcliente+'/domicilios'">Domicilios</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ iddomicilio | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div *ngIf="cliente" header-extra>
+        <nz-tag [nzColor]="'magenta'">
+            <strong>{{ cliente.razonsocial }}</strong>
+            <nz-divider nzType="vertical" *ngIf="cliente.ci"></nz-divider>
+            <span *ngIf="cliente.ci">
+                {{ cliente.ci | number }}<span *ngIf="cliente.dvruc">-{{ cliente.dvruc }}</span>
+            </span>
+        </nz-tag>
+    </div>
+
+    <app-form-domicilio [idcliente]="idcliente" [(iddomicilio)]="iddomicilio"></app-form-domicilio>
+
+</app-workspace-layout>

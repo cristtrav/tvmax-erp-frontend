@@ -13,19 +13,19 @@ import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { MainComponent } from './main/main.component';
-import { appInitializer } from './util/app.initializer';
-import { SesionService } from './servicios/sesion.service';
+import { appInitializer } from './global/utils/app.initializer';
+import { SesionService } from './global/services/sesion.service';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { UsuariosModule } from './modulos/usuarios/usuarios.module';
+import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { MainComponent } from '@shared/main/main.component';
 
 registerLocaleData(es);
 

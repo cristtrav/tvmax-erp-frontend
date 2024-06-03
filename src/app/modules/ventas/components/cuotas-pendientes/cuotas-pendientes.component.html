@@ -1,0 +1,98 @@
+<nz-alert *ngIf="!idcliente" nzShowIcon nzType="warning" nzMessage="Ningún cliente seleccionado"></nz-alert>
+<nz-table
+    *ngIf="idcliente"
+    #tabla
+    nzSize="small"
+    [nzData]="lstSuscripciones"
+    [nzShowPagination]="false"
+    [nzLoading]="loadingSuscripciones"
+    [nzFooter]="pieTablaTotales">
+    <thead>
+        <tr>
+            <th nzWidth="auto"></th>
+            <th>Código</th>
+            <th>Suscripción</th>
+            <th>Cuotas</th>
+            <th>Estado</th>
+            <th>Dirección</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let suscripcion of tabla.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(suscripcion.id ?? -1)" (nzExpandChange)="onExpandChange(suscripcion.id ?? -1, $event)"></td>
+                <td>
+                    <span nz-typography nzType="secondary">{{ suscripcion.id }}</span>
+                </td>
+                <td><strong>{{ suscripcion.servicio }}</strong></td>
+                <td nzAlign="center">
+                    <nz-tag *ngIf="suscripcion.cuotaspendientes == 0" nzColor="green">
+                        {{ suscripcion.cuotaspendientes }}
+                    </nz-tag>
+                    <nz-tag *ngIf="suscripcion.cuotaspendientes >= 1 && suscripcion.cuotaspendientes <= 3" nzColor="orange">
+                        {{ suscripcion.cuotaspendientes }}
+                    </nz-tag>
+                    <nz-tag *ngIf="suscripcion.cuotaspendientes >= 4" nzColor="red">
+                        {{ suscripcion.cuotaspendientes }}
+                    </nz-tag>
+                </td>
+                <td>
+                    <nz-tag *ngIf="suscripcion.estado === 'C'" nzColor="green">Conectado</nz-tag>
+                    <nz-tag *ngIf="suscripcion.estado === 'R'" nzColor="green">Reconectado</nz-tag>
+                    <nz-tag *ngIf="suscripcion.estado === 'D'" nzColor="red">Desconectado</nz-tag>
+                </td>
+                <td>
+                    <span nz-typography nzType="secondary">{{ suscripcion.direccion }}</span>
+                    <span nz-typography nzType="secondary">Barrio: {{ suscripcion.barrio }}</span>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(suscripcion.id ?? -1)">
+                <nz-alert *ngIf="mapSuscripcionesServicios.get(suscripcion.id ?? -1)?.length === 0" nzType="success" nzMessage="Ninguna cuota pendiente" [nzShowIcon]="true"></nz-alert>
+                <ng-container *ngFor="let servicio of mapSuscripcionesServicios.get(suscripcion.id ?? -1)">
+                    <nz-alert nzType="info" [nzMessage]="servicio.descripcion ?? ''"></nz-alert>
+                    <nz-table
+                        #tablaServicioCuotas
+                        nzSize="small"
+                        [nzData]="mapSuscripcionesServiciosCuotas.get(suscripcion.id + '-' + servicio.id) ?? []"
+                        [nzShowPagination]="false"
+                        [nzLoading]="mapLoadingServicios.get(suscripcion.id ?? -1) && mapLoadingCuotas.get(suscripcion.id+'-'+servicio.id)">
+                        <thead>
+                            <tr>
+                                <th>Vencimiento</th>
+                                <th nzAlign="right">Monto</th>
+                                <th nzAlign="center">Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cuota of tablaServicioCuotas.data">
+                                <td>{{ cuota.fechavencimiento | date:'dd/MMM/yyyy' }}</td>
+                                <td nzAlign="right">Gs.{{ cuota.monto | number }}</td>
+                                <td nzAlign="center">
+                                    <button
+                                        *ngIf="!mapCuotasEnDetalle.get(cuota.id ?? -1)"
+                                        nz-button 
+                                        nzType="primary"
+                                        (click)="agregarCuotaEnDetalle(cuota)">
+                                        <i nz-icon nzType="plus"></i>
+                                    </button>
+                                    <button
+                                        *ngIf="mapCuotasEnDetalle.get(cuota.id ?? -1)"
+                                        nz-button
+                                        nzType="primary"
+                                        nzDanger
+                                        (click)="quitarCuotaDeDetalle(cuota)">
+                                        <i nz-icon nzType="minus"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </nz-table>
+                </ng-container>
+            </tr>
+        </ng-container>
+    </tbody>
+    <ng-template #pieTablaTotales>
+        <strong>Total pendiente:</strong><span> Gs.{{ montoTotalPendiente | number }}</span>
+    </ng-template>
+</nz-table>

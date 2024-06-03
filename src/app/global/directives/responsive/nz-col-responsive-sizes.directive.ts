@@ -24,12 +24,12 @@ export class NzColResponsiveSizesDirective {
   ) { }
 
   private setSizes(sizes: ResponsiveSizes){
-    this.nzcol.nzSm = sizes.nzSm ?? null;
-    this.nzcol.nzXs = sizes.nzXs ?? null;
-    this.nzcol.nzMd = sizes.nzMd ?? null;
-    this.nzcol.nzLg = sizes.nzLg ?? null;
-    this.nzcol.nzXl = sizes.nzXl ?? null;
-    this.nzcol.nzXXl = sizes.nzXXl ?? null;
+    this.nzcol.nzSm = sizes.sm ?? null;
+    this.nzcol.nzXs = sizes.xs ?? null;
+    this.nzcol.nzMd = sizes.md ?? null;
+    this.nzcol.nzLg = sizes.lg ?? null;
+    this.nzcol.nzXl = sizes.xl ?? null;
+    this.nzcol.nzXXl = sizes.xxl ?? null;
   }
 
 }

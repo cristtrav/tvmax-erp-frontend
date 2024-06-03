@@ -1,0 +1,147 @@
+<nz-spin [nzSpinning]="formLoading">
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Código</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código.">
+                <div nz-row>
+                    <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12" [nzLg]="12" [nzXl]="12" [nzXXl]="12">
+                        <nz-input-group nzSearch [nzAddOnAfter]="btnCalcularId">
+                            <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;"></nz-input-number>
+                        </nz-input-group>
+                    </div>
+                </div>
+                
+                <ng-template #btnCalcularId>
+                    <button nz-button nz-tooltip nzTooltipTitle="Generar código" (click)="consultarUltimoId()" [nzLoading]="getLastIdLoading" nzType="primary" nzSearch>
+                        <i nz-icon nzTheme="outline" nzType="sync"></i>
+                    </button>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="!idcliente">
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Titular</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" [nzErrorTip]="'Seleccione el titular'">
+                <nz-select
+                    formControlName="idcliente" 
+                    nzAllowClear
+                    nzShowSearch
+                    nzServerSearch
+                    nzPlaceHolder="Seleccionar..."
+                    [nzDropdownRender]="renderTemplate"
+                    (nzScrollToBottom)="cargarClientes()"
+                    (nzOnSearch)="buscarClientes($event)"
+                    [nzCustomTemplate]="selectedTitular">
+                    <nz-option *ngFor="let cliente of lstClientes" [nzValue]="cliente.id" [nzLabel]="cliente.razonsocial" nzCustomContent>
+                        <nz-space>
+                            <span *nzSpaceItem nz-typography nzType="secondary">[{{ cliente.id }}]</span>
+                            <span *nzSpaceItem>{{ cliente.razonsocial }}</span>
+                            <span *nzSpaceItem>
+                                <nz-tag *ngIf="cliente.ci">{{ cliente.ci | number }}</nz-tag>
+                            </span>
+                        </nz-space>
+                    </nz-option>
+                </nz-select>
+                <ng-template #selectedTitular let-selected>
+                    <span>{{ selected.nzLabel }}</span>
+                </ng-template>
+            </nz-form-control>
+            <ng-template #renderTemplate>
+                <nz-spin *ngIf="clienteLoading"></nz-spin>
+            </ng-template>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Dirección</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese una dirección. Máx. 200 carácteres.">
+                <input nz-input formControlName="direccion">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Barrio</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un barrio.">
+                <nz-select
+                    nzAllowClear
+                    nzShowSearch
+                    formControlName="idbarrio"
+                    nzPlaceHolder="Seleccionar...">
+                    <nz-option
+                        *ngFor="let b of lstBarrios"
+                        [nzValue]="b.id"
+                        [nzLabel]="b.descripcion+' ('+b.distrito+', '+b.departamento+')'">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Tipo</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un tipo de domicilio.">
+                <nz-radio-group nzButtonStyle="solid" formControlName="tipo">
+                    <label nz-radio-button [nzValue]="'PRO'">Propio</label>
+                    <label nz-radio-button [nzValue]="'ALQ'">Alquiler</label>
+                    <label nz-radio-button [nzValue]="'PRE'">Préstamo</label>
+                </nz-radio-group>
+                <!--<nz-select
+                    formControlName="tipo"
+                    nzAllowClear
+                    nzShowSearch
+                    nzPlaceHolder="Seleccionar...">
+                    <nz-option  [nzValue]="'PRO'" [nzLabel]="'Propio'"></nz-option>
+                    <nz-option  [nzValue]="'ALQ'" [nzLabel]="'Alquiler'"></nz-option>
+                    <nz-option  [nzValue]="'PRE'" [nzLabel]="'Préstamo'"></nz-option>
+                </nz-select>-->
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">ANDE</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 30 carácteres.">
+                <input nz-input formControlName="nromedidor">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">Ubicación</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese un código de ubicación válido.">
+                <nz-input-group nzSearch [nzAddOnAfter]="addonUbicacion">
+                    <input
+                        nz-input
+                        placeholder="Seleccionar..."
+                        formControlName="ubicacionOpenCode"
+                        (blur)="onUbicacionBlur()">
+                    <ng-template #addonUbicacion>
+                        <button nz-button nzType="primary" nzSearch (click)="mostrarModalUbicacion()">
+                            <i nz-icon nzType="environment" nzTheme="outline"></i>
+                        </button>
+                    </ng-template>
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSm]="7" [nzXs]="24">Observación</nz-form-label>
+            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 150 carácteres.">
+                <input nz-input formControlName="observacion">
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <span nz-col [nzSm]="7" [nzXs]="24"></span>
+            <nz-form-control [nzSm]="15" [nzXs]="24">
+                <label nz-checkbox formControlName="principal">Domicilio principal</label>
+            </nz-form-control>
+        </nz-form-item>
+        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                <i nz-icon nzType="save"></i>
+                {{ iddomicilio === 'nuevo' ? 'Registrar' : 'Editar' }}
+            </button>
+        </div>
+    </form>
+</nz-spin>
+<nz-modal
+    [nzTitle]="'Ubicación'"
+    [nzWidth]="800"
+    [nzContent]="ubicacionTpl"
+    [(nzVisible)]="modalUbicacionVisible"
+    (nzOnCancel)="cerrarModalUbicacion()"
+    (nzOnOk)="aceptarUbicacion()"
+    nzCentered>
+</nz-modal>
+<ng-template #ubicacionTpl>
+    <app-ubicacion [ubicacion]="ubicacionActual"></app-ubicacion>
+</ng-template>

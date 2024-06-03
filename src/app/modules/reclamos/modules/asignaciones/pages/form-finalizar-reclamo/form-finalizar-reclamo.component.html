@@ -1,0 +1,143 @@
+<app-workspace-layout [isBackgroundVisible]="false" [isContentPadded]="false">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/asignacionesreclamos">Asignaciones de reclamos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app/asignacionesreclamos', idreclamo]">{{ idreclamo }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Finalizar
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <div class="panel">
+                <form nz-form [formGroup]="formEstado">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Estado</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione un estado.">
+                            <nz-select nzPlaceHolder="Seleccionar..." formControlName="estado" nzAllowClear>
+                                <nz-option [nzLabel]="'Finalizado'" [nzValue]="'FIN'"></nz-option>
+                                <nz-option [nzLabel]="'Otro'" [nzValue]="'OTR'"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item *ngIf="formEstado.controls.estado.value == 'OTR'">
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese la descripción del estado. Max. 30 carácteres.">
+                            <input nz-input placeholder="Ingresar estado." formControlName="observacionestado">
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Recibido por</nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese el nombre y apellido. Máx. 50 carácteres.">
+                            <input nz-input placeholder="Ej.: Juan Perez" formControlName="personarecepciontecnico">
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </div>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <div class="panel">
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col nzSpan="24">
+                        <button nz-button nzType="primary" (click)="mostrarModalMateriales()">
+                            <i nz-icon nzType="plus" nzTheme="outline"></i>
+                            Agregar material
+                        </button>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-spin [nzSpinning]="loadingMateriales">
+                            <nz-list>
+                                <nz-list-item *ngFor="let materialUtilizado of lstMaterialUtilizado">
+                                    <nz-list-item-meta>
+                                        <nz-list-item-meta-title>{{ materialUtilizado.descripcion }}</nz-list-item-meta-title>
+                                        <nz-list-item-meta-description>
+                                            {{ materialUtilizado.cantidad | number }}
+                                            <span *ngIf="materialUtilizado.unidadmedida == 'UD'">uds.</span>
+                                            <span *ngIf="materialUtilizado.unidadmedida == 'MT'">mts.</span>
+                                        </nz-list-item-meta-description>
+                                    </nz-list-item-meta>
+                                    <nz-list-item-extra>
+                                        <button nz-button nzType="primary" nzDanger (click)="confirmarEliminarMaterialUtilizado(materialUtilizado)">
+                                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                        </button>
+                                    </nz-list-item-extra>
+                                </nz-list-item>
+                                <nz-list-empty *ngIf="lstMaterialUtilizado.length == 0"></nz-list-empty>
+                            </nz-list>
+                        </nz-spin>                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div nz-col nzSpan="24">
+            <div class="panel">
+                <button nz-button nzType="primary" [nzLoading]="loadingGuardar" (click)="guardar()">
+                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                    {{ reclamo?.estado == 'FIN' ? 'Editar' : 'Registrar' }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <nz-modal
+        [nzContent]="tplFormMateriales"
+        [(nzVisible)]="modalMaterialesVisible"
+        [nzClosable]="true"
+        [nzOkText]="'Agregar'"
+        [nzCancelText]="'Cerrar'"
+        (nzOnCancel)="ocultarModalMateriales()"
+        (nzOnOk)="agregarMaterial()">
+
+    </nz-modal>
+    <ng-template #tplFormMateriales>
+        <form nz-form style="margin-top: 20px;" [formGroup]="formMaterial">
+            <nz-form-item>
+                <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Material</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione un material.">
+                    <nz-select
+                        nzPlaceHolder="Seleccionar..."
+                        [nzLoading]="loadingMateriales"
+                        nzAllowClear
+                        nzShowSearch
+                        formControlName="idmaterial">
+                        <nz-option-group *ngFor="let tipo of mapTiposMateriales | keyvalue" [nzLabel]="tipo.key">
+                            <nz-option
+                                *ngFor="let material of tipo.value"
+                                [nzValue]="material.id"
+                                [nzLabel]="material.descripcion">
+                            </nz-option>
+                        </nz-option-group>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    nzRequired
+                    [appNzColResponsiveSizes]="LABEL_SIZES">
+                    Cantidad
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese la cantidad.">
+                    <nz-input-number
+                        style="width: 100%;"
+                        nzPlaceHolder="Ej.: 5.0"
+                        formControlName="cantidad"
+                        [nzStep]="formMaterial.controls.idmaterial.value | materialToNumberSteps:lstMateriales">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-template>
+
+</app-workspace-layout>

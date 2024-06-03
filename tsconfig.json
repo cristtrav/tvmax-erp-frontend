@@ -22,13 +22,13 @@
     ],
     "paths": {
       "@dto/*": [
-        "./src/app/dto/*"
+        "./src/app/global/dtos/*"
       ],
       "@util/*": [
-        "./src/app/util/*"
+        "./src/app/global/utils/*"
       ],
-      "@servicios/*": [
-        "./src/app/servicios/*"
+      "@services/*": [
+        "./src/app/global/services/*"
       ],
       "@helper-componets/*": [
         "./src/app/helper-components/*"
@@ -42,14 +42,14 @@
       "@global-directives/*" :[
         "src/app/global/directives/*"
       ],
-      "@global-services/*":[
-        "src/app/global/services/*"
-      ],
-      "@global-dtos/*":[
-        "src/app/global/dtos/*"
-      ],
       "@global-auth/*": [
         "src/app/global/auth/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@modules/*": [
+        "src/app/modules/*"
       ]
     },
     "useDefineForClassFields": false

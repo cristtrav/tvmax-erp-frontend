@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
-import { SesionService } from "@servicios/sesion.service";
+import { SesionService } from "@services/sesion.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 
 export const canAccessFn = (

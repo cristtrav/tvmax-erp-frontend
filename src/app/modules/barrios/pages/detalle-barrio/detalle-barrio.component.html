@@ -1,0 +1,68 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/barrios">Barrios</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idbarrio | titlecase}}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="formLoading">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Código</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese un código">
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="ID_SIZES">
+                            <nz-input-group nzSearch [nzAddOnAfter]="bntConsultarId">
+                                <nz-input-number [nzMin]="0" [nzStep]="1" formControlName="id" style="width: 100%;" [nzDisabled]="lastIdLoading">
+                                </nz-input-number> 
+                            </nz-input-group>
+                        </div>
+                    </div>
+                    
+                </nz-form-control>
+                <ng-template #bntConsultarId>
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nz-tooltip
+                        nzTooltipTitle="Generar código"
+                        [nzLoading]="lastIdLoading"
+                        (click)="cargarId()" 
+                        nzSearch>
+                        <i nz-icon nzType="sync" nzTheme="outline"></i>
+                    </button>
+                </ng-template>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Descripción</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese una descripción. Máx. 150 carácteres.">
+                    <input nz-input formControlName="descripcion">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Distrito</nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione un distrito.">
+                    <nz-select formControlName="iddistrito" nzShowSearch>
+                        <nz-option *ngFor="let dist of lstDistritos"
+                            [nzLabel]="dist.descripcion+', '+dist.departamento" [nzValue]="dist.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+                <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
+                    <i nz-icon nzType="save"></i>
+                    {{ idbarrio === 'nuevo' ? 'Registrar' : 'Editar'}}
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

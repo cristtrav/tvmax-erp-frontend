@@ -1,0 +1,26 @@
+.workspace {
+    display: flex;
+    flex-direction: column;
+}
+
+.workspace-padding{
+    padding: 8px 24px 24px 24px;
+}
+
+.workspace-content-padding{
+    padding: 20px;
+}
+
+.workspace-content-background{
+    background-color: white;
+}
+
+@media only screen and (max-width: 576px){
+    .workspace-content-padding{
+        padding: 10px;        
+    }
+    
+    .workspace-padding {
+        padding: 4px 8px 0px 8px;
+    }
+}

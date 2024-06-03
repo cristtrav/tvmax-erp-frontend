@@ -3,10 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
-import { BarriosService } from '@servicios/barrios.service';
-import { DepartamentosService } from '@servicios/departamentos.service';
-import { DistritosService } from '@servicios/distritos.service';
-import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
+import { BarriosService } from '@services/barrios.service';
+import { DepartamentosService } from '@services/departamentos.service';
+import { DistritosService } from '@services/distritos.service';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
 
