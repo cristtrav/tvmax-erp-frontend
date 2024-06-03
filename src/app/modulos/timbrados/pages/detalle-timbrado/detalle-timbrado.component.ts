@@ -1,17 +1,17 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Timbrado } from '@dto/timbrado.dto';
 import { TimbradosService } from '@global-services/timbrados.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
-import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { FormatosFacturasService } from '@global-services/formatos-facturas.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
+import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
+import { Timbrado } from '@dto/timbrado.dto';
 
 @Component({
   selector: 'app-detalle-timbrado',

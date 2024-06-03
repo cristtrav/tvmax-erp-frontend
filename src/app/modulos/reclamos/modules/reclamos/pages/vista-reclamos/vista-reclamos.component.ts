@@ -11,10 +11,10 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Observable, Subscription, debounceTime, finalize, forkJoin, of } from 'rxjs';
-import { MaterialUtilizadoDTO } from '@global-dtos/reclamos/material-utilizado.dto';
+import { MaterialUtilizadoDTO } from '@dto/reclamos/material-utilizado.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
-import { EventoCambioEstadoDTO } from '@global-dtos/reclamos/evento-cambio-estado.dto';
-import { ReiteracionDTO } from '@global-dtos/reclamos/reiteracion.dto';
+import { EventoCambioEstadoDTO } from '@dto/reclamos/evento-cambio-estado.dto';
+import { ReiteracionDTO } from '@dto/reclamos/reiteracion.dto';
 import { ReiteracionesService } from '@global-services/reclamos/reiteraciones.service';
 import { formatDate } from '@angular/common';
 

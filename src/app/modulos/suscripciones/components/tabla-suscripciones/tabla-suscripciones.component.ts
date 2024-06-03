@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
-import { Suscripcion } from '@dto/suscripcion-dto';
 import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
@@ -12,6 +11,7 @@ import { forkJoin } from 'rxjs';
 import { formatNumber } from '@angular/common';
 import { LatLngTuple } from 'leaflet';
 import { UbicacionComponent } from 'src/app/modulos/domicilios/components/ubicacion/ubicacion.component';
+import { Suscripcion } from '@dto/suscripcion-dto';
 
 @Component({
   selector: 'app-tabla-suscripciones',

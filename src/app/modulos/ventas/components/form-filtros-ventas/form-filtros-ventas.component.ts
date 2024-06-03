@@ -1,10 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
-import { UsuarioDTO } from '@dto/usuario.dto';
 import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
+import { UsuarioDTO } from '@dto/usuario.dto';
 
 const DATE_FORMAT: string = "yyyy-MM-dd";
 

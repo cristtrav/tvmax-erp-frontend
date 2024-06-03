@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Suscripcion } from '../../dto/suscripcion-dto';
+import { Suscripcion } from '../dtos/suscripcion-dto';
 import { AppSettings } from '../../util/app-settings';
 import { ResumenCuotasPendientesSuscripciones } from '@dto/resumen-cuotas-pendientes.dto';
 import { ResumenEstadosSuscripciones } from '@dto/resumen-estados-suscripciones.dto';

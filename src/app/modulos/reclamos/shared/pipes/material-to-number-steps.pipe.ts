@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { MaterialDTO } from '@dto/material.dto';
+import { MaterialDTO } from '@dto/depositos/material.dto';
 
 @Pipe({
   name: 'materialToNumberSteps',

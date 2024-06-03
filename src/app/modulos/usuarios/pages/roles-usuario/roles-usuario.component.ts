@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RolDTO } from '@dto/rol.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { RolesService } from '@global-services/roles.service';
-import { SesionService } from '@global-services/sesion.service';
 import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';

@@ -1,4 +1,4 @@
-import { FormatoFacturaA } from "../modulos/impresion/factura-preimpresa-venta/formato-factura-a";
+import { FormatoFacturaA } from "../../modulos/impresion/factura-preimpresa-venta/formato-factura-a";
 
 export interface FormatoFacturaDTO{
     id?: number;

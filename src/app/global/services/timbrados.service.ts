@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Timbrado } from '../../dto/timbrado.dto';
+import { Timbrado } from '../dtos/timbrado.dto';
 import { AppSettings } from '../../util/app-settings';
 import { HttpClient } from '@angular/common/http';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';

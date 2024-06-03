@@ -1,12 +1,12 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, Output, EventEmitter, Input, LOCALE_ID, Inject } from '@angular/core';
-import { UsuarioDTO } from '@dto/usuario.dto';
+import { Component, OnInit, Output, EventEmitter, LOCALE_ID, Inject } from '@angular/core';
 import { UsuariosService } from '@global-services/usuarios.service';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { NzMarks } from 'ng-zorro-antd/slider';
 import { formatDate } from '@angular/common';
+import { UsuarioDTO } from '@dto/usuario.dto';
 
 @Component({
   selector: 'app-form-filtro-suscripciones',

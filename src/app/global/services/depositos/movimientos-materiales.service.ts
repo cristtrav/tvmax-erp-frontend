@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DetalleMovimientoMaterialDTO } from '@dto/detalle-movimiento-material.dto';
-import { MovimientoMaterialDTO } from '@dto/movimiento-material.dto';
+import { DetalleMovimientoMaterialDTO } from '@dto/depositos/detalle-movimiento-material.dto';
+import { MovimientoMaterialDTO } from '@dto/depositos/movimiento-material.dto';
 import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';

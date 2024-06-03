@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Cliente } from 'src/app/dto/cliente-dto';
+import { Cliente } from '@dto/cliente-dto';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { HttpErrorResponseHandlerService } from 'src/app/util/http-error-response-handler.service';

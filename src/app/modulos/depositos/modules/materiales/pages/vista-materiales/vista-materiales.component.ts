@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
-import { MaterialDTO } from '@dto/material.dto';
+import { MaterialIdentificableDTO } from '@dto/depositos/material-identificable.dto';
+import { MaterialDTO } from '@dto/depositos/material.dto';
 import { MaterialesService } from '@global-services/depositos/materiales.service';
 import { ImpresionService } from '@global-services/impresion.service';
 import { Extra } from '@util/extra';

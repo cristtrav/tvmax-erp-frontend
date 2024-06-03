@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
+import { DetalleReclamoDTO } from '@dto/reclamos/detalle-reclamo.dto';
 
 @Pipe({
   name: 'detallesReclamosToText',

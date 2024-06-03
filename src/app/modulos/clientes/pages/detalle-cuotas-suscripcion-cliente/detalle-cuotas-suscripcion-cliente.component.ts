@@ -4,7 +4,7 @@ import { Cliente } from '@dto/cliente-dto';
 import { ClientesService } from '@global-services/clientes.service';
 import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Suscripcion } from 'src/app/dto/suscripcion-dto';
+import { Suscripcion } from '@dto/suscripcion-dto';
 
 @Component({
   selector: 'app-detalle-cuotas-suscripcion-cliente',

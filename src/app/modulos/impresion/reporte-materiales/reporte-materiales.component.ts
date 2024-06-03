@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { MaterialDTO } from '@dto/material.dto';
-import { TipoMaterialDTO } from '@dto/tipo-material.dto';
+import { MaterialDTO } from '@dto/depositos/material.dto';
+import { TipoMaterialDTO } from '@dto/depositos/tipo-material.dto';
 import { MaterialesService } from '@global-services/depositos/materiales.service';
 import { TiposMaterialesService } from '@global-services/depositos/tipos-materiales.service';
 import { IFiltroReporte } from '@util/interfaces/ifiltros-reporte.interface';

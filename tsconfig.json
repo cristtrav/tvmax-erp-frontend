@@ -22,7 +22,7 @@
     ],
     "paths": {
       "@dto/*": [
-        "./src/app/dto/*"
+        "./src/app/global/dtos/*"
       ],
       "@util/*": [
         "./src/app/util/*"
@@ -44,9 +44,6 @@
       ],
       "@global-services/*":[
         "src/app/global/services/*"
-      ],
-      "@global-dtos/*":[
-        "src/app/global/dtos/*"
       ],
       "@global-auth/*": [
         "src/app/global/auth/*"

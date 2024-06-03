@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AppSettings } from '../../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Grupo } from '../../dto/grupo-dto';
+import { Grupo } from '../dtos/grupo-dto';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 

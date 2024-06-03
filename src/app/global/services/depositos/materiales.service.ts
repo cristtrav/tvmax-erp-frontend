@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
-import { MaterialDTO } from '@dto/material.dto';
+import { MaterialIdentificableDTO } from '@dto/depositos/material-identificable.dto';
+import { MaterialDTO } from '@dto/depositos/material.dto';
 import { environment } from '@environments/environment';
 import { AppSettings } from '@util/app-settings';
 import { Observable } from 'rxjs';

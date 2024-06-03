@@ -1,13 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { TimbradosService } from '@global-services/timbrados.service';
-import { Timbrado } from '@dto/timbrado.dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { Timbrado } from '@dto/timbrado.dto';
 
 @Component({
   selector: 'app-vista-timbrados',
