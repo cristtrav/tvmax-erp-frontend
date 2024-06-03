@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SesionService } from '../../../servicios/sesion.service';
+import { SesionService } from '../../../global/services/sesion.service';
 
 @Component({
   selector: 'app-login-form',

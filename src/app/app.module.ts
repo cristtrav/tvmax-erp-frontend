@@ -15,7 +15,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { MainComponent } from './main/main.component';
 import { appInitializer } from './util/app.initializer';
-import { SesionService } from './servicios/sesion.service';
+import { SesionService } from './global/services/sesion.service';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';

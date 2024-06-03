@@ -8,7 +8,7 @@ import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LatLngTuple } from 'leaflet';
 import { Domicilio } from '@dto/domicilio-dto';
-import { DomiciliosService } from '@servicios/domicilios.service';
+import { DomiciliosService } from '@global-services/domicilios.service';
 import { UbicacionComponent } from '../ubicacion/ubicacion.component';
 
 @Component({

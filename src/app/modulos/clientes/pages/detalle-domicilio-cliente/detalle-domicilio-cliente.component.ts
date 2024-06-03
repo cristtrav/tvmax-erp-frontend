@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClientesService } from '../../../../servicios/clientes.service';
+import { ClientesService } from '../../../../global/services/clientes.service';
 import { Cliente } from '../../../../dto/cliente-dto';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 

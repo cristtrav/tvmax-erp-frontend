@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DetalleReclamoDTO } from '@global-dtos/reclamos/detalle-reclamo.dto';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
-import { SesionService } from '@servicios/sesion.service';
+import { SesionService } from '@global-services/sesion.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { finalize } from 'rxjs';

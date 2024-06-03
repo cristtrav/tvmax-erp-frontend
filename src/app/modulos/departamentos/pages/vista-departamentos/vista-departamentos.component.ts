@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin, Observable } from 'rxjs';
 import { Departamento } from '@dto/departamento-dto';
-import { DepartamentosService } from '@servicios/departamentos.service';
+import { DepartamentosService } from '@global-services/departamentos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { Extra } from '@util/extra';
 

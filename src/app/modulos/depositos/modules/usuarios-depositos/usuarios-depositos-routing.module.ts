@@ -2,7 +2,7 @@ import { NgModule, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
 import { VistaUsuariosDepositosComponent } from './pages/vista-usuarios-depositos/vista-usuarios-depositos.component';
 import { DetalleUsuarioDepositoComponent } from './pages/detalle-usuario-deposito/detalle-usuario-deposito.component';
-import { SesionService } from '@servicios/sesion.service';
+import { SesionService } from '@global-services/sesion.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 const accesoFormularioGuardFn: CanActivateFn = (

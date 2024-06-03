@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RolDTO } from '@dto/rol.dto';
-import { RolesService } from '@servicios/roles.service';
+import { RolesService } from '@global-services/roles.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';

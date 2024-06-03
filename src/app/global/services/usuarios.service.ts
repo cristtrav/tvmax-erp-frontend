@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppSettings } from '../util/app-settings';
+import { AppSettings } from '../../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuarioDTO } from '@dto/usuario.dto';

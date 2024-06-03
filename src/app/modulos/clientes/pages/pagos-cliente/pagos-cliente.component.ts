@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { ClientesService } from '@servicios/clientes.service';
+import { ClientesService } from '@global-services/clientes.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 

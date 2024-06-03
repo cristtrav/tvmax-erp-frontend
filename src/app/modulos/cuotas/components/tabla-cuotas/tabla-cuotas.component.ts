@@ -5,7 +5,7 @@ import { CuotaDTO } from '@dto/cuota-dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
 import { forkJoin } from 'rxjs';
-import { CuotasService } from '@servicios/cuotas.service';
+import { CuotasService } from '@global-services/cuotas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 

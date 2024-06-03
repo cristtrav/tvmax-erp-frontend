@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ParticipanteSorteoDTO } from '@dto/participante-sorteo.dto';
-import { SorteosService } from '@servicios/sorteos.service';
+import { SorteosService } from '@global-services/sorteos.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize } from 'rxjs';

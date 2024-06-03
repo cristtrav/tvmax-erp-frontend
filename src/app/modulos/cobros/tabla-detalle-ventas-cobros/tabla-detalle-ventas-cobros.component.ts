@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { CobroDetalleVenta } from '@dto/cobro-detalle-venta.dto';
-import { CobrosService } from '@servicios/cobros.service';
+import { CobrosService } from '@global-services/cobros.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { ClientesService } from '@servicios/clientes.service';
-import { CuotasService } from '@servicios/cuotas.service';
-import { ServiciosService } from '@servicios/servicios.service';
+import { ClientesService } from '@global-services/clientes.service';
+import { CuotasService } from '@global-services/cuotas.service';
+import { ServiciosService } from '@global-services/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

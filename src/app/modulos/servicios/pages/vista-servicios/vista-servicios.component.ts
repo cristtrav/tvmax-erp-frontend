@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
-import { GruposService } from '@servicios/grupos.service';
+import { GruposService } from '@global-services/grupos.service';
 import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Servicio } from '@dto/servicio-dto';
-import { ServiciosService } from '@servicios/servicios.service';
+import { ServiciosService } from '@global-services/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 

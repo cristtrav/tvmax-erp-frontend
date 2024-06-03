@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppSettings } from './../util/app-settings';
-import { CuotaDTO } from './../dto/cuota-dto';
+import { AppSettings } from '../../util/app-settings';
+import { CuotaDTO } from '../../dto/cuota-dto';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
 import { environment } from '@environments/environment';
 

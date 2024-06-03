@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { Subscription, finalize, forkJoin } from 'rxjs';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';

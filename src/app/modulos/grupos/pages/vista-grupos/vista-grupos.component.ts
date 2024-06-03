@@ -4,7 +4,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { HttpParams } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { Grupo } from '@dto/grupo-dto';
-import { GruposService } from '@servicios/grupos.service';
+import { GruposService } from '@global-services/grupos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Extra } from '@util/extra';

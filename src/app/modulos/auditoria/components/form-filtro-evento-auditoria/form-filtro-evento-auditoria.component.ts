@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { TablaAuditoria } from '@dto/tabla-auditoria-dto';
-import { AuditoriaService } from '@servicios/auditoria.service';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { AuditoriaService } from '@global-services/auditoria.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 

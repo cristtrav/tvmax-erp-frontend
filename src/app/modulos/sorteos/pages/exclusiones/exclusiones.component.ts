@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
-import { ClientesService } from '@servicios/clientes.service';
-import { SesionService } from '@servicios/sesion.service';
+import { ClientesService } from '@global-services/clientes.service';
+import { SesionService } from '@global-services/sesion.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';

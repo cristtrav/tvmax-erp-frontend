@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { VentasService } from '@servicios/ventas.service';
+import { VentasService } from '@global-services/ventas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { CardResumenVentasGruposServiciosComponent } from '../card-resumen-ventas-grupos-servicios/card-resumen-ventas-grupos-servicios.component';

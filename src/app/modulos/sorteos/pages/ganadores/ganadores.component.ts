@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PremioDTO } from '@dto/premio.dto';
-import { PremiosService } from '@servicios/premios.service';
-import { SorteosService } from '@servicios/sorteos.service';
+import { PremiosService } from '@global-services/premios.service';
+import { SorteosService } from '@global-services/sorteos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { finalize } from 'rxjs';
 

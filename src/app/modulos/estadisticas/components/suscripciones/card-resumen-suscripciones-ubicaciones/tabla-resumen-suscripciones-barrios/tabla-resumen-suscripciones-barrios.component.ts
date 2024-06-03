@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResumenBarriosSuscripciones } from '@dto/resumen-barrios-suscripciones.dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

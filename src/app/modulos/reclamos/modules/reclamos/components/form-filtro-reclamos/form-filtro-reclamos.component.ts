@@ -3,7 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@angular/core';
 import { UsuarioDTO } from '@dto/usuario.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { finalize } from 'rxjs';
 import { ESTADOS_RECLAMOS_LIST } from '../../../../shared/constants/estados-reclamos.list';

@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RolDTO } from '@dto/rol.dto';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';

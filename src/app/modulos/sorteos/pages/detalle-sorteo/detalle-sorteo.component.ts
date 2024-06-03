@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SorteoDTO } from '@dto/sorteo.dto';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
-import { SorteosService } from '@servicios/sorteos.service';
+import { SorteosService } from '@global-services/sorteos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { finalize } from 'rxjs';

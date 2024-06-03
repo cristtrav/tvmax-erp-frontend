@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { switchMap, forkJoin, of } from 'rxjs';
 import { Servicio } from '@dto/servicio-dto';
-import { ServiciosService } from '@servicios/servicios.service';
+import { ServiciosService } from '@global-services/servicios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

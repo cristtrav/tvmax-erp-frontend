@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { TimbradosService } from '@servicios/timbrados.service';
+import { TimbradosService } from '@global-services/timbrados.service';
 import { Timbrado } from '@dto/timbrado.dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '@util/extra';

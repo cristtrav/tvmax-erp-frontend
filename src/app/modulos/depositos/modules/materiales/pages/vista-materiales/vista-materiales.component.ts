@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@ang
 import { MaterialIdentificableDTO } from '@dto/material-identificable.dto';
 import { MaterialDTO } from '@dto/material.dto';
 import { MaterialesService } from '@global-services/depositos/materiales.service';
-import { ImpresionService } from '@servicios/impresion.service';
+import { ImpresionService } from '@global-services/impresion.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

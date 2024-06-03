@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { CardResumenCuotasPendientesComponent } from '../card-resumen-cuotas-pendientes/card-resumen-cuotas-pendientes.component';

@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
-import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
+import { FormatosFacturasService } from '@global-services/formatos-facturas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';

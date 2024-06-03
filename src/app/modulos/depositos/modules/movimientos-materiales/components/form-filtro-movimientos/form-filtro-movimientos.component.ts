@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, LOCALE_ID, OnInit, Output } from '@ang
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpParams } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';

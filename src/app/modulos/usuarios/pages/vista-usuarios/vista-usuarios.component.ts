@@ -6,7 +6,7 @@ import { UsuarioDTO } from '@dto/usuario.dto';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Extra } from '@util/extra';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

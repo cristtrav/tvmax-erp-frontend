@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';
-import { VentasService } from '@servicios/ventas.service';
+import { VentasService } from '@global-services/ventas.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

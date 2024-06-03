@@ -6,7 +6,7 @@ import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Extra } from '@util/extra';
 import { Distrito } from '@dto/distrito-dto';
-import { DistritosService } from '@servicios/distritos.service';
+import { DistritosService } from '@global-services/distritos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ReclamoDTO } from '@global-dtos/reclamos/reclamo.dto';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
-import { SesionService } from '@servicios/sesion.service';
+import { SesionService } from '@global-services/sesion.service';
 import { concatMap, finalize, forkJoin, from, mergeMap, of, toArray } from 'rxjs';
 
 @Component({

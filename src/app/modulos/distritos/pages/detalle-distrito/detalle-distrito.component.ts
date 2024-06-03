@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
-import { DepartamentosService } from '@servicios/departamentos.service';
-import { DistritosService } from '@servicios/distritos.service';
+import { DepartamentosService } from '@global-services/departamentos.service';
+import { DistritosService } from '@global-services/distritos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { SorteoDTO } from '@dto/sorteo.dto';
-import { SorteosService } from '@servicios/sorteos.service';
+import { SorteosService } from '@global-services/sorteos.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';

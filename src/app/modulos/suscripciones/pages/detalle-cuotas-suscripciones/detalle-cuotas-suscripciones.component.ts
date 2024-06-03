@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
-import { ClientesService } from '@servicios/clientes.service';
+import { ClientesService } from '@global-services/clientes.service';
 
 @Component({
   selector: 'app-detalle-cuotas-suscripciones',

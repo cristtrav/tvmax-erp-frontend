@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { EventoAuditoria } from '@dto/evento-auditoria-dto';
-import { AuditoriaService } from '@servicios/auditoria.service';
+import { AuditoriaService } from '@global-services/auditoria.service';
 import { Extra } from '@util/extra';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';

@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
-import { FormatosFacturasService } from '@servicios/formatos-facturas.service';
+import { FormatosFacturasService } from '@global-services/formatos-facturas.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';

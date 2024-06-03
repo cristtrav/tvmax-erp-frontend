@@ -4,7 +4,7 @@ import { UsuarioDTO } from '@dto/usuario.dto';
 import { IFormFiltroSkel } from '@util/form-filtro-skel.interface';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { IParametroFiltro } from '@util/iparametrosfiltros.interface';
-import { UsuariosService } from '@servicios/usuarios.service';
+import { UsuariosService } from '@global-services/usuarios.service';
 
 @Component({
   selector: 'app-form-filtro-clientes',

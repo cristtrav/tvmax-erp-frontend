@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { Barrio } from '@dto/barrio-dto';
 import { Departamento } from '@dto/departamento-dto';
 import { Distrito } from '@dto/distrito-dto';
-import { BarriosService } from '@servicios/barrios.service';
-import { DepartamentosService } from '@servicios/departamentos.service';
-import { DistritosService } from '@servicios/distritos.service';
+import { BarriosService } from '@global-services/barrios.service';
+import { DepartamentosService } from '@global-services/departamentos.service';
+import { DistritosService } from '@global-services/distritos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';

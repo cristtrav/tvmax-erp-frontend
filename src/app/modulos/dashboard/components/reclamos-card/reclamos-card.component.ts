@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ReclamosService } from '@global-services/reclamos/reclamos.service';
-import { SesionService } from '@servicios/sesion.service';
+import { SesionService } from '@global-services/sesion.service';
 
 @Component({
   selector: 'app-reclamos-card',

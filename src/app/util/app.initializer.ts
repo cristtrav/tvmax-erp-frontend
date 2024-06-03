@@ -1,4 +1,4 @@
-import { SesionService } from '../servicios/sesion.service';
+import { SesionService } from '../global/services/sesion.service';
 
 export function appInitializer(sessionSrv: SesionService){
     return () => new Promise<void | null>(resolve => {

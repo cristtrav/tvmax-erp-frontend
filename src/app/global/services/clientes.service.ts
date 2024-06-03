@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AppSettings } from '../util/app-settings';
+import { AppSettings } from '../../util/app-settings';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Cliente } from '../dto/cliente-dto';
+import { Cliente } from '../../dto/cliente-dto';
 import { Observable } from 'rxjs';
 import { Suscripcion } from '@dto/suscripcion-dto';
 import { environment } from '@environments/environment';

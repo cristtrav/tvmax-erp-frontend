@@ -6,7 +6,7 @@ import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { finalize } from 'rxjs';
 import { Grupo } from '@dto/grupo-dto';
-import { GruposService } from '@servicios/grupos.service';
+import { GruposService } from '@global-services/grupos.service';
 import { HttpErrorResponseHandlerService } from '@util/http-error-response-handler.service';
 
 @Component({

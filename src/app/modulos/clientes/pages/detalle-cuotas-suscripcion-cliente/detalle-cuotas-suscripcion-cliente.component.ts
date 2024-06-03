@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '@dto/cliente-dto';
-import { ClientesService } from '@servicios/clientes.service';
-import { SuscripcionesService } from '@servicios/suscripciones.service';
+import { ClientesService } from '@global-services/clientes.service';
+import { SuscripcionesService } from '@global-services/suscripciones.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Suscripcion } from 'src/app/dto/suscripcion-dto';
 
