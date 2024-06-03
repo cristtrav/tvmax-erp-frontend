@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ReclamosRoutingModule } from './reclamos-routing.module';
 import { VistaReclamosComponent } from './pages/vista-reclamos/vista-reclamos.component';
 import { DetalleReclamoComponent } from './pages/detalle-reclamo/detalle-reclamo.component';
@@ -35,6 +34,7 @@ import { EstadoToDescriptionModule } from '../../shared/pipes/estado-to-descript
 import { IdsuscripcionToEstadoPipe } from '../../shared/pipes/idsuscripcion-to-estado.pipe';
 import { TagEstadosModule } from '../../shared/components/tag-estados/tag-estados.module';
 import { BuscadorMotivosComponent } from './components/buscador-motivos/buscador-motivos.component';
+import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 
 
 @NgModule({
@@ -79,7 +79,8 @@ import { BuscadorMotivosComponent } from './components/buscador-motivos/buscador
     NzColResponsiveSizesDirective,
     EstadoToDescriptionModule,
     TagEstadosModule,
-    TagEstadosModule
+    TagEstadosModule,
+    WorkspaceLayoutModule
   ]
 })
 export class ReclamosModule { }
