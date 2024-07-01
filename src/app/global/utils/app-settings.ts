@@ -41,6 +41,11 @@ export class AppSettings {
           id: 244,
           name: 'Timbrados',
           routerLink: '/app/timbrados',
+        },
+        {
+          id: 980,
+          name: 'Tributación',
+          routerLink: '/app/tributacion'
         }
       ]
     },
@@ -269,6 +274,17 @@ export class AppSettings {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
       }),
+      params: params
+    }
+    return httpOptions;
+  }
+
+  public static getHttpOptionsBlobAuthWithParams(params: HttpParams): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }),
+      responseType: 'blob',
       params: params
     }
     return httpOptions;

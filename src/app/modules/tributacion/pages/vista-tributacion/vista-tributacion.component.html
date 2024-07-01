@@ -1,0 +1,83 @@
+<app-workspace-layout [isContentPadded]="false" [isBackgroundVisible]="false">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Tributación
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]" nzJustify="center">
+        <div nz-col [appNzColResponsiveSizes]="SECTION_RESPONSIVE_SIZES">
+            <nz-card>
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col>
+                        <h3>Exportar Ventas</h3>
+                    </div>
+                    <div nz-col>
+                        <nz-tag nzColor="blue">Imputa IVA</nz-tag>
+                        <nz-tag nzColor="blue">Imputa IRE</nz-tag>
+                    </div>
+                </div>
+                <form [formGroup]="formConsulta">
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                            Tipo
+                        </nz-form-label>
+                        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione un tipo.">
+                            <nz-select formControlName="tipo" nzPlaceHolder="Seleccionar...">
+                                <nz-option [nzValue]="'mensual'" [nzLabel]="'955-Mensual'"></nz-option>
+                                <nz-option [nzValue]="'anual'" [nzLabel]="'956-Anual'"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                            {{ formConsulta.controls.tipo.value == 'mensual' ? 'Mes/año' : 'Año' }}
+                        </nz-form-label>
+                        <nz-form-control
+                            [appNzColResponsiveSizes]="CONTROL_SIZES"
+                            nzErrorTip="Seleccione el mes/año">
+                            <nz-date-picker
+                                formControlName="mesAnio"
+                                [nzDisabledDate]="disabledDate"
+                                [nzFormat]="formConsulta.controls.tipo.value == 'mensual' ? 'MMMM/yyyy' : 'yyyy'"
+                                [nzMode]="formConsulta.controls.tipo.value == 'mensual' ? 'month' : 'year'"
+                                style="width: 100%;">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                    <nz-col [appNzColResponsiveSizes]="ACTIONS_SIZES" style="text-align: right;">
+                        <button
+                            nz-button
+                            nzType="primary"
+                            [nzLoading]="isConsultando"
+                            (click)="consultar()">
+                            <i nz-icon nzType="file-search" nzTheme="outline"></i>
+                            Consultar
+                        </button>
+                    </nz-col>
+                </form>
+            </nz-card>
+        </div>
+        <div nz-col [appNzColResponsiveSizes]="SECTION_RESPONSIVE_SIZES">
+            <nz-card>
+                <h3>Archivos</h3>
+                    <nz-spin [nzSpinning]="isConsultando">
+                        <nz-alert *ngIf="files.length == 0" nzType="warning" nzMessage="Ningún archivo" nzShowIcon></nz-alert>
+                        <div nz-row [nzGutter]="[8,8]">
+                            <div nz-col nzSpan="24" *ngFor="let file of files">
+                                <button nz-button nzType="default" (click)="descargar(file.fileNumber, file.name)" nzBlock>
+                                    <i nz-icon nzType="file-zip" nzTheme="outline"></i>
+                                    {{ file.name }}
+                                </button>
+                            </div>
+                        </div>
+                    </nz-spin>
+            </nz-card>
+        </div>
+    </div>
+
+</app-workspace-layout>

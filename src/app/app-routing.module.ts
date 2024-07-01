@@ -154,6 +154,12 @@ const routes: Routes = [
       {
         path: 'asignacionesreclamos',
         loadChildren: () => import('./modules/reclamos/modules/asignaciones/asignaciones.module').then(m => m.AsignacionesModule)
+      },
+      {
+        path: 'tributacion',
+        data: { idfuncionalidad: 980, name: 'Tributación - Exportación' },
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/tributacion/tributacion.module').then(m => m.TributacionModule)
       }
     ]
   },
