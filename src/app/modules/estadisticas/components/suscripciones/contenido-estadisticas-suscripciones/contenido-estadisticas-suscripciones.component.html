@@ -1,28 +1,44 @@
 <div nz-row [nzGutter]="[16, 16]">
-    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+    <!--<div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
         <nz-spin [nzSpinning]="loadingTotales">
             <nz-card>
                 <nz-statistic nzTitle="Total" [nzValue]="(totalSuscripciones | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
-    </div>
+    </div>-->
 
     <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
         <nz-spin [nzSpinning]="loadingTotales">
             <nz-card>
-                <nz-statistic nzTitle="Activas" [nzValue]="(totalSuscActivos | number)!"></nz-statistic>
+                <nz-statistic nzTitle="Total activos" [nzValue]="(totalSuscActivos | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
     </div>
 
     <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-spin [nzSpinning]="loadingTotales">
+            <nz-card>
+                <nz-statistic nzTitle="Activos TV CABLE" [nzValue]="(totalTvCable | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+        <nz-spin [nzSpinning]="loadingTotales">
+            <nz-card>
+                <nz-statistic nzTitle="Activos INTERNET" [nzValue]="(totalInternet | number)!"></nz-statistic>
+            </nz-card>
+        </nz-spin>
+    </div>
+
+    <!--<div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
         <nz-spin [nzSpinning]="loadingTotales">
             <nz-card>
                 <nz-statistic nzTitle="Desconectadas" [nzValue]="(totalSuscDesconectadas | number)!"></nz-statistic>
             </nz-card>
         </nz-spin>
-    </div>
-    <div nz-col nzSpan="24">
+    </div>-->
+    <!--<div nz-col nzSpan="24">
         <div nz-row [nzGutter]="[16, 16]">
 
             <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="12" [nzXl]="8">
@@ -53,5 +69,5 @@
                 </app-card-resumen-suscripciones-ubicaciones>        
             </div>
         </div>
-    </div>
+    </div>-->
 </div>

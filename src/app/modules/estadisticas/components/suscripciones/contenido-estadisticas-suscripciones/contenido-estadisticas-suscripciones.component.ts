@@ -58,6 +58,9 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
   totalDeuda: number = 0;
   loadingTotales: boolean = false;
 
+  totalInternet: number = 0;
+  totalTvCable: number = 0;
+
   constructor(
     private suscripcionesSrv: SuscripcionesService,
     private httpErrorHandler: HttpErrorResponseHandlerService
@@ -81,6 +84,35 @@ export class ContenidoEstadisticasSuscripcionesComponent implements OnInit {
       error: (e) => {
         console.error('Error al cargar resumen general de suscripciones', e);
         this.httpErrorHandler.process(e);
+      }
+    });
+    const paramsTv = new HttpParams()
+      .append('eliminado', false)
+      .append('estado', 'C')
+      .append('estado', 'R')
+      .append('idgrupo', 11);
+
+    this.suscripcionesSrv.getTotal(paramsTv).subscribe({
+      next: (cantidad) => {
+        this.totalTvCable = cantidad;
+      },
+      error: (e) => {
+        console.log('Error al cargar cantidad de suscripciones TV Cable')
+      }
+    });
+
+    const paramsInter = new HttpParams()
+    .append('eliminado', false)
+    .append('estado', 'C')
+    .append('estado', 'R')
+    .append('idgrupo', 12);
+
+    this.suscripcionesSrv.getTotal(paramsInter).subscribe({
+      next: (cantidad) => {
+        this.totalInternet = cantidad;
+      },
+      error: (e) => {
+        console.log('Error al cargar cantidad de suscripciones de internet', e);
       }
     })
   }
