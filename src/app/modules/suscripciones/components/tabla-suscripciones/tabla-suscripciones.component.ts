@@ -43,7 +43,6 @@ export class TablaSuscripcionesComponent implements OnInit {
     };
   };
   private _paramsFiltros: IParametroFiltro = {};
-  private paramsFiltrosTabla: IParametroFiltro = {};
 
   timerBusqueda: any;
 
@@ -66,6 +65,7 @@ export class TablaSuscripcionesComponent implements OnInit {
   pageIndex: number = 1;
   pageSize: number = 10;
   total: number = 0;
+  sortStr: string | null = null;
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
@@ -104,6 +104,7 @@ export class TablaSuscripcionesComponent implements OnInit {
   }
 
   cargarDatos(): void {
+    console.log('Cargar datos tabla suscripciones')
     this.tableLoading = true;
     this.tableLoadingChange.emit(true);
     forkJoin({
@@ -139,11 +140,9 @@ export class TablaSuscripcionesComponent implements OnInit {
   }
 
   onTableParamsChange(params: NzTableQueryParams) {
-    const srtString: string | null = Extra.buildSortString(params.sort);
-    if (srtString) this.paramsFiltrosTabla['sort'] = srtString;
-
-    this.paramsFiltrosTabla['offset'] = `${(this.pageIndex - 1) * this.pageSize}`;
-    this.paramsFiltrosTabla['limit'] = `${this.pageSize}`;
+    this.sortStr = Extra.buildSortString(params.sort);
+    this.pageSize = params.pageSize;
+    this.pageIndex = params.pageIndex;
     this.cargarDatos();
   }
 
@@ -154,7 +153,9 @@ export class TablaSuscripcionesComponent implements OnInit {
     if (this.textoBusqueda) paramsObj['search'] = this.textoBusqueda;
 
     var params: HttpParams = new HttpParams();
-    params = params.appendAll(this.paramsFiltrosTabla);
+    params = params.append('limit', this.pageSize);
+    params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
+    if(this.sortStr) params = params.append('sort', this.sortStr);
     params = params.appendAll(paramsObj);
     params = params.appendAll(this.paramsFiltros);
     return params;
