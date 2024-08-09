@@ -388,17 +388,15 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   quitarCuotaDetalle(cuota: CuotaDTO) {
-    const index = this.lstDetallesVenta.findIndex(detalle => detalle.idcuota == cuota.id);
-    if (index) this.quitarDetalleFactura(index);
+    const index = this.lstDetallesVenta.findIndex(detalle => detalle.idcuota == cuota.id);    
+    if (index != -1) this.quitarDetalleFactura(index);
     this.mapCuotaEnDetalle.set(cuota.id ?? -1, false);
   }
 
   quitarDetalleFactura(indice: number) {
     const idcuota = this.lstDetallesVenta[indice].idcuota;
     if (idcuota) this.mapCuotaEnDetalle.set(idcuota, false);
-    const arrDfv: DetalleVenta[] = this.lstDetallesVenta.slice();
-    arrDfv.splice(indice, 1);
-    this.lstDetallesVenta = arrDfv;
+    this.lstDetallesVenta = this.lstDetallesVenta.filter((detalle, i) => i != indice);
     this.calcularTotalFactura();
   }
 
@@ -448,7 +446,6 @@ export class DetalleVentaComponent implements OnInit {
     fv.idcobradorcomision = cliente?.idcobrador ?? null;
     //if (cliente && cliente.idcobrador) fv.idcobradorcomision = cliente.idcobrador;
     fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
-    console.log(fv);
     return fv;
   }
 
