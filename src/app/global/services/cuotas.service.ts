@@ -59,4 +59,8 @@ export class CuotasService {
   getCobroCuota(idcuota: number): Observable<CobroCuota>{
     return this.http.get<CobroCuota>(`${this.url}/${idcuota}/cobro`, AppSettings.getHttpOptionsAuth());
   }
+
+  generarCuotas(mes: number, anio: number): Observable<any>{
+    return this.http.post<{mes: number, anio: number}>(`${this.url}/generar`, { mes, anio } ,AppSettings.getHttpOptionsAuth());
+  }
 }
