@@ -20,6 +20,7 @@ import { Timbrado } from '@dto/timbrado.dto';
 import { Venta } from '@dto/venta.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
+import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -88,32 +89,35 @@ export class DetalleVentaComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private sesionSrv: SesionService,
     private impresionSrv: ImpresionService,
-    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService
+    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
+    private timbradoUtilSrv: TimbradoUtilService
   ) { }
 
   ngOnInit(): void {
     this.idventa = this.aroute.snapshot.paramMap.get('idventa') ?? 'nueva';
     this.cargarTimbrados();
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
-      this.guardarUltimoTimbradoSeleccionado(this.sesionSrv.idusuario, value);
-      if (value !== null) {
-        this.timbradoSrv.getPorId(value).subscribe({
-          next: (t) => {
-            this.actualizarControlNroFactura(t);
-            this.nroFacturaDesactivado = false;
-          },
-          error: (e) => {
-            console.log('Error al cargar timbrado por id', e);
-            this.httpErrorHandler.process(e);
-          }
-        });
-      } else {
+      this.timbradoUtilSrv.guardarUltimoSeleccionado(this.sesionSrv.idusuario, value);
+      if(value == null){
         this.nroFacturaDesactivado = true;
+        return;
       }
+      this.timbradoSrv.getPorId(value).subscribe({
+        next: (t) => {
+          this.actualizarControlNroFactura(t);
+          this.nroFacturaDesactivado = false;
+        },
+        error: (e) => {
+          console.log('Error al cargar timbrado por id', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
     });
+
     this.formCabecera.get('nroFactura')?.valueChanges.subscribe((value: number | null) => {
       this.actualizarValidacionTimbrado();
     });
+
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
       const cliente = this.lstClientes.find(cliente => cliente.id == value);
       if (this.idventa === 'nueva') this.lstDetallesVenta = [];
@@ -134,34 +138,8 @@ export class DetalleVentaComponent implements OnInit {
 
     if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
 
-    this.formCabecera.get('idTimbrado')?.setValue(this.getUltimoTimbradoSeleccionado(this.sesionSrv.idusuario));
+    this.formCabecera.get('idTimbrado')?.setValue(this.timbradoUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
-  }
-
-  private getUltimoTimbradoSeleccionado(idusuario: number): number | null {
-
-    if (typeof (Storage) === 'undefined') return null
-    const preferenciasStr: string = localStorage.getItem('preferencias-detalle-venta') ?? '[]';
-
-    let preferencias: { idusuario: number, idUltimoTimbradoSeleccionado: number }[] = JSON.parse(preferenciasStr);
-    const pref = preferencias.find(preferencia => preferencia.idusuario == idusuario);
-    if (pref) return Number(pref.idUltimoTimbradoSeleccionado);
-    else return null;
-  }
-
-  private guardarUltimoTimbradoSeleccionado(idusuario: number, idtimbrado: number | null) {
-    if (typeof (Storage) === 'undefined') return;
-
-    const clave: string = 'preferencias-detalle-venta';
-    let preferencias: {
-      idusuario: number,
-      idUltimoTimbradoSeleccionado: number
-    }[] = JSON.parse(localStorage.getItem('preferencias-detalle-venta') ?? '[]');
-
-    preferencias = preferencias.filter(pref => pref.idusuario != idusuario);
-    if (idtimbrado) preferencias.push({ idusuario: idusuario, idUltimoTimbradoSeleccionado: idtimbrado });
-
-    localStorage.setItem(clave, JSON.stringify(preferencias));
   }
 
   private agregarClienteALista(idcliente: number) {
@@ -234,28 +212,6 @@ export class DetalleVentaComponent implements OnInit {
     });
   }
 
-  formatPrefijoTimbrado(timb: Timbrado): string {
-    const codEst: string = timb.codestablecimiento ? timb.codestablecimiento.toString().padStart(3, '0') : '';
-    const codPE: string = timb.codpuntoemision ? timb.codpuntoemision.toString().padStart(3, '0') : '';
-
-    return `${codEst}-${codPE}`;
-  }
-
-  rangoTimbrado(timb: Timbrado): string {
-    const nroIni: string = timb.nroinicio ? timb.nroinicio.toString().padStart(7, '0') : '';
-    const nroFin: string = timb.nrofin ? timb.nrofin.toString().padStart(7, '0') : '';
-    return `De ${nroIni} al ${nroFin}`;
-  }
-
-  formatFechaVencimiento(timb: Timbrado): string {
-    let fvStr: string = '';
-    if (timb.fechavencimiento) {
-      const fv: Date = new Date(timb.fechavencimiento);
-      fvStr = `${fv.getDate().toString().padStart(2, '0')}/${(fv.getMonth() + 1).toString().padStart(2, '0')}/${fv.getFullYear()}`;
-    }
-    return fvStr;
-  }
-
   actualizarValidacionTimbrado() {
     if (this.formCabecera.controls['idTimbrado'].hasError('required')) {
       this.statusNroFactura = 'error';
@@ -284,36 +240,35 @@ export class DetalleVentaComponent implements OnInit {
 
   private registrar() {
     this.guardandoFactura = true;
-    this.ventasSrv.post(this.getDtoFacturaVenta()).subscribe({
+    this.ventasSrv.post(this.getDtoFacturaVenta())
+    .pipe(finalize(() => this.guardandoFactura = false))
+    .subscribe({
       next: (idgenerado) => {
-        this.guardandoFactura = false;
         this.idventa = `${idgenerado}`;
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
         this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
-        //this.cargarDatosVenta(idgenerado);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
         this.httpErrorHandler.process(e);
-        this.guardandoFactura = false;
       }
     });
   }
 
   private editar(){
     this.guardandoFactura = true;
-    this.ventasSrv.put(this.getDtoFacturaVenta()).subscribe({
+    this.ventasSrv.put(this.getDtoFacturaVenta())
+    .pipe(finalize(() => this.guardandoFactura = false))
+    .subscribe({
       next: () => {
-        this.guardandoFactura = false;
         this.notif.create('success', '<strong>Éxito</strong>', 'Venta editada');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
         this.cargarDatosVenta(Number(this.idventa));
       },
       error: (e) => {
         console.error('Error al editar venta', e);
-        this.httpErrorHandler.process(e);
-        this.guardandoFactura = false;
+        this.httpErrorHandler.process(e);        
       }
     });
   }
@@ -326,15 +281,13 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('offset', '0');
     if (consulta) params = params.append('search', consulta);
     this.loadingClientes = true;
-    this.clienteSrv.get(params).subscribe({
-      next: (clientes) => {
-        this.lstClientes = clientes;
-        this.loadingClientes = false;
-      },
+    this.clienteSrv.get(params)
+    .pipe(finalize(() => this.loadingClientes = false))
+    .subscribe({
+      next: (clientes) => this.lstClientes = clientes,
       error: (e) => {
         console.error('Error al buscar cliente', e);
-        this.httpErrorHandler.process(e);
-        this.loadingClientes = false;
+        this.httpErrorHandler.process(e);        
       }
     });
   }
@@ -346,15 +299,13 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('limit', '10');
     params = params.append('offset', `${this.lstClientes.length}`);
     this.loadingMasClientes = true;
-    this.clienteSrv.get(params).subscribe({
-      next: (clientes) => {
-        this.lstClientes = [...this.lstClientes, ...clientes];
-        this.loadingMasClientes = false;
-      },
+    this.clienteSrv.get(params)
+    .pipe(finalize(() => this.loadingMasClientes = false))
+    .subscribe({
+      next: (clientes) => this.lstClientes = [...this.lstClientes, ...clientes],
       error: (e) => {
         console.error('Error al cargar mas clientes', e);
         this.httpErrorHandler.process(e);
-        this.loadingMasClientes = false;
       }
     });
   }
@@ -443,7 +394,6 @@ export class DetalleVentaComponent implements OnInit {
     fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
     const cliente = this.lstClientes.find(cliente => cliente.id == this.formCabecera.controls.idCliente.value);
     fv.idcobradorcomision = cliente?.idcobrador ?? null;
-    //if (cliente && cliente.idcobrador) fv.idcobradorcomision = cliente.idcobrador;
     fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
     return fv;
   }
@@ -503,42 +453,43 @@ export class DetalleVentaComponent implements OnInit {
     this.loadingCantidadCuotas = true;
     let params = new HttpParams()
       .append('eliminado', 'false');
-    this.clienteSrv.getSuscripcionesPorCliente(idcliente, params).subscribe({
+    this.clienteSrv.getSuscripcionesPorCliente(idcliente, params)
+    .pipe(finalize(() => this.loadingCantidadCuotas = false))
+    .subscribe({
       next: (suscripciones) => {
         let totalPendiente = 0
         suscripciones.forEach(suscripcion => totalPendiente += Number(suscripcion.cuotaspendientes));
         this.totalCuotasPendientes = totalPendiente;
-        this.loadingCantidadCuotas = false;
       },
       error: (e) => {
         console.error('Error al consultar suscripciones por cliente', e);
-        this.loadingCantidadCuotas = false;
       }
     })
   }
 
   buscarClientePorCi(event: any) {
     const ci = this.formCabecera.controls.ci.value;
-    if (ci) {
-      const params = new HttpParams()
-        .append('eliminado', 'false')
-        .append('ci', ci);
-      this.clienteSrv.get(params).subscribe({
-        next: (clientes) => {
-          if (clientes.length === 0) {
-            this.notif.create('warning', 'No encontrado', `No se encontró ningun cliente con CI: ${ci}`);
-            event.target.select();
-          } else {
-            if (!this.lstClientes.find(cliente => cliente.ci == ci)) this.lstClientes.push(clientes[0]);
-            this.formCabecera.controls.idCliente.setValue(clientes[0].id);
-          }
-        },
-        error: (e) => {
-          console.log('Error al buscar cliente por ci', e);
-          this.httpErrorHandler.process(e);
+    if (!ci) return;
+    
+    const params = new HttpParams()
+      .append('eliminado', 'false')
+      .append('ci', ci);
+    this.clienteSrv.get(params).subscribe({
+      next: (clientes) => {
+        if (clientes.length === 0) {
+          this.notif.create('warning', 'No encontrado', `No se encontró ningun cliente con CI: ${ci}`);
+          event.target.select();
+        } else {
+          if (!this.lstClientes.find(cliente => cliente.ci == ci)) this.lstClientes.push(clientes[0]);
+          this.formCabecera.controls.idCliente.setValue(clientes[0].id);
         }
-      });
-    }
+      },
+      error: (e) => {
+        console.log('Error al buscar cliente por ci', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+    
   }
 
   buscarFacturaPorNro(){
