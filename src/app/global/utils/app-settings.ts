@@ -290,4 +290,14 @@ export class AppSettings {
     return httpOptions;
   }
 
+  public static getHttpOptionsBlobAuth(): Object {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+      }),
+      responseType: 'blob'
+    }
+    return httpOptions;
+  }
+
 }

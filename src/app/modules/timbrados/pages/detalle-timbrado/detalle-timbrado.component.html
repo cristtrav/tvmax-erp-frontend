@@ -147,6 +147,13 @@
                 </nz-form-control>
             </nz-form-item>
 
+            <nz-form-item>
+                <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="electronico">Factura Electrónica</label>
+                </nz-form-control>
+            </nz-form-item>
+
             <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
                 <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                     <i nz-icon nzType="save"></i>

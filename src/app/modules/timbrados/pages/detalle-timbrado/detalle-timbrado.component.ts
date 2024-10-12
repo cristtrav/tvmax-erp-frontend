@@ -49,6 +49,7 @@ export class DetalleTimbradoComponent implements OnInit {
     vencimiento: new FormControl(null, null),
     iniciovigencia: new FormControl(null, [Validators.required]),
     activo: new FormControl(true, [Validators.required]),
+    electronico: new FormControl(false, [Validators.required]),
     idformato: new FormControl()
   });
 
@@ -70,6 +71,7 @@ export class DetalleTimbradoComponent implements OnInit {
       }
     }
     this.form.get('nroInicial')?.valueChanges.subscribe((nroInicio: number | null) => {
+      console.log("nroinicial", nroInicio);
       this.form.get('nroFinal')?.clearValidators();
       this.form.get('ultNroUsado')?.clearValidators();
       const nroFin: number | null = this.form.get('nroFinal')?.value;
@@ -108,7 +110,9 @@ export class DetalleTimbradoComponent implements OnInit {
 
   cargarDatos() {
     this.formLoading = true;
-    this.timbradosSrv.getPorId(Number(this.idtimbrado)).subscribe({
+    this.timbradosSrv.getPorId(Number(this.idtimbrado))
+    .pipe(finalize(() => this.formLoading = false))
+    .subscribe({
       next: (timbrado) => {
         this.form.controls.id.setValue(timbrado.id);
         this.form.controls.codEstablecimiento.setValue(timbrado.codestablecimiento);
@@ -122,7 +126,7 @@ export class DetalleTimbradoComponent implements OnInit {
           this.form.controls.vencimiento.setValue(new Date(`${timbrado.fechavencimiento}T00:00:00`));
         this.form.controls.activo.setValue(timbrado.activo);
         this.form.controls.idformato.setValue(timbrado.idformatofactura);
-        this.formLoading = false;
+        this.form.controls.electronico.setValue(timbrado.electronico);
       },
       error: (e) => {
         console.error('Error al consultar timbrado por id', e);
@@ -190,6 +194,7 @@ export class DetalleTimbradoComponent implements OnInit {
     t.fechainicio = formatDate(this.form.controls.iniciovigencia.value, 'yyyy-MM-dd', this.locale);
     t.activo = this.form.get('activo')?.value;
     t.idformatofactura = this.form.get('idformato')?.value;
+    t.electronico = this.form.get('electronico')?.value;
     return t;
   }
 

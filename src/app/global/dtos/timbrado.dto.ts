@@ -11,4 +11,5 @@ export class Timbrado {
     ultimonrousado: number | null = null;
     activo: boolean | null = true;
     idformatofactura: number | null = null;
+    electronico: boolean | null = null;
 }

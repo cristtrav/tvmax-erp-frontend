@@ -7,7 +7,8 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
+import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 
 @Component({
   selector: 'app-tabla-ventas',
@@ -52,10 +53,14 @@ export class TablaVentasComponent implements OnInit {
   loadingVentas: boolean = false;
   expandSet = new Set<number>();
 
+  loadingDTE: boolean = false;
+  loadingKuDE: boolean = false;
+
   constructor(
     private ventasSrv: VentasService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private notif: NzNotificationService
+    private notif: NzNotificationService,
+    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -188,6 +193,46 @@ export class TablaVentasComponent implements OnInit {
         this.anularFactura(fv.id);
       }
     }
+  }
+
+  descargarDTE(idventa: number){
+    this.loadingDTE = true;
+    this.ventasSrv.getDTE(idventa)
+    .pipe(finalize(() => this.loadingDTE = false))
+    .subscribe({
+      next: (dte) => {
+        const venta = this.lstFacturasVenta.find(v => v.id == idventa);
+        const nombrearchivo = venta != null ? `${venta.prefijofactura}-${(venta.nrofactura ?? 0).toString().padStart(7, '0')}` : 'factura'
+        this.facturaElectronicaUtilsSrv.downloadDTE(dte, nombrearchivo);
+      },
+      error: (e) => {
+        console.error("Error al descargar DTE de factura electrónica", e);
+        this.notif.error(
+          "<strong>Error al descargar DTE</strong>",
+          e.status == 404 ? 'No se encontró el archivo' : e.statusText
+        );
+      }
+    })
+  }
+
+  descargarKUDE(idventa: number){
+    this.loadingKuDE = true;
+    this.ventasSrv.getKUDE(idventa)
+    .pipe(finalize(() => this.loadingKuDE = false))
+    .subscribe({
+      next: (kude) => {
+        const venta = this.lstFacturasVenta.find(v => v.id == idventa);
+        const nombrearchivo = venta != null ? `${venta.prefijofactura}-${(venta.nrofactura ?? 0).toString().padStart(7, '0')}` : 'factura'
+        this.facturaElectronicaUtilsSrv.downloadKUDE(kude, nombrearchivo);
+      },
+      error: (e) => {
+        console.error("Error al descargar KuDE de factura electrónica", e);
+        this.notif.error(
+          "<strong>Error al descargar KuDE</strong>",
+          e.status == 404 ? 'No se encontró el archivo' : e.statusText
+        );
+      }
+    })
   }
 
 }

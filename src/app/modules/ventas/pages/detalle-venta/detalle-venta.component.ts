@@ -19,6 +19,7 @@ import { Suscripcion } from '@dto/suscripcion-dto';
 import { Timbrado } from '@dto/timbrado.dto';
 import { Venta } from '@dto/venta.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -86,7 +87,8 @@ export class DetalleVentaComponent implements OnInit {
     private notif: NzNotificationService,
     private viewContainerRef: ViewContainerRef,
     private sesionSrv: SesionService,
-    private impresionSrv: ImpresionService
+    private impresionSrv: ImpresionService,
+    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -164,15 +166,13 @@ export class DetalleVentaComponent implements OnInit {
 
   private agregarClienteALista(idcliente: number) {
     this.loadingClientes = true;
-    this.clienteSrv.getPorId(idcliente).subscribe({
-      next: (cliente) => {
-        this.lstClientes.push(cliente);
-        this.loadingClientes = false;
-      },
+    this.clienteSrv.getPorId(idcliente)
+    .pipe(finalize(() => this.loadingClientes = false))
+    .subscribe({
+      next: (cliente) => this.lstClientes.push(cliente),
       error: (e) => {
         console.error('Error al cargar clente seleccionado', e);
         this.httpErrorHandler.process(e);
-        this.loadingClientes = false;
       }
     })
   }
@@ -193,7 +193,6 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.get('idTimbrado')?.setValue(resp.venta.idtimbrado);
         this.formCabecera.get('nroFactura')?.setValue(resp.venta.nrofactura);
         this.lstDetallesVenta = resp.detalles;
-        console.log(resp.venta.fechafactura);
         if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
       },
       error: (e) => {
@@ -476,8 +475,28 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   imprimir(): void {
-    this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef)
-    .subscribe((loading) => this.loadingImpresion = loading);
+    const timbrado = this.lstTimbrados.find(t => t.id == this.formCabecera.controls.idTimbrado.value)
+    if(timbrado?.electronico){
+      this.loadingImpresion = true;
+      this.ventasSrv.getKUDE(Number(this.idventa))
+      .pipe(finalize(() => this.loadingImpresion = false))
+      .subscribe({
+        next: (kude) => {
+          const nombrearchivo = `${timbrado.prefijo}-${(this.formCabecera.controls.nroFactura.value).toString().padStart(7, '0')}`
+          this.facturaElectronicaUtilsSrv.downloadKUDE(kude, nombrearchivo);
+        },
+        error: (e) => {
+          this.notif.error(
+            "<strong>Error al cargar KuDE</strong>",
+            e.status == 404 ? 'Archivo no encontrado' : e
+          )
+          console.error('Error al cargar kude', e);
+        }
+      })
+    }else{
+      this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef)
+      .subscribe((loading) => this.loadingImpresion = loading);
+    }
   }
 
   calcularTotalCuotasPendientes(idcliente: number) {

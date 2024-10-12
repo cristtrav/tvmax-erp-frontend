@@ -21,6 +21,7 @@ export class Venta {
     timbrado: number | null = null;
     vencimientotimbrado: Date | null = null;
     iniciovigenciatimbrado: Date | null = null;
+    facturaelectronica: boolean | null = null;
     fechacobro: Date | null = null;
     idcobradorcomision: number | null = null;
     cobrador: string | null = null;

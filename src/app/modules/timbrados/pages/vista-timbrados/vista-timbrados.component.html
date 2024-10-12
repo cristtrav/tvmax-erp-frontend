@@ -50,6 +50,7 @@
                         <th [nzColumnKey]="'fechainicio'" [nzSortFn]="true">Inicio vigencia</th>
                         <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true">Vencimiento</th>
                         <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Estado</th>
+                        <th [nzColumnKey]="'electronico'" [nzSortFn]="true" nzAlign="center">Tipo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -71,6 +72,10 @@
                         <td nzAlign="center">
                             <nz-tag *ngIf="t.activo" nzColor="green">Activo</nz-tag>
                             <nz-tag *ngIf="!t.activo" nzColor="red">Inactivo</nz-tag>
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag *ngIf="t.electronico" nzColor="purple">F. Electrónica</nz-tag>
+                            <nz-tag *ngIf="!t.electronico" nzColor="geekblue">F. Preimpresa</nz-tag>
                         </td>
                         <td>
                             <div nz-row [nzGutter]="[8, 8]">

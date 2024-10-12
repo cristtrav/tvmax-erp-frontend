@@ -100,4 +100,12 @@ export class VentasService {
   /*getDetallesVentaCobros(params: HttpParams): Observable<ServerResponseList<DetalleVentaCobro>>{
     return this.http.get<ServerResponseList<DetalleVentaCobro>>(`${this.url}/detalles/cobros`, AppSettings.getHttpOptionsAuthWithParams(params));
   }*/
+
+  getDTE(idventa: number): Observable<any>{
+    return this.http.get(`${this.url}/${idventa}/dte`, AppSettings.getHttpOptionsBlobAuth());
+  }
+
+  getKUDE(idventa: number): Observable<any>{
+    return this.http.get(`${this.url}/${idventa}/kude`, AppSettings.getHttpOptionsBlobAuth());
+  }
 }

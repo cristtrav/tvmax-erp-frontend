@@ -78,6 +78,41 @@
                         <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
                         {{ fv.id }}
                     </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulotipofactura" *ngIf="fv.facturaelectronica != null">
+                        <ng-template #titulotipofactura><strong>Tipo de Factura</strong></ng-template>
+                        <nz-tag *ngIf="fv.facturaelectronica" nzColor="purple">Electrónica</nz-tag>
+                        <nz-tag *ngIf="!fv.facturaelectronica" nzColor="geekblue">Preimpresa</nz-tag>
+                    </nz-descriptions-item>
+                    <nz-descriptions-item [nzTitle]="titulodescargas" *ngIf="fv.facturaelectronica != null">
+                        <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
+                        <nz-space>
+                            <button
+                                *nzSpaceItem
+                                nz-tooltip
+                                nzTooltipTitle="Documento Tributario Electronico en formato XML"
+                                nz-button
+                                nzType="default"
+                                nzSize="small"
+                                [nzLoading]="loadingDTE"
+                                (click)="descargarDTE(fv.id ?? 0)">
+                                <i nz-icon nzTheme="outline" nzType="file-protect"></i>
+                                DTE
+                            </button>
+                            <button
+                                nz-tooltip
+                                nzTooltipTitle="Version Imprimible en formato PDF"
+                                *nzSpaceItem
+                                nz-button
+                                nzType="default"
+                                nzSize="small"
+                                [nzLoading]="loadingKuDE"
+                                (click)="descargarKUDE(fv.id ?? 0)">
+                                <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
+                                KuDE
+                            </button>
+                        </nz-space>
+                        
+                    </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulocobrador">
                         <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
                         {{ fv.cobrador }}
