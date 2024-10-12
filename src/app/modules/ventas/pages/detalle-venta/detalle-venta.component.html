@@ -104,12 +104,12 @@
                                     [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
                                     <nz-input-group [nzAddOnBefore]="prefijoFactura" [nzAddOnAfter]="sufijoFactura" nzSearch>
                                         <ng-template #prefijoFactura>
-                                            <nz-select style="min-width: 7em;" [nzOptionOverflowSize]="32"
+                                            <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
                                                 [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
                                                 <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
-                                                    [nzLabel]="'Pref: '+formatPrefijoTimbrado(timb)+' | '+ rangoTimbrado(timb)+' | venc: '+this.formatFechaVencimiento(timb)"
+                                                    [nzLabel]="timb | datosTimbrado"
                                                     [nzValue]="timb.id">
-                                                    {{ formatPrefijoTimbrado(timb) }}
+                                                    {{ timb | datosTimbrado }}
                                                 </nz-option>
                                             </nz-select>
                                         </ng-template>
@@ -132,7 +132,7 @@
                                     </nz-input-group>
 
                                     <ng-template #renderPrefijo let-selected>
-                                        {{ selected.nzLabel.substring(6, 13) }}
+                                        {{ selected.nzLabel.substring(0, 7) }}
                                     </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
