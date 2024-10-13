@@ -41,11 +41,6 @@ export class AppSettings {
           id: 244,
           name: 'Timbrados',
           routerLink: '/app/timbrados',
-        },
-        {
-          id: 980,
-          name: 'Tributación',
-          routerLink: '/app/tributacion'
         }
       ]
     },
@@ -169,6 +164,18 @@ export class AppSettings {
           id: 880,
           name: 'Asignaciones',
           routerLink: '/app/asignacionesreclamos'
+        }
+      ]
+    },
+    {
+      id: 9,
+      title: 'Tributación',
+      icon: 'percentage',
+      children: [
+        {
+          id: 980,
+          name: 'Exportar CSV',
+          routerLink: '/app/exportarcsv'
         }
       ]
     },

@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TributacionService } from '@services/facturacion/tributacion.service';
+import { ExportarCsvService } from '@services/facturacion/tributacion.service';
 import { ResponsiveSizes } from '@util/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@util/responsive/responsive-utils';
 import { finalize } from 'rxjs';
@@ -12,11 +12,11 @@ interface FileInterface{
 }
 
 @Component({
-  selector: 'app-vista-tributacion',
-  templateUrl: './vista-tributacion.component.html',
-  styleUrls: ['./vista-tributacion.component.scss']
+  selector: 'app-vista-exportar-csv',
+  templateUrl: './vista-exportar-csv.component.html',
+  styleUrls: ['./vista-exportar-csv.component.scss']
 })
-export class VistaTributacionComponent {
+export class VistaExportarCsvComponent {
   
     readonly SECTION_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 11, xl: 10, xxl: 9 } as const;
     readonly LABEL_SIZES: ResponsiveSizes = { xs: 24, sm: 11, md: 10, lg: 9, xl: 8, xxl: 7} as const;
@@ -37,7 +37,7 @@ export class VistaTributacionComponent {
     });
 
     constructor(
-      private tributacionSrv: TributacionService
+      private tributacionSrv: ExportarCsvService
     ){}
 
     consultar(){

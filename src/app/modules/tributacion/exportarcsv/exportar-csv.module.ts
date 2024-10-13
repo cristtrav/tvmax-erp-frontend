@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TributacionRoutingModule } from './tributacion-routing.module';
-import { VistaTributacionComponent } from './pages/vista-tributacion/vista-tributacion.component';
+import { ExportarCsvRoutingModule } from './exportar-csv-routing.module';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from 'src/app/icons-provider.module';
@@ -21,15 +20,16 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { VistaExportarCsvComponent } from './pages/vista-exportar-csv/vista-exportar-csv.component';
 
 
 @NgModule({
   declarations: [
-    VistaTributacionComponent
+    VistaExportarCsvComponent
   ],
   imports: [
     CommonModule,
-    TributacionRoutingModule,
+    ExportarCsvRoutingModule,
     WorkspaceLayoutModule,
     NzBreadCrumbModule,
     IconsProviderModule,
@@ -50,4 +50,4 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
     NzTagModule
   ]
 })
-export class TributacionModule { }
+export class ExportarCsvModule { }

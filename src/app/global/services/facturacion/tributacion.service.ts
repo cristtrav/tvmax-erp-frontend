@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class TributacionService {
+export class ExportarCsvService {
 
-  readonly url = `${environment.apiURL}/tributacion`;
+  readonly url = `${environment.apiURL}/exportarcsv`;
 
   constructor(
     private httpUtils: HttpUtilsService
