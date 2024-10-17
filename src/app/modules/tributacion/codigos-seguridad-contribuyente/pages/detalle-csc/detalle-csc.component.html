@@ -1,0 +1,60 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="../">Código de Seguridad del Contribuyente</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idCsc | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="cargandoDatos">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    Código
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el código">
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <nz-input-number nzPlaceHolder="1" formControlName="id" style="width: 100%;"></nz-input-number>
+                        </div>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"    
+                    nzRequired>
+                    C. de Seguridad
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el cód. de seguridad. Máx. 200 carácteres.">
+                    <input nz-input placeholder="123456" formControlName="codigoseguridad">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <div nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></div>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="activo">Activo</label>
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
+                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                    {{ idCsc == 'nuevo' ? 'Registrar' : 'Editar' }}
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

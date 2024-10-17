@@ -186,6 +186,11 @@ export class AppSettings {
           id: 1060,
           name: 'Act. Económicas',
           routerLink: '/app/actividadeseconomicas'
+        },
+        {
+          id: 1140,
+          name: 'CSC',
+          routerLink: '/app/csc'
         }
       ]
     },
