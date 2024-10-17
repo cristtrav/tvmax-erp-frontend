@@ -1,0 +1,47 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Contribuyente
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="cargandoDatos">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    RUC
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    [nzErrorTip]="'Ingrese el RUC'">
+                    <input nz-input formControlName="ruc" placeholder="80029009-7">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    Razón social
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    [nzErrorTip]="'Ingrese la razón social'">
+                    <input nz-input formControlName="razonSocial" placeholder="TVMAX CABLE SA">
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
+                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

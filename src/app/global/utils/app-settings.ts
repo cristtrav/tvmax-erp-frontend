@@ -176,6 +176,16 @@ export class AppSettings {
           id: 980,
           name: 'Exportar CSV',
           routerLink: '/app/exportarcsv'
+        },
+        {
+          id: 1020,
+          name: "Contribuyente",
+          routerLink: '/app/contribuyente'
+        },
+        {
+          id: 1060,
+          name: 'Act. Económicas',
+          routerLink: '/app/actividadeseconomicas'
         }
       ]
     },

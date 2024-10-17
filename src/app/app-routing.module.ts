@@ -160,6 +160,18 @@ const routes: Routes = [
         data: { idfuncionalidad: 980, name: 'Tributación - Exportar CSV' },
         canActivate: [canAccessFn],
         loadChildren: () => import('./modules/tributacion/exportarcsv/exportar-csv.module').then(m => m.ExportarCsvModule)
+      },
+      {
+        path: 'contribuyente',
+        data: { idfuncionalidad: 1020, name: 'Datos del Contribuyente'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/tributacion/contribuyente/contribuyente.module').then(m => m.ContribuyenteModule)
+      },
+      {
+        path: 'actividadeseconomicas',
+        data: { idfuncionalidad: 1060, name: 'Actividades Económicas'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/tributacion/actividades-economicas/actividades-economicas.module').then(m => m.ActividadesEconomicasModule)
       }
     ]
   },

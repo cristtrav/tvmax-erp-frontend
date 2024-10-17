@@ -1,0 +1,59 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="../">Actividades Económicas</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idactividad | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="cargandoDatos">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    Código
+                </nz-form-label>
+                <nz-form-control
+                    nzErrorTip="Ingrese el codigo"
+                    [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <input nz-input
+                                placeholder="1234"
+                                style="width: 100%;"
+                                formControlName="id">
+                        </div>
+                    </div>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    nzRequired
+                    [appNzColResponsiveSizes]="LABEL_SIZES">
+                    Descripción
+                </nz-form-label>
+                <nz-form-control
+                    nzErrorTip="Ingrese la descripcón. Máx. 150 carácteres."
+                    [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <input
+                        nz-input placeholder="Servicio de telecomunicaciones"
+                        formControlName="descripcion">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
+                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                    {{ idactividad == 'nueva' ? 'Registrar' : 'Editar' }}
+                </button>
+            </nz-col>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>
