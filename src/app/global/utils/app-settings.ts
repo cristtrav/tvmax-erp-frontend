@@ -173,9 +173,9 @@ export class AppSettings {
       icon: 'percentage',
       children: [
         {
-          id: 980,
-          name: 'Exportar CSV',
-          routerLink: '/app/exportarcsv'
+          id: 1060,
+          name: 'Act. Económicas',
+          routerLink: '/app/actividadeseconomicas'
         },
         {
           id: 1020,
@@ -183,14 +183,19 @@ export class AppSettings {
           routerLink: '/app/contribuyente'
         },
         {
-          id: 1060,
-          name: 'Act. Económicas',
-          routerLink: '/app/actividadeseconomicas'
-        },
-        {
           id: 1140,
           name: 'CSC',
           routerLink: '/app/csc'
+        },
+        {
+          id: 1100,
+          name: 'Establecimientos',
+          routerLink: '/app/establecimientos'
+        },
+        {
+          id: 980,
+          name: 'Exportar CSV',
+          routerLink: '/app/exportarcsv'
         }
       ]
     },

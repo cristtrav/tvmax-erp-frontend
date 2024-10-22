@@ -178,6 +178,12 @@ const routes: Routes = [
         data: { idfuncionalidad: 1140, name: 'Código de Seguridad del Contribuyente' },
         canActivate: [canAccessFn],
         loadChildren: () => import('./modules/tributacion/codigos-seguridad-contribuyente/codigos-seguridad-contribuyente.module').then(m => m.CodigosSeguridadContribuyenteModule)
+      },
+      {
+        path: 'establecimientos',
+        data: { idfuncionalidad: 1100, name: 'Establecimientos' },
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/tributacion/establecimientos/establecimientos.module').then(m => m.EstablecimientosModule)
       }
     ]
   },

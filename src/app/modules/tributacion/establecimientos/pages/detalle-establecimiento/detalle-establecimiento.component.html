@@ -1,0 +1,155 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="../">Establecimientos</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idestablecimiento | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="cargandoDatos">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Código
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <nz-input-number
+                                nzPlaceHolder="1"
+                                formControlName="id"
+                                style="width: 100%;">
+                            </nz-input-number>
+                        </div>
+                    </div>
+    
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Denominación
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <input nz-input placeholder="TVMAX CABLE SA" formControlName="denominacion">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Dirección
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <input nz-input placeholder="CARLOS A. LOPEZ" formControlName="direccion">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    N° Casa
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <div nz-row>
+                        <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
+                            <nz-input-number
+                                nzPlaceHolder="425"
+                                formControlName="nrocasa"
+                                style="width: 100%;">
+                            </nz-input-number>
+                        </div>
+                    </div>            
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Departamento
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Seleccione un departamento">
+                    <nz-select
+                        nzPlaceHolder="Seleccionar..."
+                        formControlName="coddepartamento"
+                        [nzLoading]="cargandoDepartamentos"
+                        nzShowSearch
+                        nzAllowClear>
+                        <nz-option
+                            *ngFor="let dep of lstDepartamentos"
+                            [nzValue]="dep.codDepartamento"
+                            [nzLabel]="dep.departamento">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Distrito
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Seleccione un distrito">
+                    <nz-select
+                        nzPlaceHolder="Seleccionar..."
+                        formControlName="coddistrito"
+                        [nzLoading]="cargandoDistritos"
+                        nzShowSearch
+                        nzAllowClear>
+                        <nz-option
+                            *ngFor="let distrito of lstDistritos"
+                            [nzValue]="distrito.codDistrito"
+                            [nzLabel]="distrito.distrito">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Ciudad
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Seleccione una ciudad">
+                    <nz-select
+                        nzPlaceHolder="Seleccionar..."
+                        formControlName="codciudad"
+                        [nzLoading]="cargandoCiudades"
+                        nzShowSearch
+                        nzAllowClear>
+                        <nz-option
+                            *ngFor="let ciudad of lstCiudades"
+                            [nzValue]="ciudad.codCiudad"
+                            [nzLabel]="ciudad.ciudad">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Teléfono
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <input nz-input placeholder="0521200240" formControlName="telefono">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Email
+                </nz-form-label>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <input nz-input placeholder="soporte@tvmaxsa.com.py" formControlName="email">
+                </nz-form-control>
+            </nz-form-item>
+            <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
+                <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
+                    <i nz-icon nzType="save" nzTheme="outline"></i>
+                    {{ idestablecimiento == 'nuevo' ? 'Registrar' : 'Editar' }}
+                </button>
+            </div>
+        </form>
+    </nz-spin>
+    
+
+</app-workspace-layout>
