@@ -26,6 +26,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
     NzModalModule,
     NzSelectModule,
     WorkspaceLayoutModule,
-    NzColResponsiveSizesDirective
+    NzColResponsiveSizesDirective,
+    PaddingZerosPipe
   ]
 })
 export class TimbradosModule { }

@@ -12,6 +12,8 @@ import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.inter
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Timbrado } from '@dto/timbrado.dto';
+import { EstablecimientosService } from '@services/facturacion/establecimientos.service';
+import { EstablecimientoDTO } from '@dto/facturacion/establecimiento.dto';
 
 @Component({
   selector: 'app-detalle-timbrado',
@@ -35,8 +37,10 @@ export class DetalleTimbradoComponent implements OnInit {
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   lastidLoading: boolean = false;
+  cargandoEstablecimientos: boolean = false;
 
   lstFormatos: FormatoFacturaDTO[] = [];
+  lstEstablecimientos: EstablecimientoDTO[] = [];
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
@@ -59,17 +63,16 @@ export class DetalleTimbradoComponent implements OnInit {
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
-    private formatosFacturasSrv: FormatosFacturasService    
+    private formatosFacturasSrv: FormatosFacturasService,
+    private establecimientosSrv: EstablecimientosService
   ) { }
 
   ngOnInit(): void {
+    this.cargarEstablecimientos();
     const idtim = this.aroute.snapshot.paramMap.get('idtimbrado');
-    if (idtim) {
-      this.idtimbrado = idtim;
-      if (idtim !== 'nuevo') {
-        this.cargarDatos();
-      }
-    }
+    this.idtimbrado = Number.isInteger(Number(idtim)) ? `${idtim}` : 'nuevo';
+    if(this.idtimbrado != 'nuevo') this.cargarDatos();
+    
     this.form.get('nroInicial')?.valueChanges.subscribe((nroInicio: number | null) => {
       console.log("nroinicial", nroInicio);
       this.form.get('nroFinal')?.clearValidators();
@@ -106,6 +109,13 @@ export class DetalleTimbradoComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     })
+  }
+
+  private cargarEstablecimientos(){
+    this.cargandoEstablecimientos = true;
+    this.establecimientosSrv.get(new HttpParams())
+    .pipe(finalize(() => this.cargandoEstablecimientos = false))
+    .subscribe(establecimientos => this.lstEstablecimientos = establecimientos);
   }
 
   cargarDatos() {
