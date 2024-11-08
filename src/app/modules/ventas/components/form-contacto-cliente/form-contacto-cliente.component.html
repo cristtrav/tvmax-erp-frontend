@@ -1,0 +1,35 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+            Teléfono 1
+        </nz-form-label>
+        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+            <input nz-input formControlName="telefono1" placeholder="0971222333">
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+            Teléfono 2
+        </nz-form-label>
+        <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+            <input nz-input formControlName="telefono2" placeholder="0521667788">
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+            Email
+        </nz-form-label>
+        <nz-form-control
+            [appNzColResponsiveSizes]="CONTROL_SIZES"
+            nzErrorTip="Ingrese un email válido">
+            <input nz-input formControlName="email" placeholder="juan.perez@gmail.com">
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<nz-alert
+    *ngIf="messageVisible"
+    [nzType]="messageType"
+    [nzMessage]="messageTitle"
+    [nzDescription]="messageDescription"
+    nzShowIcon>
+</nz-alert>

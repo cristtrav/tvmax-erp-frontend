@@ -46,6 +46,7 @@ import { PaddingZerosPipe } from "../../global/pipes/padding-zeros.pipe";
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { DatosTimbradoPipe } from './pipes/datos-timbrado.pipe';
+import { FormContactoClienteComponent } from './components/form-contacto-cliente/form-contacto-cliente.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { DatosTimbradoPipe } from './pipes/datos-timbrado.pipe';
         TablaVentasComponent,
         CuotasPendientesComponent,
         ServiciosComponent,
-        DatosTimbradoPipe
+        DatosTimbradoPipe,
+        FormContactoClienteComponent
     ],
     exports: [DetalleVentaComponent, FormFiltrosVentasComponent],
     imports: [

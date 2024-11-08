@@ -52,4 +52,8 @@ export class ClientesService {
   getTotalSuscripcionesPorCliente(idcliente: number, params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/${idcliente}/suscripciones/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
+
+  putContacto(idcliente: number, contacto: { telefono1?: string, telefono2?: string, email?: string }): Observable<any>{
+    return this.http.put(`${this.url}/${idcliente}/contacto`, contacto, AppSettings.getHttpOptionsAuth());
+  }
 }

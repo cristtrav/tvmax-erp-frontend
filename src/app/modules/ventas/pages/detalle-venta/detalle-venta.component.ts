@@ -21,6 +21,7 @@ import { Venta } from '@dto/venta.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.service';
+import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -34,11 +35,17 @@ export class DetalleVentaComponent implements OnInit {
   @ViewChild('cuotasPendientes')
   cuotasPendientesComp!: CuotasPendientesComponent;
 
+  @ViewChild(FormContactoClienteComponent)
+  formContactoClienteComp!: FormContactoClienteComponent;
+
+  guardandoContacto: boolean = false;
+
   idventa: string = 'nueva'
   lstTimbrados: Timbrado[] = [];
   lstClientes: Cliente[] = [];
   lstDetallesVenta: DetalleVenta[] = [];
   dvRuc: string | null = null;
+  clienteSeleccionado?: Cliente;
 
   formCabecera: FormGroup = new FormGroup({
     nroFactura: new FormControl(null, [Validators.required]),
@@ -48,7 +55,7 @@ export class DetalleVentaComponent implements OnInit {
     ci: new FormControl(null)
   });
 
-  errorTipNroFactura: string = 'hola mundo ';
+  errorTipNroFactura: string = '';
   statusNroFactura: string = 'success';
   nroFacturaDesactivado: boolean = true;
   nroFacturaMax: number = 9999999;
@@ -78,6 +85,8 @@ export class DetalleVentaComponent implements OnInit {
   buscandoFactura: boolean = false;
   moduloActivadoDesde: 'venta' | 'pos' = 'venta';
 
+  modalContactoVisible: boolean = false;
+
   constructor(
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -87,7 +96,7 @@ export class DetalleVentaComponent implements OnInit {
     private aroute: ActivatedRoute,
     private notif: NzNotificationService,
     private viewContainerRef: ViewContainerRef,
-    private sesionSrv: SesionService,
+    public sesionSrv: SesionService,
     private impresionSrv: ImpresionService,
     private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
     private timbradoUtilSrv: TimbradoUtilService
@@ -120,6 +129,7 @@ export class DetalleVentaComponent implements OnInit {
 
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
       const cliente = this.lstClientes.find(cliente => cliente.id == value);
+      this.clienteSeleccionado = cliente;
       if (this.idventa === 'nueva') this.lstDetallesVenta = [];
 
       if (value) this.calcularTotalCuotasPendientes(value)
@@ -521,5 +531,29 @@ export class DetalleVentaComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
+  }
+
+  mostrarModalContacto(){
+    this.modalContactoVisible = true;
+  }
+
+  ocultarModelContacto(){
+    this.modalContactoVisible = false;
+  }
+
+  refreshClienteSeleccionado(){
+    if(this.clienteSeleccionado == null || this.clienteSeleccionado.id == null) return;
+    this.clienteSrv.getPorId(this.clienteSeleccionado.id).subscribe({
+      next: (cliente) => {
+        this.lstClientes = this.lstClientes.map(cli => {
+          if(cli.id == cliente.id) return cliente;
+          else return cli;
+        });
+        this.clienteSeleccionado = cliente;
+      },
+      error: (e) => {
+        console.error(`Error al recargar cliente seleccionado: ${e.message}`);
+      }
+    })
   }
 }
