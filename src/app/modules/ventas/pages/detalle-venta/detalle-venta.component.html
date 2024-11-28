@@ -210,7 +210,12 @@
                                     </button>
                                 </div>
                                 <div nz-col>
-                                    <button nz-button nzType="primary" (click)="guardar()" style="width: 100%;">
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        [nzLoading]="guardandoFactura"
+                                        (click)="guardar()"
+                                        style="width: 100%;">
                                         <i nz-icon nzType="save"></i>
                                         {{ idventa == 'nueva' ? 'Registrar' : 'Editar' }}
                                     </button>
