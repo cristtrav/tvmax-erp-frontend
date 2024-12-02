@@ -91,7 +91,7 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <nz-form-item>
+            <nz-form-item *ngIf="!form.controls.electronico.value">
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Vencimiento</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
                     nzErrorTip="Ingrese la fecha de vencimiento del timbrado.">
@@ -114,7 +114,7 @@
                     </div>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="!form.controls.electronico.value">
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Nro. Final</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
                     nzErrorTip="Ingrese el número final. Máx. 7 dígitos y mayor al nro. inicial.">
@@ -139,7 +139,7 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <nz-form-item>
+            <nz-form-item *ngIf="!form.controls.electronico.value">
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
                     Formato de impresión
                 </nz-form-label>

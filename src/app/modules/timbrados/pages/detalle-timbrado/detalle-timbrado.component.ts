@@ -74,7 +74,6 @@ export class DetalleTimbradoComponent implements OnInit {
     if(this.idtimbrado != 'nuevo') this.cargarDatos();
     
     this.form.get('nroInicial')?.valueChanges.subscribe((nroInicio: number | null) => {
-      console.log("nroinicial", nroInicio);
       this.form.get('nroFinal')?.clearValidators();
       this.form.get('ultNroUsado')?.clearValidators();
       const nroFin: number | null = this.form.get('nroFinal')?.value;
@@ -95,6 +94,13 @@ export class DetalleTimbradoComponent implements OnInit {
         this.form.get('ultNroUsado')?.setValidators([Validators.max(nroFin ?? 9999999)]);
       }
     });
+    this.form.controls.electronico.valueChanges.subscribe(value => {
+      if(!value) return;
+
+      this.form.controls.idformato.reset();
+      this.form.controls.vencimiento.reset();
+      this.form.controls.nroFinal.setValue(9999999);
+    })
     this.cargarFormatos();
   }
 
