@@ -1,0 +1,157 @@
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            POS Móvil
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <nz-steps [nzCurrent]="pasoActual" nzSize="small">
+                <nz-step nzIcon="user"></nz-step>
+                <nz-step nzIcon="file-text"></nz-step>
+                <nz-step nzIcon="save"></nz-step>
+                <nz-step nzIcon="check-circle"></nz-step>
+            </nz-steps>
+        </div>
+        <div nz-col nzSpan="24">
+            <app-paso-cliente *ngIf="pasoActual == 0"
+                [(cliente)]="clienteSeleccionado"
+                (clienteChange)="seleccionarCliente($event)">
+            </app-paso-cliente>
+            <app-paso-items *ngIf="pasoActual == 1"
+                [totalVenta]="totalVenta"
+                [lstDetalles]="lstDetalles"
+                (quitarIndice)="quitarDetalle($event)">
+            </app-paso-items>
+            <app-paso-cabecera *ngIf="pasoActual == 2"
+                (idtimbradoChange)="idtimbrado = $event"
+                (fechaChange)="fechaFactura = $event"
+                [totalVenta]="totalVenta">
+            </app-paso-cabecera>
+            <div *ngIf="pasoActual == 3">
+                <app-paso-resultado
+                (nuevoChange)="nuevo()">
+            </app-paso-resultado>
+            </div>
+        </div>
+        <div nz-col nzSpan="24">
+            <div nz-row [nzGutter]="[8,8]" [nzJustify]="'space-between'">
+                <div nz-col *ngIf="pasoAnteriorActivado">
+                    <button
+                        nz-button
+                        nzType="default"
+                        nzSize="large"
+                        (click)="anterior()">
+                        <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+                    </button>
+                </div>
+                <div nz-col>
+                    <div nz-row [nzGutter]="[8,8]">
+                        <ng-container *ngIf="pasoActual == 0">
+                            <div nz-col *ngIf="clienteSeleccionado">
+                                <button nz-button nzSize="large" (click)="confirmarLimpiarCliente()">
+                                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                                </button>
+                            </div>
+                            <!--<div nz-col>
+                                <button nz-button nzSize="large">
+                                    <i nz-icon nzType="contacts" nzTheme="outline"></i>
+                                </button>
+                            </div>-->
+                        </ng-container>
+                        <ng-container *ngIf="pasoActual == 1">
+                            <div nz-col>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    nzSize="large"
+                                    (click)="confirmarLimpiarDetalles()">
+                                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                                </button>
+                            </div>
+                            <div nz-col>
+                                <button
+                                    nz-button
+                                    nzType="default"
+                                    nzSize="large"
+                                    (click)="mostrarModalServicios()">
+                                    <i nz-icon nzType="build" nzTheme="outline"></i>
+                                </button>
+                            </div>
+                            <div nz-col>
+                                <nz-badge [nzCount]="nroCuotas">
+                                    <button
+                                        nz-button
+                                        nzType="default"
+                                        nzSize="large"
+                                        (click)="mostrarModalCuotas()">
+                                        <i nz-icon nzType="bars" nzTheme="outline"></i>
+                                    </button>
+                                </nz-badge>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div nz-col *ngIf="pasoSiguienteActivado">
+                    <button                        
+                        nz-button                        
+                        nzType="primary"
+                        nzSize="large"
+                        (click)="siguiente()">
+                        <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+                    </button>
+                </div>
+                <div nz-col *ngIf="pasoActual == 2 && idtimbrado != null && fechaFactura != null">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        nzSize="large"
+                        [nzLoading]="guardando"
+                        (click)="registrar()">
+                        <i nz-icon nzType="save" nzTheme="outline"></i>
+                        Registrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</app-workspace-layout>
+<nz-modal
+    nzClassName="modal-seleccion"
+    nzTitle="Cuotas pendientes"
+    [(nzVisible)]="modalCuotasVisible"
+    (nzOnCancel)="cerrarModalCuotas()"
+    [nzFooter]="seleccionCuotasFooter">
+    <ng-container *nzModalContent>
+        <app-seleccion-cuota
+            [cliente]="clienteSeleccionado"
+            [omitidos]="cuotasEnDetalle"
+            (cuotaChange)="agregarCuotaDetalle($event)">
+        </app-seleccion-cuota>
+    </ng-container>
+    <ng-template #seleccionCuotasFooter>
+        <button nz-button (click)="cerrarModalCuotas()">Cerrar</button>
+    </ng-template>
+</nz-modal>
+<nz-modal
+    nzClassName="modal-seleccion"
+    [(nzVisible)]="modalServiciosVisible"
+    nzTitle="Servicios"
+    (nzOnCancel)="cerrarModalServicios()"
+    [nzFooter]="seleccionServicioFooter">
+    <ng-container *nzModalContent>
+        <app-seleccion-servicio
+            [idcliente]="clienteSeleccionado?.id ?? -1"
+            (servicioChange)="agregarServicioDetalle($event)">
+        </app-seleccion-servicio>
+    </ng-container>
+    <ng-template #seleccionServicioFooter>
+        <button nz-button (click)="cerrarModalServicios()">Cerrar</button>
+    </ng-template>
+</nz-modal>

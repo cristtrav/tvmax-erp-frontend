@@ -1,0 +1,43 @@
+<nz-table #tablaDetalles
+    [nzData]="lstDetalles"
+    nzSize="small"
+    nzShowPagination="false"
+    [nzPageSize]="30"
+    [nzFooter]="pieTabla">
+    <tbody>
+        <tr *ngFor="let detalle of tablaDetalles.data; index as i">
+            <td>
+                <div nz-row>
+                    <div nz-col nzSpan="24">
+                        <span nz-typography nzType="secondary">
+                            {{ detalle.descripcion }}
+                        </span>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        Gs. {{ detalle.subtotal | number }}
+                    </div>
+                </div>
+            </td>
+            <td nzAlign="right">
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="large" 
+                    nzDanger
+                    (click)="confirmarEliminacion(detalle, i)">
+                    <i nz-icon nzType="minus" nzTheme="outline"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+    <ng-template #pieTabla>
+        <div nz-row [nzGutter]="[8,8]" nzJustify="space-between">
+            <div nz-col>
+                <span style="font-size: large;">Total:</span>
+            </div>
+            <div nz-col>
+                <strong style="font-size: large;">Gs. {{ totalVenta | number}}</strong>
+            </div> 
+        </div>        
+    </ng-template>
+</nz-table>

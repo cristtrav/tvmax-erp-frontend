@@ -1,0 +1,54 @@
+<nz-table #tablaServicios
+    [nzData]="lstServicios"
+    [nzLoading]="loadingServicios"
+    nzSimple
+    nzSize="small"
+    [nzPageSize]="6">
+
+    <tbody>
+        <tr *ngFor="let servicio of tablaServicios.data">
+            <td>{{ servicio.descripcion }}</td>
+            <td>Gs. {{ servicio.precio | number }}</td>
+            <td>
+                <button
+                    nz-button
+                    nzType="primary"
+                    nzSize="large"
+                    (click)="mostrarModalSeleccionSuscripcion(servicio)">
+                    <i nz-icon nzType="plus" nzTheme="outline"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+<nz-modal
+    nzClassName="modal-seleccion"
+    [nzTitle]="'Suscripciones'"
+    [(nzVisible)]="modalSeleccionSuscripcionVisible"
+    (nzOnCancel)="cerrarModalSeleccionSuscripcion()">
+
+    <ng-container *nzModalContent>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="24" *ngFor="let suscripcion of lstSuscripciones">
+                <button
+                    nz-button
+                    nzType="default"
+                    nzBlock
+                    (click)="seleccionarServicio(servicioSeleccionado, suscripcion)">
+                    <nz-space>
+                        <span *nzSpaceItem>[{{suscripcion.id}}] {{ suscripcion.servicio }}</span>
+                        <span *nzSpaceItem>
+                            <nz-tag *ngIf="suscripcion.estado == 'C'" nzColor="green">Con.</nz-tag>
+                            <nz-tag *ngIf="suscripcion.estado == 'R'" nzColor="green">Recon.</nz-tag>
+                            <nz-tag *ngIf="suscripcion.estado == 'D'" nzColor="red">Desc.</nz-tag>
+                        </span>
+                    </nz-space>
+                </button>
+            </div>
+        </div>
+        
+    </ng-container>
+    <ng-container *nzModalFooter>
+        <button nz-button (click)="cerrarModalSeleccionSuscripcion()">Cancelar</button>
+    </ng-container>
+</nz-modal>

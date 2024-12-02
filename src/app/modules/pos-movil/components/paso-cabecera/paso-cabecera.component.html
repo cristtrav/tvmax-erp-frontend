@@ -1,0 +1,35 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label>
+            Fecha
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Ingrese la fecha">
+            <nz-date-picker
+                nzPlaceHolder="Seleccionar..."
+                style="width: 100%;"
+                formControlName="fecha"
+                nzSize="large"
+                nzFormat="dd/MMM/yyyy">
+            </nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label>
+            Timbrado
+        </nz-form-label>
+        <nz-form-control nzErrorTip="Seleccione el timbrado">
+            <nz-select
+                formControlName="idtimbrado"
+                style="width: 100%;"
+                nzSize="large"
+                nzPlaceHolder="Seleccionar...">
+                <nz-option 
+                    *ngFor="let timbrado of lstTimbrados"
+                    [nzValue]="timbrado.id"
+                    [nzLabel]="timbrado.prefijo">
+                </nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    
+</form>

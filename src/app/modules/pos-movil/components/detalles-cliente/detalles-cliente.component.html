@@ -1,0 +1,51 @@
+<nz-descriptions *ngIf="cliente" [nzColumn]="1" nzSize="small" nzBordered>
+    <nz-descriptions-item [nzTitle]="'CI/RUC'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.ci">
+            (Sin CI)
+        </span>
+        <span *ngIf="cliente.ci">
+            {{ cliente.ci | number }}
+        </span>
+        <span *ngIf="cliente.ci && cliente.dvruc">- {{ cliente.dvruc }}</span>
+    </nz-descriptions-item>
+    <nz-descriptions-item [nzTitle]="'Teléfono 1'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.telefono1">
+            (Sin teléfono 1)
+        </span>
+        <span *ngIf="cliente.telefono1">
+            {{ cliente.telefono1 }}
+        </span>
+    </nz-descriptions-item>
+    <nz-descriptions-item [nzTitle]="'Teléfono 2'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.telefono2">
+            (Sin teléfono 2)
+        </span>
+        <span *ngIf="cliente.telefono2">
+            {{ cliente.telefono2 }}
+        </span>
+    </nz-descriptions-item>
+    <nz-descriptions-item [nzTitle]="'Correo'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.email">
+            (Sin correo)
+        </span>
+        <span *ngIf="cliente.email">
+            {{ cliente.email }}
+        </span>
+    </nz-descriptions-item>
+    <nz-descriptions-item [nzTitle]="'Dirección'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.direccion">
+            (Sin dirección)
+        </span>
+        <span *ngIf="cliente.direccion">
+            {{ cliente.direccion }}
+        </span>
+    </nz-descriptions-item>
+    <nz-descriptions-item [nzTitle]="'Barrio'">
+        <span nz-typography nzType="secondary" *ngIf="!cliente.barrio">
+            (Sin barrio)
+        </span>
+        <span *ngIf="cliente.barrio">
+            {{ cliente.barrio }}
+        </span>
+    </nz-descriptions-item>
+</nz-descriptions>

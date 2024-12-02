@@ -38,6 +38,11 @@ export class AppSettings {
           routerLink: '/app/pos',
         },
         {
+          id: 1180,
+          name: 'POS Móvil',
+          routerLink: '/app/posmovil'
+        },
+        {
           id: 244,
           name: 'Timbrados',
           routerLink: '/app/timbrados',

@@ -184,6 +184,10 @@ const routes: Routes = [
         data: { idfuncionalidad: 1100, name: 'Establecimientos' },
         canActivate: [canAccessFn],
         loadChildren: () => import('./modules/tributacion/establecimientos/establecimientos.module').then(m => m.EstablecimientosModule)
+      },
+      {
+        path: 'posmovil',
+        loadChildren: () => import('./modules/pos-movil/pos-movil.module').then(m => m.PosMovilModule)
       }
     ]
   },

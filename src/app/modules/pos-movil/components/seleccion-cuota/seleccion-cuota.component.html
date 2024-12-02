@@ -1,0 +1,46 @@
+<nz-alert
+    *ngIf="!cliente"
+    nzMessage="Ningún cliente seleccionado"
+    nzType="warning"
+    nzShowIcon>
+</nz-alert>
+<nz-spin [nzSpinning]="loadingCuotas">
+    <nz-empty *ngIf="lstSuscripcionesCuotas.length == 0" nzNotFoundImage="simple"></nz-empty>
+    <nz-collapse class="collapse-cuotas" nzGhost>
+        <nz-collapse-panel *ngFor="let susCuotas of lstSuscripcionesCuotas"
+            [nzHeader]="collapseHeader">
+            <ng-template #collapseHeader>
+                <nz-space>
+                    <strong *nzSpaceItem>{{ susCuotas.suscripcion.servicio }}</strong>
+                    <span *nzSpaceItem>
+                        <nz-tag *ngIf="susCuotas.suscripcion.estado == 'C'" nzColor="green">C</nz-tag>
+                        <nz-tag *ngIf="susCuotas.suscripcion.estado == 'R'" nzColor="green">R</nz-tag>
+                        <nz-tag *ngIf="susCuotas.suscripcion.estado == 'D'" nzColor="red">D</nz-tag>
+                        <nz-tag>{{ susCuotas.cuotas.length }}</nz-tag>
+                    </span>
+                </nz-space>
+            </ng-template>
+
+            <nz-alert *ngIf="susCuotas.cuotas.length == 0"
+                nzMessage="Sin cuotas pendientes"
+                nzType="success"
+                nzShowIcon>
+            </nz-alert>
+            <nz-table nzTemplateMode nzSimple nzSize="small">
+                <tbody>
+                    <tr *ngFor="let cuota of susCuotas.cuotas">
+                        <td>Gs. {{ cuota.monto | number }}</td>
+                        <td>{{ cuota.fechavencimiento | date: 'dd/MMM/yy' }}</td>
+                        <td nzAlign="right">
+                            <button nz-button nzType="primary" (click)="seleccionarCuota(cuota)">
+                                <i nz-icon nzType="plus" nzTheme="outline"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-collapse-panel>
+
+    </nz-collapse>
+</nz-spin>
+
