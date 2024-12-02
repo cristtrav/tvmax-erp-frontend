@@ -102,17 +102,26 @@
                                     [nzLg]="6">Factura</nz-form-label>
                                 <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                     [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
-                                    <nz-input-group [nzAddOnBefore]="prefijoFactura" [nzAddOnAfter]="sufijoFactura" nzSearch>
-                                        <ng-template #prefijoFactura>
-                                            <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
-                                                [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
-                                                <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
-                                                    [nzLabel]="timb | datosTimbrado"
-                                                    [nzValue]="timb.id">
-                                                    {{ timb | datosTimbrado }}
-                                                </nz-option>
-                                            </nz-select>
-                                        </ng-template>
+                                    
+                                    <span *ngIf="facturaElectronica">
+                                        <ng-container *ngTemplateOutlet="prefijoFactura"></ng-container>
+                                    </span>
+                                    
+                                    <ng-template #prefijoFactura>
+                                        <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
+                                            [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
+                                            <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
+                                                [nzLabel]="timb | datosTimbrado"
+                                                [nzValue]="timb.id">
+                                                {{ timb | datosTimbrado }}
+                                            </nz-option>
+                                        </nz-select>
+                                    </ng-template>
+                                    <nz-input-group
+                                        *ngIf="!facturaElectronica"
+                                        [nzAddOnBefore]="prefijoFactura"
+                                        [nzAddOnAfter]="sufijoFactura"
+                                        nzSearch>
                                         <nz-input-number style="width: 100%;" formControlName="nroFactura"
                                             [nzDisabled]="nroFacturaDesactivado" [nzStep]="1"
                                             [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax">

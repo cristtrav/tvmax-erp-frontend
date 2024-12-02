@@ -86,6 +86,7 @@ export class DetalleVentaComponent implements OnInit {
   moduloActivadoDesde: 'venta' | 'pos' = 'venta';
 
   modalContactoVisible: boolean = false;
+  facturaElectronica: boolean = false;
 
   constructor(
     private timbradoSrv: TimbradosService,
@@ -108,6 +109,7 @@ export class DetalleVentaComponent implements OnInit {
     this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
       this.timbradoUtilSrv.guardarUltimoSeleccionado(this.sesionSrv.idusuario, value);
       if(value == null){
+        this.facturaElectronica = false;
         this.nroFacturaDesactivado = true;
         return;
       }
@@ -115,6 +117,7 @@ export class DetalleVentaComponent implements OnInit {
         next: (t) => {
           this.actualizarControlNroFactura(t);
           this.nroFacturaDesactivado = false;
+          this.facturaElectronica = t.electronico ?? false;
         },
         error: (e) => {
           console.log('Error al cargar timbrado por id', e);
