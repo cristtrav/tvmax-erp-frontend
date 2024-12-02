@@ -137,48 +137,53 @@ export class TablaVentasComponent implements OnInit {
 
   private anularFactura(id: number | null): void {
     if (id) {
-      this.ventasSrv.anular(id).subscribe(() => {
-        for (let fv of this.lstFacturasVenta) {
-          if (fv.id === id) {
-            fv.anulado = true;
-            break;
+      this.ventasSrv.anular(id)
+      .subscribe({
+        next: () => {
+          for (let fv of this.lstFacturasVenta) {
+            if (fv.id === id) {
+              fv.anulado = true;
+              break;
+            }
           }
+          this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
+        },
+        error: (e) => {
+          console.error('Error al anular factura', e);
+          this.httpErrorHandler.process(e);
         }
-        this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
-      }, (e) => {
-        console.error('Error al anular factura', e);
-        this.httpErrorHandler.process(e);
       });
     }
   }
 
   private revertirAnulacion(id: number | null): void {
     if (id) {
-      this.ventasSrv.revertiranul(id).subscribe(() => {
-        /*for(let fv of this.lstFacturasVenta){
-          if(fv.id === id){
-            fv.anulado = false;
-            break;
-          }
-        }*/
-        this.cargarVentas();
-        this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
-      }, (e) => {
-        console.error('Error al revertir anulacion de factura', e);
-        this.httpErrorHandler.process(e);
+      this.ventasSrv.revertiranul(id)
+      .subscribe({
+        next: () => {
+          this.cargarVentas();
+          this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
+        },
+        error: (e) => {
+          console.error('Error al revertir anulacion de factura', e);
+          this.httpErrorHandler.process(e);
+        }
       });
     }
   }
 
   eliminarVenta(id: number | null): void {
     if (id) {
-      this.ventasSrv.delete(id).subscribe(() => {
-        this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
-        this.cargarVentas();
-      }, (e) => {
-        console.log('Error al eliminar venta');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+      this.ventasSrv.delete(id)
+      .subscribe({
+        next: () => {
+          this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
+          this.cargarVentas();
+        },
+        error: (e) => {
+          console.error('Error al eliminar venta', e);
+          this.httpErrorHandler.process(e);
+        }
       });
     }
   }
