@@ -104,4 +104,20 @@ export class PasoClienteComponent implements OnInit {
     })
   }
 
+  refreshClienteSeleccionado(){
+    if(this.cliente == null || this.cliente.id == null) return;
+    this.clientesSrv.getPorId(this.cliente.id).subscribe({
+      next: (cliente) => {
+        this.lstClientes = this.lstClientes.map(cli => {
+          if(cli.id == cliente.id) return cliente;
+          else return cli;
+        });
+        this.seleccionarCliente(cliente.id ?? -1)
+      },
+      error: (e) => {
+        console.error(`Error al recargar cliente seleccionado: ${e.message}`);
+      }
+    })
+  }
+
 }

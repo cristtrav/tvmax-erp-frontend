@@ -537,7 +537,7 @@ export class DetalleVentaComponent implements OnInit {
     this.modalContactoVisible = true;
   }
 
-  ocultarModelContacto(){
+  ocultarModalContacto(){
     this.modalContactoVisible = false;
   }
 

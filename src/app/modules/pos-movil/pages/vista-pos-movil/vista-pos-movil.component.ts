@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { Component, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
@@ -16,6 +16,9 @@ import { Venta } from '@dto/venta.dto';
 import { SesionService } from '@services/sesion.service';
 import { VentasService } from '@services/ventas.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
+import { ClientesService } from '@services/clientes.service';
+import { PasoClienteComponent } from '@modules/pos-movil/components/paso-cliente/paso-cliente.component';
 
 @Component({
   selector: 'app-vista-pos-movil',
@@ -23,6 +26,12 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
   styleUrls: ['./vista-pos-movil.component.scss']
 })
 export class VistaPosMovilComponent {
+
+  @ViewChild(FormContactoClienteComponent)
+  formContactoClienteComp!: FormContactoClienteComponent;
+
+  @ViewChild(PasoClienteComponent)
+  pasoClienteComp!: PasoClienteComponent;
 
   clienteSeleccionado: Cliente | null = null;
   pasoActual = 0;
@@ -49,17 +58,21 @@ export class VistaPosMovilComponent {
 
   guardando: boolean = false;
 
+  modalContactoVisible: boolean = false;
+  guardandoContacto: boolean = false;
+
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
     private modal: NzModalService,
     private cuotasSrv: CuotasService,
     private suscripcionesSrv: SuscripcionesService,
+    private clienteSrv: ClientesService,
     private message: NzMessageService,
-    private sesionSrv: SesionService,
+    public sesionSrv: SesionService,
     private ventasSrv: VentasService,
     private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
   ){}
 
   cargarNroCuotas(idcliente: number){
@@ -292,5 +305,29 @@ export class VistaPosMovilComponent {
     this.pasoActual = 0;
     this.limpiarCliente();
   }
+
+  mostrarModalContacto(){
+    this.modalContactoVisible = true;
+  }
+
+  ocultarModalContacto(){
+    this.modalContactoVisible = false;
+  }
+
+  /*refreshClienteSeleccionado(){
+    if(this.clienteSeleccionado == null || this.clienteSeleccionado.id == null) return;
+    this.clienteSrv.getPorId(this.clienteSeleccionado.id).subscribe({
+      next: (cliente) => {
+        this.lstClientes = this.lstClientes.map(cli => {
+          if(cli.id == cliente.id) return cliente;
+          else return cli;
+        });
+        this.clienteSeleccionado = cliente;
+      },
+      error: (e) => {
+        console.error(`Error al recargar cliente seleccionado: ${e.message}`);
+      }
+    })
+  }*/
 
 }

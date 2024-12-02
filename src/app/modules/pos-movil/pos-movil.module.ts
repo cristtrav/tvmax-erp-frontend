@@ -36,6 +36,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { PasoResultadoComponent } from './components/paso-resultado/paso-resultado.component';
 import { NzResultModule } from 'ng-zorro-antd/result';
+import { VentasModule } from '@modules/ventas/ventas.module';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { NzResultModule } from 'ng-zorro-antd/result';
     NzFormModule,
     NzDatePickerModule,
     NzStatisticModule,
-    NzResultModule
+    NzResultModule,
+    VentasModule
   ]
 })
 export class PosMovilModule { }

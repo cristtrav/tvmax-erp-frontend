@@ -59,7 +59,11 @@ import { FormContactoClienteComponent } from './components/form-contacto-cliente
         DatosTimbradoPipe,
         FormContactoClienteComponent
     ],
-    exports: [DetalleVentaComponent, FormFiltrosVentasComponent],
+    exports: [
+        DetalleVentaComponent,
+        FormFiltrosVentasComponent,
+        FormContactoClienteComponent
+    ],
     imports: [
         CommonModule,
         VentasRoutingModule,

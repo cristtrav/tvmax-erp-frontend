@@ -280,7 +280,7 @@
     [nzTitle]="'Contacto'"
     [nzContent]="contentModalContacto"
     [nzFooter]="footerModalContacto"    
-    (nzOnCancel)="ocultarModalCuotas()">
+    (nzOnCancel)="ocultarModalContacto()">
     <ng-template #contentModalContacto>
         <app-form-contacto-cliente
             [idcliente]="clienteSeleccionado?.id"
@@ -293,7 +293,7 @@
         </app-form-contacto-cliente>
     </ng-template>
     <ng-template #footerModalContacto>
-        <button nz-button nzType="default" (click)="ocultarModelContacto()">Cerrar</button>
+        <button nz-button nzType="default" (click)="ocultarModalContacto()">Cerrar</button>
         <button
             *ngIf="sesionSrv.permisos.has(187)"
             nz-button

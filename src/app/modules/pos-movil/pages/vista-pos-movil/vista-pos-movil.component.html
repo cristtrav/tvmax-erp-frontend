@@ -58,11 +58,11 @@
                                     <i nz-icon nzType="clear" nzTheme="outline"></i>
                                 </button>
                             </div>
-                            <!--<div nz-col>
-                                <button nz-button nzSize="large">
+                            <div nz-col *ngIf="clienteSeleccionado != null && sesionSrv.permisos.has(187)">
+                                <button nz-button nzSize="large" (click)="mostrarModalContacto()">
                                     <i nz-icon nzType="contacts" nzTheme="outline"></i>
                                 </button>
-                            </div>-->
+                            </div>
                         </ng-container>
                         <ng-container *ngIf="pasoActual == 1">
                             <div nz-col>
@@ -122,6 +122,7 @@
     </div>
     
 </app-workspace-layout>
+
 <nz-modal
     nzClassName="modal-seleccion"
     nzTitle="Cuotas pendientes"
@@ -139,6 +140,7 @@
         <button nz-button (click)="cerrarModalCuotas()">Cerrar</button>
     </ng-template>
 </nz-modal>
+
 <nz-modal
     nzClassName="modal-seleccion"
     [(nzVisible)]="modalServiciosVisible"
@@ -153,5 +155,36 @@
     </ng-container>
     <ng-template #seleccionServicioFooter>
         <button nz-button (click)="cerrarModalServicios()">Cerrar</button>
+    </ng-template>
+</nz-modal>
+
+<nz-modal
+    [(nzVisible)]="modalContactoVisible"
+    [nzTitle]="'Contacto'"
+    [nzContent]="contentModalContacto"
+    [nzFooter]="footerModalContacto"    
+    (nzOnCancel)="ocultarModalContacto()">
+    <ng-template #contentModalContacto>
+        <app-form-contacto-cliente
+            [idcliente]="clienteSeleccionado?.id"
+            [telefono1]="clienteSeleccionado?.telefono1"
+            [telefono2]="clienteSeleccionado?.telefono2"
+            [email]="clienteSeleccionado?.email"
+            (guardando)="guardandoContacto = $event"
+            (guardadoCorrecto)="pasoClienteComp.refreshClienteSeleccionado()">
+            
+        </app-form-contacto-cliente>
+    </ng-template>
+    <ng-template #footerModalContacto>
+        <button nz-button nzType="default" (click)="ocultarModalContacto()">Cerrar</button>
+        <button
+            *ngIf="sesionSrv.permisos.has(187)"
+            nz-button
+            nzType="primary"
+            (click)="formContactoClienteComp.guardar()"
+            [nzLoading]="guardandoContacto">
+            <i nz-icon nzType="save" nzTheme="outline"></i>
+            Editar
+        </button>
     </ng-template>
 </nz-modal>
