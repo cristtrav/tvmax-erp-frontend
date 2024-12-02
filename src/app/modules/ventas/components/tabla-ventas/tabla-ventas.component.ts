@@ -146,9 +146,8 @@ export class TablaVentasComponent implements OnInit {
         }
         this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
       }, (e) => {
-        console.log('Error al anular factura');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'anular factura');
+        console.error('Error al anular factura', e);
+        this.httpErrorHandler.process(e);
       });
     }
   }
@@ -165,9 +164,8 @@ export class TablaVentasComponent implements OnInit {
         this.cargarVentas();
         this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
       }, (e) => {
-        console.log('Error al revertir anulacion de factura');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'revertir anulación');
+        console.error('Error al revertir anulacion de factura', e);
+        this.httpErrorHandler.process(e);
       });
     }
   }
