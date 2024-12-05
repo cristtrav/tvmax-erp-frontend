@@ -73,73 +73,93 @@
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(fv.id ?? 0)">
-                <nz-descriptions nzSize="small">
-                    <nz-descriptions-item [nzTitle]="tituloidventa">
-                        <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
-                        {{ fv.id }}
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="titulotipofactura" *ngIf="fv.facturaelectronica != null">
-                        <ng-template #titulotipofactura><strong>Tipo de Factura</strong></ng-template>
-                        <nz-tag *ngIf="fv.facturaelectronica" nzColor="purple">Electrónica</nz-tag>
-                        <nz-tag *ngIf="!fv.facturaelectronica" nzColor="geekblue">Preimpresa</nz-tag>
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="titulodescargas" *ngIf="fv.facturaelectronica != null">
-                        <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
-                        <nz-space>
-                            <button
-                                *nzSpaceItem
-                                nz-tooltip
-                                nzTooltipTitle="Documento Tributario Electronico en formato XML"
-                                nz-button
-                                nzType="default"
-                                nzSize="small"
-                                [nzLoading]="loadingDTE"
-                                (click)="descargarDTE(fv.id ?? 0)">
-                                <i nz-icon nzTheme="outline" nzType="file-protect"></i>
-                                DTE
-                            </button>
-                            <button
-                                nz-tooltip
-                                nzTooltipTitle="Version Imprimible en formato PDF"
-                                *nzSpaceItem
-                                nz-button
-                                nzType="default"
-                                nzSize="small"
-                                [nzLoading]="loadingKuDE"
-                                (click)="descargarKUDE(fv.id ?? 0)">
-                                <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
-                                KuDE
-                            </button>
-                        </nz-space>
-                        
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="titulocobrador">
-                        <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
-                        {{ fv.cobrador }}
-                    </nz-descriptions-item>
-                    <nz-descriptions-item [nzTitle]="titulousuarioreg">
-                        <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
-                        {{ fv.usuarioregistrocobro }}
-                    </nz-descriptions-item>
-                </nz-descriptions>
-                <nz-table #tablaDetalle [nzLoading]="loadingDetalleMap[fv.id?fv.id:0]" [nzData]="fv.detalles"
-                    nzSize="small" nzShowPagination="false" [nzPageSize]="50" nzBordered>
-                    <thead>
-                        <tr>
-                            <th>Ítem</th>
-                            <th nzAlign="center">Monto</th>
-                        </tr>
-                    </thead>
-        <tbody>
-            <tr *ngFor="let dfv of tablaDetalle.data">
-                <td>{{ dfv.descripcion }}</td>
-                <td nzAlign="right">Gs.{{ dfv.subtotal | number }}</td>
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col [appNzColResponsiveSizes]="fv.facturaelectronica ? DETALLES_ELE_RESPONSIVE_SIZES : DETALLES_PRE_RESPONSIVE_SIZES">
+                        <nz-collapse>
+                            <nz-collapse-panel nzActive nzDisabled nzHeader="Detalles">
+                                <nz-descriptions nzSize="small" [nzColumn]="1">
+                                    <nz-descriptions-item [nzTitle]="tituloidventa">
+                                        <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
+                                        {{ fv.id }}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="titulotipofactura" *ngIf="fv.facturaelectronica != null">
+                                        <ng-template #titulotipofactura><strong>Tipo de Factura</strong></ng-template>
+                                        <nz-tag *ngIf="fv.facturaelectronica" nzColor="purple">Electrónica</nz-tag>
+                                        <nz-tag *ngIf="!fv.facturaelectronica" nzColor="geekblue">Preimpresa</nz-tag>
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="titulocobrador">
+                                        <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
+                                        {{ fv.cobrador }}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="titulousuarioreg">
+                                        <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
+                                        {{ fv.usuarioregistrocobro }}
+                                    </nz-descriptions-item>
+                                </nz-descriptions>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                    <div nz-col [appNzColResponsiveSizes]="fv.facturaelectronica ? DETALLES_ELE_RESPONSIVE_SIZES : DETALLES_PRE_RESPONSIVE_SIZES">
+                        <nz-collapse>
+                            <nz-collapse-panel nzHeader="Items" nzDisabled nzActive>
+                                <nz-list nzSize="small" [nzLoading]="loadDetalleMap.get(fv.id ?? -1)">
+                                    <nz-list-item *ngFor="let dfv of fv.detalles">
+                                        <nz-list-item-meta>
+                                            <nz-list-item-meta-description>
+                                                {{ dfv.descripcion }}
+                                            </nz-list-item-meta-description>
+                                            <nz-list-item-meta-title>
+                                                Gs.{{ dfv.subtotal | number }}
+                                            </nz-list-item-meta-title>
+                                            
+                                        </nz-list-item-meta>
+                                    </nz-list-item>
+                                    <nz-list-empty *ngIf="!fv.detalles"></nz-list-empty>
+                                </nz-list>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                    <div nz-col [appNzColResponsiveSizes]="DETALLES_ELE_RESPONSIVE_SIZES" *ngIf="fv.facturaelectronica">
+                        <nz-collapse>
+                            <nz-collapse-panel nzActive nzDisabled nzHeader="Fact. Electrónica">
+                                <nz-descriptions nzSize="small" [nzColumn]="1">
+                                    <nz-descriptions-item [nzTitle]="titulodescargas">
+                                        <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
+                                        <nz-space>
+                                            <button
+                                                *nzSpaceItem
+                                                nz-tooltip
+                                                nzTooltipTitle="Documento Tributario Electronico en formato XML"
+                                                nz-button
+                                                nzType="default"
+                                                nzSize="small"
+                                                [nzLoading]="loadingDTE"
+                                                (click)="descargarDTE(fv.id ?? 0)">
+                                                <i nz-icon nzTheme="outline" nzType="file-protect"></i>
+                                                DTE
+                                            </button>
+                                            <button
+                                                nz-tooltip
+                                                nzTooltipTitle="Version Imprimible en formato PDF"
+                                                *nzSpaceItem
+                                                nz-button
+                                                nzType="default"
+                                                nzSize="small"
+                                                [nzLoading]="loadingKuDE"
+                                                (click)="descargarKUDE(fv.id ?? 0)">
+                                                <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
+                                                KuDE
+                                            </button>
+                                        </nz-space>
+                                    </nz-descriptions-item>
+                                </nz-descriptions>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                </div>           
             </tr>
-        </tbody>
-</nz-table>
-</tr>
-</ng-container>
-</tbody>
+        </ng-container>
+    </tbody>
 </nz-table>
 
 <ng-template #pietabla>

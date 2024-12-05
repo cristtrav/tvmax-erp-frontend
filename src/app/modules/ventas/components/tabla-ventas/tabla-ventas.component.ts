@@ -9,6 +9,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
+import { ResponsiveSizes } from '@util/responsive/responsive-sizes.interface';
 
 @Component({
   selector: 'app-tabla-ventas',
@@ -44,7 +45,7 @@ export class TablaVentasComponent implements OnInit {
   timerBusqueda: any;
 
   lstFacturasVenta: Venta[] = [];
-  loadingDetalleMap: { [param: number]: boolean } = {};
+  loadDetalleMap: Map<number, boolean> = new Map();
 
   sortStr: string | null = '+id';
   pageIndex: number = 1;
@@ -55,6 +56,9 @@ export class TablaVentasComponent implements OnInit {
 
   loadingDTE: boolean = false;
   loadingKuDE: boolean = false;
+
+  public readonly DETALLES_ELE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 8, xl: 8, xxl: 8 };
+  public readonly DETALLES_PRE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 };
 
   constructor(
     private ventasSrv: VentasService,
@@ -80,40 +84,35 @@ export class TablaVentasComponent implements OnInit {
     forkJoin({
       ventas: this.ventasSrv.get(this.getHttpParams()),
       total: this.ventasSrv.getTotal(this.getHttpParams())
-    }).subscribe({
+    })
+    .pipe(finalize(() => this.loadingVentas = false))
+    .subscribe({
       next: (resp) => {
         this.lstFacturasVenta = resp.ventas;
         this.totalRegisters = resp.total;
         this.lstFacturasVenta.forEach(v => {
-          if (v.id) this.loadingDetalleMap[v.id] = false;
+          this.loadDetalleMap.set(v.id ?? -1, false);
         });
-        this.loadingVentas = false;
       },
       error: (e) => {
         console.error('Error al consultar ventas', e);
         this.httpErrorHandler.process(e);
-        this.loadingVentas = false;
       }
     });
   }
 
   private cargarDetalleVenta(idventa: number): void{
-    this.loadingDetalleMap[idventa] = true;
-    this.ventasSrv.getDetallePorIdVenta(idventa).subscribe({
+    this.loadDetalleMap.set(idventa, true);
+    this.ventasSrv.getDetallePorIdVenta(idventa)
+    .pipe(finalize(() => this.loadDetalleMap.set(idventa, false)))
+    .subscribe({
       next: (detalles) => {
-        for(let v of this.lstFacturasVenta){
-          if(v.id === idventa){
-            v.detalles = detalles;
-            break;
-          }
-        }
-        this.loadingDetalleMap[idventa] = false;
+        const venta = this.lstFacturasVenta.find(fv => fv.id == idventa)
+        if(venta) venta.detalles = detalles;
       },
       error: (e) => {
-        console.log('Error al cargar detalles de venta');
-        console.log(e);
-        this.httpErrorHandler.handle(e, 'cargar detalle de ventas');
-        this.loadingDetalleMap[idventa] = false;
+        console.error('Error al cargar detalles de venta', e);
+        this.httpErrorHandler.process(e);        
       }
     });
   }
@@ -140,12 +139,8 @@ export class TablaVentasComponent implements OnInit {
       this.ventasSrv.anular(id)
       .subscribe({
         next: () => {
-          for (let fv of this.lstFacturasVenta) {
-            if (fv.id === id) {
-              fv.anulado = true;
-              break;
-            }
-          }
+          const venta = this.lstFacturasVenta.find(fv => fv.id == id);
+          if(venta) venta.anulado = true;
           this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
         },
         error: (e) => {
