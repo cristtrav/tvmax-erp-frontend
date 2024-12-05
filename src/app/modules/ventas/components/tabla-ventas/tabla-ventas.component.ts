@@ -10,6 +10,7 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 import { ResponsiveSizes } from '@util/responsive/responsive-sizes.interface';
+import { FacturaElectronicaDTO } from '@dto/facturacion/factura-electronica.dto';
 
 @Component({
   selector: 'app-tabla-ventas',
@@ -46,6 +47,8 @@ export class TablaVentasComponent implements OnInit {
 
   lstFacturasVenta: Venta[] = [];
   loadDetalleMap: Map<number, boolean> = new Map();
+  loadFacturaElectronicaMap: Map<number, boolean> = new Map();
+  facturaElectronicaMap: Map<number, FacturaElectronicaDTO> = new Map();
 
   sortStr: string | null = '+id';
   pageIndex: number = 1;
@@ -74,6 +77,8 @@ export class TablaVentasComponent implements OnInit {
     if (checked) {
       this.expandSet.add(id);
       this.cargarDetalleVenta(id);
+      const venta = this.lstFacturasVenta.find(f => f.id == id);
+      if(venta && venta.facturaelectronica) this.cargarFacturaElectronica(id);
     } else {
       this.expandSet.delete(id);
     }
@@ -115,6 +120,21 @@ export class TablaVentasComponent implements OnInit {
         this.httpErrorHandler.process(e);        
       }
     });
+  }
+
+  private cargarFacturaElectronica(idventa: number){
+    this.loadFacturaElectronicaMap.set(idventa, true);
+    this.ventasSrv.getFacturaElectronica(idventa)
+    .pipe(finalize(() => this.loadFacturaElectronicaMap.set(idventa, false)))
+    .subscribe({
+      next: fe => {
+        this.facturaElectronicaMap.set(idventa, fe);
+      },
+      error: (e) => {
+        console.error('Error al cargar factura electronica', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   onTableQueryParamsChange(tParams: NzTableQueryParams) {

@@ -8,6 +8,7 @@ import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';
 import { ResumenServiciosVentas } from '@dto/resumen-servicios-ventas.dto';
 import { ResumenCobradoresVentas } from '@dto/resumen-cobradores-ventas.dto';
 import { environment } from '@environments/environment';
+import { FacturaElectronicaDTO } from '@dto/facturacion/factura-electronica.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -107,5 +108,9 @@ export class VentasService {
 
   getKUDE(idventa: number): Observable<any>{
     return this.http.get(`${this.url}/${idventa}/kude`, AppSettings.getHttpOptionsBlobAuth());
+  }
+
+  getFacturaElectronica(idventa: number): Observable<FacturaElectronicaDTO>{
+    return this.http.get<FacturaElectronicaDTO>(`${this.url}/${idventa}/facturaelectronica`, AppSettings.getHttpOptionsAuth());
   }
 }

@@ -47,6 +47,8 @@ import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { DatosTimbradoPipe } from './pipes/datos-timbrado.pipe';
 import { FormContactoClienteComponent } from './components/form-contacto-cliente/form-contacto-cliente.component';
+import { EstadoFeColorPipe } from './pipes/estado-fe-color.pipe';
+import { TituloCambioEstadoPipe } from './pipes/titulo-cambio-estado.pipe';
 
 @NgModule({
     declarations: [
@@ -57,7 +59,9 @@ import { FormContactoClienteComponent } from './components/form-contacto-cliente
         CuotasPendientesComponent,
         ServiciosComponent,
         DatosTimbradoPipe,
-        FormContactoClienteComponent
+        FormContactoClienteComponent,
+        EstadoFeColorPipe,
+        TituloCambioEstadoPipe
     ],
     exports: [
         DetalleVentaComponent,
