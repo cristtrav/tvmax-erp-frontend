@@ -27,10 +27,46 @@
                 <td>{{ fv.fechafactura | date: 'dd/MM/yyyy' }}</td>
 
                 <td nzAlign="right">Gs.{{ fv.total | number }}</td>
-                <td>
-                    <nz-tag *ngIf="fv.anulado" nzColor="red">Anulado</nz-tag>
-                    <nz-tag *ngIf="!fv.anulado && fv.pagado" [nzColor]="'green'">Pagado</nz-tag>
-                    <nz-tag *ngIf="!fv.anulado && !fv.pagado" [nzColor]="'orange'">Pendiente</nz-tag>
+                <td>                    
+                    <nz-tag *ngIf="fv.anulado"
+                        nzColor="red"
+                        nz-tooltip nzTooltipTitle="Anulado">
+                        ANU
+                    </nz-tag>
+                    <ng-container *ngIf="!fv.anulado">
+                        <nz-tag *ngIf="!fv.pagado"
+                            [nzColor]="'orange'"
+                            nz-tooltip nzTooltipTitle="Pendiente de pago">
+                            PEN
+                        </nz-tag>
+                        <nz-tag *ngIf="fv.pagado"
+                         [nzColor]="'green'"
+                         nz-tooltip nzTooltipTitle="Pagado">
+                            PAG
+                        </nz-tag>
+                    </ng-container>
+                    <ng-container *ngIf="fv.idestadofacturaelectronica as estado">
+                        <nz-tag *ngIf="estado == 1 || estado == 2"
+                            nzColor="green"
+                            nz-tooltip nzTooltipTitle="Aprobado por SIFEN">
+                            APR
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 3"
+                            nzColor="red"
+                            nz-tooltip nzTooltipTitle="Rechazado por SIFEN">
+                            REC
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 4"
+                            nzColor="red"
+                            nz-tooltip nzTooltipTitle="Anulado en SIFEN">
+                            CAN
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 30"
+                            nzColor="orange"
+                            nz-tooltip nzTooltipTitle="Pendiente de envio a SIFEN">
+                            NOE
+                        </nz-tag>
+                    </ng-container>
                 </td>
                 <td>
                     <span *ngIf="fv.fechacobro">{{ fv.fechacobro | date: 'dd/MM/yy' }}</span>
