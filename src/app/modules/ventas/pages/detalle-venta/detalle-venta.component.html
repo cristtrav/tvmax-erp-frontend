@@ -195,7 +195,14 @@
                                 <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">
                                     CI/RUC
                                 </nz-form-label>
+                                <nz-form-control *ngIf="!facturaElectronica"
+                                    [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17">
+                                    <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
+                                        <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
+                                    </nz-input-group>
+                                </nz-form-control>
                                 <nz-form-control
+                                    *ngIf="facturaElectronica"
                                     [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                     [nzHasFeedback] = "formCabecera.controls.idCliente.value"
                                     nzWarningTip="RUC no encontrado en Marangatu"
@@ -241,7 +248,7 @@
                                         {{ idventa == 'nueva' ? 'Registrar' : 'Editar' }}
                                     </button>
                                 </div>
-                                <div nz-col nzSpan="24" *ngIf="rucNoEncontrado">
+                                <div nz-col nzSpan="24" *ngIf="facturaElectronica && rucNoEncontrado">
                                     <nz-alert nzType="warning" nzMessage="RUC inexistente provocará rechazo del documento en SIFEN"></nz-alert>
                                 </div>
                             </div>
