@@ -10,6 +10,9 @@ import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.inter
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { ClientesService } from '@services/clientes.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { SifenService } from '@services/facturacion/sifen.service';
+import { finalize } from 'rxjs';
+import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -28,6 +31,10 @@ export class DetalleClienteComponent implements OnInit {
   formLoading: boolean = false;
   lastIdLoading: boolean = false;
   lstCobradores: UsuarioDTO[] = [];
+
+  consultandoRuc: boolean = false;
+  modalConsultaRucVisible: boolean = false;
+  consultaRuc?: ConsultaRucSifenDTO;
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
@@ -49,7 +56,8 @@ export class DetalleClienteComponent implements OnInit {
     private clienteSrv: ClientesService,
     private aroute: ActivatedRoute,
     private router: Router,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private sifenSrv: SifenService
   ) { }
 
   ngOnInit(): void {
@@ -183,5 +191,27 @@ export class DetalleClienteComponent implements OnInit {
 
   verificarCi(): void {
     if(!this.form.controls.ci.value) this.form.controls.dvruc.reset();
+  }
+
+  consultarRuc(){
+    if(!this.form.controls.ci.value) return;
+
+    this.consultandoRuc = true;
+    this.sifenSrv.consultarRuc(this.form.controls.ci.value)
+    .pipe(finalize(() => this.consultandoRuc = false))
+    .subscribe({
+      next: (consulta) => {
+        this.consultaRuc = consulta;
+        this.mostrarModalConsultaRuc();
+      }
+    })
+  }
+
+  cerrarModalConsultaRuc(){
+    this.modalConsultaRucVisible = false;
+  }
+
+  mostrarModalConsultaRuc(){
+    this.modalConsultaRucVisible = true;
   }
 }

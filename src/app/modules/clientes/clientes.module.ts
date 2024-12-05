@@ -45,6 +45,8 @@ import { CuotasSuscripcionClienteComponent } from './pages/cuotas-suscripcion-cl
 import { SuscripcionesModule } from '@modules/suscripciones/suscripciones.module';
 import { DomiciliosClienteComponent } from './pages/domicilios-cliente/domicilios-cliente.component';
 import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente.component';
+import { DetalleRucComponent } from './components/detalle-ruc/detalle-ruc.component';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @NgModule({
     declarations: [
@@ -57,7 +59,8 @@ import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente
         CuotasSuscripcionClienteComponent,
         DetalleCuotasSuscripcionClienteComponent,
         FormFiltroClientesComponent,
-        PagosClienteComponent
+        PagosClienteComponent,
+        DetalleRucComponent
     ],
     imports: [
         CommonModule,
@@ -96,7 +99,8 @@ import { DetalleClienteComponent } from './pages/detalle-cliente/detalle-cliente
         NzCollapseModule,
         OpenLocationCodePipe,
         WorkspaceLayoutModule,
-        NzColResponsiveSizesDirective
+        NzColResponsiveSizesDirective,
+        NzAlertModule
     ]
 })
 export class ClientesModule { }

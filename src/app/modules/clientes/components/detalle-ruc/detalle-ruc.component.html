@@ -1,0 +1,19 @@
+<nz-alert *ngIf="!consultaRuc"
+    nzType="warning"
+    nzMessage="No se encontró ninguna consulta">
+</nz-alert>
+
+<nz-descriptions *ngIf="consultaRuc"
+    [nzColumn]="1"
+    nzBordered
+    nzSize="small">
+    <nz-descriptions-item nzTitle="RUC">
+        {{ consultaRuc.ruc }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Razón social">
+        {{ consultaRuc.razonSocial }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Estado RUC">
+        {{ consultaRuc.estado }}
+    </nz-descriptions-item>
+</nz-descriptions>

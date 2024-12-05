@@ -102,6 +102,15 @@
             </nz-form-item>
             <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
                 <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                    <div nz-col *ngIf="form.controls.ci.value">
+                        <button
+                            nz-button
+                            (click)="consultarRuc()"
+                            [nzLoading]="consultandoRuc">
+                                <i nz-icon nzType="search"></i>
+                                Consultar RUC
+                        </button>
+                    </div>
                     <div nz-col *ngIf="idcliente!=='nuevo'">
                         <button nz-button routerLink="pagos">
                             <i nz-icon nzType="credit-card" nzTheme="outline"></i>
@@ -121,9 +130,13 @@
                         </button>
                     </div>
                     <div nz-col>
-                        <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
-                            <i nz-icon nzType="save"></i>
-                            {{ idcliente === 'nuevo' ? 'Registrar' : 'Editar' }}
+                        <button
+                            nz-button
+                            nzType="primary"
+                            (click)="guardar()"
+                            [nzLoading]="guardarLoading">
+                                <i nz-icon nzType="save"></i>
+                                {{ idcliente === 'nuevo' ? 'Registrar' : 'Editar' }}
                         </button>
                     </div>
                 </div>
@@ -132,3 +145,19 @@
     </nz-spin>
 
 </app-workspace-layout>
+
+<nz-modal
+    nzTitle="Consulta de RUC - SIFEN"
+    [(nzVisible)]="modalConsultaRucVisible"
+    (nzOnCancel)="cerrarModalConsultaRuc()"
+    (nzAfterClose)="consultaRuc == undefined">
+
+    <ng-container *nzModalContent>
+        <app-detalle-ruc [consultaRuc]="consultaRuc"></app-detalle-ruc>
+    </ng-container>
+    <ng-container *nzModalFooter>
+        <button nz-button (click)="cerrarModalConsultaRuc()">
+            Cerrar
+        </button>
+    </ng-container>
+</nz-modal>
