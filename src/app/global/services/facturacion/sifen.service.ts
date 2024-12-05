@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
 import { environment } from '@environments/environment';
@@ -13,10 +14,10 @@ export class SifenService {
   readonly url = `${environment.apiURL}/sifen`;
 
   constructor(
-    private httpUtilSrv: HttpUtilsService
+    private http: HttpClient
   ) { }
 
   consultarRuc(ci: string): Observable<ConsultaRucSifenDTO>{
-    return this.httpUtilSrv.get<ConsultaRucSifenDTO>(`${this.url}/consultaruc/${ci}`, AppSettings.getHttpOptionsAuth())
+    return this.http.get<ConsultaRucSifenDTO>(`${this.url}/consultaruc/${ci}`, AppSettings.getHttpOptionsAuth())
   }
 }

@@ -203,6 +203,10 @@ export class DetalleClienteComponent implements OnInit {
       next: (consulta) => {
         this.consultaRuc = consulta;
         this.mostrarModalConsultaRuc();
+      },
+      error: (e) => {
+        console.error('Error al consultar RUC', e);
+        this.httpErrorHandler.process(e);
       }
     })
   }

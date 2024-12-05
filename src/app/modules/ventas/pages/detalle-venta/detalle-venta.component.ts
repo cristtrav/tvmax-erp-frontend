@@ -23,6 +23,7 @@ import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura
 import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.service';
 import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { SifenService } from '@services/facturacion/sifen.service';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -89,6 +90,9 @@ export class DetalleVentaComponent implements OnInit {
   modalContactoVisible: boolean = false;
   facturaElectronica: boolean = false;
 
+  rucNoEncontrado: boolean = false;
+  consultandoRuc: boolean = false;
+
   constructor(
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
@@ -102,7 +106,8 @@ export class DetalleVentaComponent implements OnInit {
     private impresionSrv: ImpresionService,
     private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
     private timbradoUtilSrv: TimbradoUtilService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    private sifenSrv: SifenService
   ) { }
 
   ngOnInit(): void {
@@ -148,6 +153,10 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.controls.ci.setValue(null);
         this.dvRuc = null;
       }
+
+      if(cliente && cliente.ci) this.consultarRuc(cliente.ci);
+      else this.rucNoEncontrado = false;
+
       this.calcularTotalFactura();
     });
 
@@ -155,6 +164,23 @@ export class DetalleVentaComponent implements OnInit {
 
     this.formCabecera.get('idTimbrado')?.setValue(this.timbradoUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
+  }
+
+  consultarRuc(ci: string){
+    this.rucNoEncontrado = false;
+    this.consultandoRuc = true;
+    this.sifenSrv.consultarRuc(ci)
+    .pipe(finalize(() => this.consultandoRuc = false))
+    .subscribe({
+      next: (consulta) => {
+        this.rucNoEncontrado = false;
+      },
+      error: (e) => {
+        console.log('Error al consultar', e);
+        if(e.status == 404) this.rucNoEncontrado = true;
+        else this.rucNoEncontrado = false;
+      }
+    })
   }
 
   private agregarClienteALista(idcliente: number) {
