@@ -57,7 +57,8 @@
                                             nz-button 
                                             (click)="confirmarQuitarDetalleFactura(i)"
                                             nzType="primary"
-                                            nzDanger>
+                                            nzDanger
+                                            [disabled]="guardandoFactura">
                                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                                         </button>
                                     </td>
