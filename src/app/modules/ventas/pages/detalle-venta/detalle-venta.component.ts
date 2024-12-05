@@ -22,6 +22,7 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.service';
 import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -100,7 +101,8 @@ export class DetalleVentaComponent implements OnInit {
     public sesionSrv: SesionService,
     private impresionSrv: ImpresionService,
     private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
-    private timbradoUtilSrv: TimbradoUtilService
+    private timbradoUtilSrv: TimbradoUtilService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
@@ -354,6 +356,17 @@ export class DetalleVentaComponent implements OnInit {
     const index = this.lstDetallesVenta.findIndex(detalle => detalle.idcuota == cuota.id);    
     if (index != -1) this.quitarDetalleFactura(index);
     this.mapCuotaEnDetalle.set(cuota.id ?? -1, false);
+  }
+
+  confirmarQuitarDetalleFactura(indice: number){
+    const detalle = this.lstDetallesVenta[indice];
+    this.modal.confirm({
+      nzTitle: `¿Desea quitar el detalle?`,
+      nzContent: `${detalle.descripcion} - Gs.${detalle.monto}`,
+      nzOkText: `Quitar`,
+      nzOkDanger: true,
+      nzOnOk: () => this.quitarDetalleFactura(indice)
+    })
   }
 
   quitarDetalleFactura(indice: number) {

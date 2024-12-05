@@ -20,7 +20,7 @@
                     <div nz-col nzSpan="24">
                         <div nz-row [nzGutter]="[8, 8]">
                             <div nz-col>
-                                <button nz-button nzType="primary" (click)="modalServiciosVisible = true;">
+                                <button nz-button nzType="primary" (click)="modalServiciosVisible = true;" [disabled]="guardandoFactura">
                                     <i nz-icon nzType="search" nzTheme="outline"></i>
                                     Servicios
                                 </button>
@@ -28,7 +28,8 @@
                             <div nz-col>
                                 <nz-badge [nzCount]="totalCuotasPendientes">
                                     <button nz-button nzType="primary" (click)="mostrarModalCuotas()"
-                                        [nzLoading]="loadingCantidadCuotas">
+                                        [nzLoading]="loadingCantidadCuotas"
+                                        [disabled]="guardandoFactura">
                                         <i nz-icon nzType="search" nzTheme="outline"></i>
                                         Cuotas
                                     </button>
@@ -52,9 +53,11 @@
                                         <span>Gs. {{ dfv.subtotal | number }}</span>
                                     </td>
                                     <td [nzAlign]="'center'">
-                                        <button nz-button nz-popconfirm
-                                            nzPopconfirmTitle="¿Desea eliminar el detalle?" nzOkText="Elimnar"
-                                            nzType="primary" nzDanger (nzOnConfirm)="quitarDetalleFactura(i)">
+                                        <button
+                                            nz-button 
+                                            (click)="confirmarQuitarDetalleFactura(i)"
+                                            nzType="primary"
+                                            nzDanger>
                                             <i nz-icon nzType="delete" nzTheme="outline"></i>
                                         </button>
                                     </td>
@@ -200,20 +203,20 @@
                             <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
                                 <div *ngIf="clienteSeleccionado != null" nz-col>
                                     <nz-badge [nzShowDot]="clienteSeleccionado != null && (clienteSeleccionado.telefono1 == null || clienteSeleccionado.email == null)" nzDot>
-                                        <button nz-button nzType="default" style="width: 100%;" (click)="mostrarModalContacto()" >
+                                        <button nz-button nzType="default" style="width: 100%;" (click)="mostrarModalContacto()" [disabled]="guardandoFactura">
                                             <i nz-icon nzType="contacts"></i>
                                             Contacto
                                         </button>
                                     </nz-badge>
                                 </div>
                                 <div *ngIf="idventa !== 'nueva'" nz-col>
-                                    <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion">
+                                    <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion" [disabled]="guardandoFactura">
                                         <i nz-icon nzType="printer"></i>
                                         Imprimir
                                     </button>
                                 </div>
                                 <div nz-col>
-                                    <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()">
+                                    <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()" [disabled]="guardandoFactura">
                                         <i nz-icon [nzType]="idventa === 'nueva'?'clear':'plus'"></i>
                                         {{ idventa === 'nueva'?'Limpiar':'Nueva' }}
                                     </button>
