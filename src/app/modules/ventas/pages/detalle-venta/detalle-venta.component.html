@@ -164,11 +164,12 @@
                                 <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                     nzErrorTip="Seleccione el cliente de la factura.">
                                     <nz-select
+                                        nzServerSearch
                                         nzAllowClear
                                         nzShowSearch
                                         [nzLoading]="loadingClientes"
                                         [nzDropdownRender]="spinCargarMasClientes"
-                                        (nzOnSearch)="buscarCliente($event)"
+                                        (nzOnSearch)="buscarClienteDelayed($event)"
                                         (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
                                         <nz-option
                                             nzCustomContent
@@ -195,21 +196,11 @@
                                 <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">
                                     CI/RUC
                                 </nz-form-label>
-                                <nz-form-control *ngIf="!facturaElectronica"
-                                    [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17">
-                                    <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
-                                        <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
-                                    </nz-input-group>
-                                </nz-form-control>
                                 <nz-form-control
-                                    *ngIf="facturaElectronica"
                                     [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                    [nzHasFeedback] = "formCabecera.controls.idCliente.value"
+                                    [nzHasFeedback]="mostrarValidacionRuc"
                                     nzWarningTip="RUC no encontrado en Marangatu"
-                                    [nzValidateStatus]="consultandoRuc ?
-                                        'validating' : 
-                                        ( rucNoEncontrado || (formCabecera.controls.idCliente.value && !formCabecera.controls.ci.value) ?
-                                        'warning' : 'success' )">
+                                    [nzValidateStatus]="estadoValidacionRuc">
                                     <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
                                         <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
                                     </nz-input-group>
@@ -248,8 +239,8 @@
                                         {{ idventa == 'nueva' ? 'Registrar' : 'Editar' }}
                                     </button>
                                 </div>
-                                <div nz-col nzSpan="24" *ngIf="facturaElectronica && rucNoEncontrado">
-                                    <nz-alert nzType="warning" nzMessage="RUC inexistente provocará rechazo del documento en SIFEN"></nz-alert>
+                                <div nz-col nzSpan="24" *ngIf="mostrarValidacionRuc && estadoValidacionRuc == 'warning'">
+                                    <nz-alert nzType="warning" nzMessage="RUC inexistente provocará rechazo de Factura Electrónica"></nz-alert>
                                 </div>
                             </div>
                         </form>

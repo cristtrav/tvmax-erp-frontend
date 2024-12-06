@@ -24,6 +24,7 @@ import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.serv
 import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SifenService } from '@services/facturacion/sifen.service';
+import { NzValidateStatus } from 'ng-zorro-antd/core/types';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -90,8 +91,13 @@ export class DetalleVentaComponent implements OnInit {
   modalContactoVisible: boolean = false;
   facturaElectronica: boolean = false;
 
-  rucNoEncontrado: boolean = false;
-  consultandoRuc: boolean = false;
+  //rucNoEncontrado: boolean = false;
+  //consultandoRuc: boolean = false;
+
+  mostrarValidacionRuc:boolean = false;
+  estadoValidacionRuc: NzValidateStatus = 'success';
+
+  timerBusquedaCliente: any;
 
   constructor(
     private timbradoSrv: TimbradosService,
@@ -120,6 +126,7 @@ export class DetalleVentaComponent implements OnInit {
         this.nroFacturaDesactivado = true;
         return;
       }
+      
       this.timbradoSrv.getPorId(value).subscribe({
         next: (t) => {
           this.actualizarControlNroFactura(t);
@@ -131,6 +138,8 @@ export class DetalleVentaComponent implements OnInit {
           this.httpErrorHandler.process(e);
         }
       });
+
+      this.validarRuc();
     });
 
     this.formCabecera.get('nroFactura')?.valueChanges.subscribe((value: number | null) => {
@@ -138,6 +147,7 @@ export class DetalleVentaComponent implements OnInit {
     });
 
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
+     
       const cliente = this.lstClientes.find(cliente => cliente.id == value);
       this.clienteSeleccionado = cliente;
       if (this.idventa === 'nueva') this.lstDetallesVenta = [];
@@ -153,10 +163,8 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.controls.ci.setValue(null);
         this.dvRuc = null;
       }
-
-      if(cliente && cliente.ci) this.consultarRuc(cliente.ci);
-      else this.rucNoEncontrado = false;
-
+      
+      this.validarRuc();
       this.calcularTotalFactura();
     });
 
@@ -166,19 +174,46 @@ export class DetalleVentaComponent implements OnInit {
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
   }
 
+  private validarRuc(){
+    const idtimbrado = this.formCabecera.controls.idTimbrado.value;
+    this.mostrarValidacionRuc = this.isRucValidated();
+    if(!this.mostrarValidacionRuc){
+      this.estadoValidacionRuc = 'success';
+      return;
+    }
+
+    const timbrado = this.lstTimbrados.find(t => t.id == idtimbrado);
+    if(timbrado == null || this.clienteSeleccionado == null){
+      this.estadoValidacionRuc = 'success';
+      return;
+    };
+
+    if(this.mostrarValidacionRuc && this.clienteSeleccionado && this.clienteSeleccionado.ci) this.consultarRuc(this.clienteSeleccionado.ci);
+  }
+
+  private isRucValidated(): boolean {
+    const idtimbrado = this.formCabecera.controls.idTimbrado.value;
+    if(idtimbrado == null || this.clienteSeleccionado == null) return false;
+
+    const timbrado = this.lstTimbrados.find(t => t.id == idtimbrado);
+    if(timbrado == null) return false;
+
+    if(!timbrado.electronico) return false;
+    if(timbrado.electronico && this.clienteSeleccionado.dvruc == null) return false;
+    return true;
+  }
+
   consultarRuc(ci: string){
-    this.rucNoEncontrado = false;
-    this.consultandoRuc = true;
+    this.estadoValidacionRuc = 'validating';
     this.sifenSrv.consultarRuc(ci)
-    .pipe(finalize(() => this.consultandoRuc = false))
     .subscribe({
       next: (consulta) => {
-        this.rucNoEncontrado = false;
+        this.estadoValidacionRuc = 'success';
       },
       error: (e) => {
         console.log('Error al consultar', e);
-        if(e.status == 404) this.rucNoEncontrado = true;
-        else this.rucNoEncontrado = false;
+        if(e.status == 404) this.estadoValidacionRuc = 'warning';
+        else this.estadoValidacionRuc = 'success';
       }
     })
   }
@@ -188,7 +223,7 @@ export class DetalleVentaComponent implements OnInit {
     this.clienteSrv.getPorId(idcliente)
     .pipe(finalize(() => this.loadingClientes = false))
     .subscribe({
-      next: (cliente) => this.lstClientes.push(cliente),
+      next: (cliente) => this.lstClientes.concat([cliente]),
       error: (e) => {
         console.error('Error al cargar clente seleccionado', e);
         this.httpErrorHandler.process(e);
@@ -312,6 +347,13 @@ export class DetalleVentaComponent implements OnInit {
         this.httpErrorHandler.process(e);        
       }
     });
+  }
+
+  buscarClienteDelayed(consulta: string){
+    clearTimeout(this.timerBusquedaCliente);
+    this.timerBusquedaCliente = setTimeout(() => {
+      this.buscarCliente(consulta);
+    }, 250);
   }
 
   buscarCliente(consulta: string) {
