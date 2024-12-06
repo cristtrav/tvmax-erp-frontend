@@ -278,7 +278,7 @@ export class VistaPosMovilComponent {
     const date: Date = this.fechaFactura ?? new Date();
     const fechaSinHora: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     venta.fechacobro = fechaSinHora;
-    venta.fechafactura = fechaSinHora;
+    venta.fechafactura = formatDate(date, 'yyyy-MM-dd', this.locale);
     venta.idusuarioregistrocobro = this.sesionSrv.idusuario;
     venta.idcobradorcomision = this.clienteSeleccionado?.idcobrador ?? null;
     venta.idusuarioregistrofactura = this.sesionSrv.idusuario;
@@ -313,21 +313,5 @@ export class VistaPosMovilComponent {
   ocultarModalContacto(){
     this.modalContactoVisible = false;
   }
-
-  /*refreshClienteSeleccionado(){
-    if(this.clienteSeleccionado == null || this.clienteSeleccionado.id == null) return;
-    this.clienteSrv.getPorId(this.clienteSeleccionado.id).subscribe({
-      next: (cliente) => {
-        this.lstClientes = this.lstClientes.map(cli => {
-          if(cli.id == cliente.id) return cliente;
-          else return cli;
-        });
-        this.clienteSeleccionado = cliente;
-      },
-      error: (e) => {
-        console.error(`Error al recargar cliente seleccionado: ${e.message}`);
-      }
-    })
-  }*/
 
 }

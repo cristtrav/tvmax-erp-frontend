@@ -153,9 +153,25 @@
                                 <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">Fecha</nz-form-label>
                                 <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                     nzErrorTip="Ingrese la fecha de la factura.">
-                                    <nz-date-picker style="width: 100%;" nzFormat="dd/MM/yyyy"
-                                        formControlName="fecha">
-                                    </nz-date-picker>
+                                    <nz-input-group [nzAddOnAfter]="addonEditarFechaHora" nzSearch>
+                                        <ng-template #addonEditarFechaHora>
+                                            <button
+                                                nz-button                                                
+                                                [nzType]="usarFechaActual ? 'default' : 'primary'"
+                                                (click)="cambiarAModoFechaActual(!usarFechaActual)"
+                                                nzSearch>
+                                                <i nz-icon nzType="edit"></i>
+                                            </button>
+                                        </ng-template>
+                                        <nz-date-picker
+                                            [nzDisabled]="usarFechaActual"
+                                            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+                                            style="width: 100%;"
+                                            nzFormat="dd/MM/yyyy HH:mm"
+                                            formControlName="fecha">
+                                        </nz-date-picker>
+                                    </nz-input-group>
+                                    
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>

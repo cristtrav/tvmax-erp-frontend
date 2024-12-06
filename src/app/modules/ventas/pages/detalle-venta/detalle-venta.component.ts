@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TimbradosService } from '@services/timbrados.service';
 import { HttpParams } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -98,8 +98,13 @@ export class DetalleVentaComponent implements OnInit {
   estadoValidacionRuc: NzValidateStatus = 'success';
 
   timerBusquedaCliente: any;
+  intervalFechaActual: any;
+
+  usarFechaActual: boolean = true;
 
   constructor(
+    @Inject(LOCALE_ID)
+    private locale: string,
     private timbradoSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private clienteSrv: ClientesService,
@@ -172,6 +177,23 @@ export class DetalleVentaComponent implements OnInit {
 
     this.formCabecera.get('idTimbrado')?.setValue(this.timbradoUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
+    this.activarActualizacionFecha();
+  }
+
+  cambiarAModoFechaActual(modoFechaActual: boolean){
+    this.usarFechaActual = modoFechaActual;
+    if(modoFechaActual){
+      this.activarActualizacionFecha();
+      this.formCabecera.controls.fecha.setValue(new Date());
+    }
+    else clearInterval(this.intervalFechaActual);
+  }
+
+  private activarActualizacionFecha(){
+    clearInterval(this.intervalFechaActual);
+    this.intervalFechaActual = setInterval(() => {      
+      this.formCabecera.controls.fecha.setValue(new Date());
+    }, 10000);
   }
 
   private validarRuc(){
@@ -247,7 +269,8 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.get('idTimbrado')?.setValue(resp.venta.idtimbrado);
         this.formCabecera.get('nroFactura')?.setValue(resp.venta.nrofactura);
         this.lstDetallesVenta = resp.detalles;
-        if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
+        if(resp.venta.fechahorafactura) this.formCabecera.controls.fecha.setValue(new Date(resp.venta.fechahorafactura));
+        else if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
       },
       error: (e) => {
         console.error('Error al cargar venta por id', e)
@@ -484,7 +507,8 @@ export class DetalleVentaComponent implements OnInit {
     const date: Date = this.formCabecera.get('fecha')?.value;
     const fechaSinHora: Date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     fv.fechacobro = fechaSinHora;
-    fv.fechafactura = fechaSinHora;
+    fv.fechafactura = formatDate(date, 'yyyy-MM-dd', this.locale);
+    fv.fechahorafactura = date.toISOString();
     fv.idusuarioregistrocobro = this.sesionSrv.idusuario;
     const cliente = this.lstClientes.find(cliente => cliente.id == this.formCabecera.controls.idCliente.value);
     fv.idcobradorcomision = cliente?.idcobrador ?? null;
@@ -500,6 +524,7 @@ export class DetalleVentaComponent implements OnInit {
     this.idventa = 'nueva';
     this.lstDetallesVenta = [];
     this.calcularTotalFactura();
+    this.cambiarAModoFechaActual(true);
   }
 
   agregarServicioDetalle(srv: Servicio, susc: Suscripcion) {

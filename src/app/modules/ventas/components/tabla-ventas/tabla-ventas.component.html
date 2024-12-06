@@ -24,7 +24,10 @@
                     <span *ngIf="fv.dvruc">{{ fv.ci | number }}-{{ fv.dvruc }}</span>
                 </td>
                 <td>{{ fv.cliente }}</td>
-                <td>{{ fv.fechafactura | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                    <span *ngIf="!fv.fechahorafactura">{{ fv.fechafactura | date: 'dd/MM/yyyy' }}</span>
+                    <span *ngIf="fv.fechahorafactura">{{ fv.fechahorafactura | date: 'dd/MM/yyyy HH:mm' }}</span>
+                </td>
 
                 <td nzAlign="right">Gs.{{ fv.total | number }}</td>
                 <td>                    
@@ -213,7 +216,7 @@
                                                 <ng-template #tituloFechaCambioEstadoFE>
                                                     <strong>{{ factElect.idestadodocumento | tituloCambioEstado }}</strong>
                                                 </ng-template>
-                                                {{ factElect.fechacambioestado | date:'dd/MMM/yyyy hh:MM' }}
+                                                {{ factElect.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
                                             </nz-descriptions-item>
                                         </ng-container>
                                     </nz-descriptions>

@@ -49,6 +49,7 @@ import { DatosTimbradoPipe } from './pipes/datos-timbrado.pipe';
 import { FormContactoClienteComponent } from './components/form-contacto-cliente/form-contacto-cliente.component';
 import { EstadoFeColorPipe } from './pipes/estado-fe-color.pipe';
 import { TituloCambioEstadoPipe } from './pipes/titulo-cambio-estado.pipe';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @NgModule({
     declarations: [

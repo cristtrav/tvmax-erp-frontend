@@ -58,12 +58,13 @@ export class Extra {
     }
 
     public static getVentaPrueba(): Venta {
+        const fecha = new Date();
         const venta = new Venta();
         venta.id = 7655;
         venta.anulado = false;
         venta.ci = 4567123;
         venta.dvruc = 4;
-        venta.fechafactura = new Date();
+        venta.fechafactura = `${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()}`;
         venta.fechacobro = new Date();
         venta.idcliente = 2000;
         venta.cliente = 'JUAN PEREZ';
