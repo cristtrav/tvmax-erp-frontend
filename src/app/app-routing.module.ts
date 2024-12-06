@@ -187,7 +187,15 @@ const routes: Routes = [
       },
       {
         path: 'posmovil',
+        data: { idfuncionalidad: 1180, name: 'POS Móvil' },
+        canActivate: [canAccessFn],
         loadChildren: () => import('./modules/pos-movil/pos-movil.module').then(m => m.PosMovilModule)
+      },
+      {
+        path: 'lotesfacturas',
+        data: { idfuncionalidad: 1220, name: 'Lotes Facturas'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/tributacion/lotes-facturas/lotes-facturas.module').then(m => m.LotesFacturasModule)
       }
     ]
   },

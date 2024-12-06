@@ -46,6 +46,11 @@ export class AppSettings {
           id: 244,
           name: 'Timbrados',
           routerLink: '/app/timbrados',
+        },
+        {
+          id: 1220,
+          name: 'Lotes facturas',
+          routerLink: '/app/lotesfacturas'
         }
       ]
     },
