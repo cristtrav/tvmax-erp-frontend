@@ -56,8 +56,21 @@ export class FormCuotaComponent implements OnInit {
     this.form.get('idservicio')?.valueChanges.subscribe((value: number[]) => {
       if (value && value.length > 0) {
         const idservicio = value[value.length - 1];
-        if(!this.validandoFormulario)
-          this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+        this.suscripcionesSrv.getPorId(this.idsuscripcion ?? -1).subscribe({
+          next: (suscripcion) => {
+            if(!this.validandoFormulario){
+              if(suscripcion.idservicio == idservicio)
+                this.form.controls.monto.setValue(suscripcion.monto);
+              else  
+                this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+            }
+          },
+          error: (e) => {
+            console.log('Error al consultar suscripcion');
+            if(!this.validandoFormulario)
+              this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+          }
+        });
       } else this.form.controls.monto.reset();
     });
   }
