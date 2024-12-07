@@ -69,6 +69,11 @@
                             nz-tooltip nzTooltipTitle="Pendiente de envio a SIFEN">
                             NOE
                         </nz-tag>
+                        <nz-tag *ngIf="estado == 32"
+                            nzColor="blue"
+                            nz-tooltip nzTooltipTitle="Enviado a SIFEN">
+                            ENV
+                        </nz-tag>
                     </ng-container>
                 </td>
                 <td>

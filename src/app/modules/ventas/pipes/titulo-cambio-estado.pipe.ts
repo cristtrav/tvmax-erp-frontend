@@ -10,7 +10,7 @@ export class TituloCambioEstadoPipe implements PipeTransform {
     if(value == 3) return 'F. Rechazo';
     if(value == 4) return 'F. Cancelación';
     if(value == 30) return 'F. Creación';
-    if(value == 32) return 'F. Anulación';
+    if(value == 32) return 'F. Envío';
     return 'F.Cambio Estado';
   }
 
