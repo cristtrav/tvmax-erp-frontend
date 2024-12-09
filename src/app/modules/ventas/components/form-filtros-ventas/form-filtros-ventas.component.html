@@ -35,23 +35,21 @@
                 [nzValue]="timbrado.id"
                 [nzLabel]="timbrado.prefijo"
                 nzCustomContent>
-                <nz-space>
-                    <span *nzSpaceItem>{{ timbrado | datosTimbrado:false }}</span>
-                    <nz-tag *nzSpaceItem [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
+                
+                    <nz-tag [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
                         {{ timbrado.electronico ? 'E' : 'P' }}
                     </nz-tag>
-                </nz-space>
+                    <span>{{ timbrado | datosTimbrado:false }}</span>
+                
                 
             </nz-option>
             <ng-template #timbradoSelected let-selected>
-                    <nz-space *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
-                        <span *nzSpaceItem>
-                            {{ timbrado.prefijo }} | {{ timbrado.nrotimbrado }}
-                        </span>
-                        <nz-tag *nzSpaceItem [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
-                            {{ timbrado.electronico ? 'E' : 'P' }}
-                        </nz-tag>
-                    </nz-space>                
+                <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
+                    <nz-tag [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
+                        {{ timbrado.electronico ? 'E' : 'P' }}
+                    </nz-tag>
+                    <span>{{ timbrado.prefijo }} | {{ timbrado.nrotimbrado }}</span>
+                </span>                
             </ng-template>
         </nz-select>
     </div>
