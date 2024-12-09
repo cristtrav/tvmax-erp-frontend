@@ -177,7 +177,11 @@ export class DetalleVentaComponent implements OnInit {
 
     this.formCabecera.get('idTimbrado')?.setValue(this.timbradoUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
-    this.activarActualizacionFecha();
+    if(this.idventa == 'nueva'){
+      this.usarFechaActual = true;
+      this.activarActualizacionFecha();
+    }else this.usarFechaActual = false
+  
   }
 
   cambiarAModoFechaActual(modoFechaActual: boolean){
@@ -347,6 +351,7 @@ export class DetalleVentaComponent implements OnInit {
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
         this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
+        clearInterval(this.intervalFechaActual);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
