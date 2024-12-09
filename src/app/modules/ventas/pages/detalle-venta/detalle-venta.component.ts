@@ -245,7 +245,7 @@ export class DetalleVentaComponent implements OnInit {
     this.clienteSrv.getPorId(idcliente)
     .pipe(finalize(() => this.loadingClientes = false))
     .subscribe({
-      next: (cliente) => this.lstClientes.concat([cliente]),
+      next: (cliente) => this.lstClientes = this.lstClientes.concat([cliente]),
       error: (e) => {
         console.error('Error al cargar clente seleccionado', e);
         this.httpErrorHandler.process(e);
