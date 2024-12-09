@@ -107,9 +107,9 @@
                                 <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                     [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
                                     
-                                    <span *ngIf="facturaElectronica">
+                                    <!--<span *ngIf="facturaElectronica && idventa == 'nueva'">
                                         <ng-container *ngTemplateOutlet="prefijoFactura"></ng-container>
-                                    </span>
+                                    </span>-->
                                     
                                     <ng-template #prefijoFactura>
                                         <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
@@ -122,15 +122,21 @@
                                         </nz-select>
                                     </ng-template>
                                     <nz-input-group
-                                        *ngIf="!facturaElectronica"
                                         [nzAddOnBefore]="prefijoFactura"
-                                        [nzAddOnAfter]="sufijoFactura"
                                         nzSearch>
-                                        <nz-input-number style="width: 100%;" formControlName="nroFactura"
+                                        <input
+                                            *ngIf="facturaElectronica && idventa == 'nueva'"
+                                            nz-input
+                                            placeholder="(autogenerado)"
+                                            disabled="true">
+                                        <nz-input-number
+                                            *ngIf="!facturaElectronica || (facturaElectronica && idventa != 'nueva')"
+                                            style="width: 100%;"
+                                            formControlName="nroFactura"
                                             [nzDisabled]="nroFacturaDesactivado" [nzStep]="1"
                                             [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax">
                                         </nz-input-number>
-                                        <ng-template #sufijoFactura>
+                                        <!--<ng-template #sufijoFactura>
                                             <button
                                                 nz-button
                                                 nzType="default"
@@ -141,7 +147,7 @@
                                                 (click)="buscarFacturaPorNro()">
                                                 <i nz-icon nzType="search" nzTheme="outline"></i>
                                             </button>
-                                        </ng-template>
+                                        </ng-template>-->
                                     </nz-input-group>
 
                                     <ng-template #renderPrefijo let-selected>
