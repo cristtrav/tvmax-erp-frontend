@@ -5,6 +5,9 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
+import { Timbrado } from '@dto/timbrado.dto';
+import { TimbradosService } from '@services/timbrados.service';
+import { finalize } from 'rxjs';
 
 const DATE_FORMAT: string = "yyyy-MM-dd";
 
@@ -50,15 +53,21 @@ export class FormFiltrosVentasComponent implements OnInit {
 
   grupoServicioFiltro: string[] = [];
 
+  lstTimbrados: Timbrado[] = [];
+  idtimbradoFiltro: number | null = null;
+  loadingTimbrados: boolean = false;
+
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private usuariosSrv: UsuariosService,
+    private timbradosSrv: TimbradosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
   ngOnInit(): void {
     this.cargarCobradoresFiltro();
     this.cargarUsuarioFiltro();
+    this.cargarTimbradosFiltro();
   }
 
   disabledStartDate = (startValue: Date): boolean => {
@@ -120,6 +129,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (this.filtroPendiente) cant++;
     if (this.filtroAnulado) cant++;
     if (this.grupoServicioFiltro.length > 0) cant++;
+    if (this.idtimbradoFiltro != null) cant++;
     return cant;    
   }
 
@@ -157,6 +167,11 @@ export class FormFiltrosVentasComponent implements OnInit {
     this.filtrar();
   }
 
+  limpiarFiltroTimbrado(){
+    this.idtimbradoFiltro = null;
+    this.filtrar();
+  }
+
   cargarCobradoresFiltro() {
     let params: HttpParams = new HttpParams()
       .append('eliminado', 'false')
@@ -189,6 +204,24 @@ export class FormFiltrosVentasComponent implements OnInit {
     });
   }
 
+  cargarTimbradosFiltro(){
+    const params = new HttpParams()
+    .append('eliminado', false)
+    .append('sort', '-id');
+    this.loadingTimbrados = true;
+    this.timbradosSrv.get(params)
+    .pipe(finalize(() => this.loadingTimbrados = false))
+    .subscribe({
+      next: (timbrados) => {
+        this.lstTimbrados = timbrados;
+      },
+      error: (e) => {
+        console.log('Error al cargar timbrados para filtro', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
+  }
+
   getParams(): IParametroFiltro {
     let params: IParametroFiltro = {};
     params['eliminado'] = 'false';
@@ -212,6 +245,8 @@ export class FormFiltrosVentasComponent implements OnInit {
       if(filtrosGrupos.length > 0)
         params['idgrupo'] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
     }
+
+    if(this.idtimbradoFiltro != null) params['idtimbrado'] = this.idtimbradoFiltro;
     return params;
   }
 

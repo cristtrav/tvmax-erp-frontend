@@ -14,6 +14,47 @@
             nzPlaceHolder="Fecha hasta" style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
         </nz-date-picker>
     </div>
+    <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idtimbradoFiltro != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de timbrado" (click)="limpiarFiltroTimbrado()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Timbrado
+            </h3>
+        </nz-badge>
+        <nz-select
+            nzPlaceHolder="Seleccionar..."
+            nzAllowClear
+            [(ngModel)]="idtimbradoFiltro"
+            (ngModelChange)="filtrar()"
+            style="width: 100%;"
+            [nzDropdownMatchSelectWidth]="false"
+            [nzCustomTemplate]="timbradoSelected">
+            <nz-option
+                *ngFor="let timbrado of lstTimbrados"
+                [nzValue]="timbrado.id"
+                [nzLabel]="timbrado.prefijo"
+                nzCustomContent>
+                <nz-space>
+                    <span *nzSpaceItem>{{ timbrado | datosTimbrado:false }}</span>
+                    <nz-tag *nzSpaceItem [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
+                        {{ timbrado.electronico ? 'E' : 'P' }}
+                    </nz-tag>
+                </nz-space>
+                
+            </nz-option>
+            <ng-template #timbradoSelected let-selected>
+                    <nz-space *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
+                        <span *nzSpaceItem>
+                            {{ timbrado.prefijo }} | {{ timbrado.nrotimbrado }}
+                        </span>
+                        <nz-tag *nzSpaceItem [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
+                            {{ timbrado.electronico ? 'E' : 'P' }}
+                        </nz-tag>
+                    </nz-space>                
+            </ng-template>
+        </nz-select>
+    </div>
     <div nz-col>
         <nz-badge [nzShowDot]="filtroAnulado || filtroPagado || filtroPendiente" nzDot>
             <h3>

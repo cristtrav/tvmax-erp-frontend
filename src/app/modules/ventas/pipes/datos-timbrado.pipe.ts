@@ -6,13 +6,15 @@ import { Timbrado } from '@dto/timbrado.dto';
 })
 export class DatosTimbradoPipe implements PipeTransform {
 
-  transform(timb: Timbrado): string {
+  transform(timb: Timbrado, mostrarTipo?: boolean): string {
+    console.log('args pipe', mostrarTipo);
     if(!timb) return '';
     const ultNro = (timb.ultimonrousado ?? 0).toString().padStart(7, '0');
     const nroInicio = (timb.nroinicio ?? 0).toString().padStart(7, '0');
     const nroFin = (timb.nrofin ?? 0).toString().padStart(7, '0');
     const tipo = timb.electronico ? '[E]' : '[P]'
-    let datosTimb = `${timb.prefijo} | ${nroInicio} al ${nroFin} | ${ultNro} ${tipo}`;
+    let datosTimb = `${timb.prefijo} | ${nroInicio} al ${nroFin} | ${ultNro}`;
+    if(mostrarTipo) datosTimb = `${datosTimb} ${tipo}`;
     return datosTimb;
   }
 
