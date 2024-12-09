@@ -54,6 +54,8 @@ export class VistaLotesFacturasComponent implements OnInit {
 
   private getParams(): HttpParams{
     let params = new HttpParams();
+    params = params.append('limit', this.pageSize);
+    params = params.append('offset', (this.pageIndex - 1) * this.pageSize);
     params = params.append('sort', '-id');
     return params;
   }
