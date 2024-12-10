@@ -101,6 +101,7 @@ export class DetalleVentaComponent implements OnInit {
   intervalFechaActual: any;
 
   usarFechaActual: boolean = true;
+  ultimoNroFacturaUsado: number | null = null;
 
   constructor(
     @Inject(LOCALE_ID)
@@ -197,7 +198,7 @@ export class DetalleVentaComponent implements OnInit {
     clearInterval(this.intervalFechaActual);
     this.intervalFechaActual = setInterval(() => {      
       this.formCabecera.controls.fecha.setValue(new Date());
-    }, 10000);
+    }, 1000);
   }
 
   private validarRuc(){
@@ -284,6 +285,7 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   actualizarControlNroFactura(t: Timbrado) {
+    this.ultimoNroFacturaUsado = t.ultimonrousado;
     this.nroFacturaMin = t.nroinicio ?? 1;
     this.nroFacturaMax = t.nrofin ?? 9999999;
     this.formCabecera.get('nroFactura')?.clearValidators();

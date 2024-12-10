@@ -125,14 +125,14 @@
                                             </nz-option>
                                         </nz-select>
                                     </ng-template>
-                                    <nz-input-group
+                                    <nz-input-number-group
                                         [nzAddOnBefore]="prefijoFactura"
                                         nzSearch>
-                                        <input
+                                        <nz-input-number
                                             *ngIf="facturaElectronica && idventa == 'nueva'"
-                                            nz-input
-                                            placeholder="(autogenerado)"
-                                            disabled="true">
+                                            nzPlaceHolder="(autogenerado)"
+                                            [nzDisabled]="true">
+                                        </nz-input-number>
                                         <nz-input-number
                                             *ngIf="!facturaElectronica || (facturaElectronica && idventa != 'nueva')"
                                             style="width: 100%;"
@@ -152,8 +152,7 @@
                                                 <i nz-icon nzType="search" nzTheme="outline"></i>
                                             </button>
                                         </ng-template>-->
-                                    </nz-input-group>
-
+                                    </nz-input-number-group>
                                     <ng-template #renderPrefijo let-selected>
                                         <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
                                             {{ timbrado.prefijo }}
@@ -168,19 +167,22 @@
                                     <nz-input-group [nzAddOnAfter]="addonEditarFechaHora" nzSearch>
                                         <ng-template #addonEditarFechaHora>
                                             <button
-                                                nz-button                                                
+                                                nz-button
+                                                [disabled]="usarFechaActual"                                                
                                                 [nzType]="usarFechaActual ? 'default' : 'primary'"
                                                 (click)="cambiarAModoFechaActual(!usarFechaActual)"
-                                                nzSearch>
-                                                <i nz-icon nzType="edit"></i>
+                                                nzSearch
+                                                nz-tooltip
+                                                [nzTooltipTitle]="usarFechaActual ? '' : 'Usar fecha/hora actual'">
+                                                <i nz-icon [nzType]="'sync'"></i>
                                             </button>
                                         </ng-template>
                                         <nz-date-picker
-                                            [nzDisabled]="usarFechaActual"
                                             [nzShowTime]="{ nzFormat: 'HH:mm' }"
                                             style="width: 100%;"
-                                            nzFormat="dd/MM/yyyy HH:mm"
-                                            formControlName="fecha">
+                                            nzFormat="dd/MM/yyyy HH:mm:ss"
+                                            formControlName="fecha"
+                                            (nzOnOpenChange)="cambiarAModoFechaActual(false)">
                                         </nz-date-picker>
                                     </nz-input-group>
                                     
