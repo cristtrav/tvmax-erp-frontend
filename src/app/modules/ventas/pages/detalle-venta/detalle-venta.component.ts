@@ -303,6 +303,7 @@ export class DetalleVentaComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('activo', 'true');
+    params = params.append('sort', '-id')
     this.timbradoSrv.get(params).subscribe({
       next: (timbrados) => {
         this.lstTimbrados = timbrados;

@@ -9,7 +9,7 @@
             <span *ngIf="moduloActivadoDesde == 'pos'">POS</span>
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>
-            <a>{{ idventa | titlecase }}</a>
+            {{ idventa | titlecase }}
         </nz-breadcrumb-item>
     </nz-breadcrumb>
 
@@ -116,8 +116,12 @@
                                             [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
                                             <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
                                                 [nzLabel]="timb | datosTimbrado"
-                                                [nzValue]="timb.id">
-                                                {{ timb | datosTimbrado }}
+                                                [nzValue]="timb.id"
+                                                [nzCustomContent]>
+                                                <nz-tag [nzColor]="timb.electronico ? 'purple' : 'geekblue'">
+                                                    {{ timb.electronico ? 'E' : 'P' }}
+                                                </nz-tag>
+                                                <span>{{ timb | datosTimbrado:false }}</span>
                                             </nz-option>
                                         </nz-select>
                                     </ng-template>
@@ -151,7 +155,9 @@
                                     </nz-input-group>
 
                                     <ng-template #renderPrefijo let-selected>
-                                        {{ selected.nzLabel.substring(0, 7) }}
+                                        <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
+                                            {{ timbrado.prefijo }}
+                                        </span>  
                                     </ng-template>
                                 </nz-form-control>
                             </nz-form-item>
