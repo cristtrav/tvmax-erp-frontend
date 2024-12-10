@@ -168,7 +168,7 @@
                                         <ng-template #addonEditarFechaHora>
                                             <button
                                                 nz-button
-                                                [disabled]="usarFechaActual"                                                
+                                                [disabled]="usarFechaActual || guardandoFactura"                                                
                                                 [nzType]="usarFechaActual ? 'default' : 'primary'"
                                                 (click)="cambiarAModoFechaActual(!usarFechaActual)"
                                                 nzSearch

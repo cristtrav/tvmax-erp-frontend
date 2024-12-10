@@ -345,6 +345,8 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   private registrar() {
+    const usarFechaActualTmp = this.usarFechaActual;
+    this.cambiarAModoFechaActual(false);
     this.guardandoFactura = true;
     this.ventasSrv.post(this.getDtoFacturaVenta())
     .pipe(finalize(() => this.guardandoFactura = false))
@@ -354,11 +356,11 @@ export class DetalleVentaComponent implements OnInit {
         this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
         this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
-        clearInterval(this.intervalFechaActual);
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
         this.httpErrorHandler.process(e);
+        this.cambiarAModoFechaActual(usarFechaActualTmp);
       }
     });
   }
