@@ -125,13 +125,14 @@
                                             </nz-option>
                                         </nz-select>
                                     </ng-template>
-                                    <nz-input-number-group
+                                    <nz-input-group
                                         [nzAddOnBefore]="prefijoFactura"
                                         nzSearch>
                                         <nz-input-number
                                             *ngIf="facturaElectronica && idventa == 'nueva'"
                                             nzPlaceHolder="(autogenerado)"
-                                            [nzDisabled]="true">
+                                            [nzDisabled]="true"
+                                            style="width: 100%;">
                                         </nz-input-number>
                                         <nz-input-number
                                             *ngIf="!facturaElectronica || (facturaElectronica && idventa != 'nueva')"
@@ -152,7 +153,7 @@
                                                 <i nz-icon nzType="search" nzTheme="outline"></i>
                                             </button>
                                         </ng-template>-->
-                                    </nz-input-number-group>
+                                    </nz-input-group>
                                     <ng-template #renderPrefijo let-selected>
                                         <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
                                             {{ timbrado.prefijo }}
