@@ -103,6 +103,8 @@ export class DetalleVentaComponent implements OnInit {
   usarFechaActual: boolean = true;
   ultimoNroFacturaUsado: number | null = null;
 
+  loadingVenta: boolean = false;
+
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
@@ -260,10 +262,13 @@ export class DetalleVentaComponent implements OnInit {
 
   private cargarDatosVenta(idventa: number) {
     const paramsDetalle = new HttpParams().append('eliminado', 'false');
+    this.loadingVenta = true;
     forkJoin({
       venta: this.ventasSrv.getPorId(idventa),
       detalles: this.ventasSrv.getDetallePorIdVenta(idventa, paramsDetalle)
-    }).subscribe({
+    })
+    .pipe(finalize(() => this.loadingVenta = false))
+    .subscribe({
       next: (resp) => {
         this.formCabecera.get('idCliente')?.setValue(resp.venta.idcliente);
         this.dvRuc = resp.venta.dvruc != null ? `${resp.venta.dvruc}` : null;

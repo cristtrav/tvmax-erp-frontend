@@ -38,7 +38,10 @@
                         </div>
                     </div>
                     <div nz-col nzSpan="24">
-                        <nz-table #tablaDetalle nzSize="small" [nzData]="lstDetallesVenta">
+                        <nz-table #tablaDetalle
+                            nzSize="small"
+                            [nzData]="lstDetallesVenta"
+                            [nzLoading]="loadingVenta">
                             <thead>
                                 <tr>
                                     <th>Descripción</th>
@@ -100,181 +103,183 @@
                 </div>
                 <div nz-col nzSpan="24">
                     <div class="module-content">
-                        <form nz-form [formGroup]="formCabecera" (keydown.enter)="$event.preventDefault()">
-                            <nz-form-item>
-                                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24"
-                                    [nzLg]="6">Factura</nz-form-label>
-                                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                    [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
-                                    
-                                    <!--<span *ngIf="facturaElectronica && idventa == 'nueva'">
-                                        <ng-container *ngTemplateOutlet="prefijoFactura"></ng-container>
-                                    </span>-->
-                                    
-                                    <ng-template #prefijoFactura>
-                                        <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
-                                            [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
-                                            <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
-                                                [nzLabel]="timb | datosTimbrado"
-                                                [nzValue]="timb.id"
-                                                [nzCustomContent]>
-                                                <nz-tag [nzColor]="timb.electronico ? 'purple' : 'geekblue'">
-                                                    {{ timb.electronico ? 'E' : 'P' }}
-                                                </nz-tag>
-                                                <span>{{ timb | datosTimbrado:false }}</span>
+                        <nz-spin [nzSpinning]="loadingVenta">
+                            <form nz-form [formGroup]="formCabecera" (keydown.enter)="$event.preventDefault()">
+                                <nz-form-item>
+                                    <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24"
+                                        [nzLg]="6">Factura</nz-form-label>
+                                    <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
+                                        [nzErrorTip]="errorTipNroFactura" [nzValidateStatus]="statusNroFactura">
+                                        
+                                        <!--<span *ngIf="facturaElectronica && idventa == 'nueva'">
+                                            <ng-container *ngTemplateOutlet="prefijoFactura"></ng-container>
+                                        </span>-->
+                                        
+                                        <ng-template #prefijoFactura>
+                                            <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
+                                                [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
+                                                <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
+                                                    [nzLabel]="timb | datosTimbrado"
+                                                    [nzValue]="timb.id"
+                                                    [nzCustomContent]>
+                                                    <nz-tag [nzColor]="timb.electronico ? 'purple' : 'geekblue'">
+                                                        {{ timb.electronico ? 'E' : 'P' }}
+                                                    </nz-tag>
+                                                    <span>{{ timb | datosTimbrado:false }}</span>
+                                                </nz-option>
+                                            </nz-select>
+                                        </ng-template>
+                                        <nz-input-group
+                                            [nzAddOnBefore]="prefijoFactura"
+                                            nzSearch>
+                                            <nz-input-number
+                                                *ngIf="facturaElectronica && idventa == 'nueva'"
+                                                nzPlaceHolder="(autogenerado)"
+                                                [nzDisabled]="true"
+                                                style="width: 100%;">
+                                            </nz-input-number>
+                                            <nz-input-number
+                                                *ngIf="!facturaElectronica || (facturaElectronica && idventa != 'nueva')"
+                                                style="width: 100%;"
+                                                formControlName="nroFactura"
+                                                [nzDisabled]="nroFacturaDesactivado" [nzStep]="1"
+                                                [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax">
+                                            </nz-input-number>
+                                            <!--<ng-template #sufijoFactura>
+                                                <button
+                                                    nz-button
+                                                    nzType="default"
+                                                    nzSearch
+                                                    nz-tooltip
+                                                    nzTooltipTitle="Buscar y abrir factura"
+                                                    [nzLoading]="buscandoFactura"
+                                                    (click)="buscarFacturaPorNro()">
+                                                    <i nz-icon nzType="search" nzTheme="outline"></i>
+                                                </button>
+                                            </ng-template>-->
+                                        </nz-input-group>
+                                        <ng-template #renderPrefijo let-selected>
+                                            <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
+                                                {{ timbrado.prefijo }}
+                                            </span>  
+                                        </ng-template>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">Fecha</nz-form-label>
+                                    <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
+                                        nzErrorTip="Ingrese la fecha de la factura.">
+                                        <nz-input-group [nzAddOnAfter]="addonEditarFechaHora" nzSearch>
+                                            <ng-template #addonEditarFechaHora>
+                                                <button
+                                                    nz-button
+                                                    [disabled]="usarFechaActual || guardandoFactura"                                                
+                                                    [nzType]="usarFechaActual ? 'default' : 'primary'"
+                                                    (click)="cambiarAModoFechaActual(!usarFechaActual)"
+                                                    nzSearch
+                                                    nz-tooltip
+                                                    [nzTooltipTitle]="usarFechaActual ? '' : 'Usar fecha/hora actual'">
+                                                    <i nz-icon [nzType]="'sync'"></i>
+                                                </button>
+                                            </ng-template>
+                                            <nz-date-picker
+                                                [nzShowTime]="{ nzFormat: 'HH:mm' }"
+                                                style="width: 100%;"
+                                                nzFormat="dd/MM/yyyy HH:mm:ss"
+                                                formControlName="fecha"
+                                                (nzOnOpenChange)="cambiarAModoFechaActual(false)">
+                                            </nz-date-picker>
+                                        </nz-input-group>
+                                        
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24"
+                                        [nzLg]="6">Cliente</nz-form-label>
+                                    <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
+                                        nzErrorTip="Seleccione el cliente de la factura.">
+                                        <nz-select
+                                            nzServerSearch
+                                            nzAllowClear
+                                            nzShowSearch
+                                            [nzLoading]="loadingClientes"
+                                            [nzDropdownRender]="spinCargarMasClientes"
+                                            (nzOnSearch)="buscarClienteDelayed($event)"
+                                            (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
+                                            <nz-option
+                                                nzCustomContent
+                                                *ngFor="let cli of lstClientes"
+                                                [nzLabel]="cli.razonsocial"
+                                                [nzValue]="cli.id">
+                                                <nz-space>
+                                                    <span *nzSpaceItem>{{ cli.razonsocial }}</span>
+                                                    <ng-container *ngIf="cli.ci">
+                                                        <nz-tag *nzSpaceItem>
+                                                            {{ cli.ci | number }}
+                                                            <span *ngIf="cli.dvruc">- {{ cli.dvruc }}</span>
+                                                        </nz-tag>
+                                                    </ng-container>
+                                                </nz-space>
                                             </nz-option>
                                         </nz-select>
-                                    </ng-template>
-                                    <nz-input-group
-                                        [nzAddOnBefore]="prefijoFactura"
-                                        nzSearch>
-                                        <nz-input-number
-                                            *ngIf="facturaElectronica && idventa == 'nueva'"
-                                            nzPlaceHolder="(autogenerado)"
-                                            [nzDisabled]="true"
-                                            style="width: 100%;">
-                                        </nz-input-number>
-                                        <nz-input-number
-                                            *ngIf="!facturaElectronica || (facturaElectronica && idventa != 'nueva')"
-                                            style="width: 100%;"
-                                            formControlName="nroFactura"
-                                            [nzDisabled]="nroFacturaDesactivado" [nzStep]="1"
-                                            [nzMin]="nroFacturaMin" [nzMax]="nroFacturaMax">
-                                        </nz-input-number>
-                                        <!--<ng-template #sufijoFactura>
-                                            <button
-                                                nz-button
-                                                nzType="default"
-                                                nzSearch
-                                                nz-tooltip
-                                                nzTooltipTitle="Buscar y abrir factura"
-                                                [nzLoading]="buscandoFactura"
-                                                (click)="buscarFacturaPorNro()">
-                                                <i nz-icon nzType="search" nzTheme="outline"></i>
-                                            </button>
-                                        </ng-template>-->
-                                    </nz-input-group>
-                                    <ng-template #renderPrefijo let-selected>
-                                        <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
-                                            {{ timbrado.prefijo }}
-                                        </span>  
-                                    </ng-template>
-                                </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item>
-                                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">Fecha</nz-form-label>
-                                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                    nzErrorTip="Ingrese la fecha de la factura.">
-                                    <nz-input-group [nzAddOnAfter]="addonEditarFechaHora" nzSearch>
-                                        <ng-template #addonEditarFechaHora>
-                                            <button
-                                                nz-button
-                                                [disabled]="usarFechaActual || guardandoFactura"                                                
-                                                [nzType]="usarFechaActual ? 'default' : 'primary'"
-                                                (click)="cambiarAModoFechaActual(!usarFechaActual)"
-                                                nzSearch
-                                                nz-tooltip
-                                                [nzTooltipTitle]="usarFechaActual ? '' : 'Usar fecha/hora actual'">
-                                                <i nz-icon [nzType]="'sync'"></i>
-                                            </button>
+                                        <ng-template #spinCargarMasClientes>
+                                            <nz-spin *ngIf="loadingMasClientes"></nz-spin>
                                         </ng-template>
-                                        <nz-date-picker
-                                            [nzShowTime]="{ nzFormat: 'HH:mm' }"
-                                            style="width: 100%;"
-                                            nzFormat="dd/MM/yyyy HH:mm:ss"
-                                            formControlName="fecha"
-                                            (nzOnOpenChange)="cambiarAModoFechaActual(false)">
-                                        </nz-date-picker>
-                                    </nz-input-group>
-                                    
-                                </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item>
-                                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24"
-                                    [nzLg]="6">Cliente</nz-form-label>
-                                <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                    nzErrorTip="Seleccione el cliente de la factura.">
-                                    <nz-select
-                                        nzServerSearch
-                                        nzAllowClear
-                                        nzShowSearch
-                                        [nzLoading]="loadingClientes"
-                                        [nzDropdownRender]="spinCargarMasClientes"
-                                        (nzOnSearch)="buscarClienteDelayed($event)"
-                                        (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
-                                        <nz-option
-                                            nzCustomContent
-                                            *ngFor="let cli of lstClientes"
-                                            [nzLabel]="cli.razonsocial"
-                                            [nzValue]="cli.id">
-                                            <nz-space>
-                                                <span *nzSpaceItem>{{ cli.razonsocial }}</span>
-                                                <ng-container *ngIf="cli.ci">
-                                                    <nz-tag *nzSpaceItem>
-                                                        {{ cli.ci | number }}
-                                                        <span *ngIf="cli.dvruc">- {{ cli.dvruc }}</span>
-                                                    </nz-tag>
-                                                </ng-container>
-                                            </nz-space>
-                                        </nz-option>
-                                    </nz-select>
-                                    <ng-template #spinCargarMasClientes>
-                                        <nz-spin *ngIf="loadingMasClientes"></nz-spin>
-                                    </ng-template>
-                                </nz-form-control>
-                            </nz-form-item>
-                            <nz-form-item>
-                                <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">
-                                    CI/RUC
-                                </nz-form-label>
-                                <nz-form-control
-                                    [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
-                                    [nzHasFeedback]="mostrarValidacionRuc"
-                                    nzWarningTip="RUC no encontrado en Marangatu"
-                                    [nzValidateStatus]="estadoValidacionRuc">
-                                    <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
-                                        <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                            
-                            <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
-                                <div *ngIf="clienteSeleccionado != null" nz-col>
-                                    <nz-badge [nzShowDot]="clienteSeleccionado != null && (clienteSeleccionado.telefono1 == null || clienteSeleccionado.email == null)" nzDot>
-                                        <button nz-button nzType="default" style="width: 100%;" (click)="mostrarModalContacto()" [disabled]="guardandoFactura">
-                                            <i nz-icon nzType="contacts"></i>
-                                            Contacto
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">
+                                        CI/RUC
+                                    </nz-form-label>
+                                    <nz-form-control
+                                        [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
+                                        [nzHasFeedback]="mostrarValidacionRuc"
+                                        nzWarningTip="RUC no encontrado en Marangatu"
+                                        [nzValidateStatus]="estadoValidacionRuc">
+                                        <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
+                                            <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                
+                                <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
+                                    <div *ngIf="clienteSeleccionado != null" nz-col>
+                                        <nz-badge [nzShowDot]="clienteSeleccionado != null && (clienteSeleccionado.telefono1 == null || clienteSeleccionado.email == null)" nzDot>
+                                            <button nz-button nzType="default" style="width: 100%;" (click)="mostrarModalContacto()" [disabled]="guardandoFactura">
+                                                <i nz-icon nzType="contacts"></i>
+                                                Contacto
+                                            </button>
+                                        </nz-badge>
+                                    </div>
+                                    <div *ngIf="idventa !== 'nueva'" nz-col>
+                                        <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion" [disabled]="guardandoFactura">
+                                            <i nz-icon nzType="printer"></i>
+                                            Imprimir
                                         </button>
-                                    </nz-badge>
+                                    </div>
+                                    <div nz-col>
+                                        <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()" [disabled]="guardandoFactura">
+                                            <i nz-icon [nzType]="idventa === 'nueva'?'clear':'plus'"></i>
+                                            {{ idventa === 'nueva'?'Limpiar':'Nueva' }}
+                                        </button>
+                                    </div>
+                                    <div nz-col>
+                                        <button
+                                            nz-button
+                                            nzType="primary"
+                                            [nzLoading]="guardandoFactura"
+                                            (click)="guardar()"
+                                            style="width: 100%;">
+                                            <i nz-icon nzType="save"></i>
+                                            {{ idventa == 'nueva' ? 'Registrar' : 'Editar' }}
+                                        </button>
+                                    </div>
+                                    <div nz-col nzSpan="24" *ngIf="mostrarValidacionRuc && estadoValidacionRuc == 'warning'">
+                                        <nz-alert nzType="warning" nzMessage="RUC inexistente provocará rechazo de Factura Electrónica"></nz-alert>
+                                    </div>
                                 </div>
-                                <div *ngIf="idventa !== 'nueva'" nz-col>
-                                    <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion" [disabled]="guardandoFactura">
-                                        <i nz-icon nzType="printer"></i>
-                                        Imprimir
-                                    </button>
-                                </div>
-                                <div nz-col>
-                                    <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()" [disabled]="guardandoFactura">
-                                        <i nz-icon [nzType]="idventa === 'nueva'?'clear':'plus'"></i>
-                                        {{ idventa === 'nueva'?'Limpiar':'Nueva' }}
-                                    </button>
-                                </div>
-                                <div nz-col>
-                                    <button
-                                        nz-button
-                                        nzType="primary"
-                                        [nzLoading]="guardandoFactura"
-                                        (click)="guardar()"
-                                        style="width: 100%;">
-                                        <i nz-icon nzType="save"></i>
-                                        {{ idventa == 'nueva' ? 'Registrar' : 'Editar' }}
-                                    </button>
-                                </div>
-                                <div nz-col nzSpan="24" *ngIf="mostrarValidacionRuc && estadoValidacionRuc == 'warning'">
-                                    <nz-alert nzType="warning" nzMessage="RUC inexistente provocará rechazo de Factura Electrónica"></nz-alert>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </nz-spin>
                     </div>
                 </div>
             </div>
