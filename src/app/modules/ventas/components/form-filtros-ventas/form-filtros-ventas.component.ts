@@ -8,6 +8,8 @@ import { UsuarioDTO } from '@dto/usuario.dto';
 import { Timbrado } from '@dto/timbrado.dto';
 import { TimbradosService } from '@services/timbrados.service';
 import { finalize } from 'rxjs';
+import { EstadoFacturaElectronicaDTO } from '@dto/facturacion/estado-factura-electronica.dto';
+import { EstadoFacturaElectronicaService } from '@services/facturacion/estado-factura-electronica.service';
 
 const DATE_FORMAT: string = "yyyy-MM-dd";
 
@@ -57,17 +59,23 @@ export class FormFiltrosVentasComponent implements OnInit {
   idtimbradoFiltro: number | null = null;
   loadingTimbrados: boolean = false;
 
+  lstEstadosFacturaElectronica: EstadoFacturaElectronicaDTO[] = [];
+  loadingEstadosFacturaElectronica: boolean = false;
+  idEstadoFacturaElectronicaSeleccionada: number | null = null;
+
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private usuariosSrv: UsuariosService,
     private timbradosSrv: TimbradosService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private estadosSifenSrv: EstadoFacturaElectronicaService
   ) { }
 
   ngOnInit(): void {
     this.cargarCobradoresFiltro();
     this.cargarUsuarioFiltro();
     this.cargarTimbradosFiltro();
+    this.cargarEstadosSifen();
   }
 
   disabledStartDate = (startValue: Date): boolean => {
@@ -130,6 +138,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (this.filtroAnulado) cant++;
     if (this.grupoServicioFiltro.length > 0) cant++;
     if (this.idtimbradoFiltro != null) cant++;
+    if (this.idEstadoFacturaElectronicaSeleccionada != null) cant++;
     return cant;    
   }
 
@@ -170,6 +179,20 @@ export class FormFiltrosVentasComponent implements OnInit {
   limpiarFiltroTimbrado(){
     this.idtimbradoFiltro = null;
     this.filtrar();
+  }
+
+  limpiarFiltroEstadoFacturaElectronica(){
+    this.idEstadoFacturaElectronicaSeleccionada = null;
+    this.filtrar();
+  }
+
+  cargarEstadosSifen(){
+    const params = new HttpParams()
+    .append('sort', '+id');
+    this.loadingEstadosFacturaElectronica = true;
+    this.estadosSifenSrv.get(params)
+    .pipe(finalize(() => this.loadingEstadosFacturaElectronica = false))
+    .subscribe((estados) => this.lstEstadosFacturaElectronica = estados);
   }
 
   cargarCobradoresFiltro() {
@@ -247,6 +270,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     }
 
     if(this.idtimbradoFiltro != null) params['idtimbrado'] = this.idtimbradoFiltro;
+    if(this.idEstadoFacturaElectronicaSeleccionada != null) params['idestadofacturaelectronica'] = this.idEstadoFacturaElectronicaSeleccionada
     return params;
   }
 

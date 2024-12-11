@@ -1,5 +1,5 @@
 <div nz-row [nzGutter]="[8, 8]">
-    <div nz-col>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="fechaInicioFiltro != null || fechaFinFiltro != null" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtro de fecha de factura" (click)="limpiarFiltroFechas()">
@@ -7,12 +7,18 @@
                 </a> Fecha factura
             </h3>
         </nz-badge>
-        <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledStartDate"
-            nzPlaceHolder="Fecha desde" style="width: 100%;" nzFormat="dd/MM/yyyy">
-        </nz-date-picker>
-        <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledEndDate"
-            nzPlaceHolder="Fecha hasta" style="width: 100%; margin-top: 10px;" nzFormat="dd/MM/yyyy">
-        </nz-date-picker>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="12">
+                <nz-date-picker [(ngModel)]="fechaInicioFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledStartDate"
+                    nzPlaceHolder="Desde" style="width: 100%;" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-date-picker [(ngModel)]="fechaFinFiltro" (ngModelChange)="filtrar()" [nzDisabledDate]="disabledEndDate"
+                    nzPlaceHolder="Hasta" style="width: 100%;" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+            </div>
+        </div>
     </div>
     <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="idtimbradoFiltro != null" nzDot>
@@ -35,13 +41,10 @@
                 [nzValue]="timbrado.id"
                 [nzLabel]="timbrado.prefijo"
                 nzCustomContent>
-                
                     <nz-tag [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
                         {{ timbrado.electronico ? 'E' : 'P' }}
                     </nz-tag>
                     <span>{{ timbrado | datosTimbrado:false }}</span>
-                
-                
             </nz-option>
             <ng-template #timbradoSelected let-selected>
                 <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
@@ -76,6 +79,27 @@
         </div>
     </div>
     <div nz-col nzSpan="24">
+        <nz-badge [nzShowDot]="idEstadoFacturaElectronicaSeleccionada != null" nzDot>
+            <h3>
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de estados de Factura Electrónica" (click)="limpiarFiltroEstadoFacturaElectronica()">
+                    <i nz-icon nzType="clear" nzTheme="outline"></i>
+                </a> Estado F. Electrónica
+            </h3>
+        </nz-badge>
+        <nz-select
+            [(ngModel)]="idEstadoFacturaElectronicaSeleccionada"
+            (ngModelChange)="filtrar()"
+            nzPlaceHolder="Seleccionar..."
+            nzAllowClear
+            style="width: 100%;">
+            <nz-option
+                *ngFor="let estadoSifen of lstEstadosFacturaElectronica"
+                [nzLabel]="estadoSifen.descripcion"
+                [nzValue]="estadoSifen.id">
+            </nz-option>
+        </nz-select>
+    </div>
+    <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="fechaInicioCobroFiltro != null || fechaFinCobroFiltro != null" nzDot>
             <h3>
                 <a nz-tooltip nzTooltipTitle="Limpiar filtro de fechas" (click)="limpiarFiltrosFechasCobro()">
@@ -83,14 +107,20 @@
                 </a> Fecha cobro
             </h3>
         </nz-badge>
-        <nz-date-picker [(ngModel)]="fechaInicioCobroFiltro" (ngModelChange)="filtrar()"
-            [nzDisabledDate]="disabledStartDateCobro" nzPlaceHolder="Fecha desde" style="width: 100%;"
-            nzFormat="dd/MM/yyyy">
-        </nz-date-picker>
-        <nz-date-picker [(ngModel)]="fechaFinCobroFiltro" (ngModelChange)="filtrar()"
-            [nzDisabledDate]="disabledEndDateCobro" nzPlaceHolder="Fecha hasta" style="width: 100%; margin-top: 10px;"
-            nzFormat="dd/MM/yyyy">
-        </nz-date-picker>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="12">
+                <nz-date-picker [(ngModel)]="fechaInicioCobroFiltro" (ngModelChange)="filtrar()"
+                    [nzDisabledDate]="disabledStartDateCobro" nzPlaceHolder="Desde" style="width: 100%;"
+                    nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12">
+                <nz-date-picker [(ngModel)]="fechaFinCobroFiltro" (ngModelChange)="filtrar()"
+                    [nzDisabledDate]="disabledEndDateCobro" nzPlaceHolder="Hasta" style="width: 100%;"
+                    nzFormat="dd/MM/yyyy">
+                </nz-date-picker>   
+            </div>
+        </div>
     </div>
     <div nz-col nzSpan="24">
         <nz-badge [nzShowDot]="idUsuarioCobroFiltro != null" nzDot>
