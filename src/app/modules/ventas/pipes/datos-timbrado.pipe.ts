@@ -7,7 +7,6 @@ import { Timbrado } from '@dto/timbrado.dto';
 export class DatosTimbradoPipe implements PipeTransform {
 
   transform(timb: Timbrado, mostrarTipo?: boolean): string {
-    console.log('args pipe', mostrarTipo);
     if(!timb) return '';
     const ultNro = (timb.ultimonrousado ?? 0).toString().padStart(7, '0');
     const nroInicio = (timb.nroinicio ?? 0).toString().padStart(7, '0');
