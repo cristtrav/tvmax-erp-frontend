@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@services/sesion.service';
 import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
-import { finalize, forkJoin, mergeMap } from 'rxjs';
+import { finalize, forkJoin, mergeMap, of } from 'rxjs';
 import { ImpresionService } from '@services/impresion.service';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
@@ -264,7 +264,15 @@ export class DetalleVentaComponent implements OnInit {
       venta: this.ventasSrv.getPorId(idventa),
       detalles: this.ventasSrv.getDetallePorIdVenta(idventa, paramsDetalle)
     })
-    .pipe(finalize(() => this.loadingVenta = false))
+    .pipe(
+      mergeMap(resp => forkJoin({
+          venta: of(resp.venta),
+          detalles: of(resp.detalles),
+          cliente: this.clienteSrv.getPorId(resp.venta.idcliente ?? -1)
+        })
+      ),
+      finalize(() => this.loadingVenta = false)
+    )
     .subscribe({
       next: (resp) => {
         this.formCabecera.get('idCliente')?.setValue(resp.venta.idcliente);
@@ -278,6 +286,8 @@ export class DetalleVentaComponent implements OnInit {
         this.lstDetallesVenta = resp.detalles;
         if(resp.venta.fechahorafactura) this.formCabecera.controls.fecha.setValue(new Date(resp.venta.fechahorafactura));
         else if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
+        this.clienteSeleccionado = resp.cliente;
+        this.validarRuc();
       },
       error: (e) => {
         console.error('Error al cargar venta por id', e)
