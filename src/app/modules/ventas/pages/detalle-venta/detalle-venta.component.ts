@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@services/sesion.service';
 import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
-import { finalize, forkJoin } from 'rxjs';
+import { finalize, forkJoin, mergeMap } from 'rxjs';
 import { ImpresionService } from '@services/impresion.service';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
@@ -90,9 +90,6 @@ export class DetalleVentaComponent implements OnInit {
 
   modalContactoVisible: boolean = false;
   facturaElectronica: boolean = false;
-
-  //rucNoEncontrado: boolean = false;
-  //consultandoRuc: boolean = false;
 
   mostrarValidacionRuc:boolean = false;
   estadoValidacionRuc: NzValidateStatus = 'success';
@@ -354,13 +351,17 @@ export class DetalleVentaComponent implements OnInit {
     this.cambiarAModoFechaActual(false);
     this.guardandoFactura = true;
     this.ventasSrv.post(this.getDtoFacturaVenta())
-    .pipe(finalize(() => this.guardandoFactura = false))
+    .pipe(
+      mergeMap(idventa => this.ventasSrv.getPorId(idventa)),
+      finalize(() => this.guardandoFactura = false),
+    )
     .subscribe({
-      next: (idgenerado) => {
-        this.idventa = `${idgenerado}`;
-        this.router.navigate(['../', idgenerado], { relativeTo: this.aroute });
-        this.notif.create('success', '<strong>Éxito</strong>', 'Factura registrada.');
+      next: (venta) => {
+        this.idventa = `${venta.id}`;
+        this.router.navigate(['../', venta.id], { relativeTo: this.aroute });
+        this.notif.success('<strong>Éxito</strong>', 'Factura registrada.');
         this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
+        this.formCabecera.controls.nroFactura.setValue(venta.nrofactura)
       },
       error: (e) => {
         console.error('Error al registrar venta', e);
