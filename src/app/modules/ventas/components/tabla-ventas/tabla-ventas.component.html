@@ -20,8 +20,8 @@
                 <td [nzExpand]="expandSet.has(fv.id ?? 0)" (nzExpandChange)="onExpandChange(fv.id ?? 0, $event)"></td>
                 <td>
                     <span *ngIf="fv.ci == null" nz-typography nzType="secondary">(sin CI/RUC)</span>
-                    <span *ngIf="!fv.dvruc">{{ fv.ci | number }}</span>
-                    <span *ngIf="fv.dvruc">{{ fv.ci | number }}-{{ fv.dvruc }}</span>
+                    <span *ngIf="fv.dvruc == null">{{ fv.ci | number }}</span>
+                    <span *ngIf="fv.dvruc != null">{{ fv.ci | number }}-{{ fv.dvruc }}</span>
                 </td>
                 <td>{{ fv.cliente }}</td>
                 <td>
