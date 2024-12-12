@@ -124,7 +124,7 @@ export class SesionService {
           this.loadMenuFavs(this.getIdUsuario(resp.session.accessToken));
           return (<IRefreshSession>resp.session);
         }), catchError(err => {
-          if (err.status === 401 || err.status === 403) {
+          if (err.status === 401 || err.status === 403 || err.error.message.includes('TokenExpiredError')) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
           }
@@ -138,15 +138,20 @@ export class SesionService {
     return this.http.post(`${this.url}/logout`, { refreshToken: rtoken }, AppSettings.httpOptionsPost)
       .pipe(
         map(res => {
-          this.permisos.clear();
-          this.roles.clear();
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          this.idusuarioBehavior.next(-1);
-          this.nombreBehavior.next('(Sin usuario)');
-          this.menuFavsBehabiorSubj.next(new Array());
+          this.clearSessionData();
           return res;
-        }));
+        })
+      );
+  }
+
+  private clearSessionData(){
+    this.permisos.clear();
+    this.roles.clear();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    this.idusuarioBehavior.next(-1);
+    this.nombreBehavior.next('(Sin usuario)');
+    this.menuFavsBehabiorSubj.next(new Array());          
   }
 
   private actualizarDatosUsuario(token: string): void {
@@ -166,7 +171,12 @@ export class SesionService {
     this.refreshTokenTimeout = setTimeout(() => {
       const rtoken = localStorage.getItem('refreshToken');
       if (rtoken) {
-        this.refresh(rtoken).subscribe();
+        this.refresh(rtoken).subscribe({
+          error: (err) => {
+            if(err.error.message.includes('TokenExpiredError'))
+              this.showSessionExpiredDialog();
+          }
+        });
       }
     }, timeout);
   }
@@ -210,6 +220,18 @@ export class SesionService {
 
   hasRol(idrol: number): boolean{
     return this.roles.has(idrol);
+  }
+
+  showSessionExpiredDialog(){
+    this.modal.warning({
+      nzTitle: 'Sesión expirada',
+      nzContent: 'Debe volver a iniciar sesión',
+      nzClosable: false,
+      nzOnOk: () => {
+        this.clearSessionData();
+        this.router.navigateByUrl('/login');
+      }
+    })
   }
 }
 
