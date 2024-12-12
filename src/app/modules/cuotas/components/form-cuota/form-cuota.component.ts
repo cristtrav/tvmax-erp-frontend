@@ -59,7 +59,7 @@ export class FormCuotaComponent implements OnInit {
         this.suscripcionesSrv.getPorId(this.idsuscripcion ?? -1).subscribe({
           next: (suscripcion) => {
             if(!this.validandoFormulario){
-              if(suscripcion.idservicio == idservicio)
+              if(suscripcion.idservicio == idservicio && this.idcuota == 'nueva')
                 this.form.controls.monto.setValue(suscripcion.monto);
               else  
                 this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
