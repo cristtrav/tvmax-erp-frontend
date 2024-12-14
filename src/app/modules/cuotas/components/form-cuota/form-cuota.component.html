@@ -40,7 +40,7 @@
             </nz-form-control>
         </nz-form-item>
         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-            <button nz-button nzType="primary" [nzLoading]="guardarLoading" (click)="guardar()">
+            <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
                 <i nz-icon nzType="save"></i>
                 {{ idcuota === 'nueva' ? 'Registrar' : 'Editar' }}
             </button>

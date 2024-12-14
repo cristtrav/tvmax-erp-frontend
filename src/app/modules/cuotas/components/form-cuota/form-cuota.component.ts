@@ -35,7 +35,7 @@ export class FormCuotaComponent implements OnInit {
   });
 
   cuotaEditar?: CuotaDTO;
-  guardarLoading: boolean = false;
+  guardando: boolean = false;
   formLoading: boolean = false;
   lstServicios: Servicio[] = [];
   suscripcionActual: Suscripcion | null = null;
@@ -52,25 +52,28 @@ export class FormCuotaComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarGruposServicios();
-    if (this.idcuota && this.idcuota !== 'nueva') this.cargarDatos();
+    if (this.idcuota != 'nueva') this.cargarDatos();
+    
+    if (this.idsuscripcion) this.suscripcionesSrv
+      .getPorId(this.idsuscripcion)
+      .subscribe({
+        next: (suscripcion) => {
+          this.suscripcionActual = suscripcion;
+        },
+        error: (e) => {
+          console.log('Error al cargar suscripcion actual', e);
+        }
+      })
+
     this.form.get('idservicio')?.valueChanges.subscribe((value: number[]) => {
       if (value && value.length > 0) {
         const idservicio = value[value.length - 1];
-        this.suscripcionesSrv.getPorId(this.idsuscripcion ?? -1).subscribe({
-          next: (suscripcion) => {
-            if(!this.validandoFormulario){
-              if(suscripcion.idservicio == idservicio && this.idcuota == 'nueva')
-                this.form.controls.monto.setValue(suscripcion.monto);
-              else  
-                this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
-            }
-          },
-          error: (e) => {
-            console.log('Error al consultar suscripcion');
-            if(!this.validandoFormulario)
-              this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
-          }
-        });
+        if(!this.validandoFormulario){
+          if(this.suscripcionActual && this.suscripcionActual.idservicio == idservicio)
+            this.form.controls.monto.setValue(this.suscripcionActual.monto);
+          else  
+            this.form.controls.monto.setValue(this.lstServicios.find(srv => srv.id == idservicio)?.precio);
+        }
       } else this.form.controls.monto.reset();
     });
   }
@@ -150,10 +153,10 @@ export class FormCuotaComponent implements OnInit {
   }
 
   private registrar(): void {
-    this.guardarLoading = true;
+    this.guardando = true;
     this.cuotaSrv
       .post(this.getDto())
-      .pipe(finalize(() => this.guardarLoading = false))
+      .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => {
           this.notif.create('success', '<strong>Éxito</strong>', 'Cuota registrada');
@@ -167,10 +170,10 @@ export class FormCuotaComponent implements OnInit {
   }
 
   private modificar(): void {
-    this.guardarLoading = true;
+    this.guardando = true;
     this.cuotaSrv
       .put(Number(this.idcuota), this.getDto())
-      .pipe(finalize(() => this.guardarLoading = false))
+      .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => {
           this.notif.create('success', '<strong>Éxito</strong>', 'Cuota editada');
