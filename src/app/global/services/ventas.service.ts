@@ -106,8 +106,9 @@ export class VentasService {
     return this.http.get(`${this.url}/${idventa}/dte`, AppSettings.getHttpOptionsBlobAuth());
   }
 
-  getKUDE(idventa: number): Observable<any>{
-    return this.http.get(`${this.url}/${idventa}/kude`, AppSettings.getHttpOptionsBlobAuth());
+  getKUDE(idventa: number, duplicado: boolean = false): Observable<any>{
+    const params = new HttpParams().append('duplicado', duplicado);
+    return this.http.get(`${this.url}/${idventa}/kude`, AppSettings.getHttpOptionsBlobAuthWithParams(params));
   }
 
   getFacturaElectronica(idventa: number): Observable<FacturaElectronicaDTO>{

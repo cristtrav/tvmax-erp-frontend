@@ -569,11 +569,20 @@ export class DetalleVentaComponent implements OnInit {
     this.calcularTotalFactura();
   }
 
-  imprimir(): void {
-    const timbrado = this.lstTimbrados.find(t => t.id == this.formCabecera.controls.idTimbrado.value)
-    if(timbrado?.electronico){
-      this.loadingImpresion = true;
-      this.ventasSrv.getKUDE(Number(this.idventa))
+  imprimirFacturaPreimpresa(){
+    this.impresionSrv.imprimirFacturaPreimpresa(Number(this.idventa), this.iframe, this.viewContainerRef).subscribe(
+      (loading) => this.loadingImpresion = loading
+    );
+  }
+  
+  imprimirKude(duplicado: boolean){
+    const timbrado = this.lstTimbrados.find(t => t.id == this.formCabecera.controls.idTimbrado.value);
+    if(!timbrado) {
+      this.notif.error('Error al obtener datos del timbrado', '');
+      return;
+    }
+    this.loadingImpresion = true;
+      this.ventasSrv.getKUDE(Number(this.idventa), duplicado)
       .pipe(finalize(() => this.loadingImpresion = false))
       .subscribe({
         next: (kude) => {
@@ -588,10 +597,6 @@ export class DetalleVentaComponent implements OnInit {
           console.error('Error al cargar kude', e);
         }
       })
-    }else{
-      this.impresionSrv.imprimirFacturaPreimpresa( Number(this.idventa), this.iframe, this.viewContainerRef)
-      .subscribe((loading) => this.loadingImpresion = loading);
-    }
   }
 
   calcularTotalCuotasPendientes(idcliente: number) {

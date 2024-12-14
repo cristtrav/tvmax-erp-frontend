@@ -252,10 +252,41 @@
                                         </nz-badge>
                                     </div>
                                     <div *ngIf="idventa !== 'nueva'" nz-col>
-                                        <button nz-button nzType="default" style="width: 100%;" (click)="imprimir()" [nzLoading]="loadingImpresion" [disabled]="guardandoFactura">
-                                            <i nz-icon nzType="printer"></i>
-                                            Imprimir
-                                        </button>
+                                        <ng-container *ngIf="facturaElectronica">
+                                            <button
+                                                nz-button
+                                                nzType="default"
+                                                style="width: 100%;"
+                                                [nzLoading]="loadingImpresion"
+                                                [disabled]="guardandoFactura"
+                                                nz-dropdown
+                                                [nzDropdownMenu]="menuImpresion">
+                                                <i nz-icon nzType="printer"></i>
+                                                Imprimir
+                                            </button>
+                                            <nz-dropdown-menu #menuImpresion="nzDropdownMenu">
+                                                <ul nz-menu>
+                                                    <li nz-menu-item (click)="imprimirKude(false)">
+                                                        <a>Normal</a>
+                                                    </li>
+                                                    <li nz-menu-item (click)="imprimirKude(true)">
+                                                        <a>Con duplicado</a>
+                                                    </li>
+                                                </ul>
+                                            </nz-dropdown-menu>
+                                        </ng-container>
+                                        <ng-container *ngIf="!facturaElectronica">
+                                            <button
+                                                nz-button
+                                                nzType="default"
+                                                style="width: 100%;"
+                                                [nzLoading]="loadingImpresion"
+                                                [disabled]="guardandoFactura"
+                                                (click)="imprimirFacturaPreimpresa()">
+                                                    <i nz-icon nzType="printer"></i>
+                                                    Imprimir
+                                            </button>
+                                        </ng-container>
                                     </div>
                                     <div nz-col>
                                         <button nz-button nzType="default" style="width: 100%;" (click)="limpiar()" [disabled]="guardandoFactura">
