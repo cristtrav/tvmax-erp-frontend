@@ -170,9 +170,12 @@
                                                 Aprobado con obs.
                                             </nz-tag>
                                             <nz-tag
-                                                *ngIf="detalle.codigoestado != '0260' && detalle.codigoestado != '1005'"
+                                                *ngIf="detalle.codigoestado != null && detalle.codigoestado != '0260' && detalle.codigoestado != '1005'"
                                                 nzColor="red">
                                                 Rechazado
+                                            </nz-tag>
+                                            <nz-tag *ngIf="detalle.codigoestado == null">
+                                                Sin datos
                                             </nz-tag>
                                         </td>
                                         <td>
