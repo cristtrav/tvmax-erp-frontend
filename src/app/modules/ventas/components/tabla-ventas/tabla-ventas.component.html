@@ -224,7 +224,9 @@
                                                 {{ factElect.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
                                             </nz-descriptions-item>
                                         </ng-container>
-                                        <nz-descriptions-item *ngIf="!fv.anulado" [nzTitle]="tituloConsultarSifen">
+                                        <nz-descriptions-item
+                                            *ngIf="!fv.anulado && fv.idestadofacturaelectronica != 30 && fv.idestadofacturaelectronica != 4"
+                                            [nzTitle]="tituloConsultarSifen">
                                             <ng-template #tituloConsultarSifen>
                                                 <strong>Sincronizar</strong>
                                             </ng-template>
