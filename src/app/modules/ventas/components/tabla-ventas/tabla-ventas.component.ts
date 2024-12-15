@@ -71,6 +71,7 @@ export class TablaVentasComponent implements OnInit {
 
   //anulando: boolean = false;
   anulandoMap = new Map<number, boolean>();
+  eliminandoMap = new Map<number, boolean>();
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
@@ -92,6 +93,7 @@ export class TablaVentasComponent implements OnInit {
       if(venta && venta.facturaelectronica) this.cargarFacturaElectronica(id);
     } else {
       this.expandSet.delete(id);
+      this.facturaElectronicaMap.delete(id);
     }
   }
 
@@ -106,9 +108,10 @@ export class TablaVentasComponent implements OnInit {
       next: (resp) => {
         this.lstFacturasVenta = resp.ventas;
         this.totalRegisters = resp.total;
-        this.lstFacturasVenta.forEach(v => {
-          this.loadDetalleMap.set(v.id ?? -1, false);
-        });
+        this.expandSet.forEach(idventa => {
+          this.cargarDetalleVenta(idventa);
+          this.cargarFacturaElectronica(idventa);
+        })
       },
       error: (e) => {
         console.error('Error al consultar ventas', e);
@@ -188,7 +191,44 @@ export class TablaVentasComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
-    
+  }
+
+  confirmarEliminacion(fv: Venta){
+    let content = this.getResumenVenta(fv);
+    if(fv.facturaelectronica){
+      if(fv.idestadofacturaelectronica == 1 || fv.idestadofacturaelectronica == 2){
+        this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica aprobada por SIFEN');
+        return;
+      }
+  
+      if(fv.idestadofacturaelectronica == 4){
+        this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica anulada (cancelada)');
+        return;
+      }
+      if(fv.idestadofacturaelectronica == 32){
+        this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica enviada a SIFEN');
+        return;
+      }
+
+      content += `\nObs: Se recomienda editar la factura para evitar saltos de numeración`
+    }
+
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar la venta?',
+      nzContent: content,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.eliminarVenta(fv.id ?? -1)
+    })
+
+  }
+
+  private getResumenVenta(fv: Venta): string{
+    const nroFact = fv.prefijofactura + '-' + `${fv.nrofactura ?? 0}`.padStart(7, '0');
+    const fechaStr = fv.fechahorafactura ?? fv.fechafactura;
+    const fecha = fechaStr != null ? new Date(fechaStr) : new Date();
+    const formatoFecha = fv.fechahorafactura != null ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy';
+    return `${fv.idtimbrado != null ? nroFact : '(Sin factura)'} | Gs.${new DecimalPipe(this.locale).transform(fv.total)} | ${formatDate(fecha, formatoFecha, this.locale)}`;
   }
 
   private revertirAnulacion(id: number): void {
@@ -207,20 +247,20 @@ export class TablaVentasComponent implements OnInit {
     });
   }
 
-  eliminarVenta(id: number | null): void {
-    if (id) {
-      this.ventasSrv.delete(id)
-      .subscribe({
-        next: () => {
-          this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
-          this.cargarVentas();
-        },
-        error: (e) => {
-          console.error('Error al eliminar venta', e);
-          this.httpErrorHandler.process(e);
-        }
-      });
-    }
+  eliminarVenta(id: number): void {
+    this.eliminandoMap.set(id, true);
+    this.ventasSrv.delete(id)
+    .pipe(finalize(() => this.eliminandoMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        this.notif.create('success', '<b>Éxito</b>', 'Factura eliminada correctamente');
+        this.cargarVentas();
+      },
+      error: (e) => {
+        console.error('Error al eliminar venta', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
   descargarDTE(idventa: number){
@@ -290,14 +330,9 @@ export class TablaVentasComponent implements OnInit {
       return;
     }
 
-    const nroFact = fv.prefijofactura + '-' + `${fv.nrofactura ?? 0}`.padStart(7, '0');
-    const fechaStr = fv.fechahorafactura ?? fv.fechafactura;
-    const fecha = fechaStr != null ? new Date(fechaStr) : new Date();
-    const formatoFecha = fv.fechahorafactura != null ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy';
-
     this.modal.confirm({
       nzTitle: fv.anulado ? '¿Desea revertir la anulación?' : '¿Desea anular la factura?',
-      nzContent: `${fv.idtimbrado != null ? nroFact : '(Sin factura)'} | Gs.${new DecimalPipe(this.locale).transform(fv.total)} | ${formatDate(fecha, formatoFecha, this.locale)}`,
+      nzContent: this.getResumenVenta(fv),
       nzOkDanger: true,
       nzOkText: fv.anulado ? 'Revertir' : 'Anular',
       nzOnOk: () => {

@@ -110,9 +110,14 @@
                             </button>
                         </div>
                         <div nz-col>
-                            <button nz-tooltip nz-button nz-popconfirm nzType="primary"
-                                nzTooltipTitle="Eliminar factura" nzPopconfirmTitle="¿Desea eliminar la factura?"
-                                nzOkText="Eliminar" (nzOnConfirm)="eliminarVenta(fv.id)" nzDanger>
+                            <button
+                                nz-tooltip
+                                nz-button
+                                nzType="primary"
+                                nzTooltipTitle="Eliminar factura"
+                                nzOkText="Eliminar"
+                                nzDanger
+                                (click)="confirmarEliminacion(fv)">
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
                         </div>
