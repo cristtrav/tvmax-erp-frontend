@@ -114,4 +114,8 @@ export class VentasService {
   getFacturaElectronica(idventa: number): Observable<FacturaElectronicaDTO>{
     return this.http.get<FacturaElectronicaDTO>(`${this.url}/${idventa}/facturaelectronica`, AppSettings.getHttpOptionsAuth());
   }
+
+  consultarFacturaSifen(id: number): Observable<any>{
+    return this.http.get(`${this.url}/${id}/consultarsifen`, AppSettings.getHttpOptionsAuth());
+  }
 }

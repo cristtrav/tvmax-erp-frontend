@@ -60,6 +60,8 @@ export class TablaVentasComponent implements OnInit {
   loadingDTE: boolean = false;
   loadingKuDE: boolean = false;
 
+  loadingConsultaDTEMap = new Map<number, boolean>();
+
   public readonly DETALLES_ELE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 8, xl: 8, xxl: 8 };
   public readonly DETALLES_PRE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 };
 
@@ -129,6 +131,13 @@ export class TablaVentasComponent implements OnInit {
     .subscribe({
       next: fe => {
         this.facturaElectronicaMap.set(idventa, fe);
+        this.lstFacturasVenta = this.lstFacturasVenta.map(fact => {
+          if(fact.id == idventa){
+            fact.idestadofacturaelectronica = fe.idestadodocumento;
+            return fact;
+          }
+          return fact;
+        })
       },
       error: (e) => {
         console.error('Error al cargar factura electronica', e);
@@ -251,6 +260,22 @@ export class TablaVentasComponent implements OnInit {
         );
       }
     })
+  }
+
+  consutlarSifen(id: number){
+    this.loadingConsultaDTEMap.set(id, true);
+    this.ventasSrv.consultarFacturaSifen(id)
+    .pipe(finalize(() => this.loadingConsultaDTEMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        this.notif.success('<strong>Éxito</strong>', 'Factura sincronizada');
+        this.cargarFacturaElectronica(id);
+      },
+      error: (e) => {
+        console.log('Error al consultar factura en SIFEN', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
 }

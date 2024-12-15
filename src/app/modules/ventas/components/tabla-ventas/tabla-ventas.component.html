@@ -224,6 +224,19 @@
                                                 {{ factElect.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
                                             </nz-descriptions-item>
                                         </ng-container>
+                                        <nz-descriptions-item *ngIf="!fv.anulado" [nzTitle]="tituloConsultarSifen">
+                                            <ng-template #tituloConsultarSifen>
+                                                <strong>Sincronizar</strong>
+                                            </ng-template>
+                                            <button
+                                                nz-button
+                                                nzSize="small"
+                                                [nzLoading]="loadingConsultaDTEMap.get(fv.id ?? -1)"
+                                                (click)="consutlarSifen(fv.id ?? -1)">
+                                                <i nz-icon nzType="monitor"></i>
+                                                Consultar SIFEN
+                                            </button>
+                                        </nz-descriptions-item>
                                     </nz-descriptions>
                                 </nz-spin>
                             </nz-collapse-panel>
