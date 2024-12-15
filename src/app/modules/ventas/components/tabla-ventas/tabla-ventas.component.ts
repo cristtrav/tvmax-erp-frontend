@@ -285,6 +285,11 @@ export class TablaVentasComponent implements OnInit {
       return;
     }
 
+    if(fv.facturaelectronica && fv.idestadofacturaelectronica != 1 && fv.idestadofacturaelectronica != 2){
+      this.notif.error('<strong>No se puede anular</strong>', 'La factura electrónica no fue aprobada por SIFEN');
+      return;
+    }
+
     const nroFact = fv.prefijofactura + '-' + `${fv.nrofactura ?? 0}`.padStart(7, '0');
     const fechaStr = fv.fechahorafactura ?? fv.fechafactura;
     const fecha = fechaStr != null ? new Date(fechaStr) : new Date();
