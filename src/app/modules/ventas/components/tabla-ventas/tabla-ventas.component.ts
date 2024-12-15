@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { Venta } from '@dto/venta.dto';
 import { VentasService } from '@services/ventas.service';
 import { Extra } from '@global-utils/extra';
@@ -11,6 +11,8 @@ import { finalize, forkJoin } from 'rxjs';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
 import { ResponsiveSizes } from '@util/responsive/responsive-sizes.interface';
 import { FacturaElectronicaDTO } from '@dto/facturacion/factura-electronica.dto';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { DecimalPipe, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-tabla-ventas',
@@ -67,11 +69,16 @@ export class TablaVentasComponent implements OnInit {
   public readonly DETALLES_ELE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 8, xl: 8, xxl: 8 };
   public readonly DETALLES_PRE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 };
 
+  //anulando: boolean = false;
+  anulandoMap = new Map<number, boolean>();
+
   constructor(
+    @Inject(LOCALE_ID) private locale: string,
     private ventasSrv: VentasService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
-    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService
+    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
+    private modal: NzModalService
   ) { }
 
   ngOnInit(): void {
@@ -165,37 +172,39 @@ export class TablaVentasComponent implements OnInit {
     return params;
   }
 
-  private anularFactura(id: number | null): void {
-    if (id) {
-      this.ventasSrv.anular(id)
-      .subscribe({
-        next: () => {
-          const venta = this.lstFacturasVenta.find(fv => fv.id == id);
-          if(venta) venta.anulado = true;
-          this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
-        },
-        error: (e) => {
-          console.error('Error al anular factura', e);
-          this.httpErrorHandler.process(e);
-        }
-      });
-    }
+  private anularFactura(id: number): void {
+    this.anulandoMap.set(id, true);
+    this.ventasSrv.anular(id)
+    .pipe(finalize(() => this.anulandoMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        const venta = this.lstFacturasVenta.find(fv => fv.id == id);
+        if(venta) venta.anulado = true;
+        if(venta && venta.facturaelectronica) venta.idestadofacturaelectronica = 4;
+        this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
+      },
+      error: (e) => {
+        console.error('Error al anular factura', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+    
   }
 
-  private revertirAnulacion(id: number | null): void {
-    if (id) {
-      this.ventasSrv.revertiranul(id)
-      .subscribe({
-        next: () => {
-          this.cargarVentas();
-          this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
-        },
-        error: (e) => {
-          console.error('Error al revertir anulacion de factura', e);
-          this.httpErrorHandler.process(e);
-        }
-      });
-    }
+  private revertirAnulacion(id: number): void {
+    this.anulandoMap.set(id, true);
+    this.ventasSrv.revertiranul(id)
+    .pipe(finalize(() => this.anulandoMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        this.cargarVentas();
+        this.notif.create('success', '<b>Éxito</b>', 'Anulación revertida correctamente');
+      },
+      error: (e) => {
+        console.error('Error al revertir anulacion de factura', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
   }
 
   eliminarVenta(id: number | null): void {
@@ -211,16 +220,6 @@ export class TablaVentasComponent implements OnInit {
           this.httpErrorHandler.process(e);
         }
       });
-    }
-  }
-
-  procesarAnulacion(fv: Venta | null) {
-    if (fv) {
-      if (fv.anulado) {
-        this.revertirAnulacion(fv.id);
-      } else {
-        this.anularFactura(fv.id);
-      }
     }
   }
 
@@ -278,6 +277,29 @@ export class TablaVentasComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
+  }
+
+  confirmarAnulacion(fv: Venta){
+    if(fv.facturaelectronica && fv.anulado){
+      this.notif.error('<strong>No permitido</strong>', 'No se puede revertir la anulación de una factura electrónica');
+      return;
+    }
+
+    const nroFact = fv.prefijofactura + '-' + `${fv.nrofactura ?? 0}`.padStart(7, '0');
+    const fechaStr = fv.fechahorafactura ?? fv.fechafactura;
+    const fecha = fechaStr != null ? new Date(fechaStr) : new Date();
+    const formatoFecha = fv.fechahorafactura != null ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy';
+
+    this.modal.confirm({
+      nzTitle: fv.anulado ? '¿Desea revertir la anulación?' : '¿Desea anular la factura?',
+      nzContent: `${fv.idtimbrado != null ? nroFact : '(Sin factura)'} | Gs.${new DecimalPipe(this.locale).transform(fv.total)} | ${formatDate(fecha, formatoFecha, this.locale)}`,
+      nzOkDanger: true,
+      nzOkText: fv.anulado ? 'Revertir' : 'Anular',
+      nzOnOk: () => {
+        if(fv.anulado) this.revertirAnulacion(fv.id ?? -1)
+        else this.anularFactura(fv.id ?? -1)  
+      }
+    })
   }
 
 }

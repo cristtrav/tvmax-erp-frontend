@@ -89,10 +89,13 @@
                 <td nzAlign="center">
                     <div nz-row [nzGutter]="[8, 8]">
                         <div nz-col>
-                            <button nz-button nz-tooltip nz-popconfirm [nzType]="'default'"
+                            <button
+                                nz-button
+                                nz-tooltip
+                                [nzLoading]="anulandoMap.get(fv.id ?? -1)"
+                                [nzType]="'default'"
                                 [nzTooltipTitle]="fv.anulado?'Revertir anulacion':'Anular factura'"
-                                [nzPopconfirmTitle]="fv.anulado?'¿Desea revertir la anulación?':'¿Desea anular la factura?'"
-                                [nzOkText]="fv.anulado?'Revertir':'Anular'" (nzOnConfirm)="procesarAnulacion(fv)">
+                                (click)="confirmarAnulacion(fv)">
                                 <i nz-icon nzTheme="outline" [nzType]="fv.anulado?'undo':'minus-circle'"></i>
                             </button>
                         </div>
