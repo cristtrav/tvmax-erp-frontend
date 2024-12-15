@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DetalleLoteDTO } from '@dto/facturacion/detalle-lote.dto';
 import { LoteFacturaDTO } from '@dto/facturacion/lote-factura.dto';
 import { environment } from '@environments/environment';
 import { HttpUtilsService } from '@services/http-utils/http-utils.service';
@@ -35,5 +36,9 @@ export class LotesFacturasService {
 
   generarLotes(): Observable<any>{
     return this.httpUtilsSrv.get(`${this.url}/generar`, AppSettings.getHttpOptionsAuth());
+  }
+
+  getDetallesPorIdLote(idlote: number): Observable<DetalleLoteDTO[]>{
+    return this.httpUtilsSrv.get(`${this.url}/${idlote}/detalles`, AppSettings.getHttpOptionsAuth());
   }
 }

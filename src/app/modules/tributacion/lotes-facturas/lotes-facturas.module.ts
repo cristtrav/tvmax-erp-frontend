@@ -12,6 +12,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
 
 
 @NgModule({
@@ -29,7 +30,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     NzButtonModule,
     NzTypographyModule,
     NzTagModule,
-    NzToolTipModule
+    NzToolTipModule,
+    PaddingZerosPipe,
+    NzTypographyModule
   ]
 })
 export class LotesFacturasModule { }

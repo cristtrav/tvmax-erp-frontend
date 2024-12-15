@@ -47,6 +47,7 @@
                 (nzQueryParams)="onTableQueryChange($event)">
                 <thead>
                     <tr>
+                        <th nzWidth="60px"></th>
                         <th>Código</th>
                         <th>Creación</th>
                         <th>Envío</th>
@@ -58,73 +59,137 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let lote of tabla.data">
-                        <td>{{ lote.id }}</td>
-                        <td>{{ lote.fechahoracreacion | date:'dd/MMM/yyyy hh:mm' }}</td>
-                        <td>
-                            <span *ngIf="!lote.fechahoraenvio"
-                                nz-typography
-                                nzType="secondary">
-                                (sin fecha)
-                            </span>
-                            <span *ngIf="lote.fechahoraenvio">{{ lote.fechahoraenvio | date:'dd/MMM/yyyy hh:mm' }}</span>
-                        </td>
-                        <td>
-                            <span *ngIf="!lote.fechahoraconsulta"
-                                nz-typography
-                                nzType="secondary">
-                                (sin fecha)
-                            </span>
-                            <span *ngIf="lote.fechahoraconsulta">{{ lote.fechahoraconsulta| date:'dd/MMM/yyyy hh:mm' }}</span>
-                        </td>
-                        <td>{{ lote.cantidadfacturas | number }}</td>
-                        <td>
-                            <nz-tag *ngIf="!lote.enviado"
-                                nzColor="orange">
-                                Envío pediente
-                            </nz-tag>
-                            <ng-container *ngIf="lote.enviado">
-                                <nz-tag *ngIf="lote.aceptado" nzColor="green">Aceptado</nz-tag>
-                                <nz-tag *ngIf="!lote.aceptado" nzColor="red">Rechazado</nz-tag>
-                            </ng-container>
-                        </td>
-                        <td>
-                            <span *ngIf="!lote.observacion"
-                                nz-typography
-                                nzType="secondary">
-                                (Sin observación)
-                            </span>
-                            <span *ngIf="lote.observacion">
-                                {{ lote.observacion }}
-                            </span>
-                        </td>
-                        <td>
-                            <div nz-row [nzGutter]="[8,8]">
-                                <div nz-col>
-                                    <button
-                                        *ngIf="!lote.enviado"
-                                        nz-tooltip
-                                        nzTooltipTitle="Enviar lote a SIFEN"
-                                        nz-button
-                                        nzType="primary"
-                                        [nzLoading]="mapLoadingEnvio.get(lote.id) ?? false"
-                                        (click)="confirmarEnvio(lote)">
-                                        <i nz-icon nzType="send"></i>
-                                    </button>
-                                    <button
-                                        *ngIf="lote.enviado"
-                                        nz-tooltip
-                                        nzTooltipTitle="Consultar estado del lote en SIFEN"
-                                        nz-button
-                                        nzType="primary"
-                                        [nzLoading]="mapLoadingConsulta.get(lote.id) ?? false"
-                                        (click)="consultarLote(lote.id)">
-                                        <i nz-icon nzType="monitor"></i>
-                                    </button>
+                    <ng-container *ngFor="let lote of tabla.data">
+                        <tr>
+                            <td [nzExpand]="expandSet.has(lote.id)" (nzExpandChange)="onExpandChange(lote.id, $event)"></td>
+                            <td>{{ lote.id }}</td>
+                            <td>{{ lote.fechahoracreacion | date:'dd/MMM/yyyy hh:mm' }}</td>
+                            <td>
+                                <span *ngIf="!lote.fechahoraenvio"
+                                    nz-typography
+                                    nzType="secondary">
+                                    (sin fecha)
+                                </span>
+                                <span *ngIf="lote.fechahoraenvio">{{ lote.fechahoraenvio | date:'dd/MMM/yyyy hh:mm' }}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="!lote.fechahoraconsulta"
+                                    nz-typography
+                                    nzType="secondary">
+                                    (sin fecha)
+                                </span>
+                                <span *ngIf="lote.fechahoraconsulta">{{ lote.fechahoraconsulta| date:'dd/MMM/yyyy hh:mm' }}</span>
+                            </td>
+                            <td>{{ lote.cantidadfacturas | number }}</td>
+                            <td>
+                                <nz-tag *ngIf="!lote.enviado"
+                                    nzColor="orange">
+                                    Envío pediente
+                                </nz-tag>
+                                <ng-container *ngIf="lote.enviado">
+                                    <nz-tag *ngIf="lote.aceptado" nzColor="green">Aceptado</nz-tag>
+                                    <nz-tag *ngIf="!lote.aceptado" nzColor="red">Rechazado</nz-tag>
+                                </ng-container>
+                            </td>
+                            <td>
+                                <span *ngIf="!lote.observacion"
+                                    nz-typography
+                                    nzType="secondary">
+                                    (Sin observación)
+                                </span>
+                                <span *ngIf="lote.observacion">
+                                    {{ lote.observacion }}
+                                </span>
+                            </td>
+                            <td>
+                                <div nz-row [nzGutter]="[8,8]">
+                                    <div nz-col>
+                                        <button
+                                            *ngIf="!lote.enviado"
+                                            nz-tooltip
+                                            nzTooltipTitle="Enviar lote a SIFEN"
+                                            nz-button
+                                            nzType="primary"
+                                            [nzLoading]="mapLoadingEnvio.get(lote.id) ?? false"
+                                            (click)="confirmarEnvio(lote)">
+                                            <i nz-icon nzType="send"></i>
+                                        </button>
+                                        <button
+                                            *ngIf="lote.enviado"
+                                            nz-tooltip
+                                            nzTooltipTitle="Consultar estado del lote en SIFEN"
+                                            nz-button
+                                            nzType="primary"
+                                            [nzLoading]="mapLoadingConsulta.get(lote.id) ?? false"
+                                            (click)="consultarLote(lote.id)">
+                                            <i nz-icon nzType="monitor"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(lote.id)">
+                            <nz-table #tablaDetalle
+                                [nzData]="detallesMap.get(lote.id) ?? []"
+                                [nzLoading]="loadingDetallesMap.get(lote.id)"
+                                nzSize="small">
+                                <thead>
+                                    <tr>
+                                        <th>Cód. Venta</th>
+                                        <th>Fecha</th>
+                                        <th>Timbrado</th>
+                                        <th>Nro. Factura</th>
+                                        <th>Estado</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let detalle of tablaDetalle.data">
+                                        <td>{{ detalle.idventa }}</td>
+                                        <td>
+                                            <span *ngIf="detalle.fechahorafactura != null">
+                                                {{ detalle.fechahorafactura | date:'dd/MM/yyyy HH:mm' }}
+                                            </span>
+                                            <span *ngIf="detalle.fechahorafactura == null">
+                                                {{ detalle.fechafactura | date: 'dd/MM/yyyy' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ detalle.nrotimbrado }}</td>
+                                        <td>
+                                            {{ detalle.prefijofactura }}-{{ detalle.nrofactura | paddingZeros:7 }}
+                                        </td>
+                                        <td>
+                                            <nz-tag
+                                                *ngIf="detalle.codigoestado == '0260'"
+                                                nzColor="green">
+                                                Aprobado
+                                            </nz-tag>
+                                            <nz-tag
+                                                *ngIf="detalle.codigoestado == '1005'"
+                                                nzColor="green">
+                                                Aprobado con obs.
+                                            </nz-tag>
+                                            <nz-tag
+                                                *ngIf="detalle.codigoestado != '0260' && detalle.codigoestado != '1005'"
+                                                nzColor="red">
+                                                Rechazado
+                                            </nz-tag>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="detalle.codigoestado == null"
+                                                nz-typography
+                                                nzType="secondary">
+                                                (ninguno)
+                                            </span>
+                                            <span *ngIf="detalle.codigoestado != null">
+                                                {{ detalle.codigoestado }} - {{ detalle.descripcion }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </nz-table>
         </div>

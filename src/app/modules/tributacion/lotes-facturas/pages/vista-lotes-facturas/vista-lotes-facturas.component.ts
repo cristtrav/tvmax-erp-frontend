@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { DetalleLoteDTO } from '@dto/facturacion/detalle-lote.dto';
 import { LoteFacturaDTO } from '@dto/facturacion/lote-factura.dto';
 import { LotesFacturasService } from '@services/facturacion/lotes-facturas.service';
 import { SifenService } from '@services/facturacion/sifen.service';
@@ -29,6 +30,10 @@ export class VistaLotesFacturasComponent implements OnInit {
   total: number = 0;
   sortStr: string | null = '-id';
 
+  expandSet = new Set<number>();
+  loadingDetallesMap = new Map<number, boolean>();
+  detallesMap = new Map<number, DetalleLoteDTO[]>();
+
   constructor(
     private lotesFacturasSrv: LotesFacturasService,
     private notif: NzNotificationService,
@@ -37,6 +42,24 @@ export class VistaLotesFacturasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  cargarDetallesLote(idlote: number){
+    this.loadingDetallesMap.set(idlote, true);
+    this.lotesFacturasSrv.getDetallesPorIdLote(idlote)
+    .pipe(finalize(() => this.loadingDetallesMap.set(idlote, false)))
+    .subscribe(detalles => this.detallesMap.set(idlote, detalles));
+  }
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked){
+      this.expandSet.add(id);
+      this.cargarDetallesLote(id);
+    } else{
+      this.expandSet.delete(id);
+      this.loadingDetallesMap.delete(id);
+      this.detallesMap.delete(id);
+    }
   }
 
   cargarDatos(){
@@ -49,6 +72,7 @@ export class VistaLotesFacturasComponent implements OnInit {
     .subscribe(resp => {
       this.lstLotes = resp.lotes;
       this.total = resp.total;
+      this.expandSet.forEach(idlote => this.cargarDetallesLote(idlote));
     });
   }
 
