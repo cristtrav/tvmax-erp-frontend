@@ -178,7 +178,7 @@
                                                     nz-button
                                                     nzType="default"
                                                     nzSize="small"
-                                                    [nzLoading]="loadingDTE"
+                                                    [nzLoading]="loadingDTEMap.get(fv.id ?? -1)"
                                                     (click)="descargarDTE(fv.id ?? 0)">
                                                     <i nz-icon nzTheme="outline" nzType="file-protect"></i>
                                                     DTE
@@ -190,7 +190,7 @@
                                                     nz-button
                                                     nzType="default"
                                                     nzSize="small"
-                                                    [nzLoading]="loadingKuDE"
+                                                    [nzLoading]="loadingKudeMap.get(fv.id ?? -1)"
                                                     (click)="descargarKUDE(fv.id ?? 0)">
                                                     <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
                                                     KuDE

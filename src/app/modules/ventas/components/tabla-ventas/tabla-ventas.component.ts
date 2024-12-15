@@ -57,10 +57,12 @@ export class TablaVentasComponent implements OnInit {
   loadingVentas: boolean = false;
   expandSet = new Set<number>();
 
-  loadingDTE: boolean = false;
-  loadingKuDE: boolean = false;
+  //loadingDTE: boolean = false;
+  //loadingKuDE: boolean = false;
 
   loadingConsultaDTEMap = new Map<number, boolean>();
+  loadingDTEMap = new Map<number, boolean>();
+  loadingKudeMap = new Map<number, boolean>();
 
   public readonly DETALLES_ELE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 8, xl: 8, xxl: 8 };
   public readonly DETALLES_PRE_RESPONSIVE_SIZES: ResponsiveSizes = { xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 };
@@ -223,9 +225,9 @@ export class TablaVentasComponent implements OnInit {
   }
 
   descargarDTE(idventa: number){
-    this.loadingDTE = true;
+    this.loadingDTEMap.set(idventa, true);
     this.ventasSrv.getDTE(idventa)
-    .pipe(finalize(() => this.loadingDTE = false))
+    .pipe(finalize(() => this.loadingDTEMap.set(idventa, false)))
     .subscribe({
       next: (dte) => {
         const venta = this.lstFacturasVenta.find(v => v.id == idventa);
@@ -243,9 +245,9 @@ export class TablaVentasComponent implements OnInit {
   }
 
   descargarKUDE(idventa: number){
-    this.loadingKuDE = true;
+    this.loadingKudeMap.set(idventa, true);    
     this.ventasSrv.getKUDE(idventa)
-    .pipe(finalize(() => this.loadingKuDE = false))
+    .pipe(finalize(() => this.loadingKudeMap.set(idventa, false)))
     .subscribe({
       next: (kude) => {
         const venta = this.lstFacturasVenta.find(v => v.id == idventa);
