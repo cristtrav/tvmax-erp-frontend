@@ -152,7 +152,7 @@ export class DetalleVentaComponent implements OnInit {
     });
 
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
-     
+     this.lstDetallesVenta = [];
       const cliente = this.lstClientes.find(cliente => cliente.id == value);
       this.clienteSeleccionado = cliente;
       if (this.idventa === 'nueva') this.lstDetallesVenta = [];
