@@ -25,6 +25,7 @@ import { FormContactoClienteComponent } from '@modules/ventas/components/form-co
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SifenService } from '@services/facturacion/sifen.service';
 import { NzValidateStatus } from 'ng-zorro-antd/core/types';
+import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -101,6 +102,8 @@ export class DetalleVentaComponent implements OnInit {
   ultimoNroFacturaUsado: number | null = null;
 
   loadingVenta: boolean = false;
+  indexFilaEnEdicion?: number;
+  montoEnEdicion?: number;
 
   constructor(
     @Inject(LOCALE_ID)
@@ -695,5 +698,42 @@ export class DetalleVentaComponent implements OnInit {
         console.error(`Error al recargar cliente seleccionado: ${e.message}`);
       }
     })
+  }
+
+  iniciarEdicionMonto(index: number, monto: number,inputComp: NzInputNumberComponent){
+    if(!this.sesionSrv.permisos.has(268)) return;
+    if(this.indexFilaEnEdicion != null) return;
+    if(this.lstDetallesVenta[index].idcuota != null){
+      this.notif.error('<strong>No se puede modificar</strong>', 'El monto de la cuota debe modificarse en el módulo de cuotas');
+      return;
+    }
+
+    this.indexFilaEnEdicion = index;
+    this.montoEnEdicion = monto;
+    setTimeout(() => {
+      inputComp.focus()
+    }, 200);
+  }
+
+  cancelarEdicionMonto(){
+    this.indexFilaEnEdicion = undefined;
+    this.montoEnEdicion = undefined;
+  }
+
+  aceptarEdicionMonto(){
+    if(!this.sesionSrv.permisos.has(268)) return;
+    this.lstDetallesVenta = this.lstDetallesVenta.map((detalle, index) => {
+      if(this.montoEnEdicion != null && index == this.indexFilaEnEdicion){
+        detalle.monto = this.montoEnEdicion;
+        detalle.subtotal = (detalle.cantidad ?? 1) * detalle.monto;
+        detalle.porcentajeiva = detalle.porcentajeiva ?? 10;
+        detalle.montoiva = detalle.montoiva = Math.round((detalle.subtotal * detalle.porcentajeiva) / (100 + detalle.porcentajeiva));
+        return detalle;
+      }
+      return detalle;
+    })
+    this.calcularTotalFactura();
+    this.indexFilaEnEdicion = undefined;
+    this.montoEnEdicion = undefined;
   }
 }
