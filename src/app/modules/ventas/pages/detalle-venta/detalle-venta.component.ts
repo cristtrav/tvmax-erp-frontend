@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Inject, Input, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TimbradosService } from '@services/timbrados.service';
 import { HttpParams } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -104,6 +104,7 @@ export class DetalleVentaComponent implements OnInit {
   loadingVenta: boolean = false;
   indexFilaEnEdicion?: number;
   montoEnEdicion?: number;
+  descripcionEnEdicion?: string;
 
   constructor(
     @Inject(LOCALE_ID)
@@ -721,19 +722,61 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   aceptarEdicionMonto(){
-    if(!this.sesionSrv.permisos.has(268)) return;
-    this.lstDetallesVenta = this.lstDetallesVenta.map((detalle, index) => {
-      if(this.montoEnEdicion != null && index == this.indexFilaEnEdicion){
-        detalle.monto = this.montoEnEdicion;
-        detalle.subtotal = (detalle.cantidad ?? 1) * detalle.monto;
-        detalle.porcentajeiva = detalle.porcentajeiva ?? 10;
-        detalle.montoiva = detalle.montoiva = Math.round((detalle.subtotal * detalle.porcentajeiva) / (100 + detalle.porcentajeiva));
+    if(this.sesionSrv.permisos.has(268)){
+      this.lstDetallesVenta = this.lstDetallesVenta.map((detalle, index) => {
+        if(this.montoEnEdicion != null && index == this.indexFilaEnEdicion){
+          detalle.monto = this.montoEnEdicion;
+          detalle.subtotal = (detalle.cantidad ?? 1) * detalle.monto;
+          detalle.porcentajeiva = detalle.porcentajeiva ?? 10;
+          detalle.montoiva = detalle.montoiva = Math.round((detalle.subtotal * detalle.porcentajeiva) / (100 + detalle.porcentajeiva));
+          return detalle;
+        }
         return detalle;
-      }
-      return detalle;
-    })
-    this.calcularTotalFactura();
+      })
+      this.calcularTotalFactura();
+    }
+    
     this.indexFilaEnEdicion = undefined;
     this.montoEnEdicion = undefined;
+  }
+
+  iniciarEdicionDescripcion(index: number, descripcion: string, inputComp: HTMLInputElement){
+    if(!this.sesionSrv.permisos.has(269)) return;
+    if(this.indexFilaEnEdicion != null) return;
+    if(this.lstDetallesVenta[index].idcuota != null){
+      this.notif.error('<strong>No se puede modificar</strong>', 'La descripción de la cuota no se puede modificar');
+      return;
+    }
+
+    this.indexFilaEnEdicion = index;
+    this.descripcionEnEdicion = descripcion ?? '';
+    setTimeout(() => {
+      inputComp.focus();
+    }, 200);
+  }
+
+  cancelarEdicionDescripcion(){
+    this.indexFilaEnEdicion = undefined;
+    this.descripcionEnEdicion = undefined;
+  }
+
+  aceptarEdicionDescripcion(){
+    if(this.sesionSrv.permisos.has(269)){
+      
+      if(this.descripcionEnEdicion?.length == 0){
+        this.notif.error('<strong>Error al modificar</strong>', 'La descripción no puede quedar en blanco');
+      }else{
+        this.lstDetallesVenta = this.lstDetallesVenta.map((detalle, i) => {
+          if(this.descripcionEnEdicion != null && i == this.indexFilaEnEdicion){
+            detalle.descripcion = this.descripcionEnEdicion;
+            return detalle;
+          }
+          return detalle;
+        });
+      }
+    };
+    
+    this.indexFilaEnEdicion = undefined;
+    this.descripcionEnEdicion = undefined;
   }
 }

@@ -50,17 +50,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let dfv of tablaDetalle.data; let i = index" [class.editable-row]="this.sesionSrv.permisos.has(268)">
-                                    <td>{{ dfv.descripcion }}</td>
+                                <tr *ngFor="let dfv of tablaDetalle.data; let i = index"
+                                    [class.editable-row]="this.sesionSrv.permisos.has(268) || this.sesionSrv.permisos.has(269)">
+                                    <td (click)="iniciarEdicionDescripcion(i, dfv.descripcion ?? '', inputCompDesc)">
+                                        <div [hidden]="indexFilaEnEdicion == i && descripcionEnEdicion != null"
+                                            [class.editable-cell]="this.sesionSrv.permisos.has(269)">
+                                            {{ dfv.descripcion }}
+                                        </div>
+                                        <input #inputCompDesc
+                                            nz-input
+                                            [hidden]="indexFilaEnEdicion != i || (indexFilaEnEdicion == i && descripcionEnEdicion == null)"
+                                            [(ngModel)]="descripcionEnEdicion"
+                                            (keydown.enter)="aceptarEdicionDescripcion()"
+                                            (keydown.escape)="cancelarEdicionDescripcion()"
+                                            (blur)="cancelarEdicionDescripcion()">
+                                    </td>
                                     <td [nzAlign]="'right'" (click)="iniciarEdicionMonto(i, dfv.monto ?? -1, inputCompMonto)" >
                                         <div
                                             [class.editable-cell]="this.sesionSrv.permisos.has(268)"
-                                            [hidden]="indexFilaEnEdicion == i">
+                                            [hidden]="indexFilaEnEdicion == i && montoEnEdicion != null">
                                             Gs. {{ dfv.monto | number }}
                                         </div>
                                         <nz-input-number #inputCompMonto
                                             [(ngModel)]="montoEnEdicion"
-                                            [hidden]="indexFilaEnEdicion != i"
+                                            [hidden]="indexFilaEnEdicion != i || (indexFilaEnEdicion == i && montoEnEdicion == null)"
                                             (keydown.enter)="aceptarEdicionMonto()"
                                             (keydown.escape)="cancelarEdicionMonto()"
                                             (nzBlur)="cancelarEdicionMonto()"
