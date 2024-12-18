@@ -7,6 +7,7 @@ import { ClientesService } from '@services/clientes.service';
 import { ServiciosService } from '@services/servicios.service';
 import { SuscripcionesService } from '@services/suscripciones.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-servicios',
@@ -36,8 +37,7 @@ export class ServiciosComponent implements OnInit {
   menuSuscripcionVisible: boolean = false;
 
   constructor(
-    private serviciosSrv: ServiciosService,
-    private suscripcionesSrv: SuscripcionesService,
+    private serviciosSrv: ServiciosService,    
     private clientesSrv: ClientesService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
@@ -51,25 +51,22 @@ export class ServiciosComponent implements OnInit {
     const params = new HttpParams()
       .append('eliminado', 'false')
       .append('suscribible', 'false');
-    this.serviciosSrv.getServicios(params).subscribe({
+    this.serviciosSrv.getServicios(params)
+    .pipe(finalize(() => this.loadingServicios = false))
+    .subscribe({
       next: (servicios) => {
-        let gruposTmp: Grupo[] = [];
+        const gruposMap = new Map<number, Grupo>();
         servicios.forEach(servicio => {
-          if (!gruposTmp.find(grupo => grupo.id == servicio.idgrupo)) {
-            gruposTmp.push({
-              id: servicio.idgrupo ?? null,
-              descripcion: servicio.grupo ?? null
-            });
-            this.mapGruposServicios.set(servicio.idgrupo ?? -1, servicios.filter(servicioFilter => servicioFilter.idgrupo === servicio.idgrupo))
-          }
+          gruposMap.set(servicio.idgrupo ?? -1, { id: servicio.idgrupo ?? -1, descripcion: servicio.grupo ?? '(sin grupo)' })
+        });
+        gruposMap.forEach(grupo => {
+          this.mapGruposServicios.set(grupo.id ?? -1, servicios.filter(servi => servi.idgrupo == grupo.id))
         })
-        this.lstGrupos = gruposTmp;
-        this.loadingServicios = false;
+        this.lstGrupos = Array.from(gruposMap.values());
       },
       error: (e) => {
         console.error('Error al cargar servicios no suscribibles', e);
         this.httpErrorHandler.process(e);
-        this.loadingServicios = false;
       }
     })
   }

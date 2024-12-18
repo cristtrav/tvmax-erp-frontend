@@ -5,15 +5,18 @@
             [nzDisabled]="true"></nz-collapse-panel>
         <nz-collapse-panel *ngFor="let grupo of lstGrupos; let isFirst = first" [nzHeader]="grupo.descripcion ?? ''"
             [nzActive]="isFirst">
-            <nz-table #tabla nzSize="small" [nzData]="mapGruposServicios.get(grupo.id ?? -1) ?? []"
-                [nzShowPagination]="false">
-                <thead>
+            <nz-table #tabla
+                nzSize="small"
+                [nzData]="mapGruposServicios.get(grupo.id ?? -1) ?? []"
+                [nzShowPagination]="true"
+                [nzPageSize]="5">
+                <!--<thead>
                     <tr>
                         <th>Servicio</th>
                         <th nzAlign="center">Monto</th>
                         <th nzAlign="center">Acciones</th>
                     </tr>
-                </thead>
+                </thead>-->
                 <tbody>
 
                     <tr *ngFor="let servicio of tabla.data">
