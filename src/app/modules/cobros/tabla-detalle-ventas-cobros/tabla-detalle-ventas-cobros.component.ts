@@ -21,6 +21,8 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
   idsuscripcion: number | null = null;
   @Input()
   mostrarColumnaCliente: boolean = true;
+  @Input()
+  sinSuscripcion: boolean = false
 
   @Input()
   get paramsFiltros(): IParametroFiltro {
@@ -113,6 +115,7 @@ export class TablaDetalleVentasCobrosComponent implements OnInit {
     if(this.idcliente != null) params = params.append('idcliente', `${this.idcliente}`);
     if(this.idsuscripcion != null) params = params.append('idsuscripcion', `${this.idsuscripcion}`);
     if (this.textoBusqueda) params = params.append('search', this.textoBusqueda);
+    if(this.sinSuscripcion) params = params.append('sinsuscripcion', true);
     return params;
   }
 

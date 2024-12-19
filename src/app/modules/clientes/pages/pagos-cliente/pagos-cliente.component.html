@@ -65,16 +65,29 @@
             </nz-drawer>
             <nz-spin [nzSpinning]="loadingSuscripciones">
                 <nz-tabset nzTabPosition="left">
-                    <ng-container *ngFor="let suscripcion of lstSuscripciones">
-                        <ng-template #tituloTab>
-                            <span nz-tooltip [nzTooltipTitle]="'Cód. Suscripción: '+suscripcion.id">
-                                <nz-tag nzColor="green" *ngIf="suscripcion.estado === 'C'">Con.</nz-tag>
-                                <nz-tag nzColor="green" *ngIf="suscripcion.estado === 'R'">Rec.</nz-tag>
-                                <nz-tag nzColor="red" *ngIf="suscripcion.estado === 'D'">Des.</nz-tag>
-                                {{ suscripcion.servicio }}
+                    <nz-tab [nzTitle]="tituloTabSinSusc">
+                        <ng-template #tituloTabSinSusc>
+                            <span nz-tooltip [nzTooltipTitle]="'Pagos sin ninguna suscripción asociada'">
+                                Sin suscripción
                             </span>
                         </ng-template>
+                        <app-tabla-detalle-ventas-cobros
+                            [idcliente]="idcliente"
+                            [sinSuscripcion]="true"
+                            [paramsFiltros]="paramsFiltros"
+                            [mostrarColumnaCliente]="false">
+                        </app-tabla-detalle-ventas-cobros>
+                    </nz-tab>
+                    <ng-container *ngFor="let suscripcion of lstSuscripciones">
                         <nz-tab [nzTitle]="tituloTab">
+                            <ng-template #tituloTab>
+                                <span nz-tooltip [nzTooltipTitle]="'Cód. Suscripción: '+suscripcion.id">
+                                    {{ suscripcion.servicio }}
+                                    <nz-tag nzColor="green" *ngIf="suscripcion.estado === 'C'">Con.</nz-tag>
+                                    <nz-tag nzColor="green" *ngIf="suscripcion.estado === 'R'">Rec.</nz-tag>
+                                    <nz-tag nzColor="red" *ngIf="suscripcion.estado === 'D'">Des.</nz-tag>                                    
+                                </span>
+                            </ng-template>
                             <app-tabla-detalle-ventas-cobros
                                 [idsuscripcion]="suscripcion.id"
                                 [paramsFiltros]="paramsFiltros"
@@ -82,6 +95,8 @@
                             </app-tabla-detalle-ventas-cobros>
                         </nz-tab>
                     </ng-container>
+                    
+                    
                 </nz-tabset>
             </nz-spin>
         </div>

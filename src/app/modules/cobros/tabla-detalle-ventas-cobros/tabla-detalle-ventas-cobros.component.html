@@ -69,7 +69,14 @@
                         <ng-template #tituloidsuscripcion>
                             <strong>Cód. Suscripción</strong>
                         </ng-template>
-                        {{ detalle.idsuscripcion }}
+                        <span *ngIf="detalle.idsuscripcion == null"
+                            nz-typography
+                            nzType="secondary">
+                            (Sin suscripción)
+                        </span>
+                        <span *ngIf="detalle.idsuscripcion != null">
+                            {{ detalle.idsuscripcion }}
+                        </span>
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulocobrador">
                         <ng-template #titulocobrador>
@@ -90,7 +97,7 @@
                             <strong>Vencimiento cuota</strong>
                         </ng-template>
                             <span *ngIf="detalle.fechavencimiento">{{ detalle.fechavencimiento | date: 'dd/MM/yy' }}</span>
-                            <span *ngIf="!detalle.fechavencimiento" nz-typography nzType="secondary">-</span>
+                            <span *ngIf="!detalle.fechavencimiento" nz-typography nzType="secondary">(Sin vencimiento)</span>
                     </nz-descriptions-item>
                     <nz-descriptions-item [nzTitle]="titulogruposervicio">
                         <ng-template #titulogruposervicio>

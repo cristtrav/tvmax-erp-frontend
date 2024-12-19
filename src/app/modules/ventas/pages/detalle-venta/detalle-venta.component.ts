@@ -557,19 +557,23 @@ export class DetalleVentaComponent implements OnInit {
     this.cambiarAModoFechaActual(true);
   }
 
-  agregarServicioDetalle(srv: Servicio, susc: Suscripcion) {
-    const lstdt: DetalleVenta[] = this.lstDetallesVenta.slice();
+  agregarServicioDetalle(srv: Servicio, susc?: Suscripcion) {
+    //const lstdt: DetalleVenta[] = this.lstDetallesVenta.slice();
     const dt: DetalleVenta = new DetalleVenta();
     dt.cantidad = 1;
     dt.monto = srv.precio ?? null;
     dt.idservicio = srv.id ?? null;
     dt.subtotal = (dt.monto ?? 0) * dt.cantidad;
-    dt.idsuscripcion = susc.id;
     dt.porcentajeiva = Number(srv.porcentajeiva);
     dt.montoiva = Math.round((dt.subtotal * dt.porcentajeiva) / (100 + dt.porcentajeiva));
-    dt.descripcion = `${srv.descripcion} | ${susc.servicio} [${susc.id}]`.toUpperCase();
-    lstdt.push(dt);
-    this.lstDetallesVenta = lstdt;
+    if(susc != null){
+      dt.idsuscripcion = susc.id;
+      dt.descripcion = `${srv.descripcion} | ${susc.servicio} [${susc.id}]`.toUpperCase();
+    }else{
+      dt.descripcion = `${srv.descripcion}`.toUpperCase();
+    }
+    //lstdt.push(dt);
+    this.lstDetallesVenta = this.lstDetallesVenta.concat([dt]);
     this.calcularTotalFactura();
   }
 

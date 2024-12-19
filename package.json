@@ -1,6 +1,6 @@
 {
   "name": "tvmax-erp-frontend",
-  "version": "1.9.33",
+  "version": "1.10.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

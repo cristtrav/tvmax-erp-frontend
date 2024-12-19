@@ -64,7 +64,8 @@
                         <th nzColumnKey="id" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'id' ? ordenInicial : null">Código</th>
                         <th nzColumnKey="descripcion" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'descripcion' ? ordenInicial : null">Descripción</th>
                         <th nzColumnKey="grupo" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'grupo' ? ordenInicial : null">Grupo</th>
-                        <th nzColumnKey="suscribible" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'suscribible' ? ordenInicial : null">Tipo</th>
+                        <th nzColumnKey="suscribible" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'suscribible' ? ordenInicial : null">Suscribible</th>
+                        <th nzColumnKey="suscribible" [nzSortFn]="true" [nzSortOrder]="ordenarPorInicial == 'facturarsinsuscripcion' ? ordenInicial : null">Tipo facturación</th>
                         <th nzColumnKey="precio" [nzSortFn]="true" nzAlign="center" [nzSortOrder]="ordenarPorInicial == 'precio' ? ordenInicial : null">Precio</th>
                         <th>Acciones</th>
                     </tr>
@@ -81,6 +82,10 @@
                         <td>
                             <nz-tag *ngIf="srv.suscribible" [nzColor]="'green'">Suscribible</nz-tag>
                             <nz-tag *ngIf="!srv.suscribible" [nzColor]="'red'">No suscribible</nz-tag>
+                        </td>
+                        <td>
+                            <nz-tag *ngIf="srv.facturarsinsuscripcion" [nzColor]="'geekblue'">Suscripción opcional</nz-tag>
+                            <nz-tag *ngIf="!srv.facturarsinsuscripcion" [nzColor]="'purple'">Suscripción obligatoria</nz-tag>
                         </td>
                         <td nzAlign="right">Gs.{{ srv.precio | number }}</td>
                         <td nzAlign="center">

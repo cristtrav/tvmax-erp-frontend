@@ -348,23 +348,22 @@
 <nz-modal
     [(nzVisible)]="modalServiciosVisible"
     nzTitle="Servicios"
-    [nzContent]="contentModalServicios"
     (nzOnCancel)="modalServiciosVisible = false;"
-    [nzFooter]="footerModalServicios"
     nzWidth="700px">
 
-    <ng-template #contentModalServicios>
+    <ng-container *nzModalContent>
         <app-servicios
+            #serviciosComp
             [idcliente]="this.formCabecera.controls.idCliente.value"
             (agregarServicio)="agregarServicioDetalle($event.servicio, $event.suscripcion)">
         </app-servicios>
-    </ng-template>
+    </ng-container>
 
-    <ng-template #footerModalServicios>
+    <ng-container *nzModalFooter>
         <button nz-button nzType="default" (click)="modalServiciosVisible = false;">
             Cerrar
         </button>
-    </ng-template>
+    </ng-container>
 </nz-modal>
 
 <nz-modal

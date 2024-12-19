@@ -58,7 +58,6 @@ export class TablaResumenVentasServiciosComponent implements OnInit {
   }
 
   private getHttpQueryParams(): HttpParams {
-    console.log(this.paramsFiltros)
     const p: IParametroFiltro = { ...this.paramsFiltros };
     if (!Object.keys(p).includes('anulado')) p['anulado'] = 'false';
     if (p['anulado'] == 'true') {

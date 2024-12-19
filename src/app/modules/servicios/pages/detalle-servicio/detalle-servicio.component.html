@@ -63,6 +63,26 @@
                 <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
                     <label nz-checkbox formControlName="suscribible">Suscribible</label>
+                    <i nz-icon
+                        type="question-circle"
+                        nzTheme="twotone"
+                        style="cursor: help;"
+                        nz-tooltip
+                        nzTooltipTitle="Establece si pueden o no pueden crearse suscripciones asociadas a este servicio">
+                    </i>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="facturarSinSuscripcion">Facturar sin suscripción</label>
+                    <i nz-icon
+                        type="question-circle"
+                        nzTheme="twotone"
+                        style="cursor: help;"
+                        nz-tooltip
+                        nzTooltipTitle="Establece si pueden emitirse facturas de este servicio sin tener una suscripción asociada">
+                    </i>
                 </nz-form-control>
             </nz-form-item>
             <div nz-col [appNzColResponsiveSizes]="ACCION_SIZES" style="text-align: right;">

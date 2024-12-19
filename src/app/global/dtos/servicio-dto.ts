@@ -6,4 +6,5 @@ export interface Servicio{
     precio?: number;
     suscribible?: boolean;
     porcentajeiva?: number;
+    facturarsinsuscripcion?: boolean;
 }

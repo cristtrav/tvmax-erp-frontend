@@ -31,7 +31,8 @@ export class DetalleServicioComponent implements OnInit {
     descripcion: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(100)]),
     idgrupo: new FormControl<number | null>(null, [Validators.required]),
     precio: new FormControl<number | null>(null, [Validators.required]),
-    suscribible: new FormControl<boolean | null>(false, [Validators.required])
+    suscribible: new FormControl<boolean | null>(false, [Validators.required]),
+    facturarSinSuscripcion: new FormControl<boolean>(false, [Validators.required]),
   });
   formLoading: boolean = false;
   guardarLoading: boolean = false;
@@ -67,6 +68,7 @@ export class DetalleServicioComponent implements OnInit {
           this.form.controls.idgrupo.setValue(data.idgrupo ?? null);
           this.form.controls.precio.setValue(data.precio ?? null);
           this.form.controls.suscribible.setValue(data.suscribible ?? null);
+          this.form.controls.facturarSinSuscripcion.setValue(data.facturarsinsuscripcion ?? false)
         },
         error: (e) => {
           console.error('Error al cargar datos de servicio', e);
@@ -95,7 +97,8 @@ export class DetalleServicioComponent implements OnInit {
       descripcion: this.form.controls.descripcion.value ?? undefined,
       idgrupo: this.form.controls.idgrupo.value ?? undefined,
       precio: this.form.controls.precio.value ?? undefined,
-      suscribible: this.form.controls.suscribible.value ?? undefined
+      suscribible: this.form.controls.suscribible.value ?? undefined,
+      facturarsinsuscripcion: this.form.controls.facturarSinSuscripcion.value ?? undefined
     }
   }
 

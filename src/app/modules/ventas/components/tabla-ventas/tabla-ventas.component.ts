@@ -28,7 +28,7 @@ export class TablaVentasComponent implements OnInit {
   set paramsFiltros(p: IParametroFiltro) {
     const oldParams: string = JSON.stringify(this._paramsFiltros);
     this._paramsFiltros = p;
-    if (oldParams !== JSON.stringify(p)) this.cargarVentas();
+    if (oldParams !== JSON.stringify(p) && !this.primeraCarga) this.cargarVentas();
   }
   _paramsFiltros: IParametroFiltro = {};
 
@@ -73,6 +73,9 @@ export class TablaVentasComponent implements OnInit {
   anulandoMap = new Map<number, boolean>();
   eliminandoMap = new Map<number, boolean>();
 
+  //Fix para evitar la llamada doble a cargar ventas al abrir por primera vez
+  primeraCarga: boolean = true;
+
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private ventasSrv: VentasService,
@@ -103,7 +106,10 @@ export class TablaVentasComponent implements OnInit {
       ventas: this.ventasSrv.get(this.getHttpParams()),
       total: this.ventasSrv.getTotal(this.getHttpParams())
     })
-    .pipe(finalize(() => this.loadingVentas = false))
+    .pipe(finalize(() => {
+      this.loadingVentas = false;
+      this.primeraCarga = false;
+    }))
     .subscribe({
       next: (resp) => {
         this.lstFacturasVenta = resp.ventas;
