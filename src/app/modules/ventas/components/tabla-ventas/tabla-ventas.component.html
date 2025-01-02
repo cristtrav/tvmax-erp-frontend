@@ -276,7 +276,7 @@
                                         <span nz-typography nzType="secondary" *ngIf="!factElect.observacionemail">
                                             (Sin observación)
                                         </span>
-                                        <span *ngIf="!factElect.observacionemail">
+                                        <span *ngIf="factElect.observacionemail">
                                             {{ factElect.observacionemail }}
                                         </span>
                                     </nz-descriptions-item>
