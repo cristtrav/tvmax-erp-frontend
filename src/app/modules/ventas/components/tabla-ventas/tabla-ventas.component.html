@@ -125,134 +125,166 @@
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(fv.id ?? 0)">
-                <div nz-row [nzGutter]="[8,8]">
-                    <div nz-col [appNzColResponsiveSizes]="fv.facturaelectronica ? DETALLES_ELE_RESPONSIVE_SIZES : DETALLES_PRE_RESPONSIVE_SIZES">
-                        <nz-collapse>
-                            <nz-collapse-panel nzActive nzDisabled nzHeader="Detalles">
-                                <nz-descriptions nzSize="small" [nzColumn]="1">
-                                    <nz-descriptions-item [nzTitle]="tituloidventa">
-                                        <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
-                                        {{ fv.id }}
+                <nz-tabset>
+                    <nz-tab nzTitle="Detalles">
+                        <nz-descriptions nzSize="small">
+                            <nz-descriptions-item [nzTitle]="tituloidventa">
+                                <ng-template #tituloidventa><strong>Código Venta</strong></ng-template>
+                                {{ fv.id }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="titulotipofactura" *ngIf="fv.facturaelectronica != null">
+                                <ng-template #titulotipofactura><strong>Tipo de Factura</strong></ng-template>
+                                <nz-tag *ngIf="fv.facturaelectronica" nzColor="purple">Electrónica</nz-tag>
+                                <nz-tag *ngIf="!fv.facturaelectronica" nzColor="geekblue">Preimpresa</nz-tag>
+                            </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="titulocobrador">
+                                <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
+                                {{ fv.cobrador }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="titulousuarioreg">
+                                <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
+                                {{ fv.usuarioregistrocobro }}
+                            </nz-descriptions-item>
+                        </nz-descriptions>
+                    </nz-tab>
+                    <nz-tab nzTitle="Items">
+                        <nz-table #tablaDetalle [nzData]="fv.detalles" nzSize="small">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Cant.</th>
+                                    <th>Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let dfv of tablaDetalle.data">
+                                    <td>{{ dfv.descripcion }}</td>
+                                    <td>{{ dfv.cantidad }}</td>
+                                    <td>Gs.{{ dfv.monto | number }}</td>
+                                    <td>Gs.{{ dfv.subtotal | number }}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-tab>
+                    <nz-tab nzTitle="Factura Electrónica">
+                        <nz-spin [nzSpinning]="loadFacturaElectronicaMap.get(fv.id ?? -1) ?? false">
+                            <nz-descriptions nzSize="small">
+                                <nz-descriptions-item [nzTitle]="titulodescargas">
+                                    <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
+                                    <nz-space>
+                                        <button
+                                            *nzSpaceItem
+                                            nz-tooltip
+                                            nzTooltipTitle="Documento Tributario Electronico en formato XML"
+                                            nz-button
+                                            nzType="default"
+                                            nzSize="small"
+                                            [nzLoading]="loadingDTEMap.get(fv.id ?? -1)"
+                                            (click)="descargarDTE(fv.id ?? 0)">
+                                            <i nz-icon nzTheme="outline" nzType="file-protect"></i>
+                                            DTE
+                                        </button>
+                                        <button
+                                            nz-tooltip
+                                            nzTooltipTitle="Version Imprimible en formato PDF"
+                                            *nzSpaceItem
+                                            nz-button
+                                            nzType="default"
+                                            nzSize="small"
+                                            [nzLoading]="loadingKudeMap.get(fv.id ?? -1)"
+                                            (click)="descargarKUDE(fv.id ?? 0)">
+                                            <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
+                                            KuDE
+                                        </button>
+                                    </nz-space>
+                                </nz-descriptions-item>
+                                <ng-container *ngIf="facturaElectronicaMap.get(fv.id ?? -1) as factElect">
+                                    <nz-descriptions-item [nzTitle]="tituloEstadoFE">
+                                        <ng-template #tituloEstadoFE>
+                                            <strong>Estado</strong>
+                                        </ng-template>
+                                        <nz-tag [nzColor]="factElect.idestadodocumento | estadoFeColor">
+                                            {{ factElect.estadodocumento }}
+                                        </nz-tag>
                                     </nz-descriptions-item>
-                                    <nz-descriptions-item [nzTitle]="titulotipofactura" *ngIf="fv.facturaelectronica != null">
-                                        <ng-template #titulotipofactura><strong>Tipo de Factura</strong></ng-template>
-                                        <nz-tag *ngIf="fv.facturaelectronica" nzColor="purple">Electrónica</nz-tag>
-                                        <nz-tag *ngIf="!fv.facturaelectronica" nzColor="geekblue">Preimpresa</nz-tag>
+                                    <nz-descriptions-item [nzTitle]="tituloObservacionFE">
+                                        <ng-template #tituloObservacionFE>
+                                            <strong>Observación</strong>
+                                        </ng-template>
+                                        <span *ngIf="factElect.observaciondocumento">
+                                            {{ factElect.observaciondocumento }}
+                                        </span>
+                                        <span *ngIf="!factElect.observaciondocumento" nz-typography nzType="secondary">
+                                            (Sin observación)
+                                        </span>
                                     </nz-descriptions-item>
-                                    <nz-descriptions-item [nzTitle]="titulocobrador">
-                                        <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
-                                        {{ fv.cobrador }}
+                                    <nz-descriptions-item [nzTitle]="tituloFechaCambioEstadoFE">
+                                        <ng-template #tituloFechaCambioEstadoFE>
+                                            <strong>{{ factElect.idestadodocumento | tituloCambioEstado }}</strong>
+                                        </ng-template>
+                                        {{ factElect.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
                                     </nz-descriptions-item>
-                                    <nz-descriptions-item [nzTitle]="titulousuarioreg">
-                                        <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
-                                        {{ fv.usuarioregistrocobro }}
+                                </ng-container>
+                                <nz-descriptions-item
+                                    *ngIf="!fv.anulado && fv.idestadofacturaelectronica != 30 && fv.idestadofacturaelectronica != 4"
+                                    [nzTitle]="tituloConsultarSifen">
+                                    <ng-template #tituloConsultarSifen>
+                                        <strong>Sincronizar</strong>
+                                    </ng-template>
+                                    <button
+                                        nz-button
+                                        nzSize="small"
+                                        [nzLoading]="loadingConsultaDTEMap.get(fv.id ?? -1)"
+                                        (click)="consutlarSifen(fv.id ?? -1)">
+                                        <i nz-icon nzType="monitor"></i>
+                                        Consultar SIFEN
+                                    </button>
+                                </nz-descriptions-item>
+                            </nz-descriptions>
+                        </nz-spin>
+                    </nz-tab>
+                    <nz-tab nzTitle="Email">
+                        <nz-spin [nzSpinning]="loadFacturaElectronicaMap.get(fv.id ?? -1) ?? false">
+                            <nz-descriptions nzSize="small">
+                                <ng-container *ngIf="facturaElectronicaMap.get(fv.id ?? -1) as factElect">
+                                    <nz-descriptions-item [nzTitle]="tituloEstadoEmail">
+                                        <ng-template #tituloEstadoEmail>
+                                            <strong>Estado</strong>
+                                        </ng-template>
+                                        <nz-tag *ngIf="factElect.idestadoemail == 1" nzColor="orange">
+                                            {{ factElect.estadoemail }}
+                                        </nz-tag>
+                                        <nz-tag *ngIf="factElect.idestadoemail == 2" nzColor="green">
+                                            {{ factElect.estadoemail }}
+                                        </nz-tag>
+                                        <nz-tag *ngIf="factElect.idestadoemail == 3" nzColor="red">
+                                            {{ factElect.estadoemail }}
+                                        </nz-tag>
                                     </nz-descriptions-item>
-                                </nz-descriptions>
-                            </nz-collapse-panel>
-                        </nz-collapse>
-                    </div>
-                    <div nz-col [appNzColResponsiveSizes]="fv.facturaelectronica ? DETALLES_ELE_RESPONSIVE_SIZES : DETALLES_PRE_RESPONSIVE_SIZES">
-                        <nz-collapse>
-                            <nz-collapse-panel nzHeader="Items" nzDisabled nzActive>
-                                <nz-list nzSize="small" [nzLoading]="loadDetalleMap.get(fv.id ?? -1)">
-                                    <nz-list-item *ngFor="let dfv of fv.detalles">
-                                        <nz-list-item-meta>
-                                            <nz-list-item-meta-description>
-                                                {{ dfv.descripcion }}
-                                            </nz-list-item-meta-description>
-                                            <nz-list-item-meta-title>
-                                                Gs.{{ dfv.subtotal | number }}
-                                            </nz-list-item-meta-title>
-                                            
-                                        </nz-list-item-meta>
-                                    </nz-list-item>
-                                    <nz-list-empty *ngIf="!fv.detalles"></nz-list-empty>
-                                </nz-list>
-                            </nz-collapse-panel>
-                        </nz-collapse>
-                    </div>
-                    <div nz-col [appNzColResponsiveSizes]="DETALLES_ELE_RESPONSIVE_SIZES" *ngIf="fv.facturaelectronica">
-                        <nz-collapse>
-                            <nz-collapse-panel nzActive nzDisabled nzHeader="Fact. Electrónica">
-                                <nz-spin [nzSpinning]="loadFacturaElectronicaMap.get(fv.id ?? -1) ?? false">
-                                    <nz-descriptions nzSize="small" [nzColumn]="1">
-                                        <nz-descriptions-item [nzTitle]="titulodescargas">
-                                            <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
-                                            <nz-space>
-                                                <button
-                                                    *nzSpaceItem
-                                                    nz-tooltip
-                                                    nzTooltipTitle="Documento Tributario Electronico en formato XML"
-                                                    nz-button
-                                                    nzType="default"
-                                                    nzSize="small"
-                                                    [nzLoading]="loadingDTEMap.get(fv.id ?? -1)"
-                                                    (click)="descargarDTE(fv.id ?? 0)">
-                                                    <i nz-icon nzTheme="outline" nzType="file-protect"></i>
-                                                    DTE
-                                                </button>
-                                                <button
-                                                    nz-tooltip
-                                                    nzTooltipTitle="Version Imprimible en formato PDF"
-                                                    *nzSpaceItem
-                                                    nz-button
-                                                    nzType="default"
-                                                    nzSize="small"
-                                                    [nzLoading]="loadingKudeMap.get(fv.id ?? -1)"
-                                                    (click)="descargarKUDE(fv.id ?? 0)">
-                                                    <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
-                                                    KuDE
-                                                </button>
-                                            </nz-space>
-                                        </nz-descriptions-item>
-                                        <ng-container *ngIf="facturaElectronicaMap.get(fv.id ?? -1) as factElect">
-                                            <nz-descriptions-item [nzTitle]="tituloEstadoFE">
-                                                <ng-template #tituloEstadoFE>
-                                                    <strong>Estado</strong>
-                                                </ng-template>
-                                                <nz-tag [nzColor]="factElect.idestadodocumento | estadoFeColor">
-                                                    {{ factElect.estadodocumento }}
-                                                </nz-tag>
-                                            </nz-descriptions-item>
-                                            <nz-descriptions-item [nzTitle]="tituloObservacionFE">
-                                                <ng-template #tituloObservacionFE>
-                                                    <strong>Observación</strong>
-                                                </ng-template>
-                                                <span *ngIf="factElect.observaciondocumento">
-                                                    {{ factElect.observaciondocumento }}
-                                                </span>
-                                                <span *ngIf="!factElect.observaciondocumento" nz-typography nzType="secondary">
-                                                    (Sin observación)
-                                                </span>
-                                            </nz-descriptions-item>
-                                            <nz-descriptions-item [nzTitle]="tituloFechaCambioEstadoFE">
-                                                <ng-template #tituloFechaCambioEstadoFE>
-                                                    <strong>{{ factElect.idestadodocumento | tituloCambioEstado }}</strong>
-                                                </ng-template>
-                                                {{ factElect.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
-                                            </nz-descriptions-item>
-                                        </ng-container>
-                                        <nz-descriptions-item
-                                            *ngIf="!fv.anulado && fv.idestadofacturaelectronica != 30 && fv.idestadofacturaelectronica != 4"
-                                            [nzTitle]="tituloConsultarSifen">
-                                            <ng-template #tituloConsultarSifen>
-                                                <strong>Sincronizar</strong>
-                                            </ng-template>
-                                            <button
-                                                nz-button
-                                                nzSize="small"
-                                                [nzLoading]="loadingConsultaDTEMap.get(fv.id ?? -1)"
-                                                (click)="consutlarSifen(fv.id ?? -1)">
-                                                <i nz-icon nzType="monitor"></i>
-                                                Consultar SIFEN
-                                            </button>
-                                        </nz-descriptions-item>
-                                    </nz-descriptions>
-                                </nz-spin>
-                            </nz-collapse-panel>
-                        </nz-collapse>
-                    </div>
-                </div>           
+                                    <nz-descriptions-item [nzTitle]="tituloFechaEmail">
+                                        <ng-template #tituloFechaEmail>
+                                            <strong>Cambio de estado</strong>
+                                        </ng-template>
+                                        <span nz-typography nzType="secondary" *ngIf="!factElect.fechacambioestadoemail"></span>
+                                        <span *ngIf="factElect.fechacambioestado">{{ factElect.fechacambioestadoemail | date:'dd/MM/yyyy HH:mm' }}</span>
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="tituloObsEmail">
+                                        <ng-template #tituloObsEmail>
+                                            <strong>Obs. Email</strong>
+                                        </ng-template>
+                                        <span nz-typography nzType="secondary" *ngIf="!factElect.observacionemail">
+                                            (Sin observación)
+                                        </span>
+                                        <span *ngIf="!factElect.observacionemail">
+                                            {{ factElect.observacionemail }}
+                                        </span>
+                                    </nz-descriptions-item>
+                                </ng-container>
+                            </nz-descriptions>
+                        </nz-spin>
+                    </nz-tab>
+                </nz-tabset>         
             </tr>
         </ng-container>
     </tbody>

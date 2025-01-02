@@ -45,13 +45,15 @@
                             <thead>
                                 <tr>
                                     <th>Descripción</th>
-                                    <th>Monto</th>
-                                    <th>Acciones</th>
+                                    <th>Cant.</th>
+                                    <th>Unitario</th>
+                                    <th>Subtotal</th>
+                                    <th>Acc.</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let dfv of tablaDetalle.data; let i = index"
-                                    [class.editable-row]="this.sesionSrv.permisos.has(268) || this.sesionSrv.permisos.has(269)">
+                                    [class.editable-row]="this.sesionSrv.permisos.has(268) || this.sesionSrv.permisos.has(269) || this.sesionSrv.permisos.has(270)">
                                     <td (click)="iniciarEdicionDescripcion(i, dfv.descripcion ?? '', inputCompDesc)">
                                         <div [hidden]="indexFilaEnEdicion == i && descripcionEnEdicion != null"
                                             [class.editable-cell]="this.sesionSrv.permisos.has(269)">
@@ -65,11 +67,27 @@
                                             (keydown.escape)="cancelarEdicionDescripcion()"
                                             (blur)="cancelarEdicionDescripcion()">
                                     </td>
+                                    <td (click)="iniciarEdicionCantidad(i, dfv.cantidad ?? -1, inputCompCant)">
+                                        <div
+                                            [class.editable-cell]="this.sesionSrv.permisos.has(270)"
+                                            [hidden]="indexFilaEnEdicion == i && cantidadEnEdicion != null">
+                                            {{ dfv.cantidad| number }}
+                                        </div>
+                                        <nz-input-number #inputCompCant
+                                            [(ngModel)]="cantidadEnEdicion"
+                                            [hidden]="indexFilaEnEdicion != i || (indexFilaEnEdicion == i && cantidadEnEdicion == null)"
+                                            (keydown.enter)="aceptarEdicionCantidad()"
+                                            (keydown.escape)="cancelarEdicionCantidad()"
+                                            (nzBlur)="cancelarEdicionCantidad()"
+                                            [nzMin]="1"
+                                            [nzStep]="1">
+                                        </nz-input-number>
+                                    </td>
                                     <td [nzAlign]="'right'" (click)="iniciarEdicionMonto(i, dfv.monto ?? -1, inputCompMonto)" >
                                         <div
                                             [class.editable-cell]="this.sesionSrv.permisos.has(268)"
                                             [hidden]="indexFilaEnEdicion == i && montoEnEdicion != null">
-                                            Gs. {{ dfv.monto | number }}
+                                            Gs.{{ dfv.monto | number }}
                                         </div>
                                         <nz-input-number #inputCompMonto
                                             [(ngModel)]="montoEnEdicion"
@@ -80,6 +98,9 @@
                                             [nzMin]="50"
                                             [nzStep]="1">
                                         </nz-input-number>
+                                    </td>
+                                    <td [nzAlign]="'right'">
+                                        Gs.{{ dfv.subtotal | number }}
                                     </td>
                                     <td [nzAlign]="'center'">
                                         <button

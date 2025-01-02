@@ -105,6 +105,7 @@ export class DetalleVentaComponent implements OnInit {
   indexFilaEnEdicion?: number;
   montoEnEdicion?: number;
   descripcionEnEdicion?: string;
+  cantidadEnEdicion?: number;
 
   constructor(
     @Inject(LOCALE_ID)
@@ -783,4 +784,44 @@ export class DetalleVentaComponent implements OnInit {
     this.indexFilaEnEdicion = undefined;
     this.descripcionEnEdicion = undefined;
   }
+
+  iniciarEdicionCantidad(index: number, cantidad: number,inputComp: NzInputNumberComponent){
+    if(!this.sesionSrv.permisos.has(270)) return;
+    if(this.indexFilaEnEdicion != null) return;
+    if(this.lstDetallesVenta[index].idcuota != null){
+      this.notif.error('<strong>No se puede modificar</strong>', 'Debe agregar las cuotas individuales para el cobro');
+      return;
+    }
+
+    this.indexFilaEnEdicion = index;
+    this.cantidadEnEdicion = cantidad;
+    setTimeout(() => {
+      inputComp.focus()
+    }, 200);
+  }
+
+  cancelarEdicionCantidad(){
+    this.indexFilaEnEdicion = undefined;
+    this.cantidadEnEdicion = undefined;
+  }
+
+  aceptarEdicionCantidad(){
+    if(this.sesionSrv.permisos.has(270)){
+      this.lstDetallesVenta = this.lstDetallesVenta.map((detalle, index) => {
+        if(this.cantidadEnEdicion != null && index == this.indexFilaEnEdicion){
+          detalle.cantidad = this.cantidadEnEdicion;
+          detalle.subtotal = (detalle.cantidad ?? 1) * (detalle.monto ?? 0);
+          detalle.porcentajeiva = detalle.porcentajeiva ?? 10;
+          detalle.montoiva = detalle.montoiva = Math.round((detalle.subtotal * detalle.porcentajeiva) / (100 + detalle.porcentajeiva));
+          return detalle;
+        }
+        return detalle;
+      })
+      this.calcularTotalFactura();
+    }
+    
+    this.indexFilaEnEdicion = undefined;
+    this.cantidadEnEdicion = undefined;
+  }
+
 }
