@@ -789,7 +789,7 @@ export class DetalleVentaComponent implements OnInit {
     if(!this.sesionSrv.permisos.has(270)) return;
     if(this.indexFilaEnEdicion != null) return;
     if(this.lstDetallesVenta[index].idcuota != null){
-      this.notif.error('<strong>No se puede modificar</strong>', 'Debe agregar las cuotas individuales para el cobro');
+      this.notif.error('<strong>No se puede modificar la cantidad</strong>', 'Debe agregar las cuotas individuales');
       return;
     }
 
