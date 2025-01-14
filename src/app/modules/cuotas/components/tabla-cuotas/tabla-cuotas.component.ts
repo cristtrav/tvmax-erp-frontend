@@ -1,13 +1,17 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { CobroCuota } from '@dto/cobro-cuota.dto';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin, mergeMap } from 'rxjs';
 import { CuotasService } from '@services/cuotas.service';
 import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DecimalPipe, formatDate } from '@angular/common';
+import { SuscripcionesService } from '@services/suscripciones.service';
+import { ServiciosService } from '@services/servicios.service';
 
 
 @Component({
@@ -23,7 +27,11 @@ export class TablaCuotasComponent implements OnInit {
   idsuscripcion: number | null = null;
 
   lstCuotas: CuotaDTO[] = [];
-  consultaCobros: { [param: number]: boolean } = {};
+
+  mapLoadingCobros = new Map<number, boolean>();
+  mapCobros = new Map<number, CobroCuota>();
+  mapExonerando = new Map<number, boolean>();
+
   pageSize: number = 10;
   pageIndex: number = 1;
   totalRegisters: number = 0;
@@ -31,6 +39,20 @@ export class TablaCuotasComponent implements OnInit {
   sortStr: string | null = null;
 
   expandSet = new Set<number>();
+
+  constructor(
+    @Inject(LOCALE_ID) private locale: string,
+    private cuotaSrv: CuotasService,
+    private notif: NzNotificationService,
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private modal: NzModalService,
+    private suscripcionesSrv: SuscripcionesService,
+    private serviciosSrv: ServiciosService
+  ) { }
+
+  ngOnInit(): void {
+  }
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.cargarCobroCuota(id);
@@ -38,15 +60,6 @@ export class TablaCuotasComponent implements OnInit {
     } else {
       this.expandSet.delete(id);
     }
-  }
-
-  constructor(
-    private cuotaSrv: CuotasService,
-    private notif: NzNotificationService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
-  ) { }
-
-  ngOnInit(): void {
   }
 
   private cargarCuotas(): void {
@@ -57,9 +70,6 @@ export class TablaCuotasComponent implements OnInit {
     }).subscribe({
       next: (resp) => {
         this.lstCuotas = resp.cuotas;
-        resp.cuotas.forEach(cuo => {
-          this.consultaCobros[Number(cuo.id)] = false;
-        });
         this.totalRegisters = resp.total;
         this.tableLoading = false;
       },
@@ -71,31 +81,37 @@ export class TablaCuotasComponent implements OnInit {
     });
   }
 
-  eliminar(id: number | null): void {
-    if (id) {
-      this.cuotaSrv.delete(id).subscribe(() => {
-        this.notif.create('success', 'Cuota eliminada correctamente', '');
-        this.cargarCuotas();
-      }, (e) => {
-        console.log('Error al eliminar cuota');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
+  confirmarEliminacion(cuota: CuotaDTO) {
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar la cuota?',
+      nzContent: `Vencimiento: ${formatDate(cuota.fechavencimiento ?? new Date(), 'dd/MMM/yyyy', this.locale)} | Monto: Gs.${new DecimalPipe(this.locale).transform(cuota.monto)}`,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.eliminar(cuota.id ?? -1)
+    })
+  }
+
+  eliminar(id: number) {
+    this.cuotaSrv.delete(id)
+      .subscribe({
+        next: () => {
+          this.notif.create('success', 'Cuota eliminada correctamente', '');
+          this.cargarCuotas();
+        },
+        error: (e) => {
+          console.error('Error al eliminar cuota', e);
+          this.httpErrorHandler.process(e);
+        }
       });
-    }
   }
 
   getHttpParams(): HttpParams {
     var par: HttpParams = new HttpParams();
     par = par.append('eliminado', 'false');
-    if (this.idsuscripcion) {
-      par = par.append('idsuscripcion', this.idsuscripcion);
-    }
-    if (this.idservicio) {
-      par = par.append('idservicio', this.idservicio);
-    }
-    if (this.sortStr) {
-      par = par.append('sort', this.sortStr);
-    }
+    if (this.idsuscripcion) par = par.append('idsuscripcion', this.idsuscripcion);
+    if (this.idservicio) par = par.append('idservicio', this.idservicio);
+    if (this.sortStr) par = par.append('sort', this.sortStr);
+
     par = par.append('offset', `${(this.pageIndex - 1) * this.pageSize}`);
     par = par.append('limit', `${this.pageSize}`);
     return par;
@@ -109,38 +125,108 @@ export class TablaCuotasComponent implements OnInit {
   }
 
   cargarCobroCuota(idcuota: number) {
-    this.consultaCobros[idcuota] = true;
-    this.cuotaSrv.getCobroCuota(idcuota).subscribe({
-      next: (cobro) => {
-        for (let cuota of this.lstCuotas) {
-          if (cuota.id == idcuota) {
-            cuota.cobro = cobro;
-            break;
+    this.mapLoadingCobros.set(idcuota, true);
+    this.cuotaSrv.getCobroCuota(idcuota)
+      .pipe(finalize(() => this.mapLoadingCobros.set(idcuota, false)))
+      .subscribe({
+        next: (cobro) => {
+          this.mapCobros.set(idcuota, cobro);
+        },
+        error: (e) => {
+          this.mapCobros.delete(idcuota);
+          if (e.status !== 404) {
+            this.httpErrorHandler.process(e);
+            console.log('Error al consultar cobro de cuota');
+            console.log(e);
           }
         }
-        this.consultaCobros[idcuota] = false
-      },
-      error: (e) => {
-        for (let cuota of this.lstCuotas) {
-          if (cuota.id == idcuota) {
-            cuota.cobro = undefined;
-            break;
-          }
-        }
-        this.consultaCobros[idcuota] = false;
-        if (e.status !== 404) {
-          this.httpErrorHandler.process(e);
-          console.log('Error al consultar cobro de cuota');
-          console.log(e);
-        }
-      }
-    });
+      });
   }
 
+  confirmarExoneracion(cuota: CuotaDTO) {
+    this.modal.confirm({
+      nzTitle: `¿Desea exonerar la cuota?`,
+      nzContent: `Vencimiento: ${formatDate(cuota.fechavencimiento ?? new Date(), 'dd/MMM/yyyy', this.locale)} | Monto: Gs.${new DecimalPipe(this.locale).transform(cuota.monto)}`,
+      nzOkText: 'Exonerar',
+      nzOnOk: () => this.exonerar(cuota)
+    })
+  }
 
-}
+  exonerar(cuota: CuotaDTO) {
+    const cuotaExo = {
+      ...cuota,
+      monto: 0,
+      pagado: true,
+      fechavencimiento: formatDate(cuota.fechavencimiento ?? new Date(), 'yyyy-MM-dd', this.locale)
+    };
+    this.mapExonerando.set(cuota.id ?? -1, true);
+    this.cuotaSrv.put(cuota.id ?? -1, cuotaExo)
+      .pipe(finalize(() => this.mapExonerando.set(cuota.id ?? -1, false)))
+      .subscribe({
+        next: () => {
+          this.cargarCuotas();
+        },
+        error: (e) => {
+          console.log('Error al exonerar cuota', e);
+          this.httpErrorHandler.process(e);
+        }
+      })
+  }
 
-interface IConsultaCobro {
-  cargando: boolean,
-  cobro: CobroCuota | null;
+  confirmarReversionExoneracion(cuota: CuotaDTO) {
+    this.modal.confirm({
+      nzTitle: `¿Desea revertir la exoneración de la cuota?`,
+      nzContent: `Vencimiento: ${formatDate(cuota.fechavencimiento ?? new Date(), 'dd/MMM/yyyy', this.locale)} | Monto: Gs.${new DecimalPipe(this.locale).transform(cuota.monto)}`,
+      nzOkText: 'Revertir',
+      nzOnOk: () => this.revertirExoneracion(cuota)
+    })
+  }
+
+  revertirExoneracion(cuota: CuotaDTO) {
+    if (!this.idsuscripcion) {
+      this.notif.error('<strong>Error al revertir exoneración</strong>', 'No se puede cargar la suscripción');
+      return;
+    }
+    const cuotaExo = {
+      ...cuota,
+      monto: 0,
+      pagado: false,
+      fechavencimiento: formatDate(cuota.fechavencimiento ?? new Date(), 'yyyy-MM-dd', this.locale)
+    };
+    this.mapExonerando.set(cuota.id ?? -1, true);
+    forkJoin({
+      suscripcion: this.suscripcionesSrv.getPorId(this.idsuscripcion),
+      servicio: this.serviciosSrv.getServicioPorId(cuota.idservicio ?? -1)
+    })
+    .pipe(
+      mergeMap(resp => {
+          if(cuota.idservicio == resp.suscripcion.idservicio)
+            cuotaExo.monto = resp.suscripcion.monto ?? 0;
+          else cuotaExo.monto = resp.servicio.precio ?? 0;
+          return this.cuotaSrv.put(cuota.id ?? -1, cuotaExo)
+        }),
+        finalize(() => this.mapExonerando.set(cuota.id ?? -1, false))
+      )
+      .subscribe({
+        next: () => {
+          this.cargarCuotas();
+        },
+        error: (e) => {
+          console.log('Error al revertir exoneraración de cuotas', e);
+          this.httpErrorHandler.process(e);
+        }
+      })
+    /*this.cuotaSrv.put(cuota.id ?? -1, cuotaExo)
+    .pipe(finalize(() => this.mapExonerando.set(cuota.id ?? -1, false)))
+    .subscribe({
+      next: () => {
+        this.cargarCuotas();
+      },
+      error: (e) => {
+        console.log('Error al exonerar cuota', e);
+        this.httpErrorHandler.process(e);
+      }
+    })*/
+  }
+
 }
