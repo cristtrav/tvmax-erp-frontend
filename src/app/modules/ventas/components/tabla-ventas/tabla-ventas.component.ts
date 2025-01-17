@@ -234,7 +234,7 @@ export class TablaVentasComponent implements OnInit {
     const fechaStr = fv.fechahorafactura ?? fv.fechafactura;
     const fecha = fechaStr != null ? new Date(fechaStr) : new Date();
     const formatoFecha = fv.fechahorafactura != null ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy';
-    return `${fv.idtimbrado != null ? nroFact : '(Sin factura)'} | Gs.${new DecimalPipe(this.locale).transform(fv.total)} | ${formatDate(fecha, formatoFecha, this.locale)}`;
+    return `${fv.idtalonario != null ? nroFact : '(Sin factura)'} | Gs.${new DecimalPipe(this.locale).transform(fv.total)} | ${formatDate(fecha, formatoFecha, this.locale)}`;
   }
 
   private revertirAnulacion(id: number): void {

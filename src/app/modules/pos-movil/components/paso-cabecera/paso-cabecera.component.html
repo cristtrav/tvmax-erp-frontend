@@ -15,18 +15,18 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-label>
-            Timbrado
+            Talonario
         </nz-form-label>
-        <nz-form-control nzErrorTip="Seleccione el timbrado">
+        <nz-form-control nzErrorTip="Seleccione el talonario">
             <nz-select
-                formControlName="idtimbrado"
+                formControlName="idtalonario"
                 style="width: 100%;"
                 nzSize="large"
                 nzPlaceHolder="Seleccionar...">
                 <nz-option 
-                    *ngFor="let timbrado of lstTimbrados"
-                    [nzValue]="timbrado.id"
-                    [nzLabel]="timbrado.prefijo">
+                    *ngFor="let talonario of lstTalonarios"
+                    [nzValue]="talonario.id"
+                    [nzLabel]="talonario.prefijo">
                 </nz-option>
             </nz-select>
         </nz-form-control>

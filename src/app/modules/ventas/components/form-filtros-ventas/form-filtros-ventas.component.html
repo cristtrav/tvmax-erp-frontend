@@ -21,37 +21,37 @@
         </div>
     </div>
     <div nz-col nzSpan="24">
-        <nz-badge [nzShowDot]="idtimbradoFiltro != null" nzDot>
+        <nz-badge [nzShowDot]="idtalonarioFiltro != null" nzDot>
             <h3>
-                <a nz-tooltip nzTooltipTitle="Limpiar filtro de timbrado" (click)="limpiarFiltroTimbrado()">
+                <a nz-tooltip nzTooltipTitle="Limpiar filtro de talonario" (click)="limpiarFiltroTalonario()">
                     <i nz-icon nzType="clear" nzTheme="outline"></i>
-                </a> Timbrado
+                </a> Talonario
             </h3>
         </nz-badge>
         <nz-select
             nzPlaceHolder="Seleccionar..."
             nzAllowClear
-            [(ngModel)]="idtimbradoFiltro"
+            [(ngModel)]="idtalonarioFiltro"
             (ngModelChange)="filtrar()"
             style="width: 100%;"
             [nzDropdownMatchSelectWidth]="false"
-            [nzCustomTemplate]="timbradoSelected">
+            [nzCustomTemplate]="talonarioSelected">
             <nz-option
-                *ngFor="let timbrado of lstTimbrados"
-                [nzValue]="timbrado.id"
-                [nzLabel]="timbrado.prefijo"
+                *ngFor="let talonario of lstTalonarios"
+                [nzValue]="talonario.id"
+                [nzLabel]="talonario.prefijo"
                 nzCustomContent>
-                    <nz-tag [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
-                        {{ timbrado.electronico ? 'E' : 'P' }}
+                    <nz-tag [nzColor]="talonario.electronico ? 'purple' : 'geekblue'">
+                        {{ talonario.electronico ? 'E' : 'P' }}
                     </nz-tag>
-                    <span>{{ timbrado | datosTimbrado:false }}</span>
+                    <span>{{ talonario | datosTalonario:false }}</span>
             </nz-option>
-            <ng-template #timbradoSelected let-selected>
-                <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
-                    <nz-tag [nzColor]="timbrado.electronico ? 'purple' : 'geekblue'">
-                        {{ timbrado.electronico ? 'E' : 'P' }}
+            <ng-template #talonarioSelected let-selected>
+                <span *ngIf="selected.nzValue | findTalonario:lstTalonarios as talonario">
+                    <nz-tag [nzColor]="talonario.electronico ? 'purple' : 'geekblue'">
+                        {{ talonario.electronico ? 'E' : 'P' }}
                     </nz-tag>
-                    <span>{{ timbrado.prefijo }} | {{ timbrado.nrotimbrado }}</span>
+                    <span>{{ talonario.prefijo }} | {{ talonario.nrotimbrado }}</span>
                 </span>                
             </ng-template>
         </nz-select>

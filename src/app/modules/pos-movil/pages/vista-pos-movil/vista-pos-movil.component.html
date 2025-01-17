@@ -29,7 +29,7 @@
                 (quitarIndice)="quitarDetalle($event)">
             </app-paso-items>
             <app-paso-cabecera *ngIf="pasoActual == 2"
-                (idtimbradoChange)="idtimbrado = $event"
+                (idtalonarioChange)="idtalonario = $event"
                 (fechaChange)="fechaFactura = $event"
                 [totalVenta]="totalVenta">
             </app-paso-cabecera>
@@ -106,7 +106,7 @@
                         <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
                     </button>
                 </div>
-                <div nz-col *ngIf="pasoActual == 2 && idtimbrado != null && fechaFactura != null">
+                <div nz-col *ngIf="pasoActual == 2 && idtalonario != null && fechaFactura != null">
                     <button
                         nz-button
                         nzType="primary"

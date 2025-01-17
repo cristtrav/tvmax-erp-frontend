@@ -44,8 +44,8 @@ export class AppSettings {
         },
         {
           id: 244,
-          name: 'Timbrados',
-          routerLink: '/app/timbrados',
+          name: 'Talonarios',
+          routerLink: '/app/talonarios',
         },
         {
           id: 1220,

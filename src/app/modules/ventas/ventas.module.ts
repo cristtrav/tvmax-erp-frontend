@@ -45,11 +45,11 @@ import { HelperComponentsModule } from '@helper-componets/helper-components.modu
 import { PaddingZerosPipe } from "../../global/pipes/padding-zeros.pipe";
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
-import { DatosTimbradoPipe } from './pipes/datos-timbrado.pipe';
+import { DatosTalonarioPipe } from './pipes/datos-talonario.pipe';
 import { FormContactoClienteComponent } from './components/form-contacto-cliente/form-contacto-cliente.component';
 import { EstadoFeColorPipe } from './pipes/estado-fe-color.pipe';
 import { TituloCambioEstadoPipe } from './pipes/titulo-cambio-estado.pipe';
-import { FindTimbradoPipe } from './pipes/find-timbrado.pipe';
+import { FindTalonarioPipe } from './pipes/find-talonario.pipe';
 
 @NgModule({
     declarations: [
@@ -59,11 +59,11 @@ import { FindTimbradoPipe } from './pipes/find-timbrado.pipe';
         TablaVentasComponent,
         CuotasPendientesComponent,
         ServiciosComponent,
-        DatosTimbradoPipe,
+        DatosTalonarioPipe,
         FormContactoClienteComponent,
         EstadoFeColorPipe,
         TituloCambioEstadoPipe,
-        FindTimbradoPipe
+        FindTalonarioPipe
     ],
     exports: [
         DetalleVentaComponent,

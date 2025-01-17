@@ -54,7 +54,7 @@ export class VistaPosMovilComponent {
   totalExento: number = 0;
 
   fechaFactura: Date | null = null;
-  idtimbrado: number | null = null
+  idtalonario: number | null = null
 
   guardando: boolean = false;
 
@@ -271,7 +271,7 @@ export class VistaPosMovilComponent {
     venta.totalgravadoiva5 = this.totalGravado5;
     venta.totalexentoiva = this.totalExento;
     venta.detalles = this.lstDetalles;
-    venta.idtimbrado = this.idtimbrado;
+    venta.idtalonario = this.idtalonario;
     //venta.nrofactura = this.formCabecera.get('nroFactura')?.value;
     venta.pagado = true;
     venta.idcliente = this.clienteSeleccionado?.id ?? -1;

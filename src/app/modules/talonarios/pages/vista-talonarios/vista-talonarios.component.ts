@@ -1,20 +1,20 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { TimbradosService } from '@services/timbrados.service';
+import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Timbrado } from '@dto/timbrado.dto';
+import { Talonario } from '@dto/talonario.dto';
 
 @Component({
-  selector: 'app-vista-timbrados',
-  templateUrl: './vista-timbrados.component.html',
-  styleUrls: ['./vista-timbrados.component.scss']
+  selector: 'app-vista-talonarios',
+  templateUrl: './vista-talonarios.component.html',
+  styleUrls: ['./vista-talonarios.component.scss']
 })
-export class VistaTimbradosComponent implements OnInit {
+export class VistaTalonariosComponent implements OnInit {
 
   pageIndex: number = 1;
   pageSize: number = 10;
@@ -22,10 +22,10 @@ export class VistaTimbradosComponent implements OnInit {
   sortStr: string | null = '+id';
   tableLoading: boolean = false;
 
-  lstTimbrados: Timbrado[] = [];
+  lstTalonarios: Talonario[] = [];
 
   constructor(
-    private timbradoSrv: TimbradosService,
+    private talonariosSrv: TalonariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
     private modal: NzModalService
@@ -38,16 +38,16 @@ export class VistaTimbradosComponent implements OnInit {
   cargarDatos(){
     this.tableLoading = true;
     forkJoin({
-      timbrados: this.timbradoSrv.get(this.getHttpParams()),
-      total: this.timbradoSrv.getTotal(this.getHttpParams())
+      talonarios: this.talonariosSrv.get(this.getHttpParams()),
+      total: this.talonariosSrv.getTotal(this.getHttpParams())
     }).subscribe({
       next: (resp) => {
-        this.lstTimbrados = resp.timbrados;
+        this.lstTalonarios = resp.talonarios;
         this.totalRegisters = resp.total;
         this.tableLoading = false;
       },
       error: (e) => {
-        console.error('Error al cargar timbrados', e);
+        console.error('Error al cargar talonarios', e);
         this.httpErrorHandler.process(e);
         this.tableLoading = false;
       }
@@ -72,26 +72,26 @@ export class VistaTimbradosComponent implements OnInit {
     this.cargarDatos();
   }
 
-  confirmarEliminacion(timbrado: Timbrado){
+  confirmarEliminacion(talonario: Talonario){
     this.modal.confirm({
-      nzTitle: '¿Desea eliminar el Timbrado?',
-      nzContent: `«Cód: ${timbrado.id} | Nro. timbrado: ${timbrado.nrotimbrado} | Rango: ${timbrado.nroinicio} al ${timbrado.nrofin}»`,
+      nzTitle: '¿Desea eliminar el Talonario?',
+      nzContent: `«Cód: ${talonario.id} | Nro. timbrado: ${talonario.nrotimbrado} | Rango: ${talonario.nroinicio} al ${talonario.nrofin}»`,
       nzOkText: 'Eliminar',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.eliminar(Number(timbrado.id));
+        this.eliminar(Number(talonario.id));
       }
     })
   }
 
   eliminar(id: number){
-    this.timbradoSrv.delete(id).subscribe({
+    this.talonariosSrv.delete(id).subscribe({
       next: () => {
-        this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado eliminado correctamente');
+        this.notif.create('success', '<strong>Éxito</strong>', 'Talonario eliminado correctamente');
         this.cargarDatos();
       },
       error: (e) => {
-        console.error('Error al eliminar timbrado', e);
+        console.error('Error al eliminar talonario', e);
         this.httpErrorHandler.process(e);
       }
     });

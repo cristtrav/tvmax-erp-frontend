@@ -5,8 +5,8 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { Timbrado } from '@dto/timbrado.dto';
-import { TimbradosService } from '@services/timbrados.service';
+import { Talonario } from '@dto/talonario.dto';
+import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { finalize } from 'rxjs';
 import { EstadoFacturaElectronicaDTO } from '@dto/facturacion/estado-factura-electronica.dto';
 import { EstadoFacturaElectronicaService } from '@services/facturacion/estado-factura-electronica.service';
@@ -55,9 +55,9 @@ export class FormFiltrosVentasComponent implements OnInit {
 
   grupoServicioFiltro: string[] = [];
 
-  lstTimbrados: Timbrado[] = [];
-  idtimbradoFiltro: number | null = null;
-  loadingTimbrados: boolean = false;
+  lstTalonarios: Talonario[] = [];
+  idtalonarioFiltro: number | null = null;
+  loadingTalonarios: boolean = false;
 
   lstEstadosFacturaElectronica: EstadoFacturaElectronicaDTO[] = [];
   loadingEstadosFacturaElectronica: boolean = false;
@@ -66,7 +66,7 @@ export class FormFiltrosVentasComponent implements OnInit {
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private usuariosSrv: UsuariosService,
-    private timbradosSrv: TimbradosService,
+    private talonariosSrv: TalonariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private estadosSifenSrv: EstadoFacturaElectronicaService
   ) { }
@@ -74,7 +74,7 @@ export class FormFiltrosVentasComponent implements OnInit {
   ngOnInit(): void {
     this.cargarCobradoresFiltro();
     this.cargarUsuarioFiltro();
-    this.cargarTimbradosFiltro();
+    this.cargarTalonariosFiltro();
     this.cargarEstadosSifen();
   }
 
@@ -137,7 +137,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     if (this.filtroPendiente) cant++;
     if (this.filtroAnulado) cant++;
     if (this.grupoServicioFiltro.length > 0) cant++;
-    if (this.idtimbradoFiltro != null) cant++;
+    if (this.idtalonarioFiltro != null) cant++;
     if (this.idEstadoFacturaElectronicaSeleccionada != null) cant++;
     return cant;    
   }
@@ -176,8 +176,8 @@ export class FormFiltrosVentasComponent implements OnInit {
     this.filtrar();
   }
 
-  limpiarFiltroTimbrado(){
-    this.idtimbradoFiltro = null;
+  limpiarFiltroTalonario(){
+    this.idtalonarioFiltro = null;
     this.filtrar();
   }
 
@@ -227,19 +227,19 @@ export class FormFiltrosVentasComponent implements OnInit {
     });
   }
 
-  cargarTimbradosFiltro(){
+  cargarTalonariosFiltro(){
     const params = new HttpParams()
     .append('eliminado', false)
     .append('sort', '-id');
-    this.loadingTimbrados = true;
-    this.timbradosSrv.get(params)
-    .pipe(finalize(() => this.loadingTimbrados = false))
+    this.loadingTalonarios = true;
+    this.talonariosSrv.get(params)
+    .pipe(finalize(() => this.loadingTalonarios = false))
     .subscribe({
-      next: (timbrados) => {
-        this.lstTimbrados = timbrados;
+      next: (talonarios) => {
+        this.lstTalonarios = talonarios;
       },
       error: (e) => {
-        console.log('Error al cargar timbrados para filtro', e);
+        console.log('Error al cargar talonarios para filtro', e);
         this.httpErrorHandler.process(e);
       }
     })
@@ -269,7 +269,7 @@ export class FormFiltrosVentasComponent implements OnInit {
         params['idgrupo'] = this.grupoServicioFiltro.filter(gs => gs.includes('gru')).map(grupo => Number(grupo.split('-')[1]));
     }
 
-    if(this.idtimbradoFiltro != null) params['idtimbrado'] = this.idtimbradoFiltro;
+    if(this.idtalonarioFiltro != null) params['idtalonario'] = this.idtalonarioFiltro;
     if(this.idEstadoFacturaElectronicaSeleccionada != null) params['idestadofacturaelectronica'] = this.idEstadoFacturaElectronicaSeleccionada
     return params;
   }

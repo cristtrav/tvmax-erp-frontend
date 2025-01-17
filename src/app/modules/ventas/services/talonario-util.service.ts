@@ -3,21 +3,21 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class TimbradoUtilService {
+export class TalonarioUtilService {
 
   constructor() { }
 
-  public guardarUltimoSeleccionado(idusuario: number, idtimbrado: number | null) {
+  public guardarUltimoSeleccionado(idusuario: number, idtalonario: number | null) {
     if (typeof (Storage) === 'undefined') return;
 
     const clave: string = 'preferencias-detalle-venta';
     let preferencias: {
       idusuario: number,
-      idUltimoTimbradoSeleccionado: number
+      idUltimoTalonarioSeleccionado: number
     }[] = JSON.parse(localStorage.getItem('preferencias-detalle-venta') ?? '[]');
 
     preferencias = preferencias.filter(pref => pref.idusuario != idusuario);
-    if (idtimbrado) preferencias.push({ idusuario: idusuario, idUltimoTimbradoSeleccionado: idtimbrado });
+    if (idtalonario) preferencias.push({ idusuario: idusuario, idUltimoTalonarioSeleccionado: idtalonario });
 
     localStorage.setItem(clave, JSON.stringify(preferencias));
   }
@@ -26,9 +26,9 @@ export class TimbradoUtilService {
     if (typeof (Storage) === 'undefined') return null
     const preferenciasStr: string = localStorage.getItem('preferencias-detalle-venta') ?? '[]';
 
-    let preferencias: { idusuario: number, idUltimoTimbradoSeleccionado: number }[] = JSON.parse(preferenciasStr);
+    let preferencias: { idusuario: number, idUltimoTalonarioSeleccionado: number }[] = JSON.parse(preferenciasStr);
     const pref = preferencias.find(preferencia => preferencia.idusuario == idusuario);
     if(!pref) return null;
-    return Number(pref.idUltimoTimbradoSeleccionado);
+    return Number(pref.idUltimoTalonarioSeleccionado);
   }
 }

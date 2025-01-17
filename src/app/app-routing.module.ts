@@ -74,10 +74,10 @@ const routes: Routes = [
         loadChildren: () => import ('./modules/ventas/ventas.module').then(m => m.VentasModule)
       },
       {
-        path: 'timbrados',
-        data: { idfuncionalidad: 244, name: 'Timbrados'},
+        path: 'talonarios',
+        data: { idfuncionalidad: 244, name: 'Talonarios'},
         canActivate: [canAccessFn],
-        loadChildren: () => import ('./modules/timbrados/timbrados.module').then(m => m.TimbradosModule)
+        loadChildren: () => import ('./modules/talonarios/talonarios.module').then(m => m.TalonariosModule)
       },
       {
         path: 'auditoria',

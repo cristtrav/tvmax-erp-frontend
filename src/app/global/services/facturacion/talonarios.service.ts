@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Timbrado } from '../dtos/timbrado.dto';
-import { AppSettings } from '../utils/app-settings';
+import { Talonario } from '../../dtos/talonario.dto';
+import { AppSettings } from '../../utils/app-settings';
 import { HttpClient } from '@angular/common/http';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { environment } from '@environments/environment';
@@ -10,35 +10,35 @@ import { environment } from '@environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class TimbradosService {
+export class TalonariosService {
 
-  private url: string = `${environment.apiURL}/timbrados`
+  private url: string = `${environment.apiURL}/talonarios`
 
   constructor(
     private http: HttpClient
   ) { }
 
-  post(t: Timbrado): Observable<any> {
+  post(t: Talonario): Observable<any> {
     return this.http.post(this.url, t, AppSettings.getHttpOptionsAuth());
   }
 
-  get(params: HttpParams): Observable<Timbrado[]>{
-    return this.http.get<Timbrado[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
+  get(params: HttpParams): Observable<Talonario[]>{
+    return this.http.get<Talonario[]>(this.url, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
   getTotal(params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
 
-  getPorId(id: number): Observable<Timbrado> {
-    return this.http.get<Timbrado>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
+  getPorId(id: number): Observable<Talonario> {
+    return this.http.get<Talonario>(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
   getUltimoId(): Observable<number>{
     return this.http.get<number>(`${this.url}/ultimoid`, AppSettings.getHttpOptionsAuth());
   }
 
-  put(id: number, t: Timbrado): Observable<any>{
+  put(id: number, t: Talonario): Observable<any>{
     return this.http.put(`${this.url}/${id}`, t,AppSettings.getHttpOptionsAuth());
   }
 
@@ -46,7 +46,7 @@ export class TimbradosService {
     return this.http.delete(`${this.url}/${id}`, AppSettings.getHttpOptionsAuth());
   }
 
-  getFormatoPorTimbrado(idtimbrado: number): Observable<FormatoFacturaDTO>{
-    return this.http.get<FormatoFacturaDTO>(`${this.url}/${idtimbrado}/formatoimpresion`, AppSettings.getHttpOptionsAuth());
+  getFormatoPorTalonario(idtalonario: number): Observable<FormatoFacturaDTO>{
+    return this.http.get<FormatoFacturaDTO>(`${this.url}/${idtalonario}/formatoimpresion`, AppSettings.getHttpOptionsAuth());
   }
 }

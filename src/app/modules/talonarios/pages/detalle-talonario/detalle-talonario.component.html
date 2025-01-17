@@ -5,10 +5,10 @@
             <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>
-            <a routerLink="../">Timbrados</a>
+            <a routerLink="../">Talonarios</a>
         </nz-breadcrumb-item>
         <nz-breadcrumb-item>
-            {{ idtimbrado | titlecase }}
+            {{ idtalonario | titlecase }}
         </nz-breadcrumb-item>
     </nz-breadcrumb>
 
@@ -171,7 +171,7 @@
             <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
                 <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardarLoading">
                     <i nz-icon nzType="save"></i>
-                    {{ idtimbrado === 'nuevo' ? 'Registrar' : 'Editar'}}
+                    {{ idtalonario === 'nuevo' ? 'Registrar' : 'Editar'}}
                 </button>
             </div>
         </form>

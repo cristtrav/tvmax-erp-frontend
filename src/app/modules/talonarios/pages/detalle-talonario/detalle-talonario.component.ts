@@ -1,6 +1,6 @@
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TimbradosService } from '@services/timbrados.service';
+import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
@@ -11,16 +11,16 @@ import { finalize } from 'rxjs';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
-import { Timbrado } from '@dto/timbrado.dto';
+import { Talonario } from '@dto/talonario.dto';
 import { EstablecimientosService } from '@services/facturacion/establecimientos.service';
 import { EstablecimientoDTO } from '@dto/facturacion/establecimiento.dto';
 
 @Component({
-  selector: 'app-detalle-timbrado',
-  templateUrl: './detalle-timbrado.component.html',
-  styleUrls: ['./detalle-timbrado.component.scss']
+  selector: 'app-detalle-talonario',
+  templateUrl: './detalle-talonario.component.html',
+  styleUrls: ['./detalle-talonario.component.scss']
 })
-export class DetalleTimbradoComponent implements OnInit {
+export class DetalleTalonarioComponent implements OnInit {
 
   readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
   readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
@@ -33,7 +33,7 @@ export class DetalleTimbradoComponent implements OnInit {
   formatterNroFactura = (value: number): string => `${value ? value.toString().padStart(7, '0') : ''}`;
   parserNroFactura = (value: string): string => `${value ? Number(value) : ''}`;
 
-  idtimbrado: string = 'nuevo';
+  idtalonario: string = 'nuevo';
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   lastidLoading: boolean = false;
@@ -59,7 +59,7 @@ export class DetalleTimbradoComponent implements OnInit {
 
   constructor(
     @Inject(LOCALE_ID) private locale: string,
-    private timbradosSrv: TimbradosService,
+    private talonariosSrv: TalonariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
@@ -69,9 +69,9 @@ export class DetalleTimbradoComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarEstablecimientos();
-    const idtim = this.aroute.snapshot.paramMap.get('idtimbrado');
-    this.idtimbrado = Number.isInteger(Number(idtim)) ? `${idtim}` : 'nuevo';
-    if(this.idtimbrado != 'nuevo') this.cargarDatos();
+    const idtim = this.aroute.snapshot.paramMap.get('idtalonario');
+    this.idtalonario = Number.isInteger(Number(idtim)) ? `${idtim}` : 'nuevo';
+    if(this.idtalonario != 'nuevo') this.cargarDatos();
     
     this.form.get('nroInicial')?.valueChanges.subscribe((nroInicio: number | null) => {
       this.form.get('nroFinal')?.clearValidators();
@@ -126,26 +126,26 @@ export class DetalleTimbradoComponent implements OnInit {
 
   cargarDatos() {
     this.formLoading = true;
-    this.timbradosSrv.getPorId(Number(this.idtimbrado))
+    this.talonariosSrv.getPorId(Number(this.idtalonario))
     .pipe(finalize(() => this.formLoading = false))
     .subscribe({
-      next: (timbrado) => {
-        this.form.controls.id.setValue(timbrado.id);
-        this.form.controls.codEstablecimiento.setValue(timbrado.codestablecimiento);
-        this.form.controls.codPuntoEmision.setValue(timbrado.codpuntoemision);
-        this.form.controls.timbrado.setValue(timbrado.nrotimbrado);
-        this.form.controls.nroInicial.setValue(timbrado.nroinicio);
-        this.form.controls.nroFinal.setValue(timbrado.nrofin);
-        this.form.controls.ultNroUsado.setValue(timbrado.ultimonrousado);
-        this.form.controls.iniciovigencia.setValue(new Date(`${timbrado.fechainicio}T00:00:00`));
-        if(timbrado.fechavencimiento)
-          this.form.controls.vencimiento.setValue(new Date(`${timbrado.fechavencimiento}T00:00:00`));
-        this.form.controls.activo.setValue(timbrado.activo);
-        this.form.controls.idformato.setValue(timbrado.idformatofactura);
-        this.form.controls.electronico.setValue(timbrado.electronico);
+      next: (talonario) => {
+        this.form.controls.id.setValue(talonario.id);
+        this.form.controls.codEstablecimiento.setValue(talonario.codestablecimiento);
+        this.form.controls.codPuntoEmision.setValue(talonario.codpuntoemision);
+        this.form.controls.timbrado.setValue(talonario.nrotimbrado);
+        this.form.controls.nroInicial.setValue(talonario.nroinicio);
+        this.form.controls.nroFinal.setValue(talonario.nrofin);
+        this.form.controls.ultNroUsado.setValue(talonario.ultimonrousado);
+        this.form.controls.iniciovigencia.setValue(new Date(`${talonario.fechainicio}T00:00:00`));
+        if(talonario.fechavencimiento)
+          this.form.controls.vencimiento.setValue(new Date(`${talonario.fechavencimiento}T00:00:00`));
+        this.form.controls.activo.setValue(talonario.activo);
+        this.form.controls.idformato.setValue(talonario.idformatofactura);
+        this.form.controls.electronico.setValue(talonario.electronico);
       },
       error: (e) => {
-        console.error('Error al consultar timbrado por id', e);
+        console.error('Error al consultar talonario por id', e);
         this.httpErrorHandler.process(e);
         this.formLoading = false;
       }
@@ -158,22 +158,22 @@ export class DetalleTimbradoComponent implements OnInit {
       this.form.get(ctrlName)?.updateValueAndValidity();
     })
     if(this.form.valid){
-      if(this.idtimbrado === 'nuevo') this.registrar();
+      if(this.idtalonario === 'nuevo') this.registrar();
       else this.editar();
     }
   }
 
   private editar() {
     this.guardarLoading = true;
-    this.timbradosSrv
-      .put(Number(this.idtimbrado), this.getDto())
+    this.talonariosSrv
+      .put(Number(this.idtalonario), this.getDto())
       .pipe(finalize(() => this.guardarLoading = false))
       .subscribe({
         next: () => {
-          this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
+          this.notif.create('success', '<strong>Éxito</strong>', 'Talonario guardado correctamente');
         },
         error: (e) => {
-          console.log('Error al editar timbrado', e);
+          console.log('Error al editar talonario', e);
           this.httpErrorHandler.process(e);
         }
       });
@@ -181,23 +181,23 @@ export class DetalleTimbradoComponent implements OnInit {
 
   private registrar() {
     this.guardarLoading = true;
-    this.timbradosSrv
+    this.talonariosSrv
       .post(this.getDto())
       .pipe(finalize(() => this.guardarLoading = false))
       .subscribe({
         next: () => {
-          this.notif.create('success', '<strong>Éxito</strong>', 'Timbrado guardado correctamente');
+          this.notif.create('success', '<strong>Éxito</strong>', 'Talonario guardado correctamente');
           this.form.reset();
         }, 
         error: (e) => {
-          console.error('Error al registrar timbrado', e);
+          console.error('Error al registrar talonario', e);
           this.httpErrorHandler.process(e);
         }
     });
   }
 
-  getDto(): Timbrado {
-    const t: Timbrado = new Timbrado();
+  getDto(): Talonario {
+    const t: Talonario = new Talonario();
     t.id = this.form.controls.id.value;
     t.codestablecimiento = this.form.controls.codEstablecimiento.value;
     t.codpuntoemision = this.form.controls.codPuntoEmision.value;
@@ -220,7 +220,7 @@ export class DetalleTimbradoComponent implements OnInit {
 
   generarId(){
     this.lastidLoading = true;
-    this.timbradosSrv
+    this.talonariosSrv
       .getUltimoId()
       .pipe(finalize(() => this.lastidLoading = false))
       .subscribe({
@@ -228,7 +228,7 @@ export class DetalleTimbradoComponent implements OnInit {
           this.form.controls.id.setValue(lastid + 1);
         },
         error: (e) => {
-          console.error('Error al consultar ultimo ID de timbrado', e);
+          console.error('Error al consultar ultimo ID de talonario', e);
           this.httpErrorHandler.process(e);
         }
     });

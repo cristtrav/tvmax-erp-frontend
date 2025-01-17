@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TimbradosRoutingModule } from './timbrados-routing.module';
-import { VistaTimbradosComponent } from './pages/vista-timbrados/vista-timbrados.component';
-import { DetalleTimbradoComponent } from './pages/detalle-timbrado/detalle-timbrado.component';
+import { TalonariosRoutingModule } from './talonarios-routing.module';
+import { VistaTalonariosComponent } from './pages/vista-talonarios/vista-talonarios.component';
+import { DetalleTalonarioComponent } from './pages/detalle-talonario/detalle-talonario.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { IconsProviderModule } from '../../icons-provider.module';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -30,12 +30,12 @@ import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
 
 @NgModule({
   declarations: [
-    VistaTimbradosComponent,
-    DetalleTimbradoComponent
+    VistaTalonariosComponent,
+    DetalleTalonarioComponent
   ],
   imports: [
     CommonModule,
-    TimbradosRoutingModule,
+    TalonariosRoutingModule,
     NzBreadCrumbModule,
     IconsProviderModule,
     NzButtonModule,
@@ -62,4 +62,4 @@ import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
     PaddingZerosPipe
   ]
 })
-export class TimbradosModule { }
+export class TalonariosModule { }

@@ -71,7 +71,7 @@ export class Extra {
         venta.idcobradorcomision = 50;
         venta.cobrador = 'ANA DIAZ';
         venta.fechacobro = new Date();
-        venta.idtimbrado = 10;
+        venta.idtalonario = 10;
         venta.idusuarioregistrocobro = 1;
         venta.usuarioregistrocobro = 'ADMIN';
         venta.nrofactura = 3457;

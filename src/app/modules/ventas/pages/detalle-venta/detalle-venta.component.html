@@ -164,15 +164,15 @@
                                         
                                         <ng-template #prefijoFactura>
                                             <nz-select style="min-width: 7em;" [nzDropdownMatchSelectWidth]="false"
-                                                [nzCustomTemplate]="renderPrefijo" formControlName="idTimbrado">
-                                                <nz-option nzCustomContent *ngFor="let timb of lstTimbrados"
-                                                    [nzLabel]="timb | datosTimbrado"
+                                                [nzCustomTemplate]="renderPrefijo" formControlName="idtalonario">
+                                                <nz-option nzCustomContent *ngFor="let timb of lstTalonarios"
+                                                    [nzLabel]="timb | datosTalonario"
                                                     [nzValue]="timb.id"
                                                     [nzCustomContent]>
                                                     <nz-tag [nzColor]="timb.electronico ? 'purple' : 'geekblue'">
                                                         {{ timb.electronico ? 'E' : 'P' }}
                                                     </nz-tag>
-                                                    <span>{{ timb | datosTimbrado:false }}</span>
+                                                    <span>{{ timb | datosTalonario:false }}</span>
                                                 </nz-option>
                                             </nz-select>
                                         </ng-template>
@@ -206,8 +206,8 @@
                                             </ng-template>-->
                                         </nz-input-group>
                                         <ng-template #renderPrefijo let-selected>
-                                            <span *ngIf="selected.nzValue | findTimbrado:lstTimbrados as timbrado">
-                                                {{ timbrado.prefijo }}
+                                            <span *ngIf="selected.nzValue | findTalonario:lstTalonarios as talonario">
+                                                {{ talonario.prefijo }}
                                             </span>  
                                         </ng-template>
                                     </nz-form-control>

@@ -5,7 +5,7 @@ import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
 import { Venta } from '@dto/venta.dto';
 import { ClientesService } from '@services/clientes.service';
-import { TimbradosService } from '@services/timbrados.service';
+import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { VentasService } from '@services/ventas.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { catchError, EMPTY, forkJoin, Observable, of, switchMap, tap } from 'rxjs';
@@ -37,7 +37,7 @@ export class FacturaPreimpresaVentaComponent implements OnInit {
   constructor(
     private ventasSrv: VentasService,
     private clientesSrv: ClientesService,
-    private timbradosSrv: TimbradosService,
+    private talonariosSrv: TalonariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService
   ) { }
 
@@ -59,7 +59,7 @@ export class FacturaPreimpresaVentaComponent implements OnInit {
       switchMap(resp => forkJoin({
         venta: of(resp.venta),
         detalles: of(resp.detalles),
-        formatoFactura: resp.venta.idtimbrado ? this.timbradosSrv.getFormatoPorTimbrado(resp.venta.idtimbrado) : EMPTY,
+        formatoFactura: resp.venta.idtalonario ? this.talonariosSrv.getFormatoPorTalonario(resp.venta.idtalonario) : EMPTY,
         cliente: resp.venta.idcliente ? this.clientesSrv.getPorId(resp.venta.idcliente) : EMPTY
       })),
       tap(resp => {

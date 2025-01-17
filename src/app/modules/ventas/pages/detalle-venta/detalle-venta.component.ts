@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, Input, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TimbradosService } from '@services/timbrados.service';
+import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { HttpParams } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClientesService } from '@services/clientes.service';
@@ -16,11 +16,11 @@ import { CuotaDTO } from '@dto/cuota-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { Timbrado } from '@dto/timbrado.dto';
+import { Talonario } from '@dto/talonario.dto';
 import { Venta } from '@dto/venta.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
-import { TimbradoUtilService } from '@modules/ventas/services/timbrado-util.service';
+import { TalonarioUtilService } from '@modules/ventas/services/talonario-util.service';
 import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SifenService } from '@services/facturacion/sifen.service';
@@ -45,7 +45,7 @@ export class DetalleVentaComponent implements OnInit {
   guardandoContacto: boolean = false;
 
   idventa: string = 'nueva'
-  lstTimbrados: Timbrado[] = [];
+  lstTalonarios: Talonario[] = [];
   lstClientes: Cliente[] = [];
   lstDetallesVenta: DetalleVenta[] = [];
   dvRuc: string | null = null;
@@ -53,7 +53,7 @@ export class DetalleVentaComponent implements OnInit {
 
   formCabecera: FormGroup = new FormGroup({
     nroFactura: new FormControl(null, [Validators.required]),
-    idTimbrado: new FormControl(null, [Validators.required]),
+    idtalonario: new FormControl(null, [Validators.required]),
     fecha: new FormControl(new Date(), Validators.required),
     idCliente: new FormControl(null, [Validators.required]),
     ci: new FormControl(null)
@@ -110,7 +110,7 @@ export class DetalleVentaComponent implements OnInit {
   constructor(
     @Inject(LOCALE_ID)
     private locale: string,
-    private timbradoSrv: TimbradosService,
+    private talonariosSrv: TalonariosService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private clienteSrv: ClientesService,
     private ventasSrv: VentasService,
@@ -121,30 +121,30 @@ export class DetalleVentaComponent implements OnInit {
     public sesionSrv: SesionService,
     private impresionSrv: ImpresionService,
     private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
-    private timbradoUtilSrv: TimbradoUtilService,
+    private talonarioUtilSrv: TalonarioUtilService,
     private modal: NzModalService,
     private sifenSrv: SifenService
   ) { }
 
   ngOnInit(): void {
     this.idventa = this.aroute.snapshot.paramMap.get('idventa') ?? 'nueva';
-    this.cargarTimbrados();
-    this.formCabecera.get('idTimbrado')?.valueChanges.subscribe((value: number | null) => {
-      this.timbradoUtilSrv.guardarUltimoSeleccionado(this.sesionSrv.idusuario, value);
+    this.cargarTalonarios();
+    this.formCabecera.controls.idtalonario.valueChanges.subscribe((value: number | null) => {
+      this.talonarioUtilSrv.guardarUltimoSeleccionado(this.sesionSrv.idusuario, value);
       if(value == null){
         this.facturaElectronica = false;
         this.nroFacturaDesactivado = true;
         return;
       }
       
-      this.timbradoSrv.getPorId(value).subscribe({
+      this.talonariosSrv.getPorId(value).subscribe({
         next: (t) => {
           this.actualizarControlNroFactura(t);
           this.nroFacturaDesactivado = false;
           this.facturaElectronica = t.electronico ?? false;
         },
         error: (e) => {
-          console.log('Error al cargar timbrado por id', e);
+          console.log('Error al cargar talonario por id', e);
           this.httpErrorHandler.process(e);
         }
       });
@@ -153,7 +153,7 @@ export class DetalleVentaComponent implements OnInit {
     });
 
     this.formCabecera.get('nroFactura')?.valueChanges.subscribe((value: number | null) => {
-      this.actualizarValidacionTimbrado();
+      this.actualizarValidacionTalonario();
     });
 
     this.formCabecera.get('idCliente')?.valueChanges.subscribe((value: number | null) => {
@@ -180,7 +180,7 @@ export class DetalleVentaComponent implements OnInit {
 
     if (this.idventa !== 'nueva') this.cargarDatosVenta(Number(this.idventa));
 
-    this.formCabecera.get('idTimbrado')?.setValue(this.timbradoUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
+    this.formCabecera.controls.idtalonario.setValue(this.talonarioUtilSrv.obtenerUltimoSeleccionado(this.sesionSrv.idusuario));
     this.moduloActivadoDesde = this.router.routerState.snapshot.url.includes('pos') ? 'pos' : 'venta';
     if(this.idventa == 'nueva'){
       this.usarFechaActual = true;
@@ -206,15 +206,15 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   private validarRuc(){
-    const idtimbrado = this.formCabecera.controls.idTimbrado.value;
+    const idtalonario = this.formCabecera.controls.idtalonario.value;
     this.mostrarValidacionRuc = this.isRucValidated();
     if(!this.mostrarValidacionRuc){
       this.estadoValidacionRuc = 'success';
       return;
     }
 
-    const timbrado = this.lstTimbrados.find(t => t.id == idtimbrado);
-    if(timbrado == null || this.clienteSeleccionado == null){
+    const talonario = this.lstTalonarios.find(t => t.id == idtalonario);
+    if(talonario == null || this.clienteSeleccionado == null){
       this.estadoValidacionRuc = 'success';
       return;
     };
@@ -223,14 +223,14 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   private isRucValidated(): boolean {
-    const idtimbrado = this.formCabecera.controls.idTimbrado.value;
-    if(idtimbrado == null || this.clienteSeleccionado == null) return false;
+    const idtalonario = this.formCabecera.controls.idtalonario.value;
+    if(idtalonario == null || this.clienteSeleccionado == null) return false;
 
-    const timbrado = this.lstTimbrados.find(t => t.id == idtimbrado);
-    if(timbrado == null) return false;
+    const talonario = this.lstTalonarios.find(t => t.id == idtalonario);
+    if(talonario == null) return false;
 
-    if(!timbrado.electronico) return false;
-    if(timbrado.electronico && this.clienteSeleccionado.dvruc == null) return false;
+    if(!talonario.electronico) return false;
+    if(talonario.electronico && this.clienteSeleccionado.dvruc == null) return false;
     return true;
   }
 
@@ -286,7 +286,7 @@ export class DetalleVentaComponent implements OnInit {
         this.totalFactura = resp.venta.total;
         this.totalIva5 = resp.venta.totaliva5;
         this.totalIva10 = resp.venta.totaliva10;
-        this.formCabecera.get('idTimbrado')?.setValue(resp.venta.idtimbrado);
+        this.formCabecera.controls.idtalonario.setValue(resp.venta.idtalonario);
         this.formCabecera.get('nroFactura')?.setValue(resp.venta.nrofactura);
         this.lstDetallesVenta = resp.detalles;
         if(resp.venta.fechahorafactura) this.formCabecera.controls.fecha.setValue(new Date(resp.venta.fechahorafactura));
@@ -301,7 +301,7 @@ export class DetalleVentaComponent implements OnInit {
     })
   }
 
-  actualizarControlNroFactura(t: Timbrado) {
+  actualizarControlNroFactura(t: Talonario) {
     this.ultimoNroFacturaUsado = t.ultimonrousado;
     this.nroFacturaMin = t.nroinicio ?? 1;
     this.nroFacturaMax = t.nrofin ?? 9999999;
@@ -312,33 +312,33 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   actualizarControlNroFacturaSeleccionado() {
-    if (!this.formCabecera.controls.idTimbrado.value) return;
-    const timbrado = this.lstTimbrados.find(timbrado => timbrado.id == this.formCabecera.controls.idTimbrado.value);
-    if (!timbrado) return;
-    this.actualizarControlNroFactura(timbrado);
+    if (!this.formCabecera.controls.idtalonario.value) return;
+    const talonario = this.lstTalonarios.find(talonario => talonario.id == this.formCabecera.controls.idtalonario.value);
+    if (!talonario) return;
+    this.actualizarControlNroFactura(talonario);
   }
 
-  private cargarTimbrados() {
+  private cargarTalonarios() {
     let params: HttpParams = new HttpParams();
     params = params.append('eliminado', 'false');
     params = params.append('activo', 'true');
     params = params.append('sort', '-id')
-    this.timbradoSrv.get(params).subscribe({
-      next: (timbrados) => {
-        this.lstTimbrados = timbrados;
+    this.talonariosSrv.get(params).subscribe({
+      next: (talonarios) => {
+        this.lstTalonarios = talonarios;
         this.actualizarControlNroFacturaSeleccionado();
       },
       error: (e) => {
-        console.log('Error al consultar timbrados', e);
+        console.log('Error al consultar talonarios', e);
         this.httpErrorHandler.process(e);
       }
     });
   }
 
-  actualizarValidacionTimbrado() {
-    if (this.formCabecera.controls['idTimbrado'].hasError('required')) {
+  actualizarValidacionTalonario() {
+    if (this.formCabecera.controls['idtalonario'].hasError('required')) {
       this.statusNroFactura = 'error';
-      this.errorTipNroFactura = 'Seleccione un timbrado.';
+      this.errorTipNroFactura = 'Seleccione un talonario.';
     } else if (this.formCabecera.controls['nroFactura'].hasError('required')) {
       this.statusNroFactura = 'error';
       this.errorTipNroFactura = `Ingrese un núm. Mín. ${this.nroFacturaMin}, máx. ${this.nroFacturaMax}.`;
@@ -531,7 +531,7 @@ export class DetalleVentaComponent implements OnInit {
     fv.totalgravadoiva5 = this.totalGravado5;
     fv.totalexentoiva = this.totalExento;
     fv.detalles = this.lstDetallesVenta;
-    fv.idtimbrado = this.formCabecera.get('idTimbrado')?.value;
+    fv.idtalonario = this.formCabecera.controls.idtalonario.value;
     fv.nrofactura = this.formCabecera.get('nroFactura')?.value;
     fv.pagado = true;
     fv.idcliente = this.formCabecera.get('idCliente')?.value;
@@ -549,7 +549,7 @@ export class DetalleVentaComponent implements OnInit {
 
   limpiar() {
     this.mapCuotaEnDetalle.clear();
-    this.cargarTimbrados();
+    this.cargarTalonarios();
     this.formCabecera.controls['idCliente']?.reset();
     this.router.navigate(['../', 'nueva'], { relativeTo: this.aroute });
     this.idventa = 'nueva';
@@ -585,9 +585,9 @@ export class DetalleVentaComponent implements OnInit {
   }
   
   imprimirKude(duplicado: boolean){
-    const timbrado = this.lstTimbrados.find(t => t.id == this.formCabecera.controls.idTimbrado.value);
-    if(!timbrado) {
-      this.notif.error('Error al obtener datos del timbrado', '');
+    const talonario = this.lstTalonarios.find(t => t.id == this.formCabecera.controls.idtalonario.value);
+    if(!talonario) {
+      this.notif.error('Error al obtener datos del talonario', '');
       return;
     }
     this.loadingImpresion = true;
@@ -595,7 +595,7 @@ export class DetalleVentaComponent implements OnInit {
       .pipe(finalize(() => this.loadingImpresion = false))
       .subscribe({
         next: (kude) => {
-          const nombrearchivo = `${timbrado.prefijo}-${(this.formCabecera.controls.nroFactura.value).toString().padStart(7, '0')}`
+          const nombrearchivo = `${talonario.prefijo}-${(this.formCabecera.controls.nroFactura.value).toString().padStart(7, '0')}`
           this.facturaElectronicaUtilsSrv.downloadKUDE(kude, nombrearchivo);
         },
         error: (e) => {
@@ -652,7 +652,7 @@ export class DetalleVentaComponent implements OnInit {
   }
 
   buscarFacturaPorNro(){
-    if(!this.formCabecera.controls.idTimbrado.value){
+    if(!this.formCabecera.controls.idtalonario.value){
       this.notif.create('warning', 'Seleccione el prefijo de la factura','');
       return;
     }
@@ -663,7 +663,7 @@ export class DetalleVentaComponent implements OnInit {
     this.buscandoFactura = true;
     const httpParams = new HttpParams()
     .append('eliminado', false)
-    .append('idtimbrado', `${this.formCabecera.controls.idTimbrado.value}`)
+    .append('idtalonario', `${this.formCabecera.controls.idtalonario.value}`)
     .append('nrofactura', `${this.formCabecera.controls.nroFactura.value}`)
     this.ventasSrv.get(httpParams).pipe(
       finalize(() => this.buscandoFactura = false)
