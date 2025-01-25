@@ -56,7 +56,8 @@ export class DetalleVentaComponent implements OnInit {
     idtalonario: new FormControl(null, [Validators.required]),
     fecha: new FormControl(new Date(), Validators.required),
     idCliente: new FormControl(null, [Validators.required]),
-    ci: new FormControl(null)
+    ci: new FormControl(null),
+    iddte: new FormControl<number | null>(null)
   });
 
   errorTipNroFactura: string = '';
@@ -292,6 +293,7 @@ export class DetalleVentaComponent implements OnInit {
         if(resp.venta.fechahorafactura) this.formCabecera.controls.fecha.setValue(new Date(resp.venta.fechahorafactura));
         else if (resp.venta.fechafactura) this.formCabecera.get('fecha')?.setValue(new Date(resp.venta.fechafactura));
         this.clienteSeleccionado = resp.cliente;
+        this.formCabecera.controls.iddte.setValue(resp.venta.iddte);
         this.validarRuc();
       },
       error: (e) => {
@@ -544,6 +546,7 @@ export class DetalleVentaComponent implements OnInit {
     const cliente = this.lstClientes.find(cliente => cliente.id == this.formCabecera.controls.idCliente.value);
     fv.idcobradorcomision = cliente?.idcobrador ?? null;
     fv.idusuarioregistrofactura = this.sesionSrv.idusuario;
+    fv.iddte = this.formCabecera.controls.iddte.value;
     return fv;
   }
 

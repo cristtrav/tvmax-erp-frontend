@@ -1,5 +1,5 @@
 export interface FacturaElectronicaDTO{
-    idventa: number;
+    id: number;
     firmado: boolean;
     version: number;
     idestadodocumento: number;

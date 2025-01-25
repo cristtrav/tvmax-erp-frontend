@@ -200,6 +200,12 @@
                                     </nz-space>
                                 </nz-descriptions-item>
                                 <ng-container *ngIf="facturaElectronicaMap.get(fv.id ?? -1) as factElect">
+                                    <nz-descriptions-item [nzTitle]="tituloIdDte">
+                                        <ng-template #tituloIdDte>
+                                            <strong>Código</strong>
+                                        </ng-template>
+                                        {{ factElect.id }}
+                                    </nz-descriptions-item>
                                     <nz-descriptions-item [nzTitle]="tituloEstadoFE">
                                         <ng-template #tituloEstadoFE>
                                             <strong>Estado</strong>
@@ -236,7 +242,7 @@
                                         nz-button
                                         nzSize="small"
                                         [nzLoading]="loadingConsultaDTEMap.get(fv.id ?? -1)"
-                                        (click)="consutlarSifen(fv.id ?? -1)">
+                                        (click)="consutlarSifen(fv.iddte ?? -1)">
                                         <i nz-icon nzType="monitor"></i>
                                         Consultar SIFEN
                                     </button>
