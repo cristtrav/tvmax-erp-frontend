@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Talonario } from '../../dtos/talonario.dto';
+import { Talonario } from '../../dtos/facturacion/talonario.dto';
 import { AppSettings } from '../../utils/app-settings';
 import { HttpClient } from '@angular/common/http';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';

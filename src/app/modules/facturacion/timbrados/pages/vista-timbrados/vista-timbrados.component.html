@@ -1,0 +1,124 @@
+<app-workspace-layout>
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            Timbrados
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div nz-row [nzGutter]="[8,8]">
+        <div nz-col nzSpan="24">
+            <div nz-row [nzGutter]="[8,8]">
+                <div nz-col nzFlex="auto">
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <button nz-button nzType="primary" routerLink="nuevo">
+                                <i nz-icon nzType="plus" nzTheme="outline"></i>
+                                Nuevo
+                            </button>
+                        </div>
+                        <div nz-col>
+                            <button nz-button (click)="cargarTimbrados()">
+                                <i nz-icon nzType="reload" nzTheme="outline"></i>
+                                Recargar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div nz-col>
+                    <!--Search-->
+                </div>
+            </div>
+        </div>
+        <div nz-col nzSpan="24">
+            <nz-table #tabla
+                nzSize="small"
+                nzFrontPagination="false"
+                [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex"
+                [nzTotal]="totalRegisters"
+                [nzData]="lstTimbrados"
+                [nzLoading]="loadingTimbrados"
+                [nzShowSizeChanger]="true"
+                [nzFooter]="footerTabla"
+                (nzQueryParams)="onTableQueryParamsChange($event)">
+                <thead>
+                    <tr>
+                        <th [nzColumnKey]="'nrotimbrado'" [nzSortFn]="true">Nro. Timbrado</th>
+                        <th [nzColumnKey]="'fechainiciovigencia'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Inicio</th>
+                        <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true">F. Vencimiento</th>
+                        <th [nzColumnKey]="'electronico'" [nzSortFn]="true">Tipo</th>
+                        <th [nzColumnKey]="'activo'" [nzSortFn]="true">Estado</th>
+                        <th [nzColumnKey]="'nrotalonarios'" [nzSortFn]="true">Nro. Talonarios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let timbrado of tabla.data">
+                        <td>{{ timbrado.nrotimbrado }}</td>
+                        <td>{{ timbrado.fechainiciovigencia | date:'dd/MM/yyyy' }}</td>
+                        <td>
+                            <span *ngIf="timbrado.fechavencimiento">
+                                {{ timbrado.fechavencimiento | date:'dd/MM/yyyy' }}
+                            </span>
+                            <span *ngIf="!timbrado.fechavencimiento" nz-typography nzType="secondary">
+                                (ninguno)
+                            </span>
+                        </td>
+                        <td>
+                            <nz-tag *ngIf="timbrado.electronico" nzColor="purple">Electrónico</nz-tag>
+                            <nz-tag *ngIf="!timbrado.electronico" nzColor="geekblue">Preimpreso</nz-tag>
+                        </td>
+                        <td>
+                            <nz-tag *ngIf="timbrado.activo" nzColor="green">Activo</nz-tag>
+                            <nz-tag *ngIf="!timbrado.activo" nzColor="red">Inactivo</nz-tag>
+                        </td>
+                        <td>{{ timbrado.nrotalonarios | number }}</td>
+                        <td>
+                            <div nz-row [nzGutter]="[8,8]">
+                                <div nz-col>
+                                    <button
+                                        nz-button
+                                        nz-tooltip
+                                        nzTooltipTitle="Talonarios"
+                                        [routerLink]="[timbrado.nrotimbrado, 'talonarios']">
+                                        <i nz-icon nzType="snippets" nzTheme="outline"></i>
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        nz-tooltip
+                                        nzTooltipTitle="Editar"
+                                        [routerLink]="[timbrado.nrotimbrado]">
+                                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                                    </button>
+                                </div>
+                                <div nz-col>
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        nz-tooltip
+                                        nzTooltipTitle="Eliminar"
+                                        nzDanger
+                                        [nzLoading]="mapEliminando.get(timbrado.nrotimbrado)"
+                                        (click)="confirmarEliminacion(timbrado)">
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <ng-template #footerTabla>
+                    <strong>Total: </strong> {{ totalRegisters | number }}
+                </ng-template>
+            </nz-table>
+        </div>
+    </div>
+
+</app-workspace-layout>

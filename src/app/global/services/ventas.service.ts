@@ -8,7 +8,7 @@ import { ResumenGruposVentas } from '@dto/resumen-grupos-ventas.dto';
 import { ResumenServiciosVentas } from '@dto/resumen-servicios-ventas.dto';
 import { ResumenCobradoresVentas } from '@dto/resumen-cobradores-ventas.dto';
 import { environment } from '@environments/environment';
-import { FacturaElectronicaDTO } from '@dto/facturacion/factura-electronica.dto';
+import { DteDTO } from '@dto/facturacion/factura-electronica.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +39,14 @@ export class VentasService {
 
   anular(idventa: number): Observable<any> {
     return this.http.get(`${this.url}/${idventa}/anular`, AppSettings.getHttpOptionsAuth());
+  }
+
+  cancelar(idventa: number): Observable<any> {
+    return this.http.get(`${this.url}/${idventa}/cancelar`, AppSettings.getHttpOptionsAuth());
+  }
+
+  anularConNotaCredito(idventa: number): Observable<any> {
+    return this.http.get(`${this.url}/${idventa}/anular-nc`, AppSettings.getHttpOptionsAuth());
   }
 
   revertiranul(idventa: number): Observable<any> {
@@ -111,8 +119,8 @@ export class VentasService {
     return this.http.get(`${this.url}/${idventa}/kude`, AppSettings.getHttpOptionsBlobAuthWithParams(params));
   }
 
-  getFacturaElectronica(idventa: number): Observable<FacturaElectronicaDTO>{
-    return this.http.get<FacturaElectronicaDTO>(`${this.url}/${idventa}/facturaelectronica`, AppSettings.getHttpOptionsAuth());
+  getFacturaElectronica(idventa: number): Observable<DteDTO>{
+    return this.http.get<DteDTO>(`${this.url}/${idventa}/facturaelectronica`, AppSettings.getHttpOptionsAuth());
   }
 
   consultarFacturaSifen(id: number): Observable<any>{

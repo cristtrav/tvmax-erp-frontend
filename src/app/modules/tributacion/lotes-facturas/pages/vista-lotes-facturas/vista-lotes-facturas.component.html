@@ -135,29 +135,25 @@
                                 nzSize="small">
                                 <thead>
                                     <tr>
-                                        <th>Cód. Venta</th>
+                                        <th>Código</th>
+                                        <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Timbrado</th>
-                                        <th>Nro. Factura</th>
+                                        <th>Nro. Documento</th>
                                         <th>Estado</th>
                                         <th>Descripción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let detalle of tablaDetalle.data">
-                                        <td>{{ detalle.idventa }}</td>
+                                        <td>{{ detalle.iddocumento }}</td>
                                         <td>
-                                            <span *ngIf="detalle.fechahorafactura != null">
-                                                {{ detalle.fechahorafactura | date:'dd/MM/yyyy HH:mm' }}
-                                            </span>
-                                            <span *ngIf="detalle.fechahorafactura == null">
-                                                {{ detalle.fechafactura | date: 'dd/MM/yyyy' }}
-                                            </span>
+                                            <span *ngIf="detalle.tipodocumento == 'FAC'">Factura</span>
+                                            <span *ngIf="detalle.tipodocumento == 'NCR'">Nota de crédito</span>
                                         </td>
+                                        <td>{{ detalle.fechadocumento| date:'dd/MM/yyyy HH:mm' }}</td>
                                         <td>{{ detalle.nrotimbrado }}</td>
-                                        <td>
-                                            {{ detalle.prefijofactura }}-{{ detalle.nrofactura | paddingZeros:7 }}
-                                        </td>
+                                        <td>{{ detalle.nrodocumento }}</td>
                                         <td>
                                             <nz-tag
                                                 *ngIf="detalle.codigoestado == '0260'"

@@ -1,13 +1,9 @@
-import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TalonariosService } from '@services/facturacion/talonarios.service';
-import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Extra } from '@global-utils/extra';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { forkJoin } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { Talonario } from '@dto/talonario.dto';
+import { TablaTalonariosComponent } from '@modules/talonarios/components/tabla-talonarios/tabla-talonarios.component';
 
 @Component({
   selector: 'app-vista-talonarios',
@@ -16,13 +12,16 @@ import { Talonario } from '@dto/talonario.dto';
 })
 export class VistaTalonariosComponent implements OnInit {
 
-  pageIndex: number = 1;
+  @ViewChild(TablaTalonariosComponent)
+  tablaTalonariosComp!: TablaTalonariosComponent;
+
+  /*pageIndex: number = 1;
   pageSize: number = 10;
   totalRegisters: number = 0;
   sortStr: string | null = '+id';
   tableLoading: boolean = false;
 
-  lstTalonarios: Talonario[] = [];
+  lstTalonarios: Talonario[] = [];*/
 
   constructor(
     private talonariosSrv: TalonariosService,
@@ -35,7 +34,7 @@ export class VistaTalonariosComponent implements OnInit {
     //this.cargarDatos();
   }
 
-  cargarDatos(){
+  /*cargarDatos(){
     this.tableLoading = true;
     forkJoin({
       talonarios: this.talonariosSrv.get(this.getHttpParams()),
@@ -95,6 +94,10 @@ export class VistaTalonariosComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     });
+  }*/
+
+  recargar(){
+    this.tablaTalonariosComp.cargarDatos();
   }
 
 }

@@ -31,6 +31,7 @@ export class Venta {
     idusuarioregistrocobro: number | null = null;
     usuarioregistrocobro: string | null = null;
     detalles: DetalleVenta [] = [];
-    idestadofacturaelectronica: number | null = null;
+    idestadodte: number | null = null;
+    fechacambioestadodte: string | null = null;
     iddte: number | null = null;
 }

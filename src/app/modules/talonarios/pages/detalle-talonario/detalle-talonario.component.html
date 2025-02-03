@@ -33,18 +33,58 @@
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                    Tipo
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Seleccione el tipo de documento">
+                    <nz-select
+                        style="width: 100%;"
+                        formControlName="tipodocumento"
+                        nzPlaceHolder="Seleccionar"
+                        nzAllowClear>
+                        <nz-option [nzLabel]="'Factura'" [nzValue]="'FAC'"></nz-option>
+                        <nz-option [nzLabel]="'Nota de Crédito'" [nzValue]="'NCR'"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
                 <nz-form-label nzRequired [appNzColResponsiveSizes]="LABEL_SIZES">Timbrado</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Ingrese el timbrado. Máx. 8 dígitos.">
-                    <nz-input-number style="width: 100%;" [nzMin]="1" [nzMax]="99999999" [nzStep]="1"
-                        formControlName="timbrado">
-                    </nz-input-number>
+                    <nz-select
+                        formControlName="nrotimbrado"
+                        nzPlaceHolder="Seleccionar..."
+                        nzAllowClear
+                        style="width: 100%;">
+                        <nz-option
+                            *ngFor="let timbrado of lstTimbrados"
+                            [nzValue]="timbrado.nrotimbrado"
+                            [nzLabel]="timbrado.nrotimbrado"
+                            nzCustomContent>
+                                <span>{{ timbrado.nrotimbrado }}</span>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <span>
+                                    {{ timbrado.fechainiciovigencia | date: 'dd/MM/yy'}}
+                                </span>
+                                <span *ngIf="timbrado.fechavencimiento">al</span>
+                                <span *ngIf="timbrado.fechavencimiento">
+                                    {{ timbrado.fechavencimiento| date: 'dd/MM/yy'}}
+                                </span>
+                                <nz-divider nzType="vertical"></nz-divider>
+                                <span>
+                                    <nz-tag *ngIf="timbrado.electronico" nzColor="purple">ELE</nz-tag>
+                                    <nz-tag *ngIf="!timbrado.electronico" nzColor="geekblue">PRE</nz-tag>
+                                </span>
+                        </nz-option>
+                    </nz-select>
                 </nz-form-control>
             </nz-form-item>
             <nz-form-item>
                 <nz-form-label
                     [appNzColResponsiveSizes]="LABEL_SIZES"
                     nzRequired>
-                    Cód. Establecimiento
+                    Establecimiento
                 </nz-form-label>
                 <nz-form-control
                     [appNzColResponsiveSizes]="CONTROL_SIZES"
@@ -66,7 +106,7 @@
             </nz-form-item>
 
             <nz-form-item>
-                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Cód. Punto Emisión</nz-form-label>
+                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Punto Emisión</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
                     nzErrorTip="Ingrese el códígo de punto de emision. Máx. 3 dígitos.">
                     <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
@@ -74,30 +114,6 @@
                             [nzParser]="parserNroPrefijo" [nzMin]="1" [nzMax]="999" [nzStep]="1"
                             style="width: 100%;" formControlName="codPuntoEmision">
                         </nz-input-number>
-                    </div>
-                </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
-                    Inicio vigencia
-                </nz-form-label>
-                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
-                    nzErrorTip="Ingrese la fecha de inicio de vigencia del timbrado.">
-                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
-                        <nz-date-picker style="width: 100%;" [nzFormat]="'dd/MM/yyyy'"
-                            formControlName="iniciovigencia"></nz-date-picker>
-                    </div>
-                </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item *ngIf="!form.controls.electronico.value">
-                <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Vencimiento</nz-form-label>
-                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
-                    nzErrorTip="Ingrese la fecha de vencimiento del timbrado.">
-                    <div nz-col [appNzColResponsiveSizes]="SMALL_CONTROL_SIZES">
-                        <nz-date-picker style="width: 100%;" [nzFormat]="'dd/MM/yyyy'"
-                            formControlName="vencimiento"></nz-date-picker>
                     </div>
                 </nz-form-control>
             </nz-form-item>
@@ -114,7 +130,7 @@
                     </div>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item *ngIf="!form.controls.electronico.value">
+            <nz-form-item *ngIf="!(form.controls.nrotimbrado.value | isTimbradoElectronico:lstTimbrados)">
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Nro. Final</nz-form-label>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES"
                     nzErrorTip="Ingrese el número final. Máx. 7 dígitos y mayor al nro. inicial.">
@@ -139,7 +155,7 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <nz-form-item *ngIf="!form.controls.electronico.value">
+            <nz-form-item *ngIf="!(form.controls.nrotimbrado.value | isTimbradoElectronico:lstTimbrados)">
                 <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
                     Formato de impresión
                 </nz-form-label>
@@ -158,13 +174,6 @@
                 <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
                 <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
                     <label nz-checkbox formControlName="activo">Activo</label>
-                </nz-form-control>
-            </nz-form-item>
-
-            <nz-form-item>
-                <span nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></span>
-                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
-                    <label nz-checkbox formControlName="electronico">Factura Electrónica</label>
                 </nz-form-control>
             </nz-form-item>
 

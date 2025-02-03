@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Talonario } from '@dto/talonario.dto';
+import { Talonario } from '@dto/facturacion/talonario.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { finalize } from 'rxjs';

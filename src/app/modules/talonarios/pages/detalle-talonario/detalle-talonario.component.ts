@@ -7,13 +7,15 @@ import { ActivatedRoute } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { FormatosFacturasService } from '@services/formatos-facturas.service';
 import { HttpParams } from '@angular/common/http';
-import { finalize } from 'rxjs';
+import { catchError, defer, finalize, forkJoin, mergeMap, Observable, of } from 'rxjs';
 import { ResponsiveSizes } from '@global-utils/responsive/responsive-sizes.interface';
 import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { FormatoFacturaDTO } from '@dto/formato-factura.dto';
-import { Talonario } from '@dto/talonario.dto';
+import { Talonario } from '@dto/facturacion/talonario.dto';
 import { EstablecimientosService } from '@services/facturacion/establecimientos.service';
 import { EstablecimientoDTO } from '@dto/facturacion/establecimiento.dto';
+import { TimbradoDTO } from '@dto/facturacion/timbrado.dto';
+import { TimbradosService } from '@services/facturacion/timbrados.service';
 
 @Component({
   selector: 'app-detalle-talonario',
@@ -41,20 +43,21 @@ export class DetalleTalonarioComponent implements OnInit {
 
   lstFormatos: FormatoFacturaDTO[] = [];
   lstEstablecimientos: EstablecimientoDTO[] = [];
+  
+  lstTimbrados: TimbradoDTO[] = [];
+  loadingTimbrados: boolean = false;
 
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
     codEstablecimiento: new FormControl(null, [Validators.required, Validators.max(999), Validators.min(1)]),
     codPuntoEmision: new FormControl(null, [Validators.required, Validators.max(999), Validators.min(1)]),
-    timbrado: new FormControl(null, [Validators.required, Validators.max(99999999), Validators.min(1)]),
+    nrotimbrado: new FormControl(null, [Validators.required, Validators.max(99999999), Validators.min(1)]),
     nroInicial: new FormControl(null, [Validators.required, Validators.min(1), Validators.max(9999999)]),
     nroFinal: new FormControl(null, [Validators.min(1), Validators.max(9999999)]),
     ultNroUsado: new FormControl(null, [Validators.max(9999999)]),
-    vencimiento: new FormControl(null, null),
-    iniciovigencia: new FormControl(null, [Validators.required]),
     activo: new FormControl(true, [Validators.required]),
-    electronico: new FormControl(false, [Validators.required]),
-    idformato: new FormControl()
+    idformato: new FormControl(),
+    tipodocumento: new FormControl<string | null>(null, [Validators.required])
   });
 
   constructor(
@@ -64,44 +67,98 @@ export class DetalleTalonarioComponent implements OnInit {
     private notif: NzNotificationService,
     private aroute: ActivatedRoute,
     private formatosFacturasSrv: FormatosFacturasService,
-    private establecimientosSrv: EstablecimientosService
+    private establecimientosSrv: EstablecimientosService,
+    private timbradosSrv: TimbradosService
   ) { }
 
   ngOnInit(): void {
     this.cargarEstablecimientos();
     const idtim = this.aroute.snapshot.paramMap.get('idtalonario');
     this.idtalonario = Number.isInteger(Number(idtim)) ? `${idtim}` : 'nuevo';
-    if(this.idtalonario != 'nuevo') this.cargarDatos();
-    
-    this.form.get('nroInicial')?.valueChanges.subscribe((nroInicio: number | null) => {
-      this.form.get('nroFinal')?.clearValidators();
-      this.form.get('ultNroUsado')?.clearValidators();
-      const nroFin: number | null = this.form.get('nroFinal')?.value;
-      this.form.get('nroFinal')?.setValidators([Validators.min(nroInicio ?? 1), Validators.max(9999999)]);
-      if (nroInicio) {
-        this.form.get('ultNroUsado')?.setValidators([Validators.min(nroInicio), Validators.max(nroFin ?? 9999999)]);
-      } else {
-        this.form.get('ultNroUsado')?.setValidators([Validators.max(nroFin ?? 9999999)]);
-      }
+    const observables: {
+      timbrados: Observable<TimbradoDTO[]>,
+      talonario?: Observable<Talonario>
+    } = {
+      timbrados: this.cargarTimbradosObs()
+    }
+    if(this.idtalonario != 'nuevo') observables.talonario = this.cargarDatosObs(Number(this.idtalonario))
 
+    forkJoin(observables)
+    .pipe(mergeMap(resp => {
+      //Verificar si el nro timbrado del talonario esta en la lista y anexar de ser necesario
+      if(
+        resp.talonario != null &&
+        !resp.timbrados.some(t => t.nrotimbrado == resp.talonario?.nrotimbrado)
+      ) return this.timbradosSrv.getByNroTimbrado(resp.talonario?.nrotimbrado ?? -1)
+        .pipe(mergeMap(timb => of({
+            timbrados: resp.timbrados.concat([timb]),
+            talonario: resp.talonario
+          })
+        ));
+      else return of(resp);
+    }))
+    .subscribe(resp => {
+      this.cargarTimbradosNext(resp.timbrados);
+      if(resp.talonario != null) this.cargarDatosNext(resp.talonario);
     });
-    this.form.get('nroFinal')?.valueChanges.subscribe((nroFin: number | null) => {
-      this.form.get('ultNroUsado')?.clearValidators();
-      const nroInicio: number | null = this.form.get('nroInicial')?.value;
+    
+    this.asignarListeners();
+    this.cargarFormatos();
+    this.cargarTimbrados();
+  }
+
+  private asignarListeners(){
+    this.form.controls.nroInicial.valueChanges.subscribe((nroInicio: number | null) => {
+      this.form.controls.nroFinal.clearValidators();
+      this.form.controls.ultNroUsado.clearValidators();
+      const nroFin: number | null = this.form.controls.nroFinal.value;
+      this.form.controls.nroFinal.setValidators([Validators.min(nroInicio ?? 1), Validators.max(9999999)]);
       if (nroInicio) {
-        this.form.get('ultNroUsado')?.setValidators([Validators.min(nroInicio), Validators.max(nroFin ?? 9999999)]);
+        this.form.controls.ultNroUsado.setValidators([Validators.min(nroInicio), Validators.max(nroFin ?? 9999999)]);
       } else {
-        this.form.get('ultNroUsado')?.setValidators([Validators.max(nroFin ?? 9999999)]);
+        this.form.controls.ultNroUsado.setValidators([Validators.max(nroFin ?? 9999999)]);
       }
     });
-    this.form.controls.electronico.valueChanges.subscribe(value => {
-      if(!value) return;
+
+    this.form.controls.nroFinal.valueChanges.subscribe((nroFin: number | null) => {
+      this.form.controls.ultNroUsado.clearValidators();
+      const nroInicio: number | null = this.form.controls.nroInicial.value;
+      if (nroInicio) {
+        this.form.controls.ultNroUsado.setValidators([Validators.min(nroInicio), Validators.max(nroFin ?? 9999999)]);
+      } else {
+        this.form.controls.ultNroUsado.setValidators([Validators.max(nroFin ?? 9999999)]);
+      }
+    });
+    this.form.controls.nrotimbrado.valueChanges.subscribe(value => {
+      let electronico = this.lstTimbrados.find(t => t.nrotimbrado == value)?.electronico ?? false;
+      if(!electronico) return;
 
       this.form.controls.idformato.reset();
-      this.form.controls.vencimiento.reset();
       this.form.controls.nroFinal.setValue(9999999);
-    })
-    this.cargarFormatos();
+    });
+  }
+
+  private cargarTimbradosObs(): Observable<TimbradoDTO[]>{
+    const params = new HttpParams()
+      .append('sort', '-fechainiciovigencia')
+      .append('eliminado', false)
+      .append('activo', true);
+    return defer(() => {
+      this.loadingTimbrados = true;
+      return this.timbradosSrv
+        .get(params)
+        .pipe(finalize(() => this.loadingTimbrados = false));
+    });
+  }
+
+  cargarTimbrados(){
+    this.cargarTimbradosObs().subscribe(timbrados => {
+      this.cargarTimbradosNext(timbrados);
+    });
+  }
+
+  private cargarTimbradosNext(timbrados: TimbradoDTO[]){
+    this.lstTimbrados = timbrados;
   }
 
   cargarFormatos(){
@@ -125,30 +182,37 @@ export class DetalleTalonarioComponent implements OnInit {
   }
 
   cargarDatos() {
-    this.formLoading = true;
-    this.talonariosSrv.getPorId(Number(this.idtalonario))
-    .pipe(finalize(() => this.formLoading = false))
-    .subscribe({
-      next: (talonario) => {
-        this.form.controls.id.setValue(talonario.id);
-        this.form.controls.codEstablecimiento.setValue(talonario.codestablecimiento);
-        this.form.controls.codPuntoEmision.setValue(talonario.codpuntoemision);
-        this.form.controls.timbrado.setValue(talonario.nrotimbrado);
-        this.form.controls.nroInicial.setValue(talonario.nroinicio);
-        this.form.controls.nroFinal.setValue(talonario.nrofin);
-        this.form.controls.ultNroUsado.setValue(talonario.ultimonrousado);
-        this.form.controls.iniciovigencia.setValue(new Date(`${talonario.fechainicio}T00:00:00`));
-        if(talonario.fechavencimiento)
-          this.form.controls.vencimiento.setValue(new Date(`${talonario.fechavencimiento}T00:00:00`));
-        this.form.controls.activo.setValue(talonario.activo);
-        this.form.controls.idformato.setValue(talonario.idformatofactura);
-        this.form.controls.electronico.setValue(talonario.electronico);
-      },
-      error: (e) => {
-        console.error('Error al consultar talonario por id', e);
-        this.httpErrorHandler.process(e);
-        this.formLoading = false;
-      }
+    this.cargarDatosObs(Number(this.idtalonario)).subscribe(talonario => {
+        this.cargarDatosNext(talonario);
+    });
+  }
+
+  private cargarDatosNext(talonario: Talonario){
+    this.form.controls.id.setValue(talonario.id);
+    this.form.controls.codEstablecimiento.setValue(talonario.codestablecimiento);
+    this.form.controls.codPuntoEmision.setValue(talonario.codpuntoemision);
+    this.form.controls.nrotimbrado.setValue(talonario.nrotimbrado);
+    this.form.controls.nroInicial.setValue(talonario.nroinicio);
+    this.form.controls.nroFinal.setValue(talonario.nrofin);
+    this.form.controls.ultNroUsado.setValue(talonario.ultimonrousado);
+    this.form.controls.activo.setValue(talonario.activo);
+    this.form.controls.idformato.setValue(talonario.idformatofactura);
+    this.form.controls.tipodocumento.setValue(talonario.tipodocumento);
+  }
+
+  private cargarDatosObs(idtalonario: number): Observable<Talonario> {
+    return defer(() => {
+      this.formLoading = true;
+      return this.talonariosSrv
+        .getPorId(idtalonario)
+        .pipe(
+          finalize(() => this.formLoading = false),
+          catchError(e => {
+            console.log('Error al cargar talonario', e);
+            this.notif.error('Error al consultar talonario por id', e);
+            throw e;
+          })
+        );
     });
   }
 
@@ -201,16 +265,13 @@ export class DetalleTalonarioComponent implements OnInit {
     t.id = this.form.controls.id.value;
     t.codestablecimiento = this.form.controls.codEstablecimiento.value;
     t.codpuntoemision = this.form.controls.codPuntoEmision.value;
-    t.nrotimbrado = this.form.controls.timbrado.value;
+    t.nrotimbrado = this.form.controls.nrotimbrado.value;
     t.nroinicio = this.form.controls.nroInicial.value;
     t.nrofin = this.form.controls.nroFinal.value;
     t.ultimonrousado = this.form.controls.ultNroUsado.value;
-    if(this.form.controls.vencimiento.value)
-      t.fechavencimiento = formatDate(this.form.controls.vencimiento.value, 'yyyy-MM-dd', this.locale);
-    t.fechainicio = formatDate(this.form.controls.iniciovigencia.value, 'yyyy-MM-dd', this.locale);
-    t.activo = this.form.get('activo')?.value;
-    t.idformatofactura = this.form.get('idformato')?.value;
-    t.electronico = this.form.get('electronico')?.value;
+    t.activo = this.form.controls.activo.value;
+    t.idformatofactura = this.form.controls.idformato.value;
+    t.tipodocumento = this.form.controls.tipodocumento.value;
     return t;
   }
 

@@ -8,10 +8,10 @@ import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { finalize, forkJoin } from 'rxjs';
-import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
+import { DTEFileUtilsService } from '@services/sifen-utils/dte-file-utils.service';
 import { ResponsiveSizes } from '@util/responsive/responsive-sizes.interface';
-import { FacturaElectronicaDTO } from '@dto/facturacion/factura-electronica.dto';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { DteDTO } from '@dto/facturacion/factura-electronica.dto';
+import { ModalButtonOptions, NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { DecimalPipe, formatDate } from '@angular/common';
 
 @Component({
@@ -20,6 +20,9 @@ import { DecimalPipe, formatDate } from '@angular/common';
   styleUrls: ['./tabla-ventas.component.scss']
 })
 export class TablaVentasComponent implements OnInit {
+
+  private readonly SEIS_MESES_MILLIS = 15778476000;
+  private readonly DOS_DIAS_MILLIS = 172800000;
 
   @Input()
   get paramsFiltros(): IParametroFiltro {
@@ -50,7 +53,7 @@ export class TablaVentasComponent implements OnInit {
   lstFacturasVenta: Venta[] = [];
   loadDetalleMap: Map<number, boolean> = new Map();
   loadFacturaElectronicaMap: Map<number, boolean> = new Map();
-  facturaElectronicaMap: Map<number, FacturaElectronicaDTO> = new Map();
+  facturaElectronicaMap: Map<number, DteDTO> = new Map();
 
   sortStr: string | null = '+id';
   pageIndex: number = 1;
@@ -76,12 +79,15 @@ export class TablaVentasComponent implements OnInit {
   //Fix para evitar la llamada doble a cargar ventas al abrir por primera vez
   primeraCarga: boolean = true;
 
+  //Para anulacion de factura electronica
+  modalConfirmAnulacionRef!: NzModalRef;
+
   constructor(
     @Inject(LOCALE_ID) private locale: string,
     private ventasSrv: VentasService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
-    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
+    private dteFileUtilsSrv: DTEFileUtilsService,
     private modal: NzModalService
   ) { }
 
@@ -151,7 +157,7 @@ export class TablaVentasComponent implements OnInit {
         this.facturaElectronicaMap.set(idventa, fe);
         this.lstFacturasVenta = this.lstFacturasVenta.map(fact => {
           if(fact.id == idventa){
-            fact.idestadofacturaelectronica = fe.idestadodocumento;
+            fact.idestadodte = fe.idestadodocumento;
             return fact;
           }
           return fact;
@@ -189,7 +195,6 @@ export class TablaVentasComponent implements OnInit {
       next: () => {
         const venta = this.lstFacturasVenta.find(fv => fv.id == id);
         if(venta) venta.anulado = true;
-        if(venta && venta.facturaelectronica) venta.idestadofacturaelectronica = 4;
         this.notif.create('success', '<b>Éxito<b>', 'Factura anulada correctamente');
       },
       error: (e) => {
@@ -199,19 +204,53 @@ export class TablaVentasComponent implements OnInit {
     });
   }
 
+  private anularConCancelacion(id: number): void {
+    console.log('anular con cancelacion')
+    this.anulandoMap.set(id, true);
+    this.ventasSrv.cancelar(id)
+    .pipe(finalize(() => this.anulandoMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        const venta = this.lstFacturasVenta.find(fv => fv.id == id);
+        if(venta) venta.anulado = true;
+        if(venta && venta.facturaelectronica) venta.idestadodte = 4;
+        this.notif.create('success', '<b>Éxito<b>', 'Factura cancelada correctamente');
+      },
+      error: (e) => {
+        console.error('Error al anular factura', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+  }
+
+  private anularConNotaCredito(id: number): void {
+    this.anulandoMap.set(id, true);
+    this.ventasSrv.anularConNotaCredito(id)
+    .pipe(finalize(() => this.anulandoMap.set(id, false)))
+    .subscribe({
+      next: () => {
+        this.notif.create('success', '<b>Éxito<b>', 'Nota de crédito generada correctamente');
+      },
+      error: (e) => {
+        console.error('Error al anular factura con nota de credito', e);
+        this.httpErrorHandler.process(e);
+      }
+    });
+  }
+
   confirmarEliminacion(fv: Venta){
     let content = this.getResumenVenta(fv);
     if(fv.facturaelectronica){
-      if(fv.idestadofacturaelectronica == 1 || fv.idestadofacturaelectronica == 2){
+      if(fv.idestadodte == 1 || fv.idestadodte == 2){
         this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica aprobada por SIFEN');
         return;
       }
   
-      if(fv.idestadofacturaelectronica == 4){
+      if(fv.idestadodte == 4){
         this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica anulada (cancelada)');
         return;
       }
-      if(fv.idestadofacturaelectronica == 32){
+      if(fv.idestadodte == 32){
         this.notif.error('<strong>No se puede eliminar</strong>', 'La factura electrónica enviada a SIFEN');
         return;
       }
@@ -276,8 +315,8 @@ export class TablaVentasComponent implements OnInit {
     .subscribe({
       next: (dte) => {
         const venta = this.lstFacturasVenta.find(v => v.id == idventa);
-        const nombrearchivo = venta != null ? `${venta.prefijofactura}-${(venta.nrofactura ?? 0).toString().padStart(7, '0')}` : 'factura'
-        this.facturaElectronicaUtilsSrv.downloadDTE(dte, nombrearchivo);
+        const nombrearchivo = venta != null ? `FACTURA-${venta.prefijofactura}-${(venta.nrofactura ?? 0).toString().padStart(7, '0')}` : 'factura'
+        this.dteFileUtilsSrv.downloadDTE(dte, nombrearchivo);
       },
       error: (e) => {
         console.error("Error al descargar DTE de factura electrónica", e);
@@ -297,7 +336,7 @@ export class TablaVentasComponent implements OnInit {
       next: (kude) => {
         const venta = this.lstFacturasVenta.find(v => v.id == idventa);
         const nombrearchivo = venta != null ? `${venta.prefijofactura}-${(venta.nrofactura ?? 0).toString().padStart(7, '0')}` : 'factura'
-        this.facturaElectronicaUtilsSrv.downloadKUDE(kude, nombrearchivo);
+        this.dteFileUtilsSrv.downloadKUDE(kude, nombrearchivo);
       },
       error: (e) => {
         console.error("Error al descargar KuDE de factura electrónica", e);
@@ -326,16 +365,44 @@ export class TablaVentasComponent implements OnInit {
   }
 
   confirmarAnulacion(fv: Venta){
-    if(fv.facturaelectronica && fv.anulado){
-      this.notif.error('<strong>No permitido</strong>', 'No se puede revertir la anulación de una factura electrónica');
-      return;
-    }
+    if(!fv.facturaelectronica) this.confirmarAnulacionPreimpreso(fv);
+    else this.confirmarAnulacionElectronica(fv);
+  }
 
-    if(fv.facturaelectronica && fv.idestadofacturaelectronica != 1 && fv.idestadofacturaelectronica != 2){
-      this.notif.error('<strong>No se puede anular</strong>', 'La factura electrónica no fue aprobada por SIFEN');
-      return;
-    }
+  private confirmarAnulacionElectronica(fv: Venta){
+    this.modalConfirmAnulacionRef = this.modal.create({
+      nzTitle: `¿Desea anular la factura electrónica?`,
+      nzContent: 
+        `<p><strong>Factura:</strong> ${this.getResumenVenta(fv)}</p>
+        <p><strong>Obs:</strong> Se recomienda anular mediante «Cancelación». Pasadas las 48Hs de la aprobación del documento por SIFEN se debe anular mediante Nota de Crédito.</p>`,
+      nzFooter: [
+        {
+          label: 'Cancelar',
+          onClick: () => this.modalConfirmAnulacionRef?.close()
+        },
+        {
+          label: 'Generar Nota de crédito',
+          type: 'primary',
+          danger: true,
+          onClick: () => {
+            this.anularConNotaCredito(fv.id ?? -1);
+            this.modalConfirmAnulacionRef?.close();
+          }
+        },
+        {
+          label: 'Generar Cancelación',
+          type: 'primary',
+          danger: true,
+          onClick: () => {
+            this.anularConCancelacion(fv.id ?? -1);
+            this.modalConfirmAnulacionRef?.close();
+          }
+        }
+      ]
+    })
+  }
 
+  private confirmarAnulacionPreimpreso(fv: Venta){
     this.modal.confirm({
       nzTitle: fv.anulado ? '¿Desea revertir la anulación?' : '¿Desea anular la factura?',
       nzContent: this.getResumenVenta(fv),
@@ -345,7 +412,49 @@ export class TablaVentasComponent implements OnInit {
         if(fv.anulado) this.revertirAnulacion(fv.id ?? -1)
         else this.anularFactura(fv.id ?? -1)  
       }
-    })
+    });
+  }
+
+  private validarAnulacionFacturaElec(fv: Venta): boolean {
+    if(fv.facturaelectronica && fv.anulado){
+      this.notif.error('<strong>No permitido</strong>', 'No se puede revertir la anulación de una factura electrónica');
+      return false;
+    }
+
+    if(fv.facturaelectronica && fv.idestadodte != 1 && fv.idestadodte != 2){
+      this.notif.error('<strong>No se puede anular</strong>', 'La factura electrónica no fue aprobada por SIFEN');
+      return false;
+    }
+
+    if(fv.facturaelectronica && fv.fechacambioestadodte == null){
+      this.notif.error('<strong>Error</strong>', 'No se puede obtener la fecha de aprobación de la factura electrónica');
+      return false;
+    }
+    return true;
+  }
+
+  confirmarAnulacionCancelacion(fv: Venta){
+    if(!this.validarAnulacionFacturaElec(fv)) return;
+
+    this.modal.confirm({
+      nzTitle: '¿Desea anular la factura electrónica?',
+      nzContent: this.getResumenVenta(fv),
+      nzOkDanger: true,
+      nzOkText: 'Anular',
+      nzOnOk: () => this.anularConCancelacion(fv.id ?? -1)
+    });
+  }
+
+  confirmarAnulacionNotaCredito(fv: Venta){
+    if(!this.validarAnulacionFacturaElec(fv)) return;
+
+    this.modal.confirm({
+      nzTitle: '¿Desea anular la factura electrónica con nota de crédito?',
+      nzContent: this.getResumenVenta(fv),
+      nzOkDanger: true,
+      nzOkText: 'Generar Nota',
+      nzOnOk: () => this.anularConNotaCredito(fv.id ?? -1)
+    });
   }
 
 }

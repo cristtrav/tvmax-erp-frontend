@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div nz-col>
-                    <button nz-button nzType="default" (click)="cargarDatos()">
+                    <button nz-button nzType="default" (click)="recargar()">
                         <i nz-icon nzType="reload" nzTheme="outline"></i>
                         Recargar
                     </button>
@@ -28,7 +28,8 @@
             
         </div>
         <div nz-col nzSpan="24">
-            <nz-table 
+            <app-tabla-talonarios></app-tabla-talonarios>
+            <!--<nz-table 
                 #tabla
                 [nzData]="lstTalonarios"
                 nzSize="small"
@@ -44,13 +45,14 @@
                     <tr>
                         <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
                         <th [nzColumnKey]="'nrotimbrado'" [nzSortFn]="true">Timbrado</th>
+                        <th [nzColumnKey]="'tipodocumento'" [nzSortFn]="true">Documento</th>
+                        <th [nzColumnKey]="'electronico'" [nzSortFn]="true" nzAlign="center">Tipo</th>
                         <th [nzColumnKey]="'codestablecimiento'" [nzSortFn]="true">Prefijo</th>
                         <th [nzColumnKey]="'nroinicio'" [nzSortFn]="true">Rango</th>
                         <th [nzColumnKey]="'ultimonrousado'" [nzSortFn]="true">Últ. núm usado</th>
                         <th [nzColumnKey]="'fechainicio'" [nzSortFn]="true">Inicio vigencia</th>
                         <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true">Vencimiento</th>
                         <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Estado</th>
-                        <th [nzColumnKey]="'electronico'" [nzSortFn]="true" nzAlign="center">Tipo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -58,6 +60,14 @@
                     <tr *ngFor="let t of tabla.data">
                         <td>{{ t.id }}</td>
                         <td>{{ t.nrotimbrado?.toString()?.padStart(8, '0') }}</td>
+                        <td>
+                            <span *ngIf="t.tipodocumento == 'FAC'">Factura</span>
+                            <span *ngIf="t.tipodocumento == 'NCR'">Nota de Crédito</span>
+                        </td>
+                        <td nzAlign="center">
+                            <nz-tag *ngIf="t.electronico" nzColor="purple">Electrónico</nz-tag>
+                            <nz-tag *ngIf="!t.electronico" nzColor="geekblue">Preimpreso</nz-tag>
+                        </td>
                         <td>{{ t.prefijo }}</td>
                         <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
                         <td>
@@ -73,10 +83,7 @@
                             <nz-tag *ngIf="t.activo" nzColor="green">Activo</nz-tag>
                             <nz-tag *ngIf="!t.activo" nzColor="red">Inactivo</nz-tag>
                         </td>
-                        <td nzAlign="center">
-                            <nz-tag *ngIf="t.electronico" nzColor="purple">F. Electrónica</nz-tag>
-                            <nz-tag *ngIf="!t.electronico" nzColor="geekblue">F. Preimpresa</nz-tag>
-                        </td>
+                        
                         <td>
                             <div nz-row [nzGutter]="[8, 8]">
                                 <div nz-col>
@@ -98,7 +105,7 @@
                         </td>
                     </tr>
                 </tbody>
-            </nz-table>
+            </nz-table>-->
         </div>
     </div>
 

@@ -281,10 +281,15 @@
                                     <nz-form-control
                                         [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17"
                                         [nzHasFeedback]="mostrarValidacionRuc"
+                                        nzErrorTip="El nro. de documento es requerido"
                                         nzWarningTip="RUC no encontrado en Marangatu"
                                         [nzValidateStatus]="estadoValidacionRuc">
                                         <nz-input-group [nzAddOnAfter]="dvRuc ?? ''">
-                                            <input formControlName="ci" nz-input (keydown.enter)="buscarClientePorCi($event)">
+                                            <input
+                                                formControlName="ci"
+                                                nz-input
+                                                (blur)="restaurarCiForm()"
+                                                (keydown.enter)="buscarClientePorCi($event)">
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>

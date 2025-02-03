@@ -5,7 +5,7 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { formatDate } from '@angular/common';
 import { UsuarioDTO } from '@dto/usuario.dto';
-import { Talonario } from '@dto/talonario.dto';
+import { Talonario } from '@dto/facturacion/talonario.dto';
 import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { finalize } from 'rxjs';
 import { EstadoFacturaElectronicaDTO } from '@dto/facturacion/estado-factura-electronica.dto';
@@ -270,7 +270,7 @@ export class FormFiltrosVentasComponent implements OnInit {
     }
 
     if(this.idtalonarioFiltro != null) params['idtalonario'] = this.idtalonarioFiltro;
-    if(this.idEstadoFacturaElectronicaSeleccionada != null) params['idestadofacturaelectronica'] = this.idEstadoFacturaElectronicaSeleccionada
+    if(this.idEstadoFacturaElectronicaSeleccionada != null) params['idestadodte'] = this.idEstadoFacturaElectronicaSeleccionada
     return params;
   }
 

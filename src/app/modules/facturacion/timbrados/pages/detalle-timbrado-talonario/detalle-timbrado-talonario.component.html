@@ -1,0 +1,45 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/timbrados">Timbrados</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app/timbrados', nrotimbrado]">{{ nrotimbrado }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['/app/timbrados', nrotimbrado, 'talonarios']">Talonarios</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idtalonario | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div header-extra *ngIf="timbrado">
+        <nz-tag nzColor="magenta">
+            <span>F. Inicio</span>
+            <nz-divider nzType="vertical"></nz-divider>
+            <strong>{{ timbrado.fechainiciovigencia | date:'dd/MM/yyyy' }}</strong>
+        </nz-tag>
+        <nz-tag nzColor="magenta" *ngIf="timbrado.fechavencimiento != null">
+            <span>F. Vencimiento</span>
+            <nz-divider nzType="vertical"></nz-divider>
+            <strong>{{ timbrado.fechavencimiento | date:'dd/MM/yyyy' }}</strong>
+        </nz-tag>
+        <nz-tag *ngIf="timbrado.electronico" nzColor="magenta">
+            <strong>Electrónico</strong>
+        </nz-tag>
+        <nz-tag *ngIf="!timbrado.electronico" nzColor="magenta">
+            <strong>Preimpreso</strong>
+        </nz-tag>
+    </div>
+
+    <app-form-talonario
+        [nrotimbrado]="nrotimbrado"
+        (onEditTalonario)="onEditTalonario($event)">
+    </app-form-talonario>
+
+</app-workspace-layout>

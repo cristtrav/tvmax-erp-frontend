@@ -1,15 +1,13 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { DetalleLoteDTO } from '@dto/facturacion/detalle-lote.dto';
+import { LoteDetalleDTO } from '@dto/facturacion/lote-detalle.dto';
 import { LoteFacturaDTO } from '@dto/facturacion/lote-factura.dto';
 import { LotesFacturasService } from '@services/facturacion/lotes-facturas.service';
-import { SifenService } from '@services/facturacion/sifen.service';
-import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { Extra } from '@util/extra';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { finalize, forkJoin, pipe } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vista-lotes-facturas',
@@ -32,7 +30,7 @@ export class VistaLotesFacturasComponent implements OnInit {
 
   expandSet = new Set<number>();
   loadingDetallesMap = new Map<number, boolean>();
-  detallesMap = new Map<number, DetalleLoteDTO[]>();
+  detallesMap = new Map<number, LoteDetalleDTO[]>();
 
   constructor(
     private lotesFacturasSrv: LotesFacturasService,
@@ -125,7 +123,7 @@ export class VistaLotesFacturasComponent implements OnInit {
   confirmarGenerarLotes(){
     this.modal.confirm({
       nzTitle: '¿Desea generar lotes?',
-      nzContent: 'Se generarán lotes para las facturas electrónicas pendientes de envío a SIFEN. Máx. 50 c/u',
+      nzContent: 'Se generarán lotes para los documentos electrónicos pendientes de envío a SIFEN. Máx. 50 c/u',
       nzOkText: 'Generar',
       nzOnOk: () => this.generarLotes()
     });
@@ -134,7 +132,7 @@ export class VistaLotesFacturasComponent implements OnInit {
   confirmarEnvio(lote: LoteFacturaDTO){
     this.modal.confirm({
       nzTitle: '¿Desea enviar el lote?',
-      nzContent: `Se enviará a SIFEN el lote con ${lote.cantidadfacturas} ${lote.cantidadfacturas == 1 ? 'factura':'facturas'}`,
+      nzContent: `Se enviará a SIFEN el lote con ${lote.cantidadfacturas} ${lote.cantidadfacturas == 1 ? 'documento':'documentos'}`,
       nzOkText: 'Enviar',
       nzOnOk: () => this.enviarLote(lote.id)
     });

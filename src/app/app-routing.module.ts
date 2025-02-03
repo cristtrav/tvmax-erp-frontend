@@ -196,6 +196,18 @@ const routes: Routes = [
         data: { idfuncionalidad: 1220, name: 'Lotes Facturas'},
         canActivate: [canAccessFn],
         loadChildren: () => import('./modules/tributacion/lotes-facturas/lotes-facturas.module').then(m => m.LotesFacturasModule)
+      },
+      {
+        path: 'notascredito',
+        data: { idfuncionalidad: 1300, name: 'Notas de Crédito'},
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/facturacion/notas-credito/notas-credito.module').then(m => m.NotasCreditoModule)
+      },
+      {
+        path: 'timbrados',
+        data: { idfuncionalidad: 1360, name: 'Timbrados' },
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/facturacion/timbrados/timbrados.module').then(m => m.TimbradosModule)
       }
     ]
   },

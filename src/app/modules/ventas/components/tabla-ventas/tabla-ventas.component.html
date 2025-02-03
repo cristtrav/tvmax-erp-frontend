@@ -4,12 +4,12 @@
     <thead>
         <tr>
             <th nzWidth="60px"></th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
             <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
             <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
-            <th [nzColumnKey]="'fechafactura'" [nzSortFn]="true" [nzSortOrder]="'descend'">F. Factura</th>
+            <th [nzColumnKey]="'fechafactura'" [nzSortFn]="true">F. Factura</th>
             <th [nzColumnKey]="'total'" [nzSortFn]="true">Total</th>
             <th>Estado</th>
-            <th [nzColumnKey]="'fechacobro'" [nzSortFn]="true">F. Cobro</th>
             <th [nzColumnKey]="'nrofactura'" [nzSortFn]="true">Nro. Factura</th>
             <th>Acciones</th>
         </tr>
@@ -18,6 +18,7 @@
         <ng-container *ngFor="let fv of tablaVentas.data">
             <tr>
                 <td [nzExpand]="expandSet.has(fv.id ?? 0)" (nzExpandChange)="onExpandChange(fv.id ?? 0, $event)"></td>
+                <td>{{ fv.id }}</td>
                 <td>
                     <span *ngIf="fv.ci == null" nz-typography nzType="secondary">(sin CI/RUC)</span>
                     <span *ngIf="fv.dvruc == null">{{ fv.ci | number }}</span>
@@ -48,7 +49,7 @@
                             PAG
                         </nz-tag>
                     </ng-container>
-                    <ng-container *ngIf="fv.idestadofacturaelectronica as estado">
+                    <ng-container *ngIf="fv.idestadodte as estado">
                         <nz-tag *ngIf="estado == 1 || estado == 2"
                             nzColor="green"
                             nz-tooltip nzTooltipTitle="Aprobado por SIFEN">
@@ -77,10 +78,6 @@
                     </ng-container>
                 </td>
                 <td>
-                    <span *ngIf="fv.fechacobro">{{ fv.fechacobro | date: 'dd/MM/yy' }}</span>
-                    <span *ngIf="!fv.fechacobro" nz-typography nzType="secondary">(sin fecha)</span>
-                </td>
-                <td>
                     <span *ngIf="!fv.prefijofactura && !fv.nrofactura" nz-typography nzType="secondary">(sin factura)</span>
                     <span *ngIf="fv.prefijofactura && fv.nrofactura">
                         {{ fv.prefijofactura }}-{{ fv.nrofactura | paddingZeros: 7 }}
@@ -90,11 +87,12 @@
                     <div nz-row [nzGutter]="[8, 8]">
                         <div nz-col>
                             <button
+                                [disabled]="fv | botonAnularDisabled"
                                 nz-button
                                 nz-tooltip
                                 [nzLoading]="anulandoMap.get(fv.id ?? -1)"
                                 [nzType]="'default'"
-                                [nzTooltipTitle]="fv.anulado?'Revertir anulacion':'Anular factura'"
+                                [nzTooltipTitle]="fv | botonAnularTooltip"
                                 (click)="confirmarAnulacion(fv)">
                                 <i nz-icon nzTheme="outline" [nzType]="fv.anulado?'undo':'minus-circle'"></i>
                             </button>
@@ -111,10 +109,11 @@
                         </div>
                         <div nz-col>
                             <button
+                                [disabled]="fv | botonEliminarDisabled"                            
                                 nz-tooltip
                                 nz-button
                                 nzType="primary"
-                                nzTooltipTitle="Eliminar factura"
+                                [nzTooltipTitle]="fv | botonEliminarTooltip"
                                 nzOkText="Eliminar"
                                 nzDanger
                                 (click)="confirmarEliminacion(fv)">
@@ -140,6 +139,11 @@
                             <nz-descriptions-item [nzTitle]="titulocobrador">
                                 <ng-template #titulocobrador><strong>Cobrador</strong></ng-template>
                                 {{ fv.cobrador }}
+                            </nz-descriptions-item>
+                            <nz-descriptions-item [nzTitle]="tituloFechaCobro">
+                                <ng-template #tituloFechaCobro><strong>Fecha de cobro</strong></ng-template>
+                                <span *ngIf="fv.fechacobro">{{ fv.fechacobro | date: 'dd/MM/yy' }}</span>
+                                <span *ngIf="!fv.fechacobro" nz-typography nzType="secondary">(sin fecha)</span>
                             </nz-descriptions-item>
                             <nz-descriptions-item [nzTitle]="titulousuarioreg">
                                 <ng-template #titulousuarioreg><strong>Cobro registrado por</strong></ng-template>
@@ -233,7 +237,7 @@
                                     </nz-descriptions-item>
                                 </ng-container>
                                 <nz-descriptions-item
-                                    *ngIf="!fv.anulado && fv.idestadofacturaelectronica != 30 && fv.idestadofacturaelectronica != 4"
+                                    *ngIf="!fv.anulado && fv.idestadodte != 30 && fv.idestadodte != 4"
                                     [nzTitle]="tituloConsultarSifen">
                                     <ng-template #tituloConsultarSifen>
                                         <strong>Sincronizar</strong>

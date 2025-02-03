@@ -1,0 +1,99 @@
+<app-workspace-layout [isForm]="true">
+
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/timbrados">Timbrados</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ nrotimbrado | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <nz-spin [nzSpinning]="cargandoDatos">
+        <form nz-form [formGroup]="form">
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    Nro. timbrado
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese el nro. de timbrado">
+                    <nz-input-number style="width: 100%;" formControlName="nrotimbrado">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES"
+                    nzRequired>
+                    Fecha inicio
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese la fecha de inicio de vigencia">
+                    <nz-date-picker
+                        nzFormat="dd/MMM/yyyy"
+                        formControlName="fechaInicio"
+                        style="width: 100%;"
+                        [nzDisabledDate]="disabledStartDate">
+                    </nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label
+                    [appNzColResponsiveSizes]="LABEL_SIZES">
+                    Fecha vencimiento
+                </nz-form-label>
+                <nz-form-control
+                    [appNzColResponsiveSizes]="CONTROL_SIZES"
+                    nzErrorTip="Ingrese la fecha de vencimiento">
+                    <nz-date-picker
+                        [nzDisabledDate]="disabledEndDate"
+                        nzFormat="dd/MMM/yyyy"
+                        formControlName="fechaVencimiento"
+                        style="width: 100%;">
+                    </nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <div nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></div>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="electronico">Electronico</label>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <div nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></div>
+                <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES">
+                    <label nz-checkbox formControlName="activo">Activo</label>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-col [appNzColResponsiveSizes]="ACTION_SIZES">
+                <div nz-row nzJustify="end" [nzGutter]="[8,8]">
+                    <div nz-col *ngIf="nrotimbrado != 'nuevo'">
+                        <button nz-button nzType="default" routerLink="talonarios">
+                            <i nz-icon nzType="snippets" nzTheme="outline"></i>
+                            Talonarios
+                        </button>
+                    </div>
+                    <div nz-col>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            [nzLoading]="guardando"
+                            (click)="guardar()">
+                            <i nz-icon nzType="save" nzTheme="outline"></i>
+                            {{ nrotimbrado == 'nuevo' ? 'Registrar' : 'Editar'}}
+                        </button>
+                    </div>
+                </div>
+                
+            </nz-col>
+        </form>
+    </nz-spin>
+
+</app-workspace-layout>

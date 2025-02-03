@@ -1,5 +1,6 @@
-export interface FacturaElectronicaDTO{
+export interface DteDTO{
     id: number;
+    tipodocumento: string;
     firmado: boolean;
     version: number;
     idestadodocumento: number;

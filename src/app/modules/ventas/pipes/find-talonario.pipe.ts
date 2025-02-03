@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Talonario } from '@dto/talonario.dto';
+import { Talonario } from '@dto/facturacion/talonario.dto';
 
 @Pipe({
   name: 'findTalonario'

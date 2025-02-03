@@ -42,14 +42,24 @@ export class AppSettings {
           name: 'POS Móvil',
           routerLink: '/app/posmovil'
         },
-        {
+        /*{
           id: 244,
           name: 'Talonarios',
           routerLink: '/app/talonarios',
+        },*/
+        {
+          id: 1300,
+          name: 'Notas de crédito',
+          routerLink: '/app/notascredito'
+        },
+        {
+          id: 1360,
+          name: 'Timbrados',
+          routerLink: '/app/timbrados'
         },
         {
           id: 1220,
-          name: 'Lotes facturas',
+          name: 'Lotes SIFEN',
           routerLink: '/app/lotesfacturas'
         }
       ]

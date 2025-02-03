@@ -1,0 +1,84 @@
+<nz-table 
+    #tabla
+    [nzData]="lstTalonarios"
+    nzSize="small"
+    [nzLoading]="tableLoading"
+    [nzShowPagination]="true"
+    [nzShowSizeChanger]="true"
+    [nzFrontPagination]="false"
+    [nzPageIndex]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzTotal]="totalRegisters"
+    [nzFooter]="tableFooter"
+    (nzQueryParams)="onTableQueryParamsChange($event)">
+    <thead>
+        <tr>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+            <th [nzColumnKey]="'nrotimbrado'" [nzSortFn]="true" *ngIf="colNroTimbradoVisible">Timbrado</th>
+            <th [nzColumnKey]="'tipodocumento'" [nzSortFn]="true">Documento</th>
+            <th [nzColumnKey]="'electronico'" [nzSortFn]="true" nzAlign="center" *ngIf="colTipoVisible">Tipo</th>
+            <th [nzColumnKey]="'codestablecimiento'" [nzSortFn]="true">Prefijo</th>
+            <th [nzColumnKey]="'nroinicio'" [nzSortFn]="true">Rango</th>
+            <th [nzColumnKey]="'ultimonrousado'" [nzSortFn]="true">Últ. núm usado</th>
+            <th [nzColumnKey]="'fechainicio'" [nzSortFn]="true" *ngIf="colFechaInicioVisible">Inicio vigencia</th>
+            <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" *ngIf="colFechaVencimientoVisible">Vencimiento</th>
+            <th [nzColumnKey]="'activo'" [nzSortFn]="true" nzAlign="center">Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let t of tabla.data">
+            <td>{{ t.id }}</td>
+            <td *ngIf="colNroTimbradoVisible">
+                {{ t.nrotimbrado?.toString()?.padStart(8, '0') }}
+            </td>
+            <td>
+                <span *ngIf="t.tipodocumento == 'FAC'">Factura</span>
+                <span *ngIf="t.tipodocumento == 'NCR'">Nota de Crédito</span>
+            </td>
+            <td nzAlign="center" *ngIf="colTipoVisible">
+                <nz-tag *ngIf="t.electronico" nzColor="purple">Electrónico</nz-tag>
+                <nz-tag *ngIf="!t.electronico" nzColor="geekblue">Preimpreso</nz-tag>
+            </td>
+            <td>{{ t.prefijo }}</td>
+            <td>{{ t.nroinicio?.toString()?.padStart(7, '0') }} al {{ t.nrofin?.toString()?.padStart(7, '0') }}</td>
+            <td>
+                <span *ngIf="t.ultimonrousado">{{ t.ultimonrousado.toString().padStart(7, '0') }}</span>
+                <span *ngIf="!t.ultimonrousado" nz-typography nzType="secondary">(ninguno)</span>
+            </td>
+            <td *ngIf="colFechaInicioVisible">
+                {{ t.fechainicio | date: 'dd/MM/yyyy' }}
+            </td>
+            <td *ngIf="colFechaVencimientoVisible">
+                <span *ngIf="t.fechavencimiento">{{ t.fechavencimiento | date:'dd/MM/yyyy' }}</span>
+                <span *ngIf="!t.fechavencimiento" nz-typography nzType="secondary">(ninguno)</span>
+            </td>
+            <td nzAlign="center">
+                <nz-tag *ngIf="t.activo" nzColor="green">Activo</nz-tag>
+                <nz-tag *ngIf="!t.activo" nzColor="red">Inactivo</nz-tag>
+            </td>
+            <td>
+                <div nz-row [nzGutter]="[8, 8]">
+                    <div nz-col>
+                        <button nz-tooltip nz-button nzType="primary" nzTooltipTitle="Editar" [routerLink]="t.id?.toString()">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                    </div>
+                    <div nz-col>
+                        <button 
+                        nzOkText="Eliminar"
+                        (click)="confirmarEliminacion(t)" 
+                        nz-button 
+                        nzType="primary" 
+                        nzDanger>
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <ng-template #tableFooter>
+            <strong>Total: </strong>{{ totalRegisters | number }}
+        </ng-template>
+    </tbody>
+</nz-table>

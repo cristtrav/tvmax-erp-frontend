@@ -50,6 +50,10 @@ import { FormContactoClienteComponent } from './components/form-contacto-cliente
 import { EstadoFeColorPipe } from './pipes/estado-fe-color.pipe';
 import { TituloCambioEstadoPipe } from './pipes/titulo-cambio-estado.pipe';
 import { FindTalonarioPipe } from './pipes/find-talonario.pipe';
+import { BotonAnularDisabledPipe } from './pipes/boton-anular-disabled.pipe';
+import { BotonAnularTooltipPipe } from './pipes/boton-anular-tooltip.pipe';
+import { BotonEliminarTooltipPipe } from './pipes/boton-eliminar-tooltip.pipe';
+import { BotonEliminarDisabledPipe } from './pipes/boton-eliminar-disabled.pipe';
 
 @NgModule({
     declarations: [
@@ -63,7 +67,11 @@ import { FindTalonarioPipe } from './pipes/find-talonario.pipe';
         FormContactoClienteComponent,
         EstadoFeColorPipe,
         TituloCambioEstadoPipe,
-        FindTalonarioPipe
+        FindTalonarioPipe,
+        BotonAnularDisabledPipe,
+        BotonAnularTooltipPipe,
+        BotonEliminarTooltipPipe,
+        BotonEliminarDisabledPipe
     ],
     exports: [
         DetalleVentaComponent,

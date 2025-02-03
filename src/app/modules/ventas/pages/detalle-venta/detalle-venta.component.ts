@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, Input, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { HttpParams } from '@angular/common/http';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ClientesService } from '@services/clientes.service';
 import { formatDate } from '@angular/common';
 import { VentasService } from '@services/ventas.service';
@@ -9,23 +9,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@services/sesion.service';
 import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
-import { finalize, forkJoin, mergeMap, of } from 'rxjs';
+import { finalize, forkJoin, mergeMap, Observable, of, map, catchError } from 'rxjs';
 import { ImpresionService } from '@services/impresion.service';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { DetalleVenta } from '@dto/detalle-venta-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
-import { Talonario } from '@dto/talonario.dto';
+import { Talonario } from '@dto/facturacion/talonario.dto';
 import { Venta } from '@dto/venta.dto';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
-import { FacturaElectronicaUtilsService } from '@modules/ventas/services/factura-electronica-utils.service';
+import { DTEFileUtilsService } from '@services/sifen-utils/dte-file-utils.service';
 import { TalonarioUtilService } from '@modules/ventas/services/talonario-util.service';
 import { FormContactoClienteComponent } from '@modules/ventas/components/form-contacto-cliente/form-contacto-cliente.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SifenService } from '@services/facturacion/sifen.service';
 import { NzValidateStatus } from 'ng-zorro-antd/core/types';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
+import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -56,7 +57,7 @@ export class DetalleVentaComponent implements OnInit {
     idtalonario: new FormControl(null, [Validators.required]),
     fecha: new FormControl(new Date(), Validators.required),
     idCliente: new FormControl(null, [Validators.required]),
-    ci: new FormControl(null),
+    ci: new FormControl(null, [Validators.required]),
     iddte: new FormControl<number | null>(null)
   });
 
@@ -121,7 +122,7 @@ export class DetalleVentaComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     public sesionSrv: SesionService,
     private impresionSrv: ImpresionService,
-    private facturaElectronicaUtilsSrv: FacturaElectronicaUtilsService,
+    private facturaElectronicaUtilsSrv: DTEFileUtilsService,
     private talonarioUtilSrv: TalonarioUtilService,
     private modal: NzModalService,
     private sifenSrv: SifenService
@@ -137,7 +138,7 @@ export class DetalleVentaComponent implements OnInit {
         this.nroFacturaDesactivado = true;
         return;
       }
-      
+
       this.talonariosSrv.getPorId(value).subscribe({
         next: (t) => {
           this.actualizarControlNroFactura(t);
@@ -190,6 +191,10 @@ export class DetalleVentaComponent implements OnInit {
   
   }
 
+  restaurarCiForm(){
+    this.formCabecera.controls.ci.setValue(this.clienteSeleccionado?.ci);
+  }
+
   cambiarAModoFechaActual(modoFechaActual: boolean){
     this.usarFechaActual = modoFechaActual;
     if(modoFechaActual){
@@ -208,7 +213,7 @@ export class DetalleVentaComponent implements OnInit {
 
   private validarRuc(){
     const idtalonario = this.formCabecera.controls.idtalonario.value;
-    this.mostrarValidacionRuc = this.isRucValidated();
+    this.mostrarValidacionRuc = this.showValidacionRuc();
     if(!this.mostrarValidacionRuc){
       this.estadoValidacionRuc = 'success';
       return;
@@ -219,11 +224,11 @@ export class DetalleVentaComponent implements OnInit {
       this.estadoValidacionRuc = 'success';
       return;
     };
-
+    if(this.mostrarValidacionRuc && this.clienteSeleccionado && this.clienteSeleccionado.ci == null) this.estadoValidacionRuc = 'error';
     if(this.mostrarValidacionRuc && this.clienteSeleccionado && this.clienteSeleccionado.ci) this.consultarRuc(this.clienteSeleccionado.ci);
   }
 
-  private isRucValidated(): boolean {
+  private showValidacionRuc(): boolean {
     const idtalonario = this.formCabecera.controls.idtalonario.value;
     if(idtalonario == null || this.clienteSeleccionado == null) return false;
 
@@ -231,7 +236,7 @@ export class DetalleVentaComponent implements OnInit {
     if(talonario == null) return false;
 
     if(!talonario.electronico) return false;
-    if(talonario.electronico && this.clienteSeleccionado.dvruc == null) return false;
+    if(talonario.electronico && this.clienteSeleccionado.ci != null && this.clienteSeleccionado.dvruc == null) return false;
     return true;
   }
 
@@ -325,6 +330,7 @@ export class DetalleVentaComponent implements OnInit {
     params = params.append('eliminado', 'false');
     params = params.append('activo', 'true');
     params = params.append('sort', '-id')
+    params = params.append('tipodocumento', 'FAC')
     this.talonariosSrv.get(params).subscribe({
       next: (talonarios) => {
         this.lstTalonarios = talonarios;
@@ -404,6 +410,7 @@ export class DetalleVentaComponent implements OnInit {
       }
     });
   }
+
 
   buscarClienteDelayed(consulta: string){
     clearTimeout(this.timerBusquedaCliente);

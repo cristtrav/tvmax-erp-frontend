@@ -27,11 +27,20 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { FindTimbradoPipe } from './pipes/find-timbrado.pipe';
+import { IsTimbradoElectronicoPipe } from './pipes/id-timbrado-electronico.pipe';
+import { TablaTalonariosComponent } from './components/tabla-talonarios/tabla-talonarios.component';
+import { FormTalonarioComponent } from './components/form-talonario/form-talonario.component';
 
 @NgModule({
   declarations: [
     VistaTalonariosComponent,
-    DetalleTalonarioComponent
+    DetalleTalonarioComponent,
+    FindTimbradoPipe,
+    IsTimbradoElectronicoPipe,
+    TablaTalonariosComponent,
+    FormTalonarioComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +68,12 @@ import { PaddingZerosPipe } from 'src/app/global/pipes/padding-zeros.pipe';
     NzSelectModule,
     WorkspaceLayoutModule,
     NzColResponsiveSizesDirective,
-    PaddingZerosPipe
+    PaddingZerosPipe,
+    NzDividerModule
+  ],
+  exports: [
+    TablaTalonariosComponent,
+    FormTalonarioComponent
   ]
 })
 export class TalonariosModule { }

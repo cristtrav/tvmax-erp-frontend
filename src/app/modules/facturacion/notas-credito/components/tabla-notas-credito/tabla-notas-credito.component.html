@@ -1,0 +1,222 @@
+<nz-table #tabla
+    [nzData]="lstNotasCredito"
+    [nzLoading]="loadingDatos"
+    [nzPageIndex]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzTotal]="totalRegisters"
+    [nzFrontPagination]="false"
+    [nzFooter]="footer"
+    (nzQueryParams)="onTableQueryParamsChange($event)"
+    nzSize="small">
+    <thead>
+        <tr>
+            <th nzWidth="60px"></th>
+            <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
+            <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
+            <th [nzColumnKey]="'razonsocial'" [nzSortFn]="true">Razón social</th>
+            <th [nzColumnKey]="'fechahora'" [nzSortFn]="true">Fecha</th>
+            <th [nzColumnKey]="'nronota'" [nzSortFn]="true">Nro. Nota</th>
+            <th>Estado</th>
+            <th [nzColumnKey]="'total'" [nzSortFn]="true">Monto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let nota of tabla.data">
+            <tr>
+                <td [nzExpand]="expandSet.has(nota.id)" (nzExpandChange)="onExpandChange(nota.id, $event)"></td>
+                <td>{{ nota.id }}</td>
+                <td>
+                    <span>{{ nota.ci | number }}</span>
+                    <span *ngIf="nota.dvruc != null">-</span>
+                    <span *ngIf="nota.dvruc != null">{{ nota.dvruc }}</span>
+                </td>
+                <td>{{ nota.razonsocial }}</td>
+                <td>{{ nota.fechahora | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ nota.prefijonota }}-{{ nota.nronota | paddingZeros:7 }}</td>
+                <td>
+                    <ng-container *ngIf="nota.idestadodte as estado">
+                        <nz-tag *ngIf="estado == 1 || estado == 2"
+                            nzColor="green"
+                            nz-tooltip nzTooltipTitle="Aprobado por SIFEN">
+                            APR
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 3"
+                            nzColor="red"
+                            nz-tooltip nzTooltipTitle="Rechazado por SIFEN">
+                            REC
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 4"
+                            nzColor="red"
+                            nz-tooltip nzTooltipTitle="Anulado en SIFEN">
+                            CAN
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 30"
+                            nzColor="orange"
+                            nz-tooltip nzTooltipTitle="Pendiente de envio a SIFEN">
+                            NOE
+                        </nz-tag>
+                        <nz-tag *ngIf="estado == 32"
+                            nzColor="blue"
+                            nz-tooltip nzTooltipTitle="Enviado a SIFEN">
+                            ENV
+                        </nz-tag>
+                    </ng-container>
+                </td>
+                <td nzAlign="right">Gs.{{ nota.total | number }}</td>
+                <td>
+                    <div nz-row [nzGutter]="[8,8]">
+                        <div nz-col>
+                            <button
+                                [disabled]="nota | botonAnularDisabled"
+                                [nzLoading]="mapAnulando.get(nota.id)"
+                                nz-button
+                                nzType="default"
+                                nz-tooltip
+                                [nzTooltipTitle]="nota | botonAnularTooltip"
+                                (click)="confirmarAnulacion(nota)">
+                                <i nz-icon nzType="minus-circle" nzTheme="outline"></i>
+                            </button>
+                        </div>
+                        <div nz-col>
+                            <button
+                                [disabled]="nota | botonEliminarDisabled"
+                                nz-button
+                                nzType="primary"
+                                nzDanger
+                                nz-tooltip
+                                [nzTooltipTitle]="nota | botonEliminarTooltip"
+                                [nzLoading]="mapEliminando.get(nota.id)"
+                                (click)="confirmarEliminacion(nota)">
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(nota.id)">
+                <nz-tabset>
+                    <nz-tab [nzTitle]="'Detalles'">
+                        <nz-descriptions>
+                            <nz-descriptions-item [nzTitle]="tituloNroFactura">
+                                <ng-template #tituloNroFactura>
+                                    <strong>Nro. Factura Ref.</strong>
+                                </ng-template>
+                                {{ nota.nrofactura }}
+                            </nz-descriptions-item>
+                        </nz-descriptions>
+                    </nz-tab>
+                    <nz-tab [nzTitle]="'Items'">
+                        <nz-table #tablaDetalles
+                            [nzData]="mapDetalles.get(nota.id) ?? []"
+                            [nzLoading]="mapLoadingDetalles.get(nota.id)"
+                            nzSize="small">
+                            <thead>
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Cant.</th>
+                                    <th>Monto</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let notaDetalle of tablaDetalles.data">
+                                    <td>{{ notaDetalle.descripcion }}</td>
+                                    <td>{{ notaDetalle.cantidad | number}}</td>
+                                    <td>Gs.{{ notaDetalle.monto | number }}</td>
+                                    <td>Gs.{{ notaDetalle.subtotal | number }}</td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-tab>
+                    <nz-tab [nzTitle]="'Nota electrónica'">
+                        <nz-spin [nzSpinning]="mapLoadingDTE.get(nota.id) ?? false">
+                            <nz-descriptions nzSize="small">
+                                <nz-descriptions-item [nzTitle]="titulodescargas">
+                                    <ng-template #titulodescargas><strong>Descargar</strong></ng-template>
+                                    <nz-space>
+                                        <button
+                                            *nzSpaceItem
+                                            nz-tooltip
+                                            nzTooltipTitle="Documento Tributario Electronico en formato XML"
+                                            nz-button
+                                            nzType="default"
+                                            nzSize="small"
+                                            [nzLoading]="mapLoadingDTE.get(nota.id)"
+                                            (click)="descargarDteXml(nota.id)">
+                                            <i nz-icon nzTheme="outline" nzType="file-protect"></i>
+                                            DTE
+                                        </button>
+                                        <button
+                                            nz-tooltip
+                                            nzTooltipTitle="Version Imprimible en formato PDF"
+                                            *nzSpaceItem
+                                            nz-button
+                                            nzType="default"
+                                            nzSize="small"
+                                            [nzLoading]="mapLoadingKude.get(nota.id)"
+                                            (click)="descargarKUDE(nota.id)">
+                                            <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
+                                            KuDE
+                                        </button>
+                                    </nz-space>
+                                </nz-descriptions-item>
+                                <ng-container *ngIf="mapDte.get(nota.id) as dte">
+                                    <nz-descriptions-item [nzTitle]="tituloIdDte">
+                                        <ng-template #tituloIdDte>
+                                            <strong>Código</strong>
+                                        </ng-template>
+                                        {{ dte.id }}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="tituloEstadoFE">
+                                        <ng-template #tituloEstadoFE>
+                                            <strong>Estado</strong>
+                                        </ng-template>
+                                        <nz-tag [nzColor]="dte.idestadodocumento | estadoFeColor">
+                                            {{ dte.estadodocumento }}
+                                        </nz-tag>
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="tituloObservacionFE">
+                                        <ng-template #tituloObservacionFE>
+                                            <strong>Observación</strong>
+                                        </ng-template>
+                                        <span *ngIf="dte.observaciondocumento">
+                                            {{ dte.observaciondocumento }}
+                                        </span>
+                                        <span *ngIf="!dte.observaciondocumento" nz-typography nzType="secondary">
+                                            (Sin observación)
+                                        </span>
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item [nzTitle]="tituloFechaCambioEstadoFE">
+                                        <ng-template #tituloFechaCambioEstadoFE>
+                                            <strong>{{ dte.idestadodocumento | tituloCambioEstado }}</strong>
+                                        </ng-template>
+                                        {{ dte.fechacambioestado | date:'dd/MMM/yyyy HH:MM' }}
+                                    </nz-descriptions-item>
+                                </ng-container>
+                                <!--<nz-descriptions-item
+                                    *ngIf="!nota.anulado && nota.idestadodte != 30 && nota.idestadodte != 4"
+                                    [nzTitle]="tituloConsultarSifen">
+                                    <ng-template #tituloConsultarSifen>
+                                        <strong>Sincronizar</strong>
+                                    </ng-template>
+                                    <button
+                                        nz-button
+                                        nzSize="small"
+                                        [nzLoading]="mapLoadingConsultaDte.get(fv.id ?? -1)"
+                                        (click)="consutlarSifen(fv.iddte ?? -1)">
+                                        <i nz-icon nzType="monitor"></i>
+                                        Consultar SIFEN
+                                    </button>
+                                </nz-descriptions-item>-->
+                            </nz-descriptions>
+                        </nz-spin>
+                    </nz-tab>
+                </nz-tabset>
+            </tr>
+        </ng-container>
+    </tbody>
+    <ng-template #footer>
+        <strong>Total: </strong>{{ totalRegisters }}
+    </ng-template>
+</nz-table>
