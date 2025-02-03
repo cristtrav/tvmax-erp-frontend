@@ -266,6 +266,8 @@ export class FormTalonarioComponent {
         next: () => {
           this.notif.create('success', '<strong>Éxito</strong>', 'Talonario guardado correctamente');
           this.form.reset();
+          if(this.nrotimbrado) this.form.controls.nrotimbrado.setValue(this.nrotimbrado);
+          this.form.controls.activo.setValue(true);
         }, 
         error: (e) => {
           console.error('Error al registrar talonario', e);
