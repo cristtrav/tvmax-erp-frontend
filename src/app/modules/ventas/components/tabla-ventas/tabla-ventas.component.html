@@ -171,7 +171,7 @@
                             </tbody>
                         </nz-table>
                     </nz-tab>
-                    <nz-tab nzTitle="Factura Electrónica">
+                    <nz-tab nzTitle="Factura Electrónica" *ngIf="fv.facturaelectronica && fv.iddte != null">
                         <nz-spin [nzSpinning]="loadFacturaElectronicaMap.get(fv.id ?? -1) ?? false">
                             <nz-descriptions nzSize="small">
                                 <nz-descriptions-item [nzTitle]="titulodescargas">
@@ -185,7 +185,7 @@
                                             nzType="default"
                                             nzSize="small"
                                             [nzLoading]="loadingDTEMap.get(fv.id ?? -1)"
-                                            (click)="descargarDTE(fv.id ?? 0)">
+                                            (click)="descargarDTE(fv.id ?? -1)">
                                             <i nz-icon nzTheme="outline" nzType="file-protect"></i>
                                             DTE
                                         </button>
@@ -197,7 +197,7 @@
                                             nzType="default"
                                             nzSize="small"
                                             [nzLoading]="loadingKudeMap.get(fv.id ?? -1)"
-                                            (click)="descargarKUDE(fv.id ?? 0)">
+                                            (click)="descargarKUDE(fv.id ?? -1)">
                                             <i nz-icon nzTheme="outline" nzType="file-pdf"></i>
                                             KuDE
                                         </button>
@@ -246,7 +246,7 @@
                                         nz-button
                                         nzSize="small"
                                         [nzLoading]="loadingConsultaDTEMap.get(fv.id ?? -1)"
-                                        (click)="consutlarSifen(fv.iddte ?? -1)">
+                                        (click)="consutlarSifen(fv.iddte)">
                                         <i nz-icon nzType="monitor"></i>
                                         Consultar SIFEN
                                     </button>
