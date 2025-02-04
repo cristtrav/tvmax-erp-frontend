@@ -57,7 +57,7 @@ export class DetalleVentaComponent implements OnInit {
     idtalonario: new FormControl(null, [Validators.required]),
     fecha: new FormControl(new Date(), Validators.required),
     idCliente: new FormControl(null, [Validators.required]),
-    ci: new FormControl(null, [Validators.required]),
+    ci: new FormControl<string | null >(null),
     iddte: new FormControl<number | null>(null)
   });
 
@@ -360,13 +360,22 @@ export class DetalleVentaComponent implements OnInit {
       this.formCabecera.get(ctrlName)?.markAsDirty();
       this.formCabecera.get(ctrlName)?.updateValueAndValidity();
     })
+    this.validarRuc();
+    if(!this.formCabecera.valid){
+      this.notif.create('error', '<strong>Error de validación</strong>', 'Complete los campos del formulario');
+      return;
+    };
+    if(this.formCabecera.controls.ci.value == null || this.formCabecera.controls.ci.value == ''){
+      this.notif.create('error', '<strong>Error de validación</strong>', 'El numero de CI es requerido');
+      return;
+    }
     if(this.lstDetallesVenta.length === 0){
       this.notif.create('error', '<strong>Error de validación</strong>', 'No se agregó ningún ítem a la factura');
+      return;
     }
-    if (this.formCabecera.valid && this.lstDetallesVenta.length > 0) {
-      if (this.idventa === 'nueva') this.registrar();
-      else this.editar();
-    }
+    
+    if (this.idventa === 'nueva') this.registrar();
+    else this.editar();
   }
 
   private registrar() {

@@ -118,6 +118,7 @@ export class TablaVentasComponent implements OnInit {
     }))
     .subscribe({
       next: (resp) => {
+        console.log(resp.ventas);
         this.lstFacturasVenta = resp.ventas;
         this.totalRegisters = resp.total;
         this.expandSet.forEach(idventa => {
