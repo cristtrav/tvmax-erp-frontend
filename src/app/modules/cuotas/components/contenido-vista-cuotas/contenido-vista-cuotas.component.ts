@@ -19,6 +19,8 @@ export class ContenidoVistaCuotasComponent implements OnInit {
   tabsLoading: boolean = false;
   idservicioSuscrito: number | null = null;
 
+  modalGenerarCuotasVisible: boolean = false;
+
   constructor(
     private serviciosSrv: ServiciosService,
     private suscripcionSrv: SuscripcionesService,
@@ -27,6 +29,14 @@ export class ContenidoVistaCuotasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatos();
+  }
+
+  mostrarModalGenerar(){
+    this.modalGenerarCuotasVisible = true;
+  }
+
+  cerrarModalGenerar(){
+    this.modalGenerarCuotasVisible = false;
   }
 
   cargarDatos(): void{

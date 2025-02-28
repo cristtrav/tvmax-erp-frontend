@@ -5,9 +5,10 @@
         <tr>
             <th nzWidth="60px"></th>
             <th [nzColumnKey]="'id'" [nzSortFn]="true">Código</th>
-            <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" [nzSortOrder]="'descend'">Vencimiento</th>
+            <th [nzColumnKey]="'fechavencimiento'" [nzSortFn]="true" [nzSortOrder]="'descend'">Venc.</th>
             <th [nzColumnKey]="'monto'" [nzSortFn]="true" nzAlign="right">Monto</th>
             <th nzAlign="center">Estado</th>
+            <th>Nro.</th>
             <th>Observación</th>
             <th>Acciones</th>
         </tr>
@@ -17,7 +18,7 @@
             <tr>
                 <td [nzExpand]="expandSet.has(c.id ?? -1)" (nzExpandChange)="onExpandChange(+(c.id+''), $event)"></td>
                 <td>{{ c.id }}</td>
-                <td>{{ c.fechavencimiento | date: 'dd/MMM/yyyy' }}</td>
+                <td>{{ c.fechavencimiento | date: 'dd/MMM/yy' }}</td>
                 <td nzAlign="right">
                     <span *ngIf="c.monto != 0">Gs.{{ c.monto | number}}</span>
                     <nz-tag *ngIf="c.monto == 0" nzColor="blue">Exonerado</nz-tag>
@@ -26,6 +27,17 @@
                     <nz-tag nzColor="green" *ngIf="c.pagado && (c.monto ?? 0) > 0">Pagado</nz-tag>
                     <nz-tag nzColor="red" *ngIf="!c.pagado">Pendiente</nz-tag>
                     <nz-tag nzColor="blue" *ngIf="c.pagado && (c.monto ?? 0) == 0">Exonerado</nz-tag>
+                </td>
+                <td>
+                    <span
+                        *ngIf="c.nrocuota == null || c.totalcuotas == null"
+                        nz-typography 
+                        nzType="secondary">
+                        -
+                    </span>
+                    <span *ngIf="c.nrocuota != null && c.totalcuotas != null">
+                        {{ c.nrocuota }} / {{ c.totalcuotas }}
+                    </span>
                 </td>
                 <td>
                     <span *ngIf="c.observacion && c.observacion.length > 25"
@@ -87,6 +99,11 @@
             <tr [nzExpand]="expandSet.has(c.id ?? -1)">
                 <nz-spin [nzSpinning]="mapLoadingCobros.get(c.id ?? -1)">
                     <nz-descriptions nzSize="small">
+                        <nz-descriptions-item [nzTitle]="tituloGrupoCuota">
+                            <span *ngIf="c.codigogrupo == null" nz-typography nzType="secondary">(ninguno)</span>
+                            <span *ngIf="c.codigogrupo != null">{{ c.codigogrupo }}</span>
+                            <ng-template #tituloGrupoCuota><strong>Grupo</strong></ng-template>
+                        </nz-descriptions-item>
                         <ng-container *ngIf="mapCobros.get(c.id ?? -1) as cobro; else sinCobro">
                             <nz-descriptions-item [nzTitle]="titulofactura">
                                 {{ cobro.facturacobro }}

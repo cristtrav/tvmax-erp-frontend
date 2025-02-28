@@ -5,6 +5,7 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
 import { ClientesService } from '@services/clientes.service';
 import { Cliente } from '@dto/cliente-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
+import { forkJoin, mergeMap, of } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-cuotas-suscripciones',
@@ -26,41 +27,36 @@ export class DetalleCuotasSuscripcionesComponent implements OnInit {
     private clientesSrv: ClientesService
   ) { }
 
-  cargarSuscripcion() {
-    if (this.idsuscripcion) {
-      this.suscripcionSrv.getPorId(this.idsuscripcion).subscribe((s: Suscripcion) => {
-        this.suscripcion = s;
-        this.cargarCliente();
-      }, (e) => {
-        console.log('Error al cargar suscripcion en detalle de cuota');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
-  }
+  cargarDatos() {
+    if(this.idsuscripcion == null) return;
 
-  cargarCliente() {
-    if(this.suscripcion?.idcliente){
-      this.clientesSrv.getPorId(this.suscripcion.idcliente).subscribe((c: Cliente)=>{
-        this.cliente = c;
-      }, (e)=>{
-        console.log('Error al cargar cliente en detalle de cuota');
-        console.log(e);
-        this.httpErrorHandler.handle(e);
-      });
-    }
+    this.suscripcionSrv.getPorId(this.idsuscripcion)
+    .pipe(mergeMap(susc => 
+      forkJoin({
+        suscripcion: of(susc),
+        cliente: this.clientesSrv.getPorId(susc.idcliente ?? -1)
+      })
+    ))
+    .subscribe({
+      next: (resp) => {
+        this.suscripcion = resp.suscripcion;
+        this.cliente = resp.cliente
+      },
+      error: (e) => {
+        console.error('Error al cargar suscripcion por id', e);
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
   ngOnInit(): void {
     const idsus = this.aroute.snapshot.paramMap.get('idsuscripcion');
     const idcuo = this.aroute.snapshot.paramMap.get('idcuota');
-    if (idsus) {
-      this.idsuscripcion = +idsus;
-    }
-    if (idcuo) {
-      this.idcuota = idcuo;
-    }
-    this.cargarSuscripcion();
+
+    if (idsus != null) this.idsuscripcion = Number(idsus);
+    if (idcuo != null) this.idcuota = idcuo;
+    
+    this.cargarDatos();
   }
 
 }

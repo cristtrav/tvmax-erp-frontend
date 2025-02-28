@@ -26,6 +26,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { TablaCuotasComponent } from './components/tabla-cuotas/tabla-cuotas.component';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [TablaCuotasComponent, ContenidoVistaCuotasComponent, FormCuotaComponent],
@@ -54,7 +55,8 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzDescriptionsModule,
     NzTagModule,
     NzColResponsiveSizesDirective,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzModalModule
   ],
   exports: [ContenidoVistaCuotasComponent, FormCuotaComponent]
 })

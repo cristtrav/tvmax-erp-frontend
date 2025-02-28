@@ -59,6 +59,7 @@
                         <thead>
                             <tr>
                                 <th>Vencimiento</th>
+                                <th>Nro.</th>
                                 <th nzAlign="right">Monto</th>
                                 <th nzAlign="center">Accion</th>
                             </tr>
@@ -66,6 +67,17 @@
                         <tbody>
                             <tr *ngFor="let cuota of tablaServicioCuotas.data">
                                 <td>{{ cuota.fechavencimiento | date:'dd/MMM/yyyy' }}</td>
+                                <td>
+                                    <span
+                                        *ngIf="cuota.nrocuota == null || cuota.totalcuotas == null"
+                                        nz-typography
+                                        nzType="secondary">
+                                        -
+                                    </span>
+                                    <span *ngIf="cuota.nrocuota != null && cuota.totalcuotas != null">
+                                        {{ cuota.nrocuota }}/{{ cuota.totalcuotas }}
+                                    </span>
+                                </td>
                                 <td nzAlign="right">Gs.{{ cuota.monto | number }}</td>
                                 <td nzAlign="center">
                                     <button

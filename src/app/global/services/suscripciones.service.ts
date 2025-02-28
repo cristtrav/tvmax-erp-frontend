@@ -12,6 +12,7 @@ import { ResumenDistritosSuscripciones } from '@dto/resumen-distritos-suscripcio
 import { ResumenBarriosSuscripciones } from '@dto/resumen-barrios-suscripciones.dto';
 import { ResumenGeneralSuscripciones } from '@dto/resumen-general-suscripciones.dto';
 import { environment } from '@environments/environment';
+import { CuotaGrupoDTO } from '@dto/cuota-grupo.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -119,4 +120,8 @@ export class SuscripcionesService {
   getTotal(params: HttpParams): Observable<number>{
     return this.http.get<number>(`${this.url}/total`, AppSettings.getHttpOptionsAuthWithParams(params));
   }
+
+  getCuotasGrupos(idsuscripcion: number): Observable<CuotaGrupoDTO[]>{
+    return this.http.get<CuotaGrupoDTO[]>(`${this.url}/${idsuscripcion}/gruposcuotas`, AppSettings.getHttpOptionsAuth());
+  } 
 }

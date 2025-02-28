@@ -484,7 +484,10 @@ export class DetalleVentaComponent implements OnInit {
     dfv.idcuota = cuota.id ?? -1;
     dfv.montoiva = Math.round((dfv.subtotal * dfv.porcentajeiva) / (100 + dfv.porcentajeiva));
     const vencStr: string = cuota.fechavencimiento ? formatDate(cuota.fechavencimiento, 'MMM yyyy', 'es-PY').toUpperCase() : '';
-    dfv.descripcion = `CUOTA ${vencStr} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();
+    dfv.descripcion = `CUOTA ${vencStr}`;
+    if(cuota.nrocuota != null && cuota.totalcuotas != null)
+      dfv.descripcion = `${dfv.descripcion} (${cuota.nrocuota}/${cuota.totalcuotas})`
+    dfv.descripcion = `${dfv.descripcion} | ${cuota.servicio} [${cuota.idsuscripcion}]`.toUpperCase();
     const arrDFV: DetalleVenta[] = this.lstDetallesVenta.slice();
     arrDFV.push(dfv);
     this.lstDetallesVenta = arrDFV;

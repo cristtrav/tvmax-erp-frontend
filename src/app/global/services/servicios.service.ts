@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Servicio } from '../dtos/servicio-dto';
 import { AppSettings } from '../utils/app-settings';
 import { environment } from '@environments/environment';
+import { CuotaGrupoDTO } from '@dto/cuota-grupo.dto';
 
 @Injectable({
   providedIn: 'root'

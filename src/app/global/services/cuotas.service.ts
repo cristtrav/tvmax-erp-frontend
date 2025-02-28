@@ -63,4 +63,14 @@ export class CuotasService {
   generarCuotas(mes: number, anio: number): Observable<any>{
     return this.http.post<{mes: number, anio: number}>(`${this.url}/generar`, { mes, anio } ,AppSettings.getHttpOptionsAuth());
   }
+
+  generarCuotasSuscripcion(cuota: CuotaDTO): Observable<RespuestaGeneracionCuotaInterface>{
+    return this.http.post<RespuestaGeneracionCuotaInterface>(`${this.url}/generarsuscripcion`, cuota, AppSettings.getHttpOptionsAuth());
+  }
+}
+
+export interface RespuestaGeneracionCuotaInterface {
+  total: number;
+  generado: number;
+  errors: string[];
 }

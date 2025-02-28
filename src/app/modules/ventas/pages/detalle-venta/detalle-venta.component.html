@@ -251,6 +251,7 @@
                                             nzShowSearch
                                             [nzLoading]="loadingClientes"
                                             [nzDropdownRender]="spinCargarMasClientes"
+                                            [nzDropdownMatchSelectWidth]="false"
                                             (nzOnSearch)="buscarClienteDelayed($event)"
                                             (nzScrollToBottom)="cargarMasClientes()" formControlName="idCliente">
                                             <nz-option

@@ -9,7 +9,10 @@ export interface CuotaDTO {
     monto?: number;
     fechavencimiento?: string;
     nrocuota?: number;
+    totalcuotas?: number;
     pagado?: boolean;
     observacion?: string;
     cobro?: CobroCuota;
+    codigogrupo?: string;
+    cantidad?: number;
 }

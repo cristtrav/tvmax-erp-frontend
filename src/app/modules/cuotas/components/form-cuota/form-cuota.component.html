@@ -1,8 +1,26 @@
 <nz-spin [nzSpinning]="loadingDatos">
     <form nz-form [formGroup]="form">
+        <nz-form-item *ngIf="idcuota == 'nueva'">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                Cantidad
+            </nz-form-label>
+            <nz-form-control
+                [appNzColResponsiveSizes]="CONTROLS_SIZES"
+                [nzErrorTip]="'Ingrese la cantidad de cuotas a generar. Min.: ' + cantMin + ', Max.: ' + cantMax">
+                <div nz-col [appNzColResponsiveSizes]="HALF_CONTROL_SIZES">
+                    <nz-input-number
+                        style="width: 100%;"
+                        [nzStep]="1"
+                        [nzMin]="cantMin"
+                        [nzMax]="cantMax"
+                        formControlName="cantidad">
+                    </nz-input-number>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Servicio</nz-form-label>
-            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione un servicio.">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Servicio</nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Seleccione un servicio.">
                 <nz-cascader
                     [nzOptions]="opcionesServicios"
                     formControlName="idservicio"
@@ -12,9 +30,16 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Vencimiento</nz-form-label>
-            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Seleccione la fecha de vencimiento.">
-                <div nz-col [nzSm]="12" [nzXs]="24">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
+                <span *ngIf="!form.controls.cantidad.value || form.controls.cantidad.value == 1">
+                    Vencimiento
+                </span>
+                <span *ngIf="form.controls.cantidad.value > 1">
+                    Venc. inicial
+                </span>
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Seleccione la fecha de vencimiento.">
+                <div nz-col [appNzColResponsiveSizes]="HALF_CONTROL_SIZES">
                     <nz-date-picker
                         formControlName="fechavencimiento"
                         nzFormat="dd/MMMM/yyyy"
@@ -25,9 +50,9 @@
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24" nzRequired>Monto</nz-form-label>
-            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese el monto.">
-                <div nz-col [nzSm]="12" [nzXs]="24">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>Monto</nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Ingrese el monto.">
+                <div nz-col [appNzColResponsiveSizes]="HALF_CONTROL_SIZES">
                     <nz-input-number
                         [nzDisabled]="form.controls.exonerado.value || (!form.controls.exonerado.value && form.controls.pagado.value)"
                         formControlName="monto"
@@ -35,6 +60,35 @@
                         [nzStep]="1"
                         style="width: 100%;">
                     </nz-input-number>
+                </div>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="suscripcionActual?.idservicio != form.controls.idservicio.value && form.controls.idservicio?.value?.length > 0">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Grupo
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES">
+                <div nz-col [appNzColResponsiveSizes]="HALF_CONTROL_SIZES">
+                    <nz-select
+                        nzAllowClear
+                        nzPlaceHolder="Seleccionar..."
+                        formControlName="codigogrupo"
+                        [nzDropdownRender]="addCuotaGrupo"
+                        [nzLoading]="loadingCuotasGrupos">
+                        <nz-option
+                            *ngFor="let grupo of lstCuotasGrupos"
+                            [nzValue]="grupo.codigo" [nzLabel]="grupo.codigo" nzCustomContent>
+                            <span>{{ grupo.codigo }} </span>
+                            <span nz-typography nzType="secondary">({{ grupo.totalcuotas }} {{ grupo.totalcuotas == 1 ? 'cuota' : 'cuotas' }})</span>
+                        </nz-option>
+                    </nz-select>
+                    <ng-template #addCuotaGrupo>
+                        <nz-divider style="margin: 4px 0;"></nz-divider>
+                            <a nz-button nzType="link" (click)="crearGrupoCuota()" [nzLoading]="guardandoCuotaGrupo">
+                                <i nz-icon [nzType]="'plus'"></i>
+                                Crear
+                            </a>
+                    </ng-template>
                 </div>
             </nz-form-control>
         </nz-form-item>
@@ -48,8 +102,8 @@
             </nz-form-control>
         </nz-form-item>-->
         <nz-form-item>
-            <nz-form-label [nzSm]="7" [nzXs]="24">Observación</nz-form-label>
-            <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Máx. 150 carácteres.">
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">Observación</nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES" nzErrorTip="Máx. 150 carácteres.">
                 <input formControlName="observacion" nz-input>
             </nz-form-control>
         </nz-form-item>
@@ -65,10 +119,22 @@
             </nz-form-control>
         </nz-form-item>
         <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
-            <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
-                <i nz-icon nzType="save"></i>
-                {{ idcuota === 'nueva' ? 'Registrar' : 'Editar' }}
-            </button>
+            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                <div nz-col>
+                    <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
+                        <i nz-icon nzType="save"></i>
+                        <span *ngIf="idcuota == 'nueva' && (!form.controls.cantidad.value || form.controls.cantidad.value == 1)">
+                            Registrar
+                        </span>
+                        <span *ngIf="idcuota == 'nueva' && (form.controls.cantidad.value > 1)">
+                            Generar
+                        </span>
+                        <span *ngIf="idcuota != 'nueva'">
+                            Editar
+                        </span>
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 </nz-spin>

@@ -121,7 +121,7 @@ export class CuotasPendientesComponent implements OnInit {
     let paramsCuotas: HttpParams = new HttpParams();
     paramsCuotas = paramsCuotas.append('eliminado', 'false');
     paramsCuotas = paramsCuotas.append('pagado', 'false');
-    paramsCuotas = paramsCuotas.append('sort', '-fechavencimiento');
+    paramsCuotas = paramsCuotas.append('sort', '+fechavencimiento');
     paramsCuotas = paramsCuotas.append('idsuscripcion', `${idsuscripcion}`);
     paramsCuotas = paramsCuotas.append('idservicio', `${idservicio}`);
     
