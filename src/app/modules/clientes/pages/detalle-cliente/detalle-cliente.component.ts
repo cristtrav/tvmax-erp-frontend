@@ -11,8 +11,10 @@ import { ResponsiveUtils } from '@global-utils/responsive/responsive-utils';
 import { ClientesService } from '@services/clientes.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
 import { SifenService } from '@services/facturacion/sifen.service';
-import { finalize } from 'rxjs';
+import { catchError, defer, finalize, forkJoin, Observable } from 'rxjs';
 import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
+import { TipoClienteDTO } from '@dto/tipo-cliente.dto';
+import { TiposclientesService } from '@services/tiposclientes.service';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -21,23 +23,31 @@ import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
 })
 export class DetalleClienteComponent implements OnInit {
 
-  //readonly FORM_SIZES: ResponsiveSizes = { nzXXl:12, nzXl:14, nzLg:16, nzMd:18, nzSm:20 };
+  private readonly ID_ROL_COBRADOR = 3;
+  
+  readonly HALF_CONTROL_SIZE: ResponsiveSizes = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 }
   readonly FORM_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAUT_FORM_SIZES;
   readonly LABEL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFAULT_FORM_LABEL_SIZES;
   readonly CONTROL_SIZES: ResponsiveSizes = ResponsiveUtils.DEFALUT_FORM_CONTROL_SIZES;
+  readonly ACTION_SIZES = ResponsiveUtils.DEFAULT_FORM_ACTIONS_SIZES;
   
   idcliente = 'nuevo';
   guardarLoading: boolean = false;
   formLoading: boolean = false;
   lastIdLoading: boolean = false;
   lstCobradores: UsuarioDTO[] = [];
+  loadingCobradores: boolean = false;
 
   consultandoRuc: boolean = false;
   modalConsultaRucVisible: boolean = false;
   consultaRuc?: ConsultaRucSifenDTO;
 
+  lstTiposClientes: TipoClienteDTO[] = [];
+  loadingTiposClientes: boolean = false;
+
   form: FormGroup = new FormGroup({
     id: new FormControl(null, [Validators.required]),
+    idtipocliente: new FormControl<null | number>(null, [Validators.required]),
     nombres: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
     apellidos: new FormControl(null, [Validators.minLength(2), Validators.maxLength(80)]),
     razonsocial: new FormControl(null, [Validators.minLength(2), Validators.required, Validators.maxLength(160)]),
@@ -46,7 +56,7 @@ export class DetalleClienteComponent implements OnInit {
     telefono1: new FormControl(null, [Validators.minLength(4), Validators.maxLength(20)]),
     telefono2: new FormControl(null, [Validators.minLength(4), Validators.maxLength(20)]),
     email: new FormControl(null, [Validators.maxLength(120), Validators.email]),
-    idcobrador: new FormControl(null, [Validators.required]),
+    idcobrador: new FormControl(null, [Validators.required])
   });
   
 
@@ -57,13 +67,27 @@ export class DetalleClienteComponent implements OnInit {
     private aroute: ActivatedRoute,
     private router: Router,
     private httpErrorHandler: HttpErrorResponseHandlerService,
-    private sifenSrv: SifenService
+    private sifenSrv: SifenService,
+    private tiposClientesSrv: TiposclientesService
   ) { }
 
   ngOnInit(): void {
     this.idcliente = this.aroute.snapshot.paramMap.get('idcliente') ?? 'nuevo';
-    if (Number.isInteger(Number(this.idcliente))) this.cargarDatos();
-    this.cargarCobradores();
+    const consultas: {
+      cobradores: Observable<UsuarioDTO[]>,
+      tiposClientes: Observable<TipoClienteDTO[]>,
+      cliente?: Observable<Cliente>
+    } = {
+      cobradores: this.cargarCobradoresObs(),
+      tiposClientes: this.cargarTiposClientesObs()
+    }
+    if (Number.isInteger(Number(this.idcliente))) consultas.cliente = this.cargarDatosObs();
+    
+    forkJoin(consultas).subscribe(resp => {
+      this.cargarCobradoresNext(resp.cobradores);
+      this.cargarTiposClientesNext(resp.tiposClientes);
+      if(resp.cliente) this.cargarDatosNext(resp.cliente);
+    })
   }
 
   calculteID() {
@@ -81,6 +105,22 @@ export class DetalleClienteComponent implements OnInit {
     });
   }
 
+  private cargarCobradoresObs(): Observable<UsuarioDTO[]>{
+    const params: HttpParams = new HttpParams()
+      .append('eliminado', 'false')
+      .append('idrol', this.ID_ROL_COBRADOR);
+      return defer(() => {
+        this.loadingCobradores = true;
+        return this.usuariosSrv
+          .get(params)
+          .pipe(finalize(() => this.loadingCobradores = false));
+      });
+  }
+
+  private cargarCobradoresNext(cobradores: UsuarioDTO[]){
+    this.lstCobradores = cobradores;
+  }
+
   private cargarCobradores(): void {
     const params: HttpParams = new HttpParams()
       .append('eliminado', 'false')
@@ -94,6 +134,25 @@ export class DetalleClienteComponent implements OnInit {
         this.httpErrorHandler.process(e);
       }
     })
+  }
+
+  cargarTiposClientesObs(): Observable<TipoClienteDTO[]>{
+    return defer(() => {
+      this.loadingTiposClientes = true;
+      return this.tiposClientesSrv.get(new HttpParams())
+      .pipe(
+        catchError(e => {
+          console.error('Error al consultar tipos de clientes', e);
+          this.httpErrorHandler.process(e);
+          throw e;
+        }),
+        finalize(() => this.loadingTiposClientes = false)
+      );
+    });
+  }
+
+  cargarTiposClientesNext(tiposClientes: TipoClienteDTO[]){
+    this.lstTiposClientes = tiposClientes;
   }
 
   guardar(): void {
@@ -110,7 +169,6 @@ export class DetalleClienteComponent implements OnInit {
 
   private getDto(): Cliente {
     const cli: Cliente = new Cliente();
-
     cli.id = this.form.controls.id.value;
     cli.nombres = this.form.controls.nombres.value;
     cli.apellidos = this.form.controls.apellidos.value;
@@ -121,7 +179,7 @@ export class DetalleClienteComponent implements OnInit {
     cli.telefono2 = this.form.controls.telefono2.value;
     cli.email = this.form.controls.email.value;
     cli.idcobrador = this.form.controls.idcobrador.value;
-
+    cli.idtipocliente = this.form.controls.idtipocliente.value;
     return cli;
   }
 
@@ -165,28 +223,39 @@ export class DetalleClienteComponent implements OnInit {
     this.form.controls.razonsocial.setValue(`${apellidos} ${nombres}`.trim());
   }
 
+  private cargarDatosObs(): Observable<Cliente>{
+    return defer(() => {
+      this.formLoading = true;
+      return this.clienteSrv
+        .getPorId(Number(this.idcliente))
+        .pipe(
+          catchError(e => {
+            console.error('Error al cargar cliente por ID', e);
+            this.httpErrorHandler.process(e);
+            throw e;
+          }),
+          finalize(() => this.formLoading = false)
+        );
+    })
+  }
+
+  private cargarDatosNext(cliente: Cliente){
+    this.form.controls.id.setValue(cliente.id);
+    this.form.controls.nombres.setValue(cliente.nombres);
+    this.form.controls.apellidos.setValue(cliente.apellidos);
+    this.form.controls.razonsocial.setValue(cliente.razonsocial);
+    this.form.controls.ci.setValue(cliente.ci);
+    this.form.controls.dvruc.setValue(cliente.dvruc);
+    this.form.controls.telefono1.setValue(cliente.telefono1);
+    this.form.controls.telefono2.setValue(cliente.telefono2);
+    this.form.controls.email.setValue(cliente.email);
+    this.form.controls.idcobrador.setValue(cliente.idcobrador);
+    this.form.controls.idtipocliente.setValue(cliente.idtipocliente);
+    this.formLoading = false;
+  }
+
   private cargarDatos(): void {
-    this.formLoading = true;
-    this.clienteSrv.getPorId(Number(this.idcliente)).subscribe({
-      next: (cliente) => {
-        this.form.controls.id.setValue(cliente.id);
-        this.form.controls.nombres.setValue(cliente.nombres);
-        this.form.controls.apellidos.setValue(cliente.apellidos);
-        this.form.controls.razonsocial.setValue(cliente.razonsocial);
-        this.form.controls.ci.setValue(cliente.ci);
-        this.form.controls.dvruc.setValue(cliente.dvruc);
-        this.form.controls.telefono1.setValue(cliente.telefono1);
-        this.form.controls.telefono2.setValue(cliente.telefono2);
-        this.form.controls.email.setValue(cliente.email);
-        this.form.controls.idcobrador.setValue(cliente.idcobrador);
-        this.formLoading = false;
-      },
-      error: (e) => {
-        console.error('Error al cargar cliente por ID', e);
-        this.httpErrorHandler.process(e);
-        this.formLoading = false;
-      }
-    });
+    this.cargarDatosObs().subscribe(cliente => this.cargarDatosNext(cliente));
   }
 
   verificarCi(): void {

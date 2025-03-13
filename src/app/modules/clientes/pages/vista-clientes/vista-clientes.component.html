@@ -160,6 +160,12 @@
                                         <nz-collapse>
                                             <nz-collapse-panel nzHeader="Cliente" nzShowArrow="false" nzActive nzDisabled>
                                                 <nz-descriptions nzSize="small" [nzColumn]="1">
+                                                    <nz-descriptions-item [nzTitle]="tituloTipoCliente">
+                                                        {{ c.tipocliente }}
+                                                        <ng-template #tituloTipoCliente>
+                                                            <strong>Tipo de cliente</strong>
+                                                        </ng-template>
+                                                    </nz-descriptions-item>
                                                     <nz-descriptions-item [nzTitle]="tituloemail">
                                                         <ng-template #tituloemail>
                                                             <strong>Email</strong>

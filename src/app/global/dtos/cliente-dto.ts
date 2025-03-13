@@ -25,4 +25,6 @@ export class Cliente {
     excluidosorteo: boolean | null = null;
     latitud: number | null = null;
     longitud: number | null = null;
+    idtipocliente: number | null = null;
+    tipocliente: string | null = null;
 }
