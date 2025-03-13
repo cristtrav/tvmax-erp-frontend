@@ -121,21 +121,6 @@ export class DetalleClienteComponent implements OnInit {
     this.lstCobradores = cobradores;
   }
 
-  private cargarCobradores(): void {
-    const params: HttpParams = new HttpParams()
-      .append('eliminado', 'false')
-      .append('idrol', '3');
-    this.usuariosSrv.get(params).subscribe({
-      next: (usuarios) => {
-        this.lstCobradores = usuarios;
-      },
-      error: (e) => {
-        console.error('Error al cargar cobradores', e);
-        this.httpErrorHandler.process(e);
-      }
-    })
-  }
-
   cargarTiposClientesObs(): Observable<TipoClienteDTO[]>{
     return defer(() => {
       this.loadingTiposClientes = true;
