@@ -25,13 +25,21 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { WorkspaceLayoutModule } from '@shared/workspace-layout';
 import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-col-responsive-sizes.directive';
+import { VistaAjustesExistenciasMaterialesComponent } from './pages/vista-ajustes-existencias-materiales/vista-ajustes-existencias-materiales.component';
+import { AjustesExistenciasModule } from '../ajustes-existencias/ajustes-existencias.module';
+import { DetalleAjusteExistenciaMaterialComponent } from './pages/detalle-ajuste-existencia-material/detalle-ajuste-existencia-material.component';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { CantidadMaterialPipe } from './pipes/cantidad-material.pipe';
 
 
 @NgModule({
   declarations: [
     VistaMaterialesComponent,
     DetalleMaterialComponent,
-    FormFiltroMaterialesComponent
+    FormFiltroMaterialesComponent,
+    VistaAjustesExistenciasMaterialesComponent,
+    DetalleAjusteExistenciaMaterialComponent,
+    CantidadMaterialPipe
   ],
   imports: [
     CommonModule,
@@ -57,7 +65,9 @@ import { NzColResponsiveSizesDirective } from '@global-directives/responsive/nz-
     NzTabsModule,
     NzDescriptionsModule,
     WorkspaceLayoutModule,
-    NzColResponsiveSizesDirective
+    NzColResponsiveSizesDirective,
+    AjustesExistenciasModule,
+    NzDividerModule
   ]
 })
 export class MaterialesModule { }

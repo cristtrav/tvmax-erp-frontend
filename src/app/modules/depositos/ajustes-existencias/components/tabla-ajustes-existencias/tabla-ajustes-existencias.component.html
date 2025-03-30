@@ -1,0 +1,78 @@
+<nz-table
+    #table
+    [nzLoading]="loading"
+    [nzData]="lstAjustesExistencias"
+    nzSize="small">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Fecha</th>
+            <th>Cant. anterior</th>
+            <th>Cant. nueva</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let ajuste of table.data">
+            <td>{{ ajuste.id }}</td>
+            <td>{{ ajuste.fechahora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+                {{ ajuste.cantidadanterior | number }}
+                <span *ngIf="ajuste.unidadmedida == 'UD' && ajuste.cantidadanterior == '1.00'">
+                    ud.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'UD' && ajuste.cantidadanterior != '1.00'">
+                    uds.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'MT' && ajuste.cantidadanterior == '1.00'">
+                    mt.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'MT' && ajuste.cantidadanterior != '1.00'">
+                    mts.
+                </span>
+            </td>
+            <td>
+                {{ ajuste.cantidadnueva | number }}
+                <span *ngIf="ajuste.unidadmedida == 'UD' && ajuste.cantidadnueva == '1.00'">
+                    ud.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'UD' && ajuste.cantidadnueva != '1.00'">
+                    uds.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'MT' && ajuste.cantidadnueva == '1.00'">
+                    mt.
+                </span>
+                <span *ngIf="ajuste.unidadmedida == 'MT' && ajuste.cantidadnueva != '1.00'">
+                    mts.
+                </span>
+            </td>
+            <td>
+                <div nz-row [nzGutter]="[8,8]">
+                    <div nz-col>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            [disabled]="!ajuste.ultimoid"
+                            nz-tooltip
+                            [nzTooltipTitle]="ajuste.ultimoid ? 'Editar' : 'No se puede editar. Existen ajustes mas recientes'"
+                            [routerLink]="[ajuste.id]">
+                            <i nz-icon nzType="edit" nzTheme="outline"></i>
+                        </button>
+                    </div>
+                    <div nz-col>
+                        <button
+                            nz-button
+                            nzType="primary"
+                            nzDanger
+                            [disabled]="!ajuste.ultimoid"
+                            nz-tooltip
+                            [nzTooltipTitle]="ajuste.ultimoid ? 'Eliminar' : 'No se puede eliminar. Existen ajustes mas recientes'"
+                            (click)="confirmarEliminacion(ajuste)">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>

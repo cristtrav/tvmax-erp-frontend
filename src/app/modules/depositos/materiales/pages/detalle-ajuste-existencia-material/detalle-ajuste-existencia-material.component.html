@@ -1,0 +1,42 @@
+<app-workspace-layout [isForm]="true">
+    
+    <nz-breadcrumb breadcrumb>
+        <nz-breadcrumb-item>
+            <a routerLink="/app/dashboard"><i nz-icon nzType="home"></i></a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../../..']">Materiales</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../..']">{{ idmaterial }}</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            <a [routerLink]="['../']">Ajustes de existencias</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+            {{ idajusteMaterial | titlecase }}
+        </nz-breadcrumb-item>
+    </nz-breadcrumb>
+
+    <div header-extra>
+        <div nz-row *ngIf="material">
+            <div nz-col>
+                <nz-tag nzColor="magenta">
+                    <span>
+                        {{ material.descripcion }}
+                    </span>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span>
+                        <strong>{{ material | cantidadMaterial}}</strong>
+                    </span>
+                </nz-tag>
+            </div>
+        </div>
+    </div>
+
+    <app-form-ajuste-existencia
+        [idmaterial]="idmaterial"
+        (idajusteExistenciaChange)="onSaved($event)">
+    </app-form-ajuste-existencia>
+
+</app-workspace-layout>

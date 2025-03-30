@@ -130,7 +130,6 @@ export class DetalleMovimientoMaterialComponent implements OnInit, AfterViewInit
   }
 
   private cargarDatosDevolucion(movimiento: MovimientoMaterialDTO, detalles: DetalleMovimientoMaterialDTO[]){
-    console.log('Cargando para devolucion');
     this.fechaRetiro = new Date(movimiento.fecha);
     this.formCabecera.controls.fecha.setValue(new Date(movimiento.fecha));
     this.formCabecera.controls.idUsuarioEntrega.setValue(movimiento.idusuarioentrega);

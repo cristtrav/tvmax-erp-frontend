@@ -1,4 +1,4 @@
-<app-workspace-layout>
+<app-workspace-layout [isBackgroundVisible]="false" [isContentPadded]="false">
 
     <nz-breadcrumb breadcrumb>
         <nz-breadcrumb-item>
@@ -12,7 +12,7 @@
         </nz-breadcrumb-item>
     </nz-breadcrumb>
 
-    <div nz-row [nzGutter]="[8,8]">
+    <div nz-row [nzGutter]="[16,16]">
         <div nz-col nzSpan="14">
             <div class="module-content">
                 <div nz-row [nzGutter]="[8,8]">
@@ -50,10 +50,6 @@
                                     <i nz-icon nzType="download" nzTheme="outline"></i>
                                     Entrada
                                 </nz-option>
-                                <nz-option [nzValue]="'AJ'" [nzLabel]="'Ajuste'" *ngIf="opcionAJHabilitada()" nzCustomContent>
-                                    <i nz-icon nzType="control" nzTheme="outline"></i>
-                                    Ajuste
-                                </nz-option>
                                 <nz-option [nzValue]="'DE'" [nzLabel]="'Devolución'" *ngIf="formCabecera.controls.tipoMovimiento.value == 'DE'" nzCustomContent>
                                     <i nz-icon nzType="import" nzTheme="outline"></i>
                                     Devolución
@@ -62,11 +58,9 @@
                             <ng-template #tipoMovimientoTemplate let-selected>
                                 <i *ngIf="selected.nzValue == 'SA'" nz-icon nzType="upload" nzTheme="outline"></i>
                                 <i *ngIf="selected.nzValue == 'EN'" nz-icon nzType="download" nzTheme="outline"></i>
-                                <i *ngIf="selected.nzValue == 'AJ'" nz-icon nzType="control" nzTheme="outline"></i>
                                 <i *ngIf="selected.nzValue == 'DE'" nz-icon nzType="import" nzTheme="outline"></i>
                                 <span *ngIf="selected.nzValue == 'SA'"> Salida</span>
                                 <span *ngIf="selected.nzValue == 'EN'"> Entrada</span>
-                                <span *ngIf="selected.nzValue == 'AJ'"> Ajuste</span>
                                 <span *ngIf="selected.nzValue == 'DE'"> Devolución</span>
                             </ng-template>
                         </nz-form-control>

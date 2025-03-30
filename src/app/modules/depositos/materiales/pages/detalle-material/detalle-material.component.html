@@ -88,10 +88,24 @@
             </nz-form-control>
         </nz-form-item>
         <div nz-col [appNzColResponsiveSizes]="ACTION_SIZES" style="text-align: right;">
-            <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardando">
-                <i nz-icon nzType="save" nzTheme="outline"></i>
-                {{ idmaterial === 'nuevo' ? 'Registrar' : 'Editar' }}
-            </button>
+            <div nz-row [nzGutter]="[8,8]" nzJustify="end">
+                <div nz-col *ngIf="idmaterial != 'nuevo'">
+                    <button
+                        nz-button
+                        nzType="default"
+                        [routerLink]="['ajustesexistencias']">
+                        <i nz-icon nzType="file-done" nzTheme="outline"></i>
+                        Ajuste existencia
+                    </button>
+                </div>
+                <div nz-col>
+                    <button nz-button nzType="primary" (click)="guardar()" [nzLoading]="guardando">
+                        <i nz-icon nzType="save" nzTheme="outline"></i>
+                        {{ idmaterial === 'nuevo' ? 'Registrar' : 'Editar' }}
+                    </button>
+                </div>
+            </div>
+            
         </div>
     </form>
 

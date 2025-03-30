@@ -26,7 +26,7 @@
                     Selecc. tipo de mov.
                 </nz-tag>
                     <nz-input-group 
-                        *ngIf="detalle.materialidentificable && (tipoMovimiento == 'EN' || tipoMovimiento == 'AJ')"    
+                        *ngIf="detalle.materialidentificable && tipoMovimiento == 'EN'"    
                         [nzAddOnAfter]="addonGenerarSerial"
                         nzSearch>
                         <input
@@ -54,12 +54,12 @@
                         [(ngModel)]="detalle.nroseriematerial"
                         [nzStatus]="mapStatusSelectSerial.get(detalle.id ?? -1) ?? ''"
                         (ngModelChange)="onChangeSelectSerial(detalle)"
-                        [nzLoading]="mapLoadingIdentificables.get(detalle.id ?? -1)"
+                        [nzLoading]="mapLoadingIdentificables.get(detalle.idmaterial)"
                         nzAllowClear
                         nzShowSearch
                         style="min-width: 100px; width: 100%;">
                         <nz-option
-                            *ngFor="let matIdent of mapMaterialIdentificable.get(detalle.id ?? -1)"
+                            *ngFor="let matIdent of mapMaterialIdentificable.get(detalle.idmaterial)"
                             [nzLabel]="matIdent.serial"
                             [nzValue]="matIdent.serial">
                         </nz-option>

@@ -119,25 +119,25 @@ const routes: Routes = [
         path: 'gruposmateriales',
         data: { idfuncionalidad: 600, name: 'Tipos de Materiales'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modules/depositos/modules/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)
+        loadChildren: () => import('./modules/depositos/tipos-materiales/tipos-materiales.module').then(m => m.TiposMaterialesModule)
       },
       {
         path: 'materiales',
         data: { idfuncionalidad: 680, name: 'Materiales'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modules/depositos/modules/materiales/materiales.module').then(m => m.MaterialesModule)
+        loadChildren: () => import('./modules/depositos/materiales/materiales.module').then(m => m.MaterialesModule)
       },
       {
         path: 'movimientosmateriales',
         data: { idfuncionalidad: 640, name: 'Movimientos de Materiales'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modules/depositos/modules/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)
+        loadChildren: () => import('./modules/depositos/movimientos-materiales/movimientos-materiales.module').then(m => m.MovimientosMaterialesModule)
       },
       {
         path: 'usuariosdepositos',
         data: { idfuncionalidad: 720, name: 'Usuarios de Depósitos'},
         canActivate: [canAccessFn],
-        loadChildren: () => import('./modules/depositos/modules/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)
+        loadChildren: () => import('./modules/depositos/usuarios-depositos/usuarios-depositos.module').then(m => m.UsuariosDepositosModule)
       },
       {
         path: 'motivosreclamos',

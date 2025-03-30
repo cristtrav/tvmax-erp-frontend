@@ -120,6 +120,7 @@ export class VistaMaterialesComponent implements OnInit {
     .append('limit', identMeta.pageSize)
     .append('offset', (identMeta.pageIndex - 1) * identMeta.pageSize);
 
+    params = params.append('eliminado', false);
     if(!mostrarNoDisponibles) params = params.append('disponible', true);
     identMeta.mostrarNoDisponibles = mostrarNoDisponibles;
     

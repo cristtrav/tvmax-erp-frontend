@@ -75,32 +75,34 @@ export class TablaDetallesMovimientosComponent {
       materialidentificable: material.identificable,
       eliminado: false
     };
-    this.mapLoadingIdentificables.set(detalleMovimiento.id ?? -1, false);
-    this.cargarMaterialesIdentificables(detalleMovimiento, true)
+
+    this.cargarMaterialesIdentificables(material.id);
     this.lstDetallesMovimientos = this.lstDetallesMovimientos.concat([detalleMovimiento]);
     this.mapStatusSelectSerial.set(detalleMovimiento.id ?? -1, '');
   }
 
   cargarTodosMaterialesIdentificables(disponible?: boolean){
-    this.lstDetallesMovimientos.forEach(d => this.cargarMaterialesIdentificables(d, disponible));
+    const setIdMateriales = new Set<number>(this.lstDetallesMovimientos.map(d => d.idmaterial));
+    setIdMateriales.forEach(d => this.cargarMaterialesIdentificables(d, disponible));
   }
 
-  private cargarMaterialesIdentificables(detalle: DetalleMovimientoMaterialDTO, disponible?: boolean){
-    let params = new HttpParams();
+  private cargarMaterialesIdentificables(idmaterial: number, disponible?: boolean){
+    let params = new HttpParams().append('eliminado', false);
     if(disponible != null) params = params.append('disponible', disponible);
-    this.mapLoadingIdentificables.set(detalle.id ?? -1, true);
-    this.materialesSrv.getMaterialIdentificableByMaterial(detalle.idmaterial, params)
-    .pipe(finalize(() => this.mapLoadingIdentificables.set(detalle.id ?? -1, false)))
-    .subscribe({
-      next: (identificables) => {
-        this.mapMaterialIdentificable.set(detalle.id ?? -1, identificables)
-      },
-      error: (e) => {
-        this.mapMaterialIdentificable.set(detalle.id ?? -1, []);
-        console.error('Error al cargar materiales identificables', e);
-        this.httpErrorHandler.process(e);
-      }
-    })
+
+    this.mapLoadingIdentificables.set(idmaterial, true);
+    this.materialesSrv
+      .getMaterialIdentificableByMaterial(idmaterial, params)
+      .pipe(finalize(() => this.mapLoadingIdentificables.set(idmaterial, false)))
+      .subscribe({
+        next: (identificables) => {
+          this.mapMaterialIdentificable.set(idmaterial, identificables);
+        },
+        error: (e) => {
+          console.error('Error al cargar materiales identificables', e);
+          this.httpErrorHandler.process(e);
+        }
+      });
   }
 
   confirmarEliminacion(detalleMovimiento: DetalleMovimientoMaterialDTO){
@@ -172,7 +174,8 @@ export class TablaDetallesMovimientosComponent {
   }
 
   recargarNrosDeSerie(){
-    this.lstDetallesMovimientos.forEach(d => this.cargarMaterialesIdentificables(d, true));
+    const setIdMateriales = new Set<number>(this.lstDetallesMovimientos.map(de => de.idmaterial));
+    setIdMateriales.forEach(idmaterial => this.cargarMaterialesIdentificables(idmaterial, true));
   }
 
   disabledInputCantidad(detalle: DetalleMovimientoMaterialDTO): boolean {
