@@ -52,8 +52,7 @@ export class FormAjusteExistenciaComponent implements OnInit {
     private ajustesExistenciasSrv: AjustesExistenciasService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private notif: NzNotificationService,
-    private aroute: ActivatedRoute,
-    private modal: NzModalService
+    private aroute: ActivatedRoute
   ){}
 
   ngOnInit(): void {
@@ -62,7 +61,6 @@ export class FormAjusteExistenciaComponent implements OnInit {
     this.cargarMateriales();
 
     if(this.idmaterial != null){
-      console.log('idmaterial no null', this.idmaterial)
       this.form.controls.idmaterial.setValue(this.idmaterial);
       const consulta: {
         material: Observable<MaterialDTO>,
@@ -148,7 +146,6 @@ export class FormAjusteExistenciaComponent implements OnInit {
   }
 
   private cargarMaterialNext(material: MaterialDTO){
-    console.log('cargar material next', material)
     this.materialSeleccionado = material;
     this.unidadMedidaMaterial = <'UD' | 'MT'> material.unidadmedida;
     if(this.idajusteExistencia == 'nuevo')
@@ -156,7 +153,6 @@ export class FormAjusteExistenciaComponent implements OnInit {
   }
 
   cargarMaterial(){
-    console.log('ccargando material');
     this.cargarMaterialObs(Number(this.idmaterial)).subscribe(
       material => this.cargarMaterialNext(material)
     );
@@ -247,10 +243,8 @@ export class FormAjusteExistenciaComponent implements OnInit {
   calcularCantidadIdentificables(){
     const cantidad = this.lstAjustesIdentificables.reduce((accumulator, currentValue) => {
       if(!currentValue.bajanueva && currentValue.disponibilidadnueva){
-        console.log('disponible')
         return accumulator + 1;
       }
-        
       else return accumulator;
     }, 0);
     this.form.controls.cantidadNueva.setValue(cantidad);
