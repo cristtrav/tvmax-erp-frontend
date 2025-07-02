@@ -54,6 +54,7 @@ import { BotonAnularDisabledPipe } from './pipes/boton-anular-disabled.pipe';
 import { BotonAnularTooltipPipe } from './pipes/boton-anular-tooltip.pipe';
 import { BotonEliminarTooltipPipe } from './pipes/boton-eliminar-tooltip.pipe';
 import { BotonEliminarDisabledPipe } from './pipes/boton-eliminar-disabled.pipe';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @NgModule({
     declarations: [
@@ -118,7 +119,8 @@ import { BotonEliminarDisabledPipe } from './pipes/boton-eliminar-disabled.pipe'
         HelperComponentsModule,
         PaddingZerosPipe,
         WorkspaceLayoutModule,
-        NzColResponsiveSizesDirective
+        NzColResponsiveSizesDirective,
+        NzRadioModule
     ]
 })
 export class VentasModule { }

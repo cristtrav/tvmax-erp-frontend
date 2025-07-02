@@ -2,6 +2,7 @@ import { DetalleVenta } from "./detalle-venta-dto";
 
 export class Venta {
     id: number | null = null;
+    condicion: 'CON' | 'CRE' | null = null;
     cliente: string | null = null;
     ci: number | null = null;
     dvruc: number | null = null;

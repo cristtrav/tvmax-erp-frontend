@@ -294,6 +294,18 @@
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
+
+                                <nz-form-item>
+                                    <nz-form-label [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="6">
+                                        Condición
+                                    </nz-form-label>
+                                    <nz-form-control [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="17">
+                                        <nz-radio-group formControlName="condicion">
+                                            <label nz-radio-button nzValue="CON">Contado</label>
+                                            <label nz-radio-button nzValue="CRE">Crédito</label>
+                                        </nz-radio-group>
+                                    </nz-form-control>
+                                </nz-form-item>
                                 
                                 <div nz-row [nzGutter]="[8, 8]" nzJustify="end">
                                     <div *ngIf="clienteSeleccionado != null" nz-col>

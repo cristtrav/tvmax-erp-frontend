@@ -1,7 +1,7 @@
-import { Component, ElementRef, Inject, Input, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TalonariosService } from '@services/facturacion/talonarios.service';
 import { HttpParams } from '@angular/common/http';
-import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClientesService } from '@services/clientes.service';
 import { formatDate } from '@angular/common';
 import { VentasService } from '@services/ventas.service';
@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SesionService } from '@services/sesion.service';
 import { CuotasPendientesComponent } from '../../components/cuotas-pendientes/cuotas-pendientes.component';
-import { finalize, forkJoin, mergeMap, Observable, of, map, catchError } from 'rxjs';
+import { finalize, forkJoin, mergeMap, of } from 'rxjs';
 import { ImpresionService } from '@services/impresion.service';
 import { Cliente } from '@dto/cliente-dto';
 import { CuotaDTO } from '@dto/cuota-dto';
@@ -26,7 +26,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { SifenService } from '@services/facturacion/sifen.service';
 import { NzValidateStatus } from 'ng-zorro-antd/core/types';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
-import { ConsultaRucSifenDTO } from '@dto/facturacion/consulta-ruc-sifen.dto';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -58,7 +57,8 @@ export class DetalleVentaComponent implements OnInit {
     fecha: new FormControl(new Date(), Validators.required),
     idCliente: new FormControl(null, [Validators.required]),
     ci: new FormControl<string | null >(null),
-    iddte: new FormControl<number | null>(null)
+    iddte: new FormControl<number | null>(null),
+    condicion: new FormControl<string> ('CON', [Validators.required])
   });
 
   errorTipNroFactura: string = '';
@@ -289,6 +289,7 @@ export class DetalleVentaComponent implements OnInit {
         this.formCabecera.get('idCliente')?.setValue(resp.venta.idcliente);
         this.dvRuc = resp.venta.dvruc != null ? `${resp.venta.dvruc}` : null;
         this.formCabecera.get('ci')?.setValue(resp.venta.ci);
+        this.formCabecera.controls.condicion.setValue(resp.venta.condicion);
         this.totalFactura = resp.venta.total;
         this.totalIva5 = resp.venta.totaliva5;
         this.totalIva10 = resp.venta.totaliva10;
@@ -545,6 +546,7 @@ export class DetalleVentaComponent implements OnInit {
   getDtoFacturaVenta(): Venta {
     const fv: Venta = new Venta();
     if(this.idventa != 'nueva') fv.id = Number(this.idventa);
+    fv.condicion = this.formCabecera.controls.condicion.value;
     fv.total = this.totalFactura;
     fv.totaliva10 = this.totalIva10;
     fv.totaliva5 = this.totalIva5;

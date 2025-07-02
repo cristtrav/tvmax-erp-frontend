@@ -1,12 +1,23 @@
-<nz-table #tablaVentas [nzData]="lstFacturasVenta" [nzFrontPagination]="false" [nzPageSize]="pageSize"
-    [nzPageIndex]="pageIndex" [nzTotal]="totalRegisters" [nzLoading]="loadingVentas" nzShowPagination nzShowSizeChanger
-    nzSize="small" style="padding-top: 10px;" [nzFooter]="pietabla" (nzQueryParams)="onTableQueryParamsChange($event)">
+<nz-table
+    #tablaVentas
+    [nzData]="lstFacturasVenta"
+    [nzFrontPagination]="false"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    [nzTotal]="totalRegisters"
+    [nzLoading]="loadingVentas"
+    nzShowPagination
+    nzShowSizeChanger
+    nzSize="small"
+    [nzFooter]="pietabla"
+    (nzQueryParams)="onTableQueryParamsChange($event)">
     <thead>
         <tr>
-            <th nzWidth="60px"></th>
+            <th nzWidth="50px"></th>
             <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">Código</th>
             <th [nzColumnKey]="'ci'" [nzSortFn]="true">CI/RUC</th>
             <th [nzColumnKey]="'cliente'" [nzSortFn]="true">Cliente</th>
+            <th [nzColumnKey]="'condicion'" [nzSortFn]="true">Cond.</th>
             <th [nzColumnKey]="'fechafactura'" [nzSortFn]="true">F. Factura</th>
             <th [nzColumnKey]="'total'" [nzSortFn]="true">Total</th>
             <th>Estado</th>
@@ -26,8 +37,24 @@
                 </td>
                 <td>{{ fv.cliente }}</td>
                 <td>
-                    <span *ngIf="!fv.fechahorafactura">{{ fv.fechafactura | date: 'dd/MM/yyyy' }}</span>
-                    <span *ngIf="fv.fechahorafactura">{{ fv.fechahorafactura | date: 'dd/MM/yyyy HH:mm' }}</span>
+                    <nz-tag
+                        nz-tooltip
+                        nzTooltipTitle="Contado"
+                        nzColor="blue"
+                        *ngIf="fv.condicion == 'CON'">
+                        CO
+                    </nz-tag>
+                    <nz-tag
+                        nz-tooltip
+                        nzTooltipTitle="Crédito"
+                        nzColor="magenta"
+                        *ngIf="fv.condicion == 'CRE'">
+                        CR
+                    </nz-tag>
+                </td>
+                <td>
+                    <span *ngIf="!fv.fechahorafactura">{{ fv.fechafactura | date: 'dd/MM/yy' }}</span>
+                    <span *ngIf="fv.fechahorafactura">{{ fv.fechahorafactura | date: 'dd/MM/yy HH:mm' }}</span>
                 </td>
 
                 <td nzAlign="right">Gs.{{ fv.total | number }}</td>
@@ -35,45 +62,45 @@
                     <nz-tag *ngIf="fv.anulado"
                         nzColor="red"
                         nz-tooltip nzTooltipTitle="Anulado">
-                        ANU
+                        AN
                     </nz-tag>
                     <ng-container *ngIf="!fv.anulado">
                         <nz-tag *ngIf="!fv.pagado"
                             [nzColor]="'orange'"
                             nz-tooltip nzTooltipTitle="Pendiente de pago">
-                            PEN
+                            PE
                         </nz-tag>
                         <nz-tag *ngIf="fv.pagado"
                          [nzColor]="'green'"
                          nz-tooltip nzTooltipTitle="Pagado">
-                            PAG
+                            PA
                         </nz-tag>
                     </ng-container>
                     <ng-container *ngIf="fv.idestadodte as estado">
                         <nz-tag *ngIf="estado == 1 || estado == 2"
                             nzColor="green"
                             nz-tooltip nzTooltipTitle="Aprobado por SIFEN">
-                            APR
+                            AP
                         </nz-tag>
                         <nz-tag *ngIf="estado == 3"
                             nzColor="red"
                             nz-tooltip nzTooltipTitle="Rechazado por SIFEN">
-                            REC
+                            RE
                         </nz-tag>
                         <nz-tag *ngIf="estado == 4"
                             nzColor="red"
                             nz-tooltip nzTooltipTitle="Anulado en SIFEN">
-                            CAN
+                            CA
                         </nz-tag>
                         <nz-tag *ngIf="estado == 30"
                             nzColor="orange"
                             nz-tooltip nzTooltipTitle="Pendiente de envio a SIFEN">
-                            NOE
+                            NE
                         </nz-tag>
                         <nz-tag *ngIf="estado == 32"
                             nzColor="blue"
                             nz-tooltip nzTooltipTitle="Enviado a SIFEN">
-                            ENV
+                            EN
                         </nz-tag>
                     </ng-container>
                 </td>
