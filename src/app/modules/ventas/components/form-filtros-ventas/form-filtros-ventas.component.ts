@@ -230,7 +230,8 @@ export class FormFiltrosVentasComponent implements OnInit {
   cargarTalonariosFiltro(){
     const params = new HttpParams()
     .append('eliminado', false)
-    .append('sort', '-id');
+    .append('sort', '-id')
+    .append('tipodocumento', 'FAC');
     this.loadingTalonarios = true;
     this.talonariosSrv.get(params)
     .pipe(finalize(() => this.loadingTalonarios = false))
