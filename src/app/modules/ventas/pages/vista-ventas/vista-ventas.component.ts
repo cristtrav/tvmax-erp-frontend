@@ -5,6 +5,11 @@ import { IParametroFiltro } from '@global-utils/iparametrosfiltros.interface';
 import { TablaVentasComponent } from '../../components/tabla-ventas/tabla-ventas.component';
 import { TablaDetalleVentasCobrosComponent } from '../../../cobros/tabla-detalle-ventas-cobros/tabla-detalle-ventas-cobros.component';
 import { ContenidoEstadisticasVentasComponent } from '../../../estadisticas/components/ventas/contenido-estadisticas-ventas/contenido-estadisticas-ventas.component';
+import { VentasService } from '@services/ventas.service';
+import { HttpParams } from '@angular/common/http';
+import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { XLSXFileUtilsService } from '@services/file-utils/xlsx-file-utils.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-vista-ventas',
@@ -33,12 +38,16 @@ export class VistaVentasComponent implements OnInit {
 
   paramsFiltros: IParametroFiltro = { eliminado: 'false', anulado: 'false'};
   loadingImpresion: boolean = false;
+  loadingXlsx: boolean = false;
 
   constructor(
     private aroute: ActivatedRoute,
     private router: Router,
     private viewConteinerRef: ViewContainerRef,
-    private impresionSrv: ImpresionService
+    private impresionSrv: ImpresionService,
+    private ventasSrv: VentasService,
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    private xlsxFileUtilsSrv: XLSXFileUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -74,6 +83,25 @@ export class VistaVentasComponent implements OnInit {
     this.tablaVentasComp?.cargarVentas();
     this.tablaDetallesVentasComp?.cargarDetalleCobro();
     this.contenidoEstadisticasVentas?.recargar();
+  }
+
+  exportarXls(){
+    if(this.tablaVentasComp == null){
+      console.log('tablaVentasComp null')
+      return;
+    }
+    this.loadingXlsx = true;
+    this.ventasSrv.getXls(this.tablaVentasComp.getHttpParams())
+    .pipe(finalize(() => this.loadingXlsx = false))
+    .subscribe({
+      next: (xlsx) => {
+        this.xlsxFileUtilsSrv.downloadXLSX(xlsx, 'ventas.xlsx');
+      },
+      error: e => {
+        console.error('Error al exportar XLSX');
+        this.httpErrorHandler.process(e);
+      }
+    })
   }
 
 }

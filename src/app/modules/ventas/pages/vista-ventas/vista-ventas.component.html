@@ -55,6 +55,12 @@
                                 Imprimir
                             </button>
                         </div>
+                        <div nz-col *ngIf="vista === 'facturas'">
+                            <button nz-button nzType="default" (click)="exportarXls()" [nzLoading]="loadingXlsx">
+                                <i nz-icon nzType="file-excel" nzTheme="outline"></i>
+                                Exportar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div nz-col>

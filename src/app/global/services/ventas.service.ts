@@ -126,4 +126,8 @@ export class VentasService {
   consultarFacturaSifen(id: number): Observable<any>{
     return this.http.get(`${this.url}/${id}/consultarsifen`, AppSettings.getHttpOptionsAuth());
   }
+
+  getXls(params: HttpParams): Observable<any>{
+    return this.http.get(`${this.url}/exportar/xls`, AppSettings.getHttpOptionsBlobAuthWithParams(params));
+  }
 }
