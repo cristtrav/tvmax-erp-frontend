@@ -233,7 +233,13 @@ export class AppSettings {
           id: 344,
           name: 'Formatos de facturas',
           routerLink: '/app/formatosfacturas',
-        }
+        },
+        {
+          id: 1460,
+          name: 'Generar DTE en Lotes',
+          routerLink: '/app/generar-dte-lotes'
+        },
+        
       ]
     }
   ]

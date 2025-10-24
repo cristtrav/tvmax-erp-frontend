@@ -208,6 +208,12 @@ const routes: Routes = [
         data: { idfuncionalidad: 1360, name: 'Timbrados' },
         canActivate: [canAccessFn],
         loadChildren: () => import('./modules/facturacion/timbrados/timbrados.module').then(m => m.TimbradosModule)
+      },
+      {
+        path: 'generar-dte-lotes',
+        data: { idfuncionalidad: 1460, name: 'Generar DTE en Lotes' },
+        canActivate: [canAccessFn],
+        loadChildren: () => import('./modules/generar-dte-lotes/generar-dte-lotes.module').then(m => m.GenerarDteLotesModule)
       }
     ]
   },

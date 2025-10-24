@@ -1,0 +1,70 @@
+<app-workspace-layout [isForm]="true">
+    <form nz-form [formGroup]="form">
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Desde
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione la fecha desde">
+                <nz-date-picker
+                    nzPlaceholder="Selecionar..."
+                    style="width: 100%;"
+                    formControlName="desde">
+                </nz-date-picker>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Hasta
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione la fecha hasta">
+                <nz-date-picker
+                    nzPlaceholder="Selecionar..."
+                    style="width: 100%;"
+                    formControlName="hasta">                    
+                </nz-date-picker>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Estado DTE
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione el estado del DTE">
+                <nz-select nzPlaceHolder="Seleccionar..." formControlName="idestadodte">
+                    <nz-option
+                        *ngFor="let estadoDte of lstEstadosDte"
+                        [nzLabel]="estadoDte.descripcion"
+                        [nzValue]="estadoDte.id">
+                    </nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Pagado
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione el estado de pago">
+                <nz-select nzPlaceHolder="Seleccionar..." formControlName="pagado">
+                    <nz-option nzLabel="Pagado" [nzValue]="true"></nz-option>
+                    <nz-option nzLabel="Pendiente" [nzValue]="false"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
+                Anulado
+            </nz-form-label>
+            <nz-form-control [appNzColResponsiveSizes]="CONTROL_SIZES" nzErrorTip="Seleccione el estado de anulacion">
+                <nz-select nzPlaceHolder="Seleccionar..." formControlName="anulado">
+                    <nz-option nzLabel="No anulado" [nzValue]="false"></nz-option>
+                    <nz-option nzLabel="Anulado" [nzValue]="true"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <div nz-col [appNzColResponsiveSizes]="ACTIONS_SIZES" style="text-align: right;">
+            <button nz-button nzType="primary" [nzLoading]="isGenerando" (click)="generar()">
+                <i nz-icon nzType="sync"></i>
+                Generar
+            </button>
+        </div>
+    </form>
+</app-workspace-layout>
