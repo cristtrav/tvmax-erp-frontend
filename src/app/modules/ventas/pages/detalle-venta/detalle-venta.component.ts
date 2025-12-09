@@ -847,5 +847,9 @@ export class DetalleVentaComponent implements OnInit {
     this.indexFilaEnEdicion = undefined;
     this.cantidadEnEdicion = undefined;
   }
+  
+  onCreatedCuota(){
+    this.calcularTotalCuotasPendientes(this.formCabecera.controls.idCliente.value);
+  }
 
 }

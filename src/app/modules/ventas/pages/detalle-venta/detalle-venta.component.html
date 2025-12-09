@@ -419,7 +419,8 @@
             [mapCuotasEnDetalle]="mapCuotaEnDetalle"
             (cantidadCuotasPendientes)="totalCuotasPendientes = $event"
             (agregarCuota)="agregarCuotaDetalle($event)"
-            (quitarCuota)="quitarCuotaDetalle($event)">
+            (quitarCuota)="quitarCuotaDetalle($event)"
+            (createdCuota)="onCreatedCuota()">
         </app-cuotas-pendientes>
     </ng-template>
 

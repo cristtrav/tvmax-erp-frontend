@@ -1,5 +1,5 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
+import { Component, OnInit, Input, Inject, LOCALE_ID, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { CuotaDTO } from "@dto/cuota-dto";
 import { Servicio } from "@dto/servicio-dto";
@@ -16,6 +16,7 @@ import { CuotaGrupoDTO } from "@dto/cuota-grupo.dto";
 import { ResponsiveSizes } from "@util/responsive/responsive-sizes.interface";
 import { GruposCuotasService } from "@services/grupos-cuotas.service";
 import { NzModalService } from "ng-zorro-antd/modal";
+import { SesionService } from "@services/sesion.service";
 
 @Component({
   selector: 'app-form-cuota',
@@ -36,6 +37,14 @@ export class FormCuotaComponent implements OnInit {
   idsuscripcion: number | null = null;
   @Input()
   idcuota = 'nueva';
+  @Input()
+  mostrarBotones: boolean = false;
+  @Input()
+  mostrarInputCantidad: boolean = false;
+  @Output()
+  savedCuota = new EventEmitter<boolean>();
+  @Output()
+  guardandoChange = new EventEmitter<boolean>();
 
   opcionesServicios: { value: number, label: string, isLeaf: boolean, children?: { value: number, label: string, isLeaf: boolean }[] }[] = [];
 
@@ -73,7 +82,8 @@ export class FormCuotaComponent implements OnInit {
     private suscripcionesSrv: SuscripcionesService,
     private httpErrorHandler: HttpErrorResponseHandlerService,
     private gruposCuotasSrv: GruposCuotasService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    public sesionSrv: SesionService
   ) { }
 
   ngOnInit(): void {
@@ -260,13 +270,18 @@ export class FormCuotaComponent implements OnInit {
 
   private registrar(): void {
     this.guardando = true;
+    this.guardandoChange.emit(true);
     this.cuotaSrv
       .post(this.getDTO())
-      .pipe(finalize(() => this.guardando = false))
+      .pipe(finalize(() => {
+        this.guardando = false;
+        this.guardandoChange.emit(false);
+      }))
       .subscribe({
         next: () => {
           this.notif.create('success', '<strong>Éxito</strong>', 'Cuota registrada');
           this.form.reset();
+          this.savedCuota.emit(true);
         },
         error: (e) => {
           console.error('Error al registrar cuota', e);
@@ -277,10 +292,14 @@ export class FormCuotaComponent implements OnInit {
 
   private modificar(): void {
     this.guardando = true;
+    this.guardandoChange.emit(true);
     const cuotaDto = this.getDTO();
     this.cuotaSrv
       .put(Number(this.idcuota), cuotaDto)
-      .pipe(finalize(() => this.guardando = false))
+      .pipe(finalize(() => {
+        this.guardando = false;
+        this.guardandoChange.emit(false);
+      }))
       .subscribe({
         next: () => {
           this.notif.create('success', '<strong>Éxito</strong>', 'Cuota editada');
@@ -288,6 +307,7 @@ export class FormCuotaComponent implements OnInit {
             cuotaDto.idsuscripcion ?? -1,
             cuotaDto.idservicio ?? -1
           ).subscribe(gruposCuotas => this.cargarGruposCuotasNext(gruposCuotas));
+          this.savedCuota.emit(true);
         },
         error: (e) => {
           console.error('Error al editar cuota', e);
@@ -321,9 +341,13 @@ export class FormCuotaComponent implements OnInit {
 
   private generarCuotas(){
     this.guardando = true;
+    this.guardandoChange.emit(true);
     const cuotaDto = this.getDTO();
     this.cuotaSrv.generarCuotasSuscripcion(cuotaDto)
-    .pipe(finalize(() => this.guardando = false))
+    .pipe(finalize(() => {
+      this.guardando = false;
+      this.guardandoChange.emit(false);
+    }))
     .subscribe({
       next: (resp) => {
         if(cuotaDto.cantidad == resp.generado)

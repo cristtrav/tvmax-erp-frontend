@@ -15,6 +15,7 @@
             <th>Cuotas</th>
             <th>Estado</th>
             <th>Dirección</th>
+            <th *ngIf="sesionSrv.permisos.has(221)">Cuota</th>
         </tr>
     </thead>
     <tbody>
@@ -44,6 +45,11 @@
                 <td>
                     <span nz-typography nzType="secondary">{{ suscripcion.direccion }}</span>
                     <span nz-typography nzType="secondary">Barrio: {{ suscripcion.barrio }}</span>
+                </td>
+                <td *ngIf="sesionSrv.permisos.has(221)">
+                    <button nz-button nzType="primary" nz-tooltip nzTooltipTitle="Nueva cuota" (click)="mostrarModalNuevaCuota(suscripcion.id ?? -1)">
+                        <i nz-icon nzType="plus" nzTheme="outline"></i>
+                    </button>
                 </td>
             </tr>
             <tr [nzExpand]="expandSet.has(suscripcion.id ?? -1)">
@@ -84,6 +90,8 @@
                                         *ngIf="!mapCuotasEnDetalle.get(cuota.id ?? -1)"
                                         nz-button 
                                         nzType="primary"
+                                        nz-tooltip
+                                        nzTooltipTitle="Agregar a la factura"
                                         (click)="agregarCuotaEnDetalle(cuota)">
                                         <i nz-icon nzType="plus"></i>
                                     </button>
@@ -92,6 +100,8 @@
                                         nz-button
                                         nzType="primary"
                                         nzDanger
+                                        nz-tooltip
+                                        nzTooltipTitle="Quitar de la factura"
                                         (click)="quitarCuotaDeDetalle(cuota)">
                                         <i nz-icon nzType="minus"></i>
                                     </button>
@@ -108,3 +118,29 @@
         <strong>Total pendiente:</strong><span> Gs.{{ montoTotalPendiente | number }}</span>
     </ng-template>
 </nz-table>
+<nz-modal
+    [(nzVisible)]="modalNuevaCuotaVisible"
+    [nzTitle]="'Nueva cuota'"
+    (nzOnCancel)="ocultarModalNuevaCuota()"
+    [nzContent]="contentNuevaCuota"
+    [nzFooter]="footerNuevaCuota"
+>
+<ng-template #contentNuevaCuota>
+    <app-form-cuota
+        [mostrarBotones]="false"
+        [mostrarInputCantidad]="false"
+        [idsuscripcion]="idsuscripcionCrearCuota ?? -1"
+        (savedCuota)="onSavedCuota()"
+        (guardandoChange)="guardandoCuota = $event">
+    </app-form-cuota>
+</ng-template>
+<ng-template #footerNuevaCuota>
+    <button nz-button nzType="primary" (click)="crearCuota()" [nzLoading]="guardandoCuota">
+        <i nz-icon nzType="save"></i>
+        Registrar
+    </button>
+    <button nz-button nzType="default" (click)="ocultarModalNuevaCuota()">
+        Cerrar
+    </button>
+</ng-template>
+</nz-modal>

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CuotaDTO } from '@dto/cuota-dto';
 import { Servicio } from '@dto/servicio-dto';
 import { Suscripcion } from '@dto/suscripcion-dto';
@@ -7,6 +7,8 @@ import { ClientesService } from '@services/clientes.service';
 import { CuotasService } from '@services/cuotas.service';
 import { ServiciosService } from '@services/servicios.service';
 import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error-response-handler.service';
+import { FormCuotaComponent } from '@modules/cuotas/components/form-cuota/form-cuota.component';
+import { SesionService } from '@services/sesion.service';
 
 @Component({
   selector: 'app-cuotas-pendientes',
@@ -14,6 +16,9 @@ import { HttpErrorResponseHandlerService } from '@services/http-utils/http-error
   styleUrls: ['./cuotas-pendientes.component.scss']
 })
 export class CuotasPendientesComponent implements OnInit {
+
+  @ViewChild(FormCuotaComponent)
+  formCuotaComp!: FormCuotaComponent;
 
   @Input()
   set idcliente(id: number | null) {
@@ -34,6 +39,15 @@ export class CuotasPendientesComponent implements OnInit {
   @Output()
   quitarCuota = new EventEmitter<CuotaDTO>()
 
+  @Output()
+  createdCuota = new EventEmitter<boolean>();
+
+  @Input()
+  mapCuotasEnDetalle: Map<number, boolean> = new Map();
+
+  modalNuevaCuotaVisible: boolean = false;
+  idsuscripcionCrearCuota?: number;
+
   lstSuscripciones: Suscripcion[] = [];
   loadingSuscripciones: boolean = false;
   montoTotalPendiente: number = 0;
@@ -45,14 +59,16 @@ export class CuotasPendientesComponent implements OnInit {
   mapLoadingServicios: Map<number, boolean> = new Map();
   mapLoadingCuotas: Map<string, boolean> = new Map();
 
-  @Input()
-  mapCuotasEnDetalle: Map<number, boolean> = new Map();
+  guardandoCuota: boolean = false;
+  
+
 
   constructor(
     private clientesSrv: ClientesService,
     private serviciosSrv: ServiciosService,
     private cuotasSrv: CuotasService,
-    private httpErrorHandler: HttpErrorResponseHandlerService
+    private httpErrorHandler: HttpErrorResponseHandlerService,
+    public sesionSrv: SesionService
   ) { }
 
   ngOnInit(): void {
@@ -148,5 +164,26 @@ export class CuotasPendientesComponent implements OnInit {
 
   quitarCuotaDeDetalle(cuota: CuotaDTO){
     this.quitarCuota.emit(cuota);
+  }
+
+  mostrarModalNuevaCuota(idsuscripcion: number){
+    this.idsuscripcionCrearCuota = idsuscripcion;
+    this.modalNuevaCuotaVisible = true;
+  }
+
+  ocultarModalNuevaCuota(){
+    this.idsuscripcionCrearCuota = undefined;
+    this.modalNuevaCuotaVisible = false;
+  }
+
+  onSavedCuota(){
+    this.cargarSuscripciones(this.idcliente);
+    this.expandSet.forEach(id => this.cargarServicios(id))
+    this.ocultarModalNuevaCuota();
+    this.createdCuota.emit(true);
+  }
+
+  crearCuota(){
+    this.formCuotaComp.guardar();
   }
 }

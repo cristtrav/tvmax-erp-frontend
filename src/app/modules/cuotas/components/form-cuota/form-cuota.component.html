@@ -1,6 +1,6 @@
 <nz-spin [nzSpinning]="loadingDatos">
     <form nz-form [formGroup]="form">
-        <nz-form-item *ngIf="idcuota == 'nueva'">
+        <nz-form-item *ngIf="idcuota == 'nueva' && mostrarInputCantidad">
             <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES" nzRequired>
                 Cantidad
             </nz-form-label>
@@ -58,12 +58,13 @@
                         formControlName="monto"
                         [nzMin]="0"
                         [nzStep]="1"
-                        style="width: 100%;">
+                        style="width: 100%;"
+                        [nzDisabled]="!sesionSrv.permisos.has(228)">
                     </nz-input-number>
                 </div>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item *ngIf="suscripcionActual?.idservicio != form.controls.idservicio.value && form.controls.idservicio?.value?.length > 0">
+        <nz-form-item *ngIf="suscripcionActual?.idservicio != form.controls.idservicio.value && form.controls.idservicio.value?.length > 0">
             <nz-form-label [appNzColResponsiveSizes]="LABEL_SIZES">
                 Grupo
             </nz-form-label>
@@ -107,7 +108,7 @@
                 <input formControlName="observacion" nz-input>
             </nz-form-control>
         </nz-form-item>
-        <nz-form-item>
+        <nz-form-item *ngIf="sesionSrv.permisos.has(227)">
             <div nz-col [appNzColResponsiveSizes]="LABEL_SIZES"></div>
             <nz-form-control [appNzColResponsiveSizes]="CONTROLS_SIZES">
                 <label
@@ -118,7 +119,7 @@
                 </label>
             </nz-form-control>
         </nz-form-item>
-        <div nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
+        <div *ngIf="mostrarBotones" nz-col [nzSm]="22" [nzXs]="24" style="text-align: right;">
             <div nz-row [nzGutter]="[8,8]" nzJustify="end">
                 <div nz-col>
                     <button nz-button nzType="primary" [nzLoading]="guardando" (click)="guardar()">
